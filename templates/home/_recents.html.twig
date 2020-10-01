@@ -18,22 +18,22 @@
                             {{ association }}
                         </a>
                     </h4>
-                    {#    <a class="d-block u-block-hover g-opacity-0_3 g-opacity-1--hover g-color-black g-transition-0_3 g-px-30 g-py-70"
-                          href="{{ path('volontariat_association_show', {'id':association.id}) }}">
+                    <a class="d-block u-block-hover g-opacity-0_3 g-opacity-1--hover g-color-black g-transition-0_3 g-px-30 g-py-70"
+                       href="{{ path('volontariat_association_show', {'id':association.id}) }}">
                         {% if association.imageName %}
-                               <img class="img-fluid w-100"
-                                    src="{{ association.imageName | acmarche_volontariat_download_image(association) | imagine_filter('acmarche_volontariat_200_100') }}"
-                                    alt="{{ association.imageName }}">
+                            <img class="img-fluid w-100"
+                                 src="{{ association.imageName | acmarche_volontariat_download_image(association) | imagine_filter('acmarche_volontariat_200_100') }}"
+                                 alt="{{ association.imageName }}">
 
+                        {% endif %}
+                        <img class="u-block-hover__main--zoom-v1 u-block-hover__main--grayscale g-width-100"
+                             src="{{ asset('bundles/volontariat/assets/img-temp/200x100/img2.jpg') }}"
+                             alt="Image Description">
 
-                            <img class="u-block-hover__main--zoom-v1 u-block-hover__main--grayscale g-width-100"
-                                 src="{{ asset('bundles/volontariat/assets/img-temp/200x100/img2.jpg') }}"
-                                 alt="Image Description">
-
-                         <span class="d-block u-block-hover__additional--partially-slide-up py-2">
+                        <span class="d-block u-block-hover__additional--partially-slide-up py-2">
                   <span class="d-block h5 g-color-gray-dark-v5 mb-4">{{ association }}</span>
               </span>
-                    </a>#}
+                    </a>
                 </div>
                 <!-- End Partners -->
             </div>

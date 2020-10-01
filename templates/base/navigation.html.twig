@@ -6,11 +6,11 @@
         </li>
         <!-- End Intro -->
 
-        <!-- Shortcodes -->
+        <!-- Shortcodes
 
         <li class="nav-item  g-mx-10--lg g-mx-15--xl">
             <a href="/page/jai-besoin-daide" class="nav-link g-py-7 g-px-0">Demandeurs</a>
-        </li>
+        </li>-->
 
         <li class="nav-item  g-mx-10--lg g-mx-15--xl">
             <a href="{{ path('volontariat_volontaire') }}" class="nav-link g-py-7 g-px-0">Volontaires</a>
@@ -19,11 +19,11 @@
         <li class="nav-item{% if action == 'volontariat_association' %} active{% endif %}  g-mx-10--lg g-mx-15--xl">
             <a href="{{ path('volontariat_association') }}" class="nav-link g-py-7 g-px-0">Associations</a>
         </li>
-<!--
+
         <li class="nav-item  g-mx-10--lg g-mx-15--xl">
             <a href="{{ path('volontariat_besoin') }}" class="nav-link g-py-7 g-px-0">Besoins</a>
         </li>
--->
+
         {% if app.user %}
             <li class="nav-item  g-mx-10--lg g-mx-15--xl">
                 <a href="{{ path('volontariat_dashboard') }}" class="nav-link g-py-7 g-px-0">Mon compte</a>
@@ -37,7 +37,5 @@
             </li>
         {% endif %}
         <!-- End Shortcodes -->
-
-
     </ul>
 </div>

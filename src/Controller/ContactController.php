@@ -105,7 +105,7 @@ class ContactController extends AbstractController
         $keySite = $this->getParameter('acmarche_volontariat_captcha_site_key');
 
         return $this->render(
-            'contact/volontaire.html.twig',
+            '@Volontariat/contact/volontaire.html.twig',
             [
                 'volontaire' => $volontaire,
                 'siteKey' => $keySite,
@@ -147,7 +147,7 @@ class ContactController extends AbstractController
         $keySite = $this->getParameter('acmarche_volontariat_captcha_site_key');
 
         return $this->render(
-            'contact/association.html.twig',
+            '@Volontariat/contact/association.html.twig',
             [
                 'association' => $association,
                 'siteKey' => $keySite,

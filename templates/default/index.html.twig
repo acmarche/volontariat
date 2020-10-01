@@ -1,22 +1,22 @@
-{% extends 'base.html.twig' %}
+{% extends '@Volontariat/base.html.twig' %}
 
 {% block body %}
-    {#{% include 'home/_cube.html.twig' %}#}
-    {% include 'home/_header_corona.html.twig' %}
-    {% include 'home/_block_actu.html.twig' %}
-    {% include 'home/_portefolio.html.twig' %}
-    {% include 'home/_block_action.html.twig' %}
-    {% include 'home/_recents.html.twig' %}
+    {#{% include '@Volontariat/home/_cube.html.twig' %}#}
+    {% include '@Volontariat/home/_header_corona.html.twig' %}
+    {% include '@Volontariat/home/_block_actu.html.twig' %}
+    {% include '@Volontariat/home/_portefolio.html.twig' %}
+    {% include '@Volontariat/home/_block_action.html.twig' %}
+    {% include '@Volontariat/home/_recents.html.twig' %}
 
 {% endblock %}
 
 {% block scripts %}
 
-    <script src="{{ asset('assets/vendor/masonry/dist/masonry.pkgd.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/imagesloaded/imagesloaded.pkgd.min.js') }}"></script>
-    <script src="{{ asset('assets/vendor/cubeportfolio-full/cubeportfolio/js/jquery.cubeportfolio.min.js') }}"></script>
-    <script src="{{ asset('assets/js/components/hs.cubeportfolio.js') }}"></script>
-    <script src="{{ asset('assets/js/components/hs.onscroll-animation.js') }}"></script>
+    <script src="{{ asset('bundles/volontariat/assets/vendor/masonry/dist/masonry.pkgd.min.js') }}"></script>
+    <script src="{{ asset('bundles/volontariat/assets/vendor/imagesloaded/imagesloaded.pkgd.min.js') }}"></script>
+    <script src="{{ asset('bundles/volontariat/assets/vendor/cubeportfolio-full/cubeportfolio/js/jquery.cubeportfolio.min.js') }}"></script>
+    <script src="{{ asset('bundles/volontariat/assets/js/components/hs.cubeportfolio.js') }}"></script>
+    <script src="{{ asset('bundles/volontariat/assets/js/components/hs.onscroll-animation.js') }}"></script>
 
     <!-- JS Plugins Init. -->
     <script>

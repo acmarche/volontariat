@@ -102,7 +102,7 @@ class ReferencerController extends AbstractController
         $keySite = $this->getParameter('acmarche_volontariat_captcha_site_key');
 
         return $this->render(
-            'contact/referencer.html.twig',
+            '@Volontariat/contact/referencer.html.twig',
             [
                 'siteKey' => $keySite,
                 'form' => $form->createView(),

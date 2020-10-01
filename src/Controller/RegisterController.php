@@ -78,7 +78,7 @@ class RegisterController extends AbstractController
         }
 
         return $this->render(
-            'security/registration/register.html.twig',
+            '@Volontariat/security/registration/register.html.twig',
             [
                 'form' => $form->createView(),
             ]

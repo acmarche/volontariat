@@ -1,7 +1,7 @@
-{% extends "base.html.twig" %}
+{% extends "@Volontariat/base.html.twig" %}
 
 {% block breadcrumbs %}
-    {% include 'dashboard/_breadcrumb.html.twig' with {'title': 'Votre association'} %}
+    {% include '@Volontariat/dashboard/_breadcrumb.html.twig' with {'title': 'Votre association'} %}
 {% endblock %}
 
 {% block body %}
@@ -9,7 +9,7 @@
         <div class="container">
             <div class="row">
                 <!-- Profile Sidebar -->
-                {% include 'dashboard/_sidebar.html.twig' %}
+                {% include '@Volontariat/dashboard/_sidebar.html.twig' %}
                 <!-- End Profile Sidebar -->
 
                 <!-- Profle Content -->
@@ -18,11 +18,11 @@
                     <div class="g-brd-around g-brd-gray-light-v4 g-pa-20 g-mb-40">
 
                         <!-- End Reviews (Option 1) -->
-                        {% include 'dashboard/_associations.html.twig' %}
+                        {% include '@Volontariat/dashboard/_associations.html.twig' %}
 
                     </div>
                     <!-- End User Block -->
-                    {% include 'backend/association/_modal_delete.html.twig' %}
+                    {% include '@Volontariat/backend/association/_modal_delete.html.twig' %}
                 </div>
                 <!-- End Profle Content -->
             </div>

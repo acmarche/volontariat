@@ -79,7 +79,7 @@ class AssociationController extends AbstractController
         $associations = $this->associationRepository->search($data);
 
         return $this->render(
-            'admin/association/index.html.twig',
+            '@Volontariat/admin/association/index.html.twig',
             array(
                 'form' => $search_form->createView(),
                 'associations' => $associations,
@@ -114,7 +114,7 @@ class AssociationController extends AbstractController
         }
 
         return $this->render(
-            'admin/association/new.html.twig',
+            '@Volontariat/admin/association/new.html.twig',
             array(
                 'association' => $association,
                 'form' => $form->createView(),
@@ -136,7 +136,7 @@ class AssociationController extends AbstractController
         $deleteForm = $this->createDeleteForm($association);
 
         return $this->render(
-            'admin/association/show.html.twig',
+            '@Volontariat/admin/association/show.html.twig',
             array(
                 'association' => $association,
                 'images' => $images,
@@ -171,7 +171,7 @@ class AssociationController extends AbstractController
         }
 
         return $this->render(
-            'admin/association/edit.html.twig',
+            '@Volontariat/admin/association/edit.html.twig',
             array(
                 'association' => $association,
                 'form' => $form->createView(),

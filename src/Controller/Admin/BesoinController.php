@@ -34,7 +34,7 @@ class BesoinController extends AbstractController
 
         $entities = $em->getRepository(Besoin::class)->findAll();
 
-        return $this->render('admin/besoin/index.html.twig', array(
+        return $this->render('@Volontariat/admin/besoin/index.html.twig', array(
 
             'entities' => $entities,
         ));
@@ -64,7 +64,7 @@ class BesoinController extends AbstractController
             return $this->redirectToRoute('volontariat_admin_besoin_show', ['id' => $besoin->getId()]);
         }
 
-        return $this->render('admin/besoin/new.html.twig', array(
+        return $this->render('@Volontariat/admin/besoin/new.html.twig', array(
             'besoin' => $besoin,
             'form' => $form->createView(),
         ));
@@ -80,7 +80,7 @@ class BesoinController extends AbstractController
     {
         $deleteForm = $this->createDeleteForm($besoin);
 
-        return $this->render('admin/besoin/show.html.twig', array(
+        return $this->render('@Volontariat/admin/besoin/show.html.twig', array(
             'besoin' => $besoin,
             'delete_form' => $deleteForm->createView(),
         ));
@@ -109,7 +109,7 @@ class BesoinController extends AbstractController
             return $this->redirectToRoute('volontariat_admin_besoin_show', ['id' => $besoin->getId()]);
         }
 
-        return $this->render('admin/besoin/edit.html.twig', array(
+        return $this->render('@Volontariat/admin/besoin/edit.html.twig', array(
             'besoin' => $besoin,
             'form' => $form->createView(),
         ));

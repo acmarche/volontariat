@@ -1,7 +1,7 @@
-{% extends "base.html.twig" %}
+{% extends "@Volontariat/base.html.twig" %}
 
 {% block breadcrumbs %}
-    {% include 'dashboard/_breadcrumb.html.twig' with {'title': 'Nouvelle association'} %}
+    {% include '@Volontariat/dashboard/_breadcrumb.html.twig' with {'title': 'Nouvelle association'} %}
 {% endblock %}
 
 {% block body -%}
@@ -11,7 +11,7 @@
 
             <div class="g-brd-around g-brd-gray-light-v4 g-pa-20 g-mb-40">
 
-                {% include 'backend/association/form.html.twig' %}
+                {% include '@Volontariat/backend/association/form.html.twig' %}
 
                 <a href="{{ path('volontariat_dashboard') }}">
                     <span class="glyphicon glyphicon-list"></span> Annuler

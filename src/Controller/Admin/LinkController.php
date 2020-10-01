@@ -71,7 +71,7 @@ class LinkController extends AbstractController
         }
 
         return $this->render(
-            'admin/link/volontaire.html.twig',
+            '@Volontariat/admin/link/volontaire.html.twig',
             array(
                 'volontaire' => $volontaire,
                 'form' => $form->createView(),
@@ -106,7 +106,7 @@ class LinkController extends AbstractController
         }
 
         return $this->render(
-            'admin/link/asbl.html.twig',
+            '@Volontariat/admin/link/asbl.html.twig',
             array(
                 'association' => $association,
                 'form' => $form->createView(),

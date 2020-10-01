@@ -28,7 +28,7 @@ class RgpdController extends AbstractController
         $mailer->send($message);
 
         return $this->render(
-            'admin/default/index.html.twig',
+            '@Volontariat/admin/default/index.html.twig',
             [
             ]
         );
@@ -45,7 +45,7 @@ class RgpdController extends AbstractController
         $user->setPassword($passwordEncoder->encodePassword($user, "homer22"));
         $em->flush();
 
-        return $this->render('admin/default/index.html.twig');
+        return $this->render('@Volontariat/admin/default/index.html.twig');
     }
 
     public function generateMailInfo(User $user): \Swift_Message

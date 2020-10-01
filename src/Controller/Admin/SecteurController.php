@@ -31,7 +31,7 @@ class SecteurController extends AbstractController
         $entities = $em->getRepository(Secteur::class)->findAll();
 
         return $this->render(
-            'admin/secteur/index.html.twig',
+            '@Volontariat/admin/secteur/index.html.twig',
             array(
             'entities' => $entities,
         )
@@ -62,7 +62,7 @@ class SecteurController extends AbstractController
         }
 
         return $this->render(
-            'admin/secteur/new.html.twig',
+            '@Volontariat/admin/secteur/new.html.twig',
             array(
             'secteur' => $secteur,
             'form' => $form->createView(),
@@ -81,7 +81,7 @@ class SecteurController extends AbstractController
         $deleteForm = $this->createDeleteForm($secteur);
 
         return $this->render(
-            'admin/secteur/show.html.twig',
+            '@Volontariat/admin/secteur/show.html.twig',
             array(
             'secteur' => $secteur,
             'delete_form' => $deleteForm->createView(),
@@ -112,7 +112,7 @@ class SecteurController extends AbstractController
         }
 
         return $this->render(
-            'admin/secteur/edit.html.twig',
+            '@Volontariat/admin/secteur/edit.html.twig',
             array(
             'secteur' => $secteur,
             'edit_form' => $editForm->createView(),

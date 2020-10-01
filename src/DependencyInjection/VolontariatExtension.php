@@ -34,7 +34,6 @@ class VolontariatExtension extends Extension implements PrependExtensionInterfac
 
         if (isset($bundles['DoctrineBundle'])) {
             foreach (array_keys($containerBuilder->getExtensions()) as $name) {
-                var_dump($name);
                 switch ($name) {
                     case 'doctrine':
                         $this->loadConfig($containerBuilder, 'doctrine');

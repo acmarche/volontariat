@@ -1,7 +1,7 @@
-{% extends 'admin/base.html.twig' %}
+{% extends '@Volontariat/admin/base.html.twig' %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('dropzone/dropzone.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/volontariat/dropzone/dropzone.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -28,7 +28,7 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{ asset('dropzone/dropzone.js') }}"></script>
+    <script src="{{ asset('bundles/volontariat/dropzone/dropzone.js') }}"></script>
     <script type="text/javascript">
         Dropzone.options.formdrop = {
             dictDefaultMessage: "Glissez ici vos images ou cliquez sur cette zone pour ajouter des photos",

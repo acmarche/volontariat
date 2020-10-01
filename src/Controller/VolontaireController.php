@@ -87,7 +87,7 @@ class VolontaireController extends AbstractController
 
         if (!$this->authorizationChecker->isGranted('index')) {
             return $this->render(
-                'volontaire/index_not_connected.html.twig',
+            '@Volontariat/volontaire/index_not_connected.html.twig',
                 array(
                     'volontaires' => $volontaires,
                 )
@@ -95,7 +95,7 @@ class VolontaireController extends AbstractController
         }
 
         return $this->render(
-            'volontaire/index.html.twig',
+            '@Volontariat/volontaire/index.html.twig',
             array(
                 'search_form' => $search_form->createView(),
                 'volontaires' => $volontaires,
@@ -116,7 +116,7 @@ class VolontaireController extends AbstractController
 
         if (!$this->authorizationChecker->isGranted('show', $volontaire)) {
             return $this->render(
-                'volontaire/show_not_connected.html.twig',
+            '@Volontariat/volontaire/show_not_connected.html.twig',
                 array(
                     'volontaire' => $volontaire,
                     'associations' => $associations,
@@ -125,7 +125,7 @@ class VolontaireController extends AbstractController
         }
 
         return $this->render(
-            'volontaire/show.html.twig',
+            '@Volontariat/volontaire/show.html.twig',
             array(
                 'volontaire' => $volontaire,
                 'associations' => $associations,

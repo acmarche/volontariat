@@ -68,7 +68,7 @@ class CompteController extends AbstractController
         }
 
         return $this->render(
-            'dashboard/settings/index.html.twig',
+            '@Volontariat/dashboard/settings/index.html.twig',
             [
                 'user' => $user,
                 'tab_active' => 'profil',
@@ -113,7 +113,7 @@ class CompteController extends AbstractController
         }
 
         return $this->render(
-            'dashboard/delete.html.twig',
+            '@Volontariat/dashboard/delete.html.twig',
             [
                 'form' => $form->createView(),
             ]

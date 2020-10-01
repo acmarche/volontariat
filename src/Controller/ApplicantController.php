@@ -71,7 +71,7 @@ class ApplicantController extends AbstractController
         }
 
         return $this->render(
-            'applicant/new.html.twig',
+            '@Volontariat/applicant/new.html.twig',
             array(
                 'applicant' => $applicant,
                 'form' => $form->createView(),

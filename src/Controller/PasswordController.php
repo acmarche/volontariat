@@ -65,7 +65,7 @@ class PasswordController extends AbstractController
         }
 
         return $this->render(
-            'security/change_password/change_password.html.twig',
+            '@Volontariat/security/change_password/change_password.html.twig',
             array(
                 'user' => $user,
                 'form' => $form->createView(),

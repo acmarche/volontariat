@@ -44,9 +44,8 @@ class ActiviteController extends AbstractController
         $entities = $em->getRepository(Activite::class)->findAll();
 
         return $this->render(
-            'admin/activite/index.html.twig',
+            '@Volontariat/admin/activite/index.html.twig',
             array(
-
                 'entities' => $entities,
             )
         );
@@ -80,7 +79,7 @@ class ActiviteController extends AbstractController
         }
 
         return $this->render(
-            'admin/activite/new.html.twig',
+            '@Volontariat/admin/activite/new.html.twig',
             array(
                 'activite' => $activite,
                 'association' => $association,
@@ -101,7 +100,7 @@ class ActiviteController extends AbstractController
         $images = $this->fileHelper->getImages($activite);
 
         return $this->render(
-            'admin/activite/show.html.twig',
+            '@Volontariat/admin/activite/show.html.twig',
             array(
                 'activite' => $activite,
                 'images' => $images,
@@ -134,7 +133,7 @@ class ActiviteController extends AbstractController
         }
 
         return $this->render(
-            'admin/activite/edit.html.twig',
+            '@Volontariat/admin/activite/edit.html.twig',
             array(
                 'activite' => $activite,
                 'form' => $form->createView(),

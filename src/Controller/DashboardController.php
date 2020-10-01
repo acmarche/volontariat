@@ -42,7 +42,7 @@ class DashboardController extends AbstractController
         $associations = $this->associationService->getAssociationsByUser($user);
         $volontaires = $this->volontaireService->getVolontairesByUser($user);
 
-        return $this->render('dashboard/index.html.twig', [
+        return $this->render('@Volontariat/dashboard/index.html.twig', [
             'volontaires' => $volontaires,
             'tab_active' => 'profil',
             'associations' => $associations,

@@ -1,11 +1,11 @@
-{% extends 'base.html.twig' %}
+{% extends '@Volontariat/base.html.twig' %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('dropzone/dropzone.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/volontariat/dropzone/dropzone.css') }}">
 {% endblock %}
 
 {% block breadcrumbs %}
-    {% include 'dashboard/_breadcrumb.html.twig' with {'title': 'Images'} %}
+    {% include '@Volontariat/dashboard/_breadcrumb.html.twig' with {'title': 'Images'} %}
 {% endblock %}
 
 {% block body %}
@@ -40,7 +40,7 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="{{ asset('dropzone/dropzone.js') }}"></script>
+    <script src="{{ asset('bundles/volontariat/dropzone/dropzone.js') }}"></script>
     <script type="text/javascript">
         Dropzone.options.formdrop = {
             dictDefaultMessage: "Glissez ici vos images ou cliquez sur cette zone pour ajouter des photos",

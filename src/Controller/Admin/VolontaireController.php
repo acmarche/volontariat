@@ -77,7 +77,7 @@ class VolontaireController extends AbstractController
         $volontaires = $this->volontaireRepository->search($data);
 
         return $this->render(
-            'admin/volontaire/index.html.twig',
+            '@Volontariat/admin/volontaire/index.html.twig',
             array(
                 'form' => $search_form->createView(),
                 'volontaires' => $volontaires,
@@ -111,7 +111,7 @@ class VolontaireController extends AbstractController
         }
 
         return $this->render(
-            'admin/volontaire/new.html.twig',
+            '@Volontariat/admin/volontaire/new.html.twig',
             array(
                 'volontaire' => $volontaire,
                 'form' => $form->createView(),
@@ -131,7 +131,7 @@ class VolontaireController extends AbstractController
         $dissocierForm = $this->formBuilderVolontariat->createDissocierForm($volontaire);
 
         return $this->render(
-            'admin/volontaire/show.html.twig',
+            '@Volontariat/admin/volontaire/show.html.twig',
             array(
                 'volontaire' => $volontaire,
                 'delete_form' => $deleteForm->createView(),
@@ -163,7 +163,7 @@ class VolontaireController extends AbstractController
         }
 
         return $this->render(
-            'admin/volontaire/edit.html.twig',
+            '@Volontariat/admin/volontaire/edit.html.twig',
             array(
                 'volontaire' => $volontaire,
                 'form' => $form->createView(),
@@ -225,7 +225,7 @@ class VolontaireController extends AbstractController
         }
 
         return $this->render(
-            'admin/volontaire/note.html.twig',
+            '@Volontariat/admin/volontaire/note.html.twig',
             array(
                 'volontaire' => $volontaire,
                 'form' => $form->createView(),

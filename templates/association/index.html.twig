@@ -1,7 +1,7 @@
-{% extends 'base.html.twig' %}
+{% extends '@Volontariat/base.html.twig' %}
 
  {% block breadcrumbs %}
-     {% include 'base/breadcrumbs.html.twig' with {'title': 'Associations'} %}
+     {% include '@Volontariat/base/breadcrumbs.html.twig' with {'title': 'Associations'} %}
  {% endblock %}
 
 {% block body %}
@@ -43,7 +43,7 @@
                                     <p>{{ association.description| slice(0,400) | nl2br  }}</p>
                                 {% endif %}
 
-                                {% include 'association/_coordonnee.html.twig' %}
+                                {% include '@Volontariat/association/_coordonnee.html.twig' %}
 
                                 <hr class="g-brd-gray-light-v4 g-my-20">
 

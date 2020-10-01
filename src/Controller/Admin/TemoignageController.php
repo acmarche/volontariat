@@ -31,7 +31,7 @@ class TemoignageController extends AbstractController
     {
         $temoignages = $temoignageRepository->findAll();
 
-        return $this->render('admin/temoignage/index.html.twig', ['temoignages' => $temoignages]);
+        return $this->render('@Volontariat/admin/temoignage/index.html.twig', ['temoignages' => $temoignages]);
     }
 
     /**
@@ -60,7 +60,7 @@ class TemoignageController extends AbstractController
         }
 
         return $this->render(
-            'admin/temoignage/new.html.twig',
+            '@Volontariat/admin/temoignage/new.html.twig',
             [
                 'temoignage' => $temoignage,
                 'form' => $form->createView(),
@@ -79,7 +79,7 @@ class TemoignageController extends AbstractController
         $deleteForm = $this->createDeleteForm($temoignage);
 
         return $this->render(
-            'admin/temoignage/show.html.twig',
+            '@Volontariat/admin/temoignage/show.html.twig',
             [
                 'temoignage' => $temoignage,
                 'delete_form' => $deleteForm->createView(),
@@ -109,7 +109,7 @@ class TemoignageController extends AbstractController
         }
 
         return $this->render(
-            'admin/temoignage/edit.html.twig',
+            '@Volontariat/admin/temoignage/edit.html.twig',
             [
                 'temoignage' => $temoignage,
                 'form' => $form->createView(),

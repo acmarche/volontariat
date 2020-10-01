@@ -32,7 +32,7 @@ class BesoinController extends AbstractController
         $besoins = $em->getRepository(Besoin::class)->findAll();
 
         return $this->render(
-            'besoin/index.html.twig',
+            '@Volontariat/besoin/index.html.twig',
             [
                 'besoins' => $besoins,
             ]
@@ -48,7 +48,7 @@ class BesoinController extends AbstractController
     public function showAction(Besoin $besoin)
     {
         return $this->render(
-            'besoin/show.html.twig',
+            '@Volontariat/besoin/show.html.twig',
             array(
                 'association' => $besoin->getAssociation(),
                 'besoin' => $besoin,

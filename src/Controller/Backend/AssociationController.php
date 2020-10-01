@@ -57,7 +57,7 @@ class AssociationController extends AbstractController
         $formDeleteAssociation = $this->createDeleteForm();
 
         return $this->render(
-            'backend/association/index.html.twig',
+            '@Volontariat/backend/association/index.html.twig',
             array(
                 'associations' => $associations,
                 'form_delete_association' => $formDeleteAssociation->createView(),
@@ -103,7 +103,7 @@ class AssociationController extends AbstractController
         }
 
         return $this->render(
-            'backend/association/new.html.twig',
+            '@Volontariat/backend/association/new.html.twig',
             array(
                 'association' => $association,
                 'form' => $form->createView(),
@@ -137,7 +137,7 @@ class AssociationController extends AbstractController
         }
 
         return $this->render(
-            'backend/association/edit.html.twig',
+            '@Volontariat/backend/association/edit.html.twig',
             array(
                 'association' => $association,
                 'form' => $form->createView(),

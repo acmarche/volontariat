@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
  * Volontaire controller.
  *
  * @Route("/backend/volontaire")
- * @IsGranted("ROLE_VOLONTARIAT"
+ * @IsGranted("ROLE_VOLONTARIAT")
  *
  */
 class VolontaireController extends AbstractController
@@ -57,7 +57,7 @@ class VolontaireController extends AbstractController
         $formDeleteVolontaire = $this->createDeleteForm();
 
         return $this->render(
-            'backend/volontaire/index.html.twig',
+            '@Volontariat/backend/volontaire/index.html.twig',
             array(
                 'volontaires' => $volontaires,
                 'form_delete_volontaire' => $formDeleteVolontaire->createView(),
@@ -101,7 +101,7 @@ class VolontaireController extends AbstractController
         }
 
         return $this->render(
-            'backend/volontaire/new.html.twig',
+            '@Volontariat/backend/volontaire/new.html.twig',
             array(
                 'volontaire' => $volontaire,
                 'form' => $form->createView(),
@@ -135,7 +135,7 @@ class VolontaireController extends AbstractController
         }
 
         return $this->render(
-            'backend/volontaire/edit.html.twig',
+            '@Volontariat/backend/volontaire/edit.html.twig',
             array(
                 'volontaire' => $volontaire,
                 'form' => $form->createView(),

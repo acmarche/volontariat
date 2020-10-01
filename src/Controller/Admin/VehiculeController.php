@@ -34,7 +34,7 @@ class VehiculeController extends AbstractController
         $entities = $em->getRepository(Vehicule::class)->findAll();
 
         return $this->render(
-            'admin/vehicule/index.html.twig',
+            '@Volontariat/admin/vehicule/index.html.twig',
             array(
             'entities' => $entities,
         )
@@ -66,7 +66,7 @@ class VehiculeController extends AbstractController
         }
 
         return $this->render(
-            'admin/vehicule/new.html.twig',
+            '@Volontariat/admin/vehicule/new.html.twig',
             array(
             'vehicule' => $vehicule,
             'form' => $form->createView(),
@@ -85,7 +85,7 @@ class VehiculeController extends AbstractController
         $deleteForm = $this->createDeleteForm($vehicule);
 
         return $this->render(
-            'admin/vehicule/show.html.twig',
+            '@Volontariat/admin/vehicule/show.html.twig',
             array(
             'vehicule' => $vehicule,
             'delete_form' => $deleteForm->createView(),
@@ -116,7 +116,7 @@ class VehiculeController extends AbstractController
         }
 
         return $this->render(
-            'admin/vehicule/edit.html.twig',
+            '@Volontariat/admin/vehicule/edit.html.twig',
             array(
             'vehicule' => $vehicule,
             'edit_form' => $editForm->createView(),

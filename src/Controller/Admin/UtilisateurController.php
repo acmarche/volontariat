@@ -71,7 +71,7 @@ class UtilisateurController extends AbstractController
         }
 
         return $this->render(
-            'admin/utilisateur/index.html.twig',
+            '@Volontariat/admin/utilisateur/index.html.twig',
             array(
                 'users' => $users,
             )
@@ -102,7 +102,7 @@ class UtilisateurController extends AbstractController
         }
 
         return $this->render(
-            'admin/utilisateur/new.html.twig',
+            '@Volontariat/admin/utilisateur/new.html.twig',
             array(
                 'utilisateur' => $utilisateur,
                 'form' => $form->createView(),
@@ -124,7 +124,7 @@ class UtilisateurController extends AbstractController
         $associations = $this->associationRepository->search(['user' => $utilisateur]);
 
         return $this->render(
-            'admin/utilisateur/show.html.twig',
+            '@Volontariat/admin/utilisateur/show.html.twig',
             array(
                 'utilisateur' => $utilisateur,
                 'associations' => $associations,
@@ -155,7 +155,7 @@ class UtilisateurController extends AbstractController
         }
 
         return $this->render(
-            'admin/utilisateur/edit.html.twig',
+            '@Volontariat/admin/utilisateur/edit.html.twig',
             array(
                 'utilisateur' => $utilisateur,
                 'edit_form' => $editForm->createView(),
@@ -216,7 +216,7 @@ class UtilisateurController extends AbstractController
         }
 
         return $this->render(
-            'admin/utilisateur/password.html.twig',
+            '@Volontariat/admin/utilisateur/password.html.twig',
             [
                 'user' => $user,
                 'form' => $form->createView(),

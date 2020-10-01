@@ -115,7 +115,7 @@ class MessageController extends AbstractController
         }
 
         return $this->render(
-            'message/new.html.twig',
+            '@Volontariat/message/new.html.twig',
             [
                 'message' => $message,
                 'destinataires' => $destinataires,

@@ -92,7 +92,7 @@ class ResettingController extends AbstractController
         }
 
         return $this->render(
-            'security/resetting/request.html.twig',
+            '@Volontariat/security/resetting/request.html.twig',
             [
                 'form' => $form->createView(),
             ]
@@ -106,7 +106,7 @@ class ResettingController extends AbstractController
     public function requestConfirmed()
     {
         return $this->render(
-            'security/resetting/confirmed.html.twig'
+            '@Volontariat/security/resetting/confirmed.html.twig'
         );
     }
 
@@ -149,7 +149,7 @@ class ResettingController extends AbstractController
         }
 
         return $this->render(
-            'security/resetting/reset.html.twig',
+            '@Volontariat/security/resetting/reset.html.twig',
             array(
                 'token' => $token,
                 'form' => $form->createView(),

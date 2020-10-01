@@ -1,8 +1,8 @@
-{% extends 'base.html.twig' %}
+{% extends '@Volontariat/base.html.twig' %}
 
  {% block breadcrumbs %}
      {% set url = path('volontariat_association_show', {'id': association.id}) %}
-     {% include 'base/breadcrumbs.html.twig' with {'parent':association,'parent_url': url,'title': besoin} %}
+     {% include '@Volontariat/base/breadcrumbs.html.twig' with {'parent':association,'parent_url': url,'title': besoin} %}
  {% endblock %}
 
 {% block body %}

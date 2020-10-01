@@ -49,7 +49,7 @@ class ImageActiviteController extends AbstractController
         $deleteForm = $this->createDeleteForm($activite->getId());
 
         return $this->render(
-            'admin/imageActivite/edit.html.twig',
+            '@Volontariat/admin/imageActivite/edit.html.twig',
             [
                 'images' => $images,
                 'form_delete' => $deleteForm->createView(),

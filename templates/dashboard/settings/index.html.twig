@@ -1,13 +1,13 @@
-{% extends 'base.html.twig' %}
+{% extends '@Volontariat/base.html.twig' %}
 
 {% block breadcrumbs %}
-    {% include 'dashboard/_breadcrumb.html.twig' with {'title':'Compte'} %}
+    {% include '@Volontariat/dashboard/_breadcrumb.html.twig' with {'title':'Compte'} %}
 {% endblock %}
 
 {% block body %}
-    {% include 'dashboard/settings/_content.html.twig' %}
+    {% include '@Volontariat/dashboard/settings/_content.html.twig' %}
 {% endblock %}
 
 {% block basejs %}
-    {% include 'dashboard/settings/javascripts.html.twig' %}
+    {% include '@Volontariat/dashboard/settings/javascripts.html.twig' %}
 {% endblock %}

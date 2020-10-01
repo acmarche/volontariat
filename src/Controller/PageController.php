@@ -28,7 +28,7 @@ class PageController extends AbstractController
         $images = $this->fileHelper->getImages($page);
 
         return $this->render(
-            'page/show.html.twig',
+            '@Volontariat/page/show.html.twig',
             [
                 'page' => $page,
                 'images' => $images,

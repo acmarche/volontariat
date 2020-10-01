@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends '@Volontariat/base.html.twig' %}
 
 {% block begin_row %}
 <div class="row blog-page ">
@@ -15,13 +15,13 @@
                     <div class="headline">
                         <h3>Les Associations suivantes ont choisis <strong>{{ secteur }}</strong></h3>
                     </div>
-                    {% include 'secteur/associations.html.twig' with {'associations': associations} %}
+                    {% include '@Volontariat/secteur/associations.html.twig' with {'associations': associations} %}
                 </div>
                 <div class="col-md-6">
                     <div class="headline">
                         <h3>Les volontaires suivants ont choisis <strong>{{ secteur }}</strong></h3>
                     </div>
-                    {% include 'secteur/volontaires.html.twig' with {'volontaires': volontaires} %}
+                    {% include '@Volontariat/secteur/volontaires.html.twig' with {'volontaires': volontaires} %}
                 </div>
             </div>
         </div><!--End Blog Post-->

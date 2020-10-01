@@ -8,33 +8,33 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
+    <link rel="icon" type="image/x-icon" href="{{ asset('bundles/volontariat/favicon.ico') }}"/>
 
-    {% include('base/css.html.twig') %}
+    {% include('@Volontariat/base/css.html.twig') %}
 
     {% block stylesheets %}{% endblock %}
     {% block scriptshead %}{% endblock %}
 
-    {% include '_analytics.html.twig' %}
+    {% include '@Volontariat/_analytics.html.twig' %}
 </head>
 
 <body>
 <main>
     {% set action = app.request.attributes.get("_route") %}
-    {% include 'base/header.html.twig' %}
+    {% include '@Volontariat/base/header.html.twig' %}
 
     {% block breadcrumbs %}
 
     {% endblock %}
 
-    {% include '_flash_messages.html.twig' %}
+    {% include '@Volontariat/_flash_messages.html.twig' %}
 
     {% block body %}
 
     {% endblock %}
 
     {% block footer %}
-        {% include 'base/footer.html.twig' %}
+        {% include '@Volontariat/base/footer.html.twig' %}
     {% endblock %}
 
     <a class="js-go-to u-go-to-v1" href="#!" data-type="fixed" data-position='{
@@ -48,7 +48,7 @@
 <div class="u-outer-spaces-helper"></div>
 
 {% block basejs %}
-    {% include 'base/javascripts.html.twig' %}
+    {% include '@Volontariat/base/javascripts.html.twig' %}
 {% endblock %}
 
 {% block scripts %}

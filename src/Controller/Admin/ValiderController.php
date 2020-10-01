@@ -50,7 +50,7 @@ class ValiderController extends AbstractController
         $activites = $em->getRepository(Activite::class)->findBy(['valider' => false]);
 
         return $this->render(
-            'admin/valider/index.html.twig',
+            '@Volontariat/admin/valider/index.html.twig',
             array(
                 'associations' => $associations,
                 'activites' => $activites,
@@ -83,7 +83,7 @@ class ValiderController extends AbstractController
         }
 
         return $this->render(
-            'admin/valider/association.html.twig',
+            '@Volontariat/admin/valider/association.html.twig',
             array(
                 'association' => $association,
                 'form' => $form->createView(),
@@ -116,7 +116,7 @@ class ValiderController extends AbstractController
         }
 
         return $this->render(
-            'admin/valider/activite.html.twig',
+            '@Volontariat/admin/valider/activite.html.twig',
             array(
                 'activite' => $activite,
                 'form' => $form->createView(),

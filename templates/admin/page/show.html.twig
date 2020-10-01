@@ -1,7 +1,7 @@
-{% extends 'admin/base.html.twig' %}
+{% extends '@Volontariat/admin/base.html.twig' %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('blueimp/css/blueimp-gallery.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/volontariat/blueimp/css/blueimp-gallery.min.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -24,6 +24,6 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{ asset('blueimp/js/blueimp-gallery.min.js') }}"></script>
-    <script src="{{ asset('js/gallery.js') }}"></script>
+    <script src="{{ asset('bundles/volontariat/blueimp/js/blueimp-gallery.min.js') }}"></script>
+    <script src="{{ asset('bundles/volontariat/js/gallery.js') }}"></script>
 {% endblock %}

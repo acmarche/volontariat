@@ -51,7 +51,7 @@ class ImagePageController extends AbstractController
         $deleteForm = $this->createDeleteForm($page->getId());
 
         return $this->render(
-            'admin/imagePage/edit.html.twig',
+            '@Volontariat/admin/imagePage/edit.html.twig',
             [
                 'images' => $images,
                 'form_delete' => $deleteForm->createView(),

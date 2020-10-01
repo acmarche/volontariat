@@ -1,7 +1,7 @@
-{% extends 'base.html.twig' %}
+{% extends '@Volontariat/base.html.twig' %}
 
 {% block breadcrumbs %}
-    {% include 'dashboard/_breadcrumb.html.twig' with {'title': 'Témoignages'} %}
+    {% include '@Volontariat/dashboard/_breadcrumb.html.twig' with {'title': 'Témoignages'} %}
 {% endblock %}
 
 {% block body -%}
@@ -69,7 +69,7 @@
             <p>Aucun</p>
         {% endif %}
     </section>
-    {% include 'backend/temoignage/_delete.html.twig' %}
+    {% include '@Volontariat/backend/temoignage/_delete.html.twig' %}
 {% endblock %}
 
 {% block scripts %}

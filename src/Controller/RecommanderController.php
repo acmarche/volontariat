@@ -105,7 +105,7 @@ class RecommanderController extends AbstractController
         $keySite = $this->getParameter('acmarche_volontariat_captcha_site_key');
 
         return $this->render(
-            'contact/recommander_volontaire.html.twig',
+            '@Volontariat/contact/recommander_volontaire.html.twig',
             [
                 'volontaire' => $volontaire,
                 'siteKey' => $keySite,
@@ -154,7 +154,7 @@ class RecommanderController extends AbstractController
         $keySite = $this->getParameter('acmarche_volontariat_captcha_site_key');
 
         return $this->render(
-            'contact/recommander_associationhtml.twig',
+            '@Volontariat/contact/recommander_associationhtml.twig',
             [
                 'association' => $association,
                 'siteKey' => $keySite,

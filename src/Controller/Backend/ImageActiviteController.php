@@ -52,7 +52,7 @@ class ImageActiviteController extends AbstractController
         $association = $activite->getAssociation();
 
         return $this->render(
-            'backend/image_activite/edit.html.twig',
+            '@Volontariat/backend/image_activite/edit.html.twig',
             array(
                 'images' => $images,
                 'form_delete' => $deleteForm->createView(),

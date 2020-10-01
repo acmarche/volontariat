@@ -47,7 +47,7 @@ class DefaultController extends AbstractController
         $associations = $em->getRepository(Association::class)->getRecent();
         $besoins = $em->getRepository(Besoin::class)->getRecent();
 
-        return $this->render('default/index.html.twig', [
+        return $this->render('@Volontariat/default/index.html.twig', [
             'activites' => $activites,
             'pages' => $pages,
             'volontaires' => $volontaires,
@@ -62,6 +62,6 @@ class DefaultController extends AbstractController
      */
     public function contact()
     {
-        return $this->render('default/contact.html.twig', []);
+        return $this->render('@Volontariat/default/contact.html.twig', []);
     }
 }

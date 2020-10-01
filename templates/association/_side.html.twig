@@ -9,7 +9,7 @@
                          alt="{{ association.imageName }}">
                 {% else %}
                     <img class="g-width-40 g-height-40"
-                         src="{{ asset('assets/img-temp/logos/img1.png') }}"
+                         src="{{ asset('bundles/volontariat/assets/img-temp/logos/img1.png') }}"
                          alt="Image Description">
                 {% endif %}
             </div>
@@ -30,7 +30,7 @@
                      ["", "labels", [{"visibility":"on"}]],
                      ["water", "", [{"color":"#bac6cb"}]]
                    ]' data-pin="true"
-             data-pin-icon="{{ asset('assets/img/icons/pin/green.png') }}">
+             data-pin-icon="{{ asset('bundles/volontariat/assets/img/icons/pin/green.png') }}">
         </div>
         <!-- End Google Map -->
 
@@ -85,7 +85,7 @@
             </a>
         {% endif %}
 
-        {% include 'association/_contact.html.twig' %}
+        {% include '@Volontariat/association/_contact.html.twig' %}
 
         <!-- Social Links
         <ul class="list-inline mb-0">

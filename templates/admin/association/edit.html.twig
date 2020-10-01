@@ -1,4 +1,4 @@
-{% extends "admin/base.html.twig" %}
+{% extends "@Volontariat/admin/base.html.twig" %}
 
 {% block body -%}
 
@@ -6,7 +6,7 @@
     <h3>{{ association }}</h3>
 
 
-    {{ include('admin/association/form.html.twig') }}
+    {{ include('@Volontariat/admin/association/form.html.twig') }}
 
     <a href="{{ path('volontariat_admin_association_show', {'id':association.id}) }}">
         <span class="fas fa-list"></span> Annuler

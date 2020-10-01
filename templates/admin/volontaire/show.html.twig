@@ -1,10 +1,10 @@
-{% extends 'admin/base.html.twig' %}
+{% extends '@Volontariat/admin/base.html.twig' %}
 
 {% block body %}
 
     <h3>{{ volontaire }}</h3>
 
-    {{ include('admin/volontaire/actions.html.twig') }}
+    {{ include('@Volontariat/admin/volontaire/actions.html.twig') }}
 
     {% if volontaire.notes %}
         <h4>Note</h4>
@@ -85,7 +85,7 @@
         </div>
 
         <div class="col-6">
-            {% include 'admin/volontaire/secteurs.html.twig' %}
+            {% include '@Volontariat/admin/volontaire/secteurs.html.twig' %}
         </div>
 
     </div>
@@ -105,6 +105,6 @@
         . {{ 'Updated' | trans }} {{ volontaire.updatedAt|date('d-m-Y H:i:s') }}
     </p>
 
-    {{ include('admin/volontaire/delete.html.twig') }}
+    {{ include('@Volontariat/admin/volontaire/delete.html.twig') }}
 
 {% endblock %}

@@ -44,7 +44,7 @@ class TemoignageController extends AbstractController
         $formDelete = $this->createDeleteForm();
 
         return $this->render(
-            'backend/temoignage/index.html.twig',
+            '@Volontariat/backend/temoignage/index.html.twig',
             [
                 'temoignages' => $temoignages,
                 'form_delete' => $formDelete->createView(),
@@ -81,7 +81,7 @@ class TemoignageController extends AbstractController
         }
 
         return $this->render(
-            'backend/temoignage/new.html.twig',
+            '@Volontariat/backend/temoignage/new.html.twig',
             [
                 'temoignage' => $temoignage,
                 'form' => $form->createView(),
@@ -112,7 +112,7 @@ class TemoignageController extends AbstractController
         }
 
         return $this->render(
-            'backend/temoignage/edit.html.twig',
+            '@Volontariat/backend/temoignage/edit.html.twig',
             [
                 'temoignage' => $temoignage,
                 'form' => $form->createView(),

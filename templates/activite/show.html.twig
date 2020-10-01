@@ -1,18 +1,18 @@
-{% extends 'base.html.twig' %}
+{% extends '@Volontariat/base.html.twig' %}
 
 {% block stylesheets %}
     <!-- CSS Implementing Plugins -->
-    <link rel="stylesheet" href="{{ asset('assets/vendor/icon-hs/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/volontariat/assets/vendor/icon-hs/style.css') }}">
     <link rel="stylesheet"
-          href="{{ asset('assets/vendor/fancybox/jquery.fancybox.min.css') }}">
+          href="{{ asset('bundles/volontariat/assets/vendor/fancybox/jquery.fancybox.min.css') }}">
 {% endblock %}
 
  {% block breadcrumbs %}
      {% if activite.association %}
          {% set url = path('volontariat_association_show', {'id': association.id}) %}
-         {% include 'base/breadcrumbs.html.twig' with {'parent':association,'parent_url': url,'title': ''} %}
+         {% include '@Volontariat/base/breadcrumbs.html.twig' with {'parent':association,'parent_url': url,'title': ''} %}
      {% else %}
-         {% include 'base/breadcrumbs.html.twig' with {'title': activite} %}
+         {% include '@Volontariat/base/breadcrumbs.html.twig' with {'title': activite} %}
      {% endif %}
  {% endblock %}
 
@@ -44,7 +44,7 @@
                     <h4>Lieu</h4>
                     {{ activite.lieu }}
 
-                    {% include 'activite/_images.html.twig' %}
+                    {% include '@Volontariat/activite/_images.html.twig' %}
 
                 </div>
             </div>
@@ -58,16 +58,16 @@
 
 {% block scripts %}
 
-    <script src="{{ asset('assets/vendor/gmaps/gmaps.min.js') }}"></script>
-    <script src="{{ asset('assets/js/components/hs.rating.js') }}"></script>
-    <script src="{{ asset('assets/js/components/gmap/hs.map.js') }}"></script>
-    <script src="{{ asset('assets/js/components/hs.progress-bar.js') }}"></script>
-    <script src="{{ asset('assets/js/components/hs.go-to.js') }}"></script>
+    <script src="{{ asset('bundles/volontariat/assets/vendor/gmaps/gmaps.min.js') }}"></script>
+    <script src="{{ asset('bundles/volontariat/assets/js/components/hs.rating.js') }}"></script>
+    <script src="{{ asset('bundles/volontariat/assets/js/components/gmap/hs.map.js') }}"></script>
+    <script src="{{ asset('bundles/volontariat/assets/js/components/hs.progress-bar.js') }}"></script>
+    <script src="{{ asset('bundles/volontariat/assets/js/components/hs.go-to.js') }}"></script>
 
     <!-- JS Implementing Plugins -->
-    <script src="{{ asset('assets/vendor/fancybox/jquery.fancybox.min.js') }}"></script>
+    <script src="{{ asset('bundles/volontariat/assets/vendor/fancybox/jquery.fancybox.min.js') }}"></script>
     <!-- JS Unify -->
-    <script src="{{ asset('assets/js/components/hs.popup.js') }}">
+    <script src="{{ asset('bundles/volontariat/assets/js/components/hs.popup.js') }}">
     </script>
 
     <script>

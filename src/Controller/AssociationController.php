@@ -65,7 +65,7 @@ class AssociationController extends AbstractController
         }
 
         return $this->render(
-            'association/index.html.twig',
+            '@Volontariat/association/index.html.twig',
             array(
                 'search_form' => $search_form->createView(),
                 'associations' => $associations,
@@ -83,7 +83,7 @@ class AssociationController extends AbstractController
     {
         $images = $this->fileHelper->getImages($association);
 
-        return $this->render('association/show.html.twig', array(
+        return $this->render('@Volontariat/association/show.html.twig', array(
             'association' => $association,
             'blog' => true,
             'images' => $images,

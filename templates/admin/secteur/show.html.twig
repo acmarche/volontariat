@@ -1,4 +1,4 @@
-{% extends 'admin/base.html.twig' %}
+{% extends '@Volontariat/admin/base.html.twig' %}
 
 {% block body %}
 
@@ -8,12 +8,12 @@
         {{ secteur.description }}
     </p>
 
-    {% include 'admin/secteur/actions.html.twig' %}
+    {% include '@Volontariat/admin/secteur/actions.html.twig' %}
 
-    {% include 'admin/secteur/volontaires.html.twig' with {'volontaires': secteur.volontaires } %}
+    {% include '@Volontariat/admin/secteur/volontaires.html.twig' with {'volontaires': secteur.volontaires } %}
 
-    {% include 'admin/secteur/associations.html.twig' with {'associations': secteur.associations } %}
+    {% include '@Volontariat/admin/secteur/associations.html.twig' with {'associations': secteur.associations } %}
 
-    {% include 'admin/secteur/delete.html.twig' %}
+    {% include '@Volontariat/admin/secteur/delete.html.twig' %}
 
 {% endblock %}

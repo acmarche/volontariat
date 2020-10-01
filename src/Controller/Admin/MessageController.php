@@ -58,7 +58,7 @@ class MessageController extends AbstractController
 
         $count = count($messages);
 
-        return $this->render('admin/message/index.html.twig', array('messages' => $messages, 'count' => $count));
+        return $this->render('@Volontariat/admin/message/index.html.twig', array('messages' => $messages, 'count' => $count));
     }
 
     /**
@@ -108,7 +108,7 @@ class MessageController extends AbstractController
         }
 
         return $this->render(
-            'admin/message/new.html.twig',
+            '@Volontariat/admin/message/new.html.twig',
             array(
                 'message' => $message,
                 'query' => $query,

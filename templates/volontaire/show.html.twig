@@ -1,8 +1,8 @@
-{% extends 'base.html.twig' %}
+{% extends '@Volontariat/base.html.twig' %}
 
 {% block breadcrumbs %}
     {% set url = path('volontariat_volontaire') %}
-    {% include 'base/breadcrumbs.html.twig' with {'title': volontaire, 'parent':'Volontaires', 'parent_url': url} %}
+    {% include '@Volontariat/base/breadcrumbs.html.twig' with {'title': volontaire, 'parent':'Volontaires', 'parent_url': url} %}
 {% endblock %}
 
 {% block body %}
@@ -54,7 +54,7 @@
                                 {{ volontaire.mobile }}
                             </li>
                         </ul>
-                        {% include 'volontaire/_contact.html.twig' %}
+                        {% include '@Volontariat/volontaire/_contact.html.twig' %}
 
                         <!-- End User Contact Buttons -->
                     </div>
@@ -166,7 +166,7 @@
 
                         <hr class="g-brd-gray-light-v4 g-my-20">
 
-                        {% include 'backend/volontaire/associations_communes.html.twig' %}
+                        {% include '@Volontariat/backend/volontaire/associations_communes.html.twig' %}
 
                     </div>
                 </div>

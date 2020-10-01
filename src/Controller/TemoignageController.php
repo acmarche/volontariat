@@ -39,7 +39,7 @@ class TemoignageController extends AbstractController
         $temoignages = $this->temoignageRepository->findAll();
 
         return $this->render(
-            'temoignage/index.html.twig',
+            '@Volontariat/temoignage/index.html.twig',
             ['temoignages' => $temoignages]
         );
     }

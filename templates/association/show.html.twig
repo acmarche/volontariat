@@ -1,15 +1,15 @@
-{% extends 'base.html.twig' %}
+{% extends '@Volontariat/base.html.twig' %}
 
 {% block stylesheets %}
     <!-- CSS Implementing Plugins -->
-    <link rel="stylesheet" href="{{ asset('assets/vendor/icon-hs/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/volontariat/assets/vendor/icon-hs/style.css') }}">
     <link rel="stylesheet"
-          href="{{ asset('assets/vendor/fancybox/jquery.fancybox.min.css') }}">
+          href="{{ asset('bundles/volontariat/assets/vendor/fancybox/jquery.fancybox.min.css') }}">
 {% endblock %}
 
 {% block breadcrumbs %}
     {% set url = path('volontariat_association') %}
-    {% include 'base/breadcrumbs.html.twig' with {'title': association, 'parent':'Associations', 'parent_url': url} %}
+    {% include '@Volontariat/base/breadcrumbs.html.twig' with {'title': association, 'parent':'Associations', 'parent_url': url} %}
 {% endblock %}
 
 {% block body %}
@@ -31,7 +31,7 @@
                                                  class="g-width-40 g-height-40" alt="Image Description">
                                         {% else %}
                                             <!--        <img class="g-width-40 g-height-40"
-                                                 src="{{ asset('assets/img-temp/logos/img1.png') }}"
+                                                 src="{{ asset('bundles/volontariat/assets/img-temp/logos/img1.png') }}"
                                                  alt="Image Description">-->
                                         {% endif %}
                                     </div>
@@ -70,7 +70,7 @@
 
                         <hr class="g-brd-gray-light-v4">
 
-                        {% include 'association/_images.html.twig' %}
+                        {% include '@Volontariat/association/_images.html.twig' %}
 
                         <hr class="g-brd-gray-light-v4">
 
@@ -126,16 +126,16 @@
 
                         <hr class="g-brd-gray-light-v4">
 
-                        {% include 'association/_besoins.html.twig' %}
+                        {% include '@Volontariat/association/_besoins.html.twig' %}
 
-                        {% include 'association/_activites.html.twig' %}
+                        {% include '@Volontariat/association/_activites.html.twig' %}
 
                     </article>
                 </div>
                 <!-- End Content -->
 
                 <!-- Sidebar -->
-                {% include 'association/_side.html.twig' %}
+                {% include '@Volontariat/association/_side.html.twig' %}
                 <!-- Sidebar -->
             </div>
         </div>
@@ -147,22 +147,22 @@
 {% endblock %}
 
 {% block footer %}
-    {% include 'base/footer_sans_contact.html.twig' %}
+    {% include '@Volontariat/base/footer_sans_contact.html.twig' %}
 {% endblock %}
 
 
 {% block scripts %}
 
-    <script src="{{ asset('assets/vendor/gmaps/gmaps.min.js') }}"></script>
-    <script src="{{ asset('assets/js/components/hs.rating.js') }}"></script>
-    <script src="{{ asset('assets/js/components/gmap/hs.map.js') }}"></script>
-    <script src="{{ asset('assets/js/components/hs.progress-bar.js') }}"></script>
-    <script src="{{ asset('assets/js/components/hs.go-to.js') }}"></script>
+    <script src="{{ asset('bundles/volontariat/assets/vendor/gmaps/gmaps.min.js') }}"></script>
+    <script src="{{ asset('bundles/volontariat/assets/js/components/hs.rating.js') }}"></script>
+    <script src="{{ asset('bundles/volontariat/assets/js/components/gmap/hs.map.js') }}"></script>
+    <script src="{{ asset('bundles/volontariat/assets/js/components/hs.progress-bar.js') }}"></script>
+    <script src="{{ asset('bundles/volontariat/assets/js/components/hs.go-to.js') }}"></script>
 
     <!-- JS Implementing Plugins -->
-    <script src="{{ asset('assets/vendor/fancybox/jquery.fancybox.min.js') }}"></script>
+    <script src="{{ asset('bundles/volontariat/assets/vendor/fancybox/jquery.fancybox.min.js') }}"></script>
     <!-- JS Unify -->
-    <script src="{{ asset('assets/js/components/hs.popup.js') }}">
+    <script src="{{ asset('bundles/volontariat/assets/js/components/hs.popup.js') }}">
     </script>
 
     <script>

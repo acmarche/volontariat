@@ -1,14 +1,14 @@
-{% extends 'base.html.twig' %}
+{% extends '@Volontariat/base.html.twig' %}
 
 {% block stylesheets %}
     <!-- CSS Implementing Plugins -->
-    <link rel="stylesheet" href="{{ asset('assets/vendor/icon-hs/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('bundles/volontariat/assets/vendor/icon-hs/style.css') }}">
     <link rel="stylesheet"
-          href="{{ asset('assets/vendor/fancybox/jquery.fancybox.min.css') }}">
+          href="{{ asset('bundles/volontariat/assets/vendor/fancybox/jquery.fancybox.min.css') }}">
 {% endblock %}
 
  {% block breadcrumbs %}
-     {% include 'base/breadcrumbs.html.twig' with {'title': page.title} %}
+     {% include '@Volontariat/base/breadcrumbs.html.twig' with {'title': page.title} %}
  {% endblock %}
 
 {% block body %}
@@ -33,21 +33,21 @@
 
         <hr class="g-brd-gray-light-v4">
 
-        {% include 'page/_images.html.twig' %}
+        {% include '@Volontariat/page/_images.html.twig' %}
 
     </section>
 
 {% endblock %}
 {% block scripts %}
 
-    <script src="{{ asset('assets/js/components/hs.rating.js') }}"></script>
-    <script src="{{ asset('assets/js/components/hs.progress-bar.js') }}"></script>
-    <script src="{{ asset('assets/js/components/hs.go-to.js') }}"></script>
+    <script src="{{ asset('bundles/volontariat/assets/js/components/hs.rating.js') }}"></script>
+    <script src="{{ asset('bundles/volontariat/assets/js/components/hs.progress-bar.js') }}"></script>
+    <script src="{{ asset('bundles/volontariat/assets/js/components/hs.go-to.js') }}"></script>
 
     <!-- JS Implementing Plugins -->
-    <script src="{{ asset('assets/vendor/fancybox/jquery.fancybox.min.js') }}"></script>
+    <script src="{{ asset('bundles/volontariat/assets/vendor/fancybox/jquery.fancybox.min.js') }}"></script>
     <!-- JS Unify -->
-    <script src="{{ asset('assets/js/components/hs.popup.js') }}">
+    <script src="{{ asset('bundles/volontariat/assets/js/components/hs.popup.js') }}">
     </script>
 
     <script>

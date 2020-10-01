@@ -23,7 +23,7 @@ class SecteurController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $secteurs = $em->getRepository(Secteur::class)->findAll();
 
-        return $this->render('secteur/index.html.twig', [
+        return $this->render('@Volontariat/secteur/index.html.twig', [
             'secteurs' => $secteurs,
         ]);
     }
@@ -39,7 +39,7 @@ class SecteurController extends AbstractController
         $associations = $secteur->getAssociations();
         $volontaires = $secteur->getVolontaires();
 
-        return $this->render('secteur/index.html.twig', array(
+        return $this->render('@Volontariat/secteur/index.html.twig', array(
             'secteur' => $secteur,
             'associations' => $associations,
             'volontaires' => $volontaires,

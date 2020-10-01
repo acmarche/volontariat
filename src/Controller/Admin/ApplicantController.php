@@ -44,7 +44,7 @@ class ApplicantController extends AbstractController
         $applicants = $em->getRepository(Applicant::class)->findAll();
 
         return $this->render(
-            'admin/applicant/index.html.twig',
+            '@Volontariat/admin/applicant/index.html.twig',
             array(
 
                 'applicants' => $applicants,
@@ -76,7 +76,7 @@ class ApplicantController extends AbstractController
         }
 
         return $this->render(
-            'admin/applicant/new.html.twig',
+            '@Volontariat/admin/applicant/new.html.twig',
             array(
                 'applicant' => $applicant,
                 'form' => $form->createView(),
@@ -95,7 +95,7 @@ class ApplicantController extends AbstractController
         $deleteForm = $this->createDeleteForm($applicant);
 
         return $this->render(
-            'admin/applicant/show.html.twig',
+            '@Volontariat/admin/applicant/show.html.twig',
             array(
                 'applicant' => $applicant,
                 'delete_form' => $deleteForm->createView(),
@@ -127,7 +127,7 @@ class ApplicantController extends AbstractController
         }
 
         return $this->render(
-            'admin/applicant/edit.html.twig',
+            '@Volontariat/admin/applicant/edit.html.twig',
             array(
                 'applicant' => $applicant,
                 'form' => $form->createView(),
@@ -158,7 +158,7 @@ class ApplicantController extends AbstractController
         }
 
         return $this->render(
-            'admin/applicant/edit.html.twig',
+            '@Volontariat/admin/applicant/edit.html.twig',
             array(
                 'applicant' => $applicant,
                 'form' => $form->createView(),

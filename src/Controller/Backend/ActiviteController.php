@@ -43,7 +43,7 @@ class ActiviteController extends AbstractController
     {
         $formDelete = $this->createDeleteForm();
 
-        return $this->render('backend/activite/index.html.twig', array(
+        return $this->render('@Volontariat/backend/activite/index.html.twig', array(
             'activites' => $association->getActivites(),
             'association' => $association,
             'form_delete' => $formDelete->createView(),
@@ -82,7 +82,7 @@ class ActiviteController extends AbstractController
             return $this->redirectToRoute('volontariat_backend_image_activite', ['id' => $activite->getId()]);
         }
 
-        return $this->render('backend/activite/new.html.twig', array(
+        return $this->render('@Volontariat/backend/activite/new.html.twig', array(
             'activite' => $activite,
             'form' => $form->createView(),
         ));
@@ -114,7 +114,7 @@ class ActiviteController extends AbstractController
             );
         }
 
-        return $this->render('backend/activite/edit.html.twig', array(
+        return $this->render('@Volontariat/backend/activite/edit.html.twig', array(
             'activite' => $activite,
             'form' => $editForm->createView(),
         ));

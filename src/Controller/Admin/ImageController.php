@@ -49,7 +49,7 @@ class ImageController extends AbstractController
         $images = $this->fileHelper->getImages($association);
         $deleteForm = $this->createDeleteForm($association->getId());
 
-        return $this->render('admin/image/edit.html.twig', array(
+        return $this->render('@Volontariat/admin/image/edit.html.twig', array(
             'images' => $images,
             'form_delete' => $deleteForm->createView(),
             'association' => $association,

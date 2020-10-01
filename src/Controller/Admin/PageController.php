@@ -44,7 +44,7 @@ class PageController extends AbstractController
         $pages = $em->getRepository(Page::class)->findAll();
 
         return $this->render(
-            'admin/page/index.html.twig',
+            '@Volontariat/admin/page/index.html.twig',
             array(
                 'pages' => $pages,
             )
@@ -75,7 +75,7 @@ class PageController extends AbstractController
         }
 
         return $this->render(
-            'admin/page/new.html.twig',
+            '@Volontariat/admin/page/new.html.twig',
             array(
                 'page' => $page,
                 'form' => $form->createView(),
@@ -95,7 +95,7 @@ class PageController extends AbstractController
         $images = $this->fileHelper->getImages($page);
 
         return $this->render(
-            'admin/page/show.html.twig',
+            '@Volontariat/admin/page/show.html.twig',
             array(
                 'page' => $page,
                 'images' => $images,
@@ -127,7 +127,7 @@ class PageController extends AbstractController
         }
 
         return $this->render(
-            'admin/page/edit.html.twig',
+            '@Volontariat/admin/page/edit.html.twig',
             array(
                 'page' => $page,
                 'edit_form' => $editForm->createView(),

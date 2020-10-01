@@ -28,7 +28,7 @@ class BesoinController extends AbstractController
         $formDelete = $this->createDeleteForm();
 
         return $this->render(
-            'backend/besoin/index.html.twig',
+            '@Volontariat/backend/besoin/index.html.twig',
             [
                 'association' => $association,
                 'besoins' => $association->getBesoins(),
@@ -69,7 +69,7 @@ class BesoinController extends AbstractController
         }
 
         return $this->render(
-            'backend/besoin/new.html.twig',
+            '@Volontariat/backend/besoin/new.html.twig',
             array(
                 'besoin' => $besoin,
                 'form' => $form->createView(),
@@ -103,7 +103,7 @@ class BesoinController extends AbstractController
         }
 
         return $this->render(
-            'backend/besoin/edit.html.twig',
+            '@Volontariat/backend/besoin/edit.html.twig',
             array(
                 'besoin' => $besoin,
                 'form' => $form->createView(),

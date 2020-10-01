@@ -44,7 +44,7 @@ class ActiviteController extends AbstractController
             $activite->setImages($this->fileHelper->getImages($activite));
         }
 
-        return $this->render('activite/show.html.twig', [
+        return $this->render('@Volontariat/activite/show.html.twig', [
             'activites' => $activites,
         ]);
     }
@@ -59,7 +59,7 @@ class ActiviteController extends AbstractController
     {
         $images = $this->fileHelper->getImages($activite);
 
-        return $this->render('activite/show.html.twig', array(
+        return $this->render('@Volontariat/activite/show.html.twig', array(
             'association' => $activite->getAssociation(),
             'images' => $images,
             'activite' => $activite,

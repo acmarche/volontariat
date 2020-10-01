@@ -1,0 +1,239 @@
+<?xml version="1.0"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="file.ext">
+        <body>
+            <trans-unit id="1">
+                <source>Content</source>
+                <target>Contenu</target>
+            </trans-unit>
+            <trans-unit id="2">
+                <source>Symfony2 is great</source>
+                <target>J'aime Symfony2</target>
+            </trans-unit>
+            <trans-unit id="3">
+                <source>Address</source>
+                <target>Rue</target>
+            </trans-unit>
+            <trans-unit id="4">
+                <source>Name</source>
+                <target>Nom</target>
+            </trans-unit>
+            <trans-unit id="5">
+                <source>Surname</source>
+                <target>Prénom</target>
+            </trans-unit>
+            <trans-unit id="6">
+                <source>Civility</source>
+                <target>Civilité</target>
+            </trans-unit>
+            <trans-unit id="7">
+                <source>Job</source>
+                <target>Profession</target>
+            </trans-unit>
+            <trans-unit id="8">
+                <source>City</source>
+                <target>Localité</target>
+            </trans-unit>
+            <trans-unit id="9">
+                <source>Birthday</source>
+                <target>Date de naissance</target>
+            </trans-unit>
+            <trans-unit id="10">
+                <source>Phone</source>
+                <target>Téléphone</target>
+            </trans-unit>
+            <trans-unit id="11">
+                <source>Mobile</source>
+                <target>Gsm</target>
+            </trans-unit>
+            <trans-unit id="12">
+                <source>Postalcode</source>
+                <target>Code postal</target>
+            </trans-unit>
+            <trans-unit id="13">
+                <source>Wishes</source>
+                <target>Activités secteurées</target>
+            </trans-unit>
+            <trans-unit id="14">
+                <source>Availability</source>
+                <target>Disponibilité</target>
+            </trans-unit>
+            <trans-unit id="15">
+                <source>Suggestion</source>
+                <target>Proposition</target>
+            </trans-unit>
+            <trans-unit id="16">
+                <source>Number</source>
+                <target>Numéro</target>
+            </trans-unit>
+            <trans-unit id="17">
+                <source>Title</source>
+                <target>Intitulé</target>
+            </trans-unit>
+            <trans-unit id="18">
+                <source>Wishtype</source>
+                <target>Type d'aide</target>
+            </trans-unit>
+            <trans-unit id="19">
+                <source>Period</source>
+                <target>Période</target>
+            </trans-unit>
+            <trans-unit id="20">
+                <source>Requirement</source>
+                <target>Descriptif des besoins</target>
+            </trans-unit>
+            <trans-unit id="21">
+                <source>Wish</source>
+                <target>Secteur</target>
+            </trans-unit>
+            <trans-unit id="22">
+                <source>Car</source>
+                <target>Véhicule</target>
+            </trans-unit>
+            <trans-unit id="23">
+                <source>Username</source>
+                <target>Nom d'utilisateur</target>
+            </trans-unit>
+            <trans-unit id="24">
+                <source>Password</source>
+                <target>Mot de passe</target>
+            </trans-unit>
+            <trans-unit id="25">
+                <source>Search</source>
+                <target>Rechercher</target>
+            </trans-unit>
+            <trans-unit id="26">
+                <source>Place</source>
+                <target>Lieu de prestation</target>
+            </trans-unit>
+            <trans-unit id="27">
+                <source>Date begin</source>
+                <target>Date de début</target>
+            </trans-unit>
+            <trans-unit id="28">
+                <source>Date end</source>
+                <target>Date de fin</target>
+            </trans-unit>
+            <trans-unit id="29">
+                <source>Create</source>
+                <target>Ajouter</target>
+            </trans-unit>
+            <trans-unit id="30">
+                <source>Back to the list</source>
+                <target>Retour à la liste</target>
+            </trans-unit>
+            <trans-unit id="31">
+                <source>Edit</source>
+                <target>Editer</target>
+            </trans-unit>
+            <trans-unit id="32">
+                <source>show</source>
+                <target>Voir</target>
+            </trans-unit>
+            <trans-unit id="33">
+                <source>edit</source>
+                <target>Editer</target>
+            </trans-unit>
+            <trans-unit id="34">
+                <source>The password fields must match.</source>
+                <target>Les mots de passes doivent correspondre</target>
+            </trans-unit>
+            <trans-unit id="35">
+                <source>Your password</source>
+                <target>Votre mot de passe</target>
+            </trans-unit>
+            <trans-unit id="36">
+                <source>Repeat Password</source>
+                <target>Répétez le mot de passe</target>
+            </trans-unit>
+            <trans-unit id="37">
+                <source>User</source>
+                <target>Utilisateur</target>
+            </trans-unit>
+            <trans-unit id="38">
+                <source>Show</source>
+                <target>Voir</target>
+            </trans-unit>
+            <trans-unit id="39">
+                <source>First</source>
+                <target>Mot de passe</target>
+            </trans-unit>
+            <trans-unit id="40">
+                <source>Second</source>
+                <target>Répéter le mot de passe</target>
+            </trans-unit>
+            <trans-unit id="41">
+                <source>User account is disabled</source>
+                <target>Votre compte n'est pas activé</target>
+            </trans-unit>
+            <trans-unit id="42">
+                <source>The presented password is invalid</source>
+                <target>Nom d'utilisateur ou mot de passe invalid.</target>
+            </trans-unit>
+            <trans-unit id="43">
+                <source>Bad credentials</source>
+                <target>Nom d'utilisateur ou mot de passe invalid</target>
+            </trans-unit>
+            <trans-unit id="44">
+                <source>Delete</source>
+                <target>Supprimer</target>
+            </trans-unit>
+            <trans-unit id="45">
+                <source>Prenom</source>
+                <target>Prénom</target>
+            </trans-unit>
+            <trans-unit id="46">
+                <source>Postal code</source>
+                <target>Code postale</target>
+            </trans-unit>
+            <trans-unit id="47">
+                <source>Prenom</source>
+                <target>Prénom</target>
+            </trans-unit>
+            <trans-unit id="48">
+                <source>temoignage.updated_successfully</source>
+                <target>Témoignage mis à jour</target>
+            </trans-unit>
+	    <trans-unit id="49">
+                <source>temoignage.created_successfully</source>
+                <target>Témoignage ajouté</target>
+            </trans-unit>
+             <trans-unit id="50">
+                            <source>Create</source>
+                            <target>Ajouter</target>
+                        </trans-unit>
+                        <trans-unit id="51">
+                            <source>Intitule</source>
+                            <target>Intitulé</target>
+                        </trans-unit>
+                        <trans-unit id="52">
+                            <source>Delete</source>
+                            <target>Supprimer</target>
+                        </trans-unit>
+                        <trans-unit id="53">
+                            <source>Edit</source>
+                            <target>Editer</target>
+                        </trans-unit>
+                        <trans-unit id="54">
+                            <source>Update</source>
+                            <target>Mettre à jour</target>
+                        </trans-unit>
+                        <trans-unit id="55">
+                            <source>Created</source>
+                            <target>Créé le</target>
+                        </trans-unit>
+                        <trans-unit id="56">
+                            <source>Updated</source>
+                            <target>Mis à jour le</target>
+                        </trans-unit>
+                        <trans-unit id="57">
+                            <source>Bad credentials.</source>
+                            <target>Vous ne disposez pas des droits</target>
+                        </trans-unit>
+                        <trans-unit id="58">
+                            <source>Something has intentionally gone wrong.</source>
+                            <target>Une erreur est survenue</target>
+                        </trans-unit>
+        </body>
+    </file>
+</xliff>

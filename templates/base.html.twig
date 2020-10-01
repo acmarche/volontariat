@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <!-- Title -->
+    <title>{% block title %}Volontariat{% endblock %}</title>
+
+    <!-- Required Meta Tags Always Come First -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
+
+    {% include('base/css.html.twig') %}
+
+    {% block stylesheets %}{% endblock %}
+    {% block scriptshead %}{% endblock %}
+
+    {% include '_analytics.html.twig' %}
+</head>
+
+<body>
+<main>
+    {% set action = app.request.attributes.get("_route") %}
+    {% include 'base/header.html.twig' %}
+
+    {% block breadcrumbs %}
+
+    {% endblock %}
+
+    {% include '_flash_messages.html.twig' %}
+
+    {% block body %}
+
+    {% endblock %}
+
+    {% block footer %}
+        {% include 'base/footer.html.twig' %}
+    {% endblock %}
+
+    <a class="js-go-to u-go-to-v1" href="#!" data-type="fixed" data-position='{
+     "bottom": 15,
+     "right": 15
+   }' data-offset-top="400" data-compensation="#js-header" data-show-effect="zoomIn">
+        <i class="hs-icon hs-icon-arrow-top"></i>
+    </a>
+</main>
+
+<div class="u-outer-spaces-helper"></div>
+
+{% block basejs %}
+    {% include 'base/javascripts.html.twig' %}
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}
+</body>
+</html>

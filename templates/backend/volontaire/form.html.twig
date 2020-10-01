@@ -1,0 +1,84 @@
+{{ form_start(form) }}
+{{ form_errors(form) }}
+
+<div class="form-row">
+    <div class="col">
+
+        <div class="form-row">
+            <div class="col">
+                {{ form_row(form.civility) }}
+            </div>
+            <div class="col">
+                {{ form_row(form.name) }}
+            </div>
+            <div class="col">
+                {{ form_row(form.surname) }}
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col">
+                {{ form_row(form.address) }}
+            </div>
+            <div class="col">
+                {{ form_row(form.number) }}
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col">
+                {{ form_row(form.postalCode) }}
+            </div>
+            <div class="col">
+                {{ form_row(form.city) }}
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col">
+                {{ form_row(form.phone) }}
+            </div>
+            <div class="col">
+                {{ form_row(form.mobile) }}
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col">
+                {{ form_row(form.fax) }}
+            </div>
+            <div class="col">
+                {{ form_row(form.birthday) }}
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col">
+                {{ form_row(form.known_by) }}
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="col">
+                {{ form_row(form.email) }}
+            </div>
+            <div class="col">
+                {{ form_row(form.job) }}
+            </div>
+        </div>
+
+        {{ form_row(form.availability) }}
+
+        {{ form_row(form.image) }}
+
+        {{ form_row(form.description) }}
+    </div>
+
+    <div class="col">
+        {{ form_row(form.vehicules) }}
+        {{ form_row(form.secteurs) }}
+        {{ form_row(form.secteur) }}
+    </div>
+</div>
+{{ form_rest(form) }}
+{{ form_end(form) }}

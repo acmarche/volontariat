@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block breadcrumbs %}
+    {% include 'dashboard/_breadcrumb.html.twig' with {'title':'Compte'} %}
+{% endblock %}
+
+{% block body %}
+    {% include 'dashboard/settings/_content.html.twig' %}
+{% endblock %}
+
+{% block basejs %}
+    {% include 'dashboard/settings/javascripts.html.twig' %}
+{% endblock %}

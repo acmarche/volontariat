@@ -1,0 +1,124 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('blueimp/css/blueimp-gallery.min.css') }}">
+{% endblock %}
+
+{% block body %}
+
+    <h3>{{ association }}</h3>
+
+    {% include 'admin/association/actions.html.twig' %}
+
+    <div class="row">
+        <div class="col-lg-6">
+            <table class="table table-bordered table-hover">
+                <tbody>
+                <tr>
+                    <th>Adresse</th>
+                    <td>
+                        {{ association.address }}<br/>
+                        {{ association.postalCode }} {{ association.city }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>
+                        {{ association.email }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Site web</th>
+                    <td>
+                        {{ association.webSite }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Téléphone ou mobile</th>
+                    <td>
+                        {{ association.phone }}
+                        {{ association.mobile }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Fax</th>
+                    <td>
+                        {{ association.fax }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Gérer par le compte</th>
+                    <td>
+                        {% if association.user %}
+                            <a href="{{ path('volontariat_admin_utilisateur_show', { 'id': association.user.id }) }}">
+                                {{ association.user }}
+                            </a>
+                            {{ form(dissocier_form) }}
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Validée</th>
+                    <td>
+                        {% if association.valider %}
+                            <span class="glyphicon glyphicon-check"></span>
+                        {% else %}
+                            <span class="text-danger">Non</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Fichier joint</th>
+                    <td>
+                        {% if association.fileName %}
+                            <a href="{{ vich_uploader_asset(association, 'fileFile') }}">
+                                {% if association.fileDescriptif %} {{ association.fileDescriptif }} {% else %}Télécharger{% endif %}
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-6">
+            {% if association.imageName %}
+                <img class="thumbnail"
+                     src="{{ association.imageName | acmarche_volontariat_download_image(association) | imagine_filter('acmarche_volontariat_thumb') }}"
+                     alt="{{ association.imageName }}">
+            {% endif %}
+        </div>
+    </div>
+
+    {{ association.description | nl2br }}
+
+    <h4 class="text-success">Besoins</h4>
+    {{ association.requirement | nl2br }}
+
+    <h4 class="text-success">Lieu besoins permanents</h4>
+    {{ association.place | nl2br }}
+
+    <h4 class="text-success">Contact</h4>
+    {{ association.contact | nl2br }}
+
+    {% include 'admin/association/secteurs.html.twig' %}
+
+    {% include 'admin/association/besoins.html.twig' %}
+
+    {% include 'admin/association/activite.html.twig' %}
+
+    {% include'admin/association/gallery-controls.html.twig' %}
+
+    {% include'admin/association/images.html.twig' %}
+
+    <p class="text-muted">
+        {{ 'Created' | trans }} {{ association.createdAt|date('d-m-Y H:i:s') }}
+        . {{ 'Updated' | trans }} {{ association.updatedAt|date('d-m-Y H:i:s') }}
+    </p>
+
+    {{ include('admin/association/delete.html.twig') }}
+
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('blueimp/js/blueimp-gallery.min.js') }}"></script>
+    <script src="{{ asset('js/gallery.js') }}"></script>
+{% endblock %}

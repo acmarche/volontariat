@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    {% block favicon %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
+    {% endblock %}
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block title %}Volontariat{% endblock %}</title>
+    {% block stylesheets %}{% endblock %}
+    <link href="{{ asset('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/datepicker.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/print.css') }}" rel="stylesheet" media="print">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
+</head>
+<body>
+{% set action = app.request.attributes.get("_route") %}
+<nav class="navbar navbar-expand-lg  navbar-light bg-white border-bottom box-shadow">
+    <a class="navbar-brand" href="{{ path('volontariat_admin_home') }}">Volontariat</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample05"
+            aria-controls="navbarsExample05" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-md-center" id="navbarsExample05">
+        <ul class="navbar-nav mr-auto2">
+            {% include 'admin/menu.html.twig' %}
+        </ul>
+    </div>
+</nav>
+
+<main role="main" class="container pt-3">
+    {% include '_flash_messages.html.twig' %}
+
+    {% block notifications %}
+
+    {% endblock %}
+
+    {% block body %}
+
+    {% endblock %}
+</main>
+
+<footer class="mb-5">
+
+</footer>
+{% block javascripts %}{% endblock %}
+<script src="{{ asset('jquery/jquery.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+<script src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script>
+
+{% block scripts %}
+
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,30 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block body -%}
+
+        <h3>Liste des témoignages</h3>
+
+    <a href="{{ path('volontariat_admin_temoignage_new') }}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Ajouter un témoignage
+    </a> <br/><br/>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Prénom</th>
+            <th>Village</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for temoignage in temoignages %}
+            <tr>
+                <td>
+                    <a href="{{ path('volontariat_admin_temoignage_show', { 'id': temoignage.id }) }}">{{ temoignage }}</a>
+                </td>
+                <td>{{ temoignage.village }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block body %}
+
+    <h3>{{ secteur }}</h3>
+    <p>Afficher : {{ secteur.display }}</p>
+    <p class="text-muted">
+        {{ secteur.description }}
+    </p>
+
+    {% include 'admin/secteur/actions.html.twig' %}
+
+    {% include 'admin/secteur/volontaires.html.twig' with {'volontaires': secteur.volontaires } %}
+
+    {% include 'admin/secteur/associations.html.twig' with {'associations': secteur.associations } %}
+
+    {% include 'admin/secteur/delete.html.twig' %}
+
+{% endblock %}

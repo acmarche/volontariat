@@ -1,0 +1,25 @@
+{% extends "base.html.twig" %}
+
+{% block breadcrumbs %}
+    {% include 'dashboard/_breadcrumb.html.twig' with {'title': volontaire} %}
+{% endblock %}
+
+{% block body -%}
+
+    <section class="g-mb-100">
+        <div class="container">
+
+            <div class="g-brd-around g-brd-gray-light-v4 g-pa-20 g-mb-40">
+
+                {% include 'backend/volontaire/form.html.twig' %}
+
+                <a href="{{ path('volontariat_dashboard') }}">
+                    <span class="glyphicon glyphicon-list"></span> Annuler
+                </a>
+
+            </div>
+
+        </div>
+    </section>
+
+{% endblock %}

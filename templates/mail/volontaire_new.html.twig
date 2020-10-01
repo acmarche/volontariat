@@ -1,0 +1,26 @@
+Un volontaire s'est inscrit sur la plate-forme du volontariat :
+
+{{volontaire.surname}} de {{volontaire.city}}
+
+{% if volontaire.secteurs.count > 0 %}
+
+A choisi les secteurs suivants :
+
+        {% for secteur in volontaire.secteurs %}
+
+        {{ secteur }}
+
+        {% endfor %}
+
+{% endif %}
+
+Connectez vous pour consulter ses coordonnées : 
+
+{{ url('volontariat_volontaire_show', {'id': volontaire.id}) }}
+
+-----------------------------------------------------------------
+Plate-forme du Volontariat
+Rue des Carmes, 26
+6900 Marche-en-Famenne
+Tél: 084/32.70.42
+Courriel: volontariat@marche.be

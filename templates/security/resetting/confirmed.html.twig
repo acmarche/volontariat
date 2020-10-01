@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <section class="container g-py-100">
+        <!-- Heading -->
+        <div class="u-heading-v6-2 g-mb-60">
+            <h2 class="u-heading-v6__title g-color-black g-font-weight-600 g-mb-30">
+                Confirmation
+            </h2>
+
+         <br/> <br/>  Un e-mail a été envoyé. <br/>
+            Il contient un lien sur lequel il vous faudra cliquer pour réinitialiser votre mot de passe.<br/>
+            Remarque : Vous ne pouvez demander un nouveau mot de passe que toutes les 2 heures.
+            <br/><br/>
+            Si vous ne recevez pas un email, vérifiez votre dossier spam ou essayez à nouveau.
+            <br/><br/>
+            <a href="{{ path('volontariat_home') }}">
+                 Retour à l'accueil
+            </a>
+
+        </div>
+
+    </section>
+{% endblock %}

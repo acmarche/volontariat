@@ -1,0 +1,32 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block body -%}
+
+    <h3>Liste des secteurs</h3>
+
+    <a href="{{ path('volontariat_admin_secteur_new') }}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Ajouter un secteur
+    </a> <br/><br/>
+
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Afficher</th>
+            <th>Nombre de volontaires</th>
+            <th>Nombre de associations</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for secteur in entities %}
+            <tr>
+                <td><a href="{{ path('volontariat_admin_secteur_show', { 'id': secteur.id }) }}">{{ secteur }}</a></td>
+                <td>{{ secteur.display }}</td>
+                <td>{{ secteur.volontaires|length }}</td>
+                <td>{{ secteur.associations|length }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

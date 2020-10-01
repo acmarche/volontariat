@@ -1,0 +1,8 @@
+Une personne a contacté
+{% if contactManager.associationNom is defined %}
+    l'association {{ contactManager.associationNom }}
+{% else %}
+    un volontaire
+{% endif %}
+
+dont le sujet est {{ contactManager.sujet }}

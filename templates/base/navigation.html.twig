@@ -1,0 +1,43 @@
+<div class="collapse navbar-collapse align-items-center flex-sm-row g-pt-10 g-pt-5--lg g-mr-40--lg" id="navBar">
+    <ul class="navbar-nav text-uppercase g-pos-rel g-font-weight-600 ml-auto">
+        <!-- Intro -->
+        <li class="nav-item{% if action == 'volontariat_home' %} active{% endif %} g-mx-10--lg g-mx-15--xl">
+            <a href="{{ path('volontariat_home') }}" class="nav-link g-py-7 g-px-0">Accueil</a>
+        </li>
+        <!-- End Intro -->
+
+        <!-- Shortcodes -->
+
+        <li class="nav-item  g-mx-10--lg g-mx-15--xl">
+            <a href="/page/jai-besoin-daide" class="nav-link g-py-7 g-px-0">Demandeurs</a>
+        </li>
+
+        <li class="nav-item  g-mx-10--lg g-mx-15--xl">
+            <a href="{{ path('volontariat_volontaire') }}" class="nav-link g-py-7 g-px-0">Volontaires</a>
+        </li>
+
+        <li class="nav-item{% if action == 'volontariat_association' %} active{% endif %}  g-mx-10--lg g-mx-15--xl">
+            <a href="{{ path('volontariat_association') }}" class="nav-link g-py-7 g-px-0">Associations</a>
+        </li>
+<!--
+        <li class="nav-item  g-mx-10--lg g-mx-15--xl">
+            <a href="{{ path('volontariat_besoin') }}" class="nav-link g-py-7 g-px-0">Besoins</a>
+        </li>
+-->
+        {% if app.user %}
+            <li class="nav-item  g-mx-10--lg g-mx-15--xl">
+                <a href="{{ path('volontariat_dashboard') }}" class="nav-link g-py-7 g-px-0">Mon compte</a>
+            </li>
+        {% else %}
+            <li class="nav-item  g-mx-10--lg g-mx-15--xl">
+                <a href="{{ path('volontariat_register') }}" class="nav-link g-py-7 g-px-0">Je m'inscris</a>
+            </li>
+            <li class="nav-item  g-mx-10--lg g-mx-15--xl">
+                <a href="{{ path('app_login') }}" class="nav-link g-py-7 g-px-0">Me connecter</a>
+            </li>
+        {% endif %}
+        <!-- End Shortcodes -->
+
+
+    </ul>
+</div>

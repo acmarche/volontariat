@@ -1,0 +1,37 @@
+{{ form_start(form, { 'attr': {'class': 'form-inline'}}) }}
+{{ form_errors(form) }}
+
+<div class="hidden-print">
+
+    {{ form_label(form.nom) }}
+    {{ form_widget(form.nom) }}
+
+    {{ form_label(form.vehicule) }}
+    {{ form_widget(form.vehicule) }}
+
+    {{ form_label(form.city) }}
+    {{ form_widget(form.city) }}
+    {{ form_widget(form.createdAt) }}
+
+    <br/><br/>
+    {{ form_label(form.secteurs) }}
+    {{ form_widget(form.secteurs) }}
+
+    <br/><br/>
+
+    {{ form_label(form.submit) }}
+    {{ form_widget(form.submit) }}
+
+    <a href="{{ path('volontariat_admin_message_new', { 'query': 'volontaire' }) }}" role="button"
+       class="btn btn-primary"><i
+                class="far fa-envelope"></i> Envoyer un message</a>
+
+    <a title="Exporter en Excel" href="{{ path('volontariat_admin_volontaire_xls') }}" class="btn btn-outline-warning btn-xs" role="button">
+        <i class="far fa-file-excel"></i>
+    </a>
+
+
+</div>
+{{ form_end(form) }}
+
+    <br/><br/>

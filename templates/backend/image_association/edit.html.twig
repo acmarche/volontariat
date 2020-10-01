@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('dropzone/dropzone.css') }}">
+{% endblock %}
+
+{% block breadcrumbs %}
+    {% include 'dashboard/_breadcrumb.html.twig' with {'title': 'Images'} %}
+{% endblock %}
+
+{% block body %}
+
+    <section class="container g-py-100">
+        <!-- Heading -->
+        <div class="u-heading-v6-2 g-mb-60">
+            <h2 class="u-heading-v6__title g-color-black g-font-weight-600 g-mb-30">
+                Gestion des images pour {{ association }}
+            </h2>
+            <p class=" g-pl-90"></p>
+        </div>
+        <!-- End Heading -->
+
+        <div class="mb-5">
+            <a class="btn btn-md u-btn-primary g-font-size-default g-rounded-25 g-px-30 g-py-12"
+               href="{{ path('volontariat_backend_association_index', {'id':association.id}) }}">
+                Retour à l'association</a>
+        </div>
+
+        {{ form_start(form, { 'attr': {'id': 'formdrop','class': 'dropzone'}}) }}
+        {{ form_errors(form) }}
+        {{ form_end(form) }}
+
+        {% if images | length > 0 %}
+            {% include "backend/image_association/_images.html.twig" %}
+        {% else %}
+            <p class="text-warning">Aucune image actuellement</p>
+        {% endif %}
+
+        <br/>
+    </section>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ asset('dropzone/dropzone.js') }}"></script>
+    <script type="text/javascript">
+        Dropzone.options.formdrop = {
+            dictDefaultMessage: "Glissez ici vos images ou cliquez sur cette zone pour ajouter des photos",
+            init: function () {
+                this.on("addedfile", function (file) {
+                    // console.log("finished");
+                });
+            }
+        };
+    </script>
+{% endblock %}
+

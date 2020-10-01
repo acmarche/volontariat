@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Volontariat</title>
+    <style type="text/css">
+        {{ css | raw }}
+    </style>
+</head>
+<body>
+<!-- Begin page content -->
+<main role="main" class="container">
+
+    <div class="mt-3 mb-3">
+        <br/><br/>
+        Madame, Monsieur,
+        <br/> <br/>
+        Il y a plusieurs mois, nous avons accueillis quelques associations et volontaires inscrits sur la Plate-forme du
+        Volontariat de Marche pour une avant-soirée d’échanges sur la refonte et l’amélioration de celle-ci.
+        <br/> <br/>
+        Nous n’étions certes pas nombreux mais c’est dans une ambiance conviviale que le Plan de Cohésion Sociale et le
+        Centre de Support Télématique ont présenté l’ébauche de ce que pourrait devenir la plate-forme une fois
+        relookée. Ce fut l’occasion également d’écouter les propositions et suggestions des participants.
+        <br/> <br/>
+        Nous avons bien entendu tenu compte des réponses reçues via les questionnaires rentrés.
+        Il en ressort ceci :
+        <br/> <br/>
+
+        <ol>
+            <li>
+                la page d’accueil de la plate-forme servira à promouvoir vos activités et événements à venir que ceux-ci
+                aient lieu à Marche (ou pas) pour autant que vous, association basée à Marche, y participiez. Cela
+                s’affichera
+                systématiquement dans la rubrique « Actualité ».
+            </li>
+
+            <li>
+                la page d’accueil servira également à relayer des informations qui touchent le secteur du volontariat en
+                général ou votre secteur d’activité. Rubrique « Actualité » également.
+            </li>
+
+            <li> que vous soyez inscrit comme volontaire ou comme association, nous vous demandons de compléter votre
+                profil
+                et/ou d’actualiser les informations diffusées. Un certain nombre d’adresses mail ne fonctionnent pas.
+                Celles qui
+                nous reviennent systématiquement seront à court terme supprimées.
+                Pour les associations, le descriptif de vos activités devra idéalement être concis, précis et
+                accrocheur. Le
+                texte est limité à 400 caractères. Il est toutefois possible de joindre un fichier (un folder de
+                présentation
+                par exemple). Quant aux volontaires, vous pouvez décrire en quelques mots, votre personnalité et vos
+                motivations
+                pour tel secteur, ce que vous pouvez apporter à l’association, etc.
+            </li>
+            <li> il sera possible de diffuser le logo de votre association, dans la rubrique « Associations » ainsi que
+                des
+                photos de vos événements (après validation et en nombre limité : 3 par activité)
+            </li>
+            <li> la possibilité de s’inscrire à partir du même profil en tant que volontaire et/ou association. (On peut
+                en
+                effet diriger une association à titre bénévole et souhaiter être bénévole dans ses moments libres.)
+            </li>
+        </ol>
+
+        <br/> <br/>
+        Je vous invite également à remplir
+        <a href="{{ absolute_url(path('volontariat_backend_temoignage')) }}">le « Livre d’or » </a>
+        dans lequel vous pouvez laisser vos témoignages. N’hésitez
+        surtout pas, c’est un retour important pour nous !
+        La Plate-forme du Volontariat est accessible en version pour Iphone, Ipad et autres.
+        <br/> <br/>
+        En raison de l'entrée en vigueur du RGPD (Règlement Général sur la Protection des Données), nous vous demandons
+        de prendre connaissance des nouvelles règles via ce lien :
+        <a href="{{ absolute_url(path('volontariat_page_show', {'slugname':'vieprive'})) }}">
+            Règles de confidentialités
+        </a>
+        <br/> <br/>
+        <strong>Pour conserver votre compte</strong>,
+        <a href="{{ absolute_url(path('volontariat_compte_home')) }}" class="btn btn-info">connectez-vous</a>
+        et cochez la case "J'ai pris connaissance du réglement de la vie privée"
+        <br/> <br/>
+        Pour rendre votre fiche volontaire temporairement inactive et ne plus recevoir les demandes des associations,
+        cliquez ci-dessous. N'oubliez pas de la réactiver le moment venu :
+        <br/> <br/>
+        Nous vous souhaitons un bel été et de belles collaborations et restons à votre entière disposition pour toute
+        information complémentaire.
+        <br/> <br/>
+        Corinne Ketels
+        <br/> <br/>
+        Chef de projet PCS<br/>
+        Tél. : 084.32.70.42
+        <br/> <br/>
+        <br/> <br/>
+
+        <a href="{{ absolute_url(path('volontariat_backend_utilisateur_delete')) }}" class="text-center">
+            Je désire supprimer mon compte
+        </a>
+
+    </div>
+</main>
+</body>

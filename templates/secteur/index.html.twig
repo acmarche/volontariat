@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block breadcrumbs %}
+    {% include 'base/breadcrumbs.html.twig' with {'title': 'Volontaires'} %}
+{% endblock %}
+
+{% block body %}
+
+    <section class="container g-pt-100">
+
+        <h2>Liste des secteurs</h2>
+
+        <p>Cliquez sur un des besoins pour découvrir quelles association ont choisis celui ci.</p>
+
+        {% for secteur in secteurs %}
+            <ul>
+                <li>
+                    <a href="{{ path('volontariat_secteur_show', {'id': secteur.id}) }}">
+                        {{ secteur }}
+                    </a>
+                </li>
+            </ul>
+        {% endfor %}
+
+    </section>
+{% endblock %}

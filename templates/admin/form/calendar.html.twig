@@ -1,0 +1,17 @@
+<script src="{{ asset('jquery/jquery.min.js') }} " type="text/javascript"></script>
+<script src="{{ asset('js/jquery.ui.datepicker-fr.js') }}"></script>
+<script>
+    $(document).ready(function () {
+        $(function () {
+            $(".datepicker")
+                .datepicker("option", $.datepicker.regional.fr)
+                .datepicker({
+                    beforeShow: function (input, object) {
+                        setTimeout(function () {
+                            $('.ui-datepicker').css('z-index', 9);
+                        }, 0);
+                    }
+                });
+        });
+    });
+</script>

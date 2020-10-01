@@ -1,0 +1,34 @@
+<h4>Associations ayant choisis ce secteur</h4>
+
+<table class="table table-bordered table-hover">
+    <thead>
+    <tr>
+        <th>Nom</th>
+        <th>Localité</th>
+        <th>Email</th>
+        <th>Téléphone</th>
+        <th>Géré par</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for secteur in associations %}
+        <tr>
+            <td>
+                <a href="{{ path('volontariat_admin_association_show', { 'id': secteur.id }) }}"
+                   title="Voir"> {{ secteur }}
+                </a>
+            </td>
+            <td>{{ secteur.city }}</td>
+            <td>
+                {{ secteur.email }}
+            </td>
+            <td>
+                {{ secteur.phone }} {{ secteur.mobile }}
+            </td>
+            <td>
+                {{ secteur.user }}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

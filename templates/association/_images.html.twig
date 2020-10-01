@@ -1,0 +1,16 @@
+<div class="row">
+    {% for image in images %}
+        <div class="col-md-3 g-mb-30">
+            <a class="js-fancybox d-block u-block-hover" href="javascript:;"
+               data-fancybox="lightbox-gallery--03"
+               data-src="{{ image.name | acmarche_volontariat_download_image(association) | imagine_filter('acmarche_volontariat_740_380') }}"
+               data-speed="350"
+               data-caption="Lightbox Gallery">
+                <img
+                        class="img-fluid u-block-hover__main--mover-right"
+                        src="{{ image.name | acmarche_volontariat_download_image(association) | imagine_filter('acmarche_volontariat_740_380') }}"
+                        alt="Image Description">
+            </a>
+        </div>
+    {% endfor %}
+</div>

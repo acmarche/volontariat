@@ -1,0 +1,53 @@
+<div class="alert fade show g-brd-around g-brd-gray-light-v3 rounded-0" role="alert">
+    <button type="button" class="close u-alert-close--light g-ml-10 g-mt-1" data-dismiss="alert"
+            aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+
+    <div class="media">
+        {% if is_granted('edit', volontaire) %}
+            <div class="d-flex g-mr-10">
+            <span class="u-icon-v3 u-icon-size--sm g-bg-lightred g-color-white g-rounded-50x">
+                <i class="icon-envelope"></i>
+            </span>
+            </div>
+            <div class="media-body">
+                <div class="d-flex justify-content-between">
+                    <p class="m-0"><strong>{{ volontaire.surname }}</strong>
+                    </p>
+                    <span class="align-self-center small text-nowrap"></span>
+                </div>
+
+                <p class="m-0 g-font-size-14">
+                    <a href="{{ path('volontariat_contact_volontaire', {'id':volontaire.id}) }}">
+                        Prendre contact avec ce volontaire.
+                    </a>
+                </p>
+
+            </div>
+        {% endif %}
+    </div>
+    {% if is_granted('ROLE_VOLONTARIAT') %}
+        <hr>
+        <div class="media">
+            <div class="d-flex g-mr-10">
+            <span class="u-icon-v3 u-icon-size--sm g-bg-lightred g-color-white g-rounded-50x">
+                <i class="icon-envelope-letter"></i>
+            </span>
+            </div>
+            <div class="media-body">
+                <div class="d-flex justify-content-between">
+                    <p class="m-0"><strong>Je recommande</strong>
+                    </p>
+                    <span class="align-self-center small text-nowrap"></span>
+                </div>
+                <p class="m-0 g-font-size-14">
+                    <a href="{{ path('volontariat_recommander_volontaire', {'id':volontaire.id}) }}">
+                        Recommander ce volontaire.
+                    </a>
+                </p>
+
+            </div>
+        </div>
+    {% endif %}
+</div>

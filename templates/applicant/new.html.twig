@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <section class="container g-py-100">
+        <!-- Heading -->
+        <div class="u-heading-v6-2 g-mb-60">
+            <h2 class="u-heading-v6__title g-color-black g-font-weight-600 g-mb-30">
+                Besoin d'aide
+            </h2>
+            <p class=" g-pl-90">Laissez nous vos coordonnées et nous vous contacterons</p>
+            <div class="alert alert-info">
+                Les données reprisent ci-dessous seront utilisées <strong>uniquement</strong> dans le cadre de la crise du covid-19d.
+                <br/>
+                Ces données seront supprimées à la fin de la crise ou à tout moment quand vous le souhaitez.
+            </div>
+        </div>
+
+        {{ form(form) }}
+
+        <a href="{{ path('volontariat_home') }}">
+            <span class="glyphicon glyphicon-list"></span> Annuler
+        </a>
+
+    </section>
+{% endblock %}

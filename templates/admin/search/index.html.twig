@@ -1,0 +1,39 @@
+{% extends "admin/base.html.twig" %}
+
+{% block title %}Rechercher une Association{% endblock %}
+
+{% block content %}
+
+    <h2>Rechercher une Association</h2>
+
+    <a href="{{ path('volontariat_admin_association') }}">Lister toutes les Association</a>
+    <br/><br/>
+
+    <div class="row">
+        <div class="col-md-6">
+            {{ form(form) }}
+        </div>
+    </div>
+    <br/>
+
+    {% if search %}
+        {% if count > 0 %}
+
+            <p class="text-success">{{ count }} Association ont été trouvées. </p>
+
+            <ul class="list-group">
+                {% for association in entities %}
+                    <li class="list-group-item">
+                        <a href="{{ path('volontariat_admin_association_show', { 'id': association.id }) }}">{{ association.title }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+
+        {% else %}
+
+            <div class="alert alert-danger">Aucune Association n'a été trouvée suivant vos critères</div>
+
+        {% endif %}
+    {% endif %}
+ <br/>
+{% endblock %}

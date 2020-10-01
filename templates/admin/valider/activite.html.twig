@@ -1,0 +1,23 @@
+{% extends "admin/base.html.twig" %}
+
+{% block body -%}
+
+    <h3>
+        Valider :
+        <a href="{{ path('volontariat_admin_activite_show', { 'id': activite.id }) }}">
+            {{ activite }}
+        </a>
+    </h3>
+
+    <div class="alert alert-info">
+        Un mail préviendra l'association que l'activitée a été validée.<br/>
+        Un mail sera envoyé à tous les volontaires et associations pour les prévenir de cette activitée
+    </div>
+
+    {{ form(form) }}
+
+    <a href="{{ path('volontariat_admin_valider') }}">
+        <span class="fas fa-list"></span> Annuler
+    </a>
+
+{% endblock %}

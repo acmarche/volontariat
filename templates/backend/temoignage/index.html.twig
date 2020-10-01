@@ -1,0 +1,89 @@
+{% extends 'base.html.twig' %}
+
+{% block breadcrumbs %}
+    {% include 'dashboard/_breadcrumb.html.twig' with {'title': 'Témoignages'} %}
+{% endblock %}
+
+{% block body -%}
+    <section class="container g-py-100">
+        <!-- Heading -->
+        <div class="u-heading-v6-2 g-mb-60">
+            <h2 class="u-heading-v6__title g-color-black g-font-weight-600 g-mb-30">
+                Liste de témoignages
+            </h2>
+            <p class=" g-pl-90">Partagez votre expérience, bonne ou mauvaise ici.</p>
+        </div>
+        <!-- End Heading -->
+        <div class="mb-5">
+            <a class="btn btn-md u-btn-primary g-font-size-default g-rounded-25 g-px-30 g-py-12"
+               href="{{ path('volontariat_dashboard') }}">
+                Retour au tableau de bord</a>
+        </div>
+
+        <div class="mb-5">
+            <a class="btn btn-md u-btn-primary g-font-size-default g-rounded-25 g-px-30 g-py-12"
+               href="{{ path('volontariat_backend_temoignage_new') }}">
+                Ajouter un témoignage</a>
+        </div>
+
+        {% if temoignages | length > 0 %}
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Village</th>
+                    <th>Editer</th>
+                    <th>Supprimer</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for temoignage in temoignages %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('volontariat_temoignage') }}">{{ temoignage }}</a>
+                        </td>
+                        <td>
+                            {{ temoignage.village }}
+                        </td>
+                        <td>
+                            <a class="u-icon-v1 u-icon-size--sm g-color-gray-dark-v5 g-bg-transparent g-color-purple--hover"
+                               href="{{ path('volontariat_backend_temoignage_edit', {'id': temoignage.id}) }}">
+                                <i class="icon-pencil"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a class="u-icon-v1 u-icon-size--sm g-color-gray-dark-v5 g-bg-transparent g-color-purple--hover"
+                               href="#!"
+                               data-toggle="modal"
+                               data-nom="{{ temoignage.nom }}"
+                               data-id="{{ temoignage.id }}"
+                               data-target="#temoignageModal">
+                                <i class="icon-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Aucun</p>
+        {% endif %}
+    </section>
+    {% include 'backend/temoignage/_delete.html.twig' %}
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        $('#temoignageModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var nom = button.data('nom'); // Extract info from data-* attributes
+            var cmdid = button.data('id'); // Extract info from data-* attributes
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this);
+            //   console.log(modal.find('modal-body-nom').value);
+            modal.find('#modal-body-nom').text(nom);
+            modal.find('#modal-body-input').val(cmdid)
+        })
+    </script>
+{% endblock %}

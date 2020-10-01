@@ -1,0 +1,21 @@
+<!-- Modal -->
+<div class="modal fade" id="volontaireDeleteModal" tabindex="-1" role="dialog"
+     aria-labelledby="volontaireDeleteModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                Supprimer <strong><span id="modal-body-nom"></span></strong> ?
+            </div>
+            <div class="modal-footer">
+                {{ form_start(form_delete_volontaire) }}
+                {{ form_errors(form_delete_volontaire) }}
+                <input type="hidden" id="modal-body-input" data-id="" name="id2"/>
+                <input type="hidden" id="idvolontaire" name="id" value=""/>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                <button type="submit" class="btn btn-danger">Supprimer</button>
+                {{ form_end(form_delete_volontaire) }}
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end Modal -->

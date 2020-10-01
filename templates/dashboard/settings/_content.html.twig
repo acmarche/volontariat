@@ -1,0 +1,20 @@
+
+{% set action = app.request.attributes.get("_route") %}
+<section class="g-mb-100">
+    <div class="container">
+        <div class="row">
+            <!-- Profile Sidebar -->
+            {% include 'dashboard/_sidebar.html.twig' %}
+            <!-- End Profile Sidebar -->
+
+            <div class="col-lg-9">
+
+
+                    <!-- Edit Profile -->
+                    {% include 'dashboard/settings/_profile.html.twig' %}
+
+            </div>
+
+        </div>
+    </div>
+</section>

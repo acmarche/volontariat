@@ -1,0 +1,41 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block body -%}
+
+    <h3>Liste des besoins occasionnels</h3>
+
+    <div class="alert alert-info">Liste des besoins encodés par les Associations</div>
+
+    {% if entities | length > 0 %}
+        <table class="table table-bordered table-hover">
+            <thead>
+            <tr>
+                <th>Titre</th>
+                <th>Association</th>
+                <th>Date de diffusion</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for besoin in entities %}
+                <tr>
+                    <td>
+                        <a href="{{ path('volontariat_admin_besoin_show', { 'id': besoin.id }) }}">{{ besoin }}</a>
+                    </td>
+                    <td>{{ besoin.association }}</td>
+                    <td>
+                        {% if besoin.dateBegin %}
+                            Du {{ besoin.dateBegin | date('d-m-Y') }}
+                        {% endif %}
+                        {% if besoin.dateEnd %}
+                            au  {{ besoin.dateEnd | date('d-m-Y') }}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Aucun</p>
+    {% endif %}
+
+{% endblock %}

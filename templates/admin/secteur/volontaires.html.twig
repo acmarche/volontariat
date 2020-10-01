@@ -1,0 +1,39 @@
+<br /><br />
+<h4 class="text-success">Volontaires ayant choisis ce secteur</h4>
+
+<table class="table table-bordered table-hover">
+    <thead>
+    <tr>
+        <th>Nom</th>
+        <th>Localité</th>
+        <th>Email</th>
+        <th>Né le</th>
+        <th>Inscrit le</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for volontaire in volontaires %}
+        <tr>
+            <td>
+                <a href="{{ path('volontariat_admin_volontaire_show', { 'id': volontaire.id }) }}"
+                   title="Voir"> {{ volontaire.name }}
+                </a>
+            </td>
+            <td>{{ volontaire.city }}</td>
+            <td>
+                {% if volontaire.user %}
+                    {{ volontaire.user.email }}
+                {% endif %}
+            </td>
+            <td>
+                {% if volontaire.birthday %}
+                    {{ volontaire.birthday|date('d-m-Y') }}
+                {% endif %}
+            </td>
+            <td>
+                {{ volontaire.createdAt|date("d-m-Y") }}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

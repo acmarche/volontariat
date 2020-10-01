@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block breadcrumbs %}
+    {% include 'dashboard/_breadcrumb.html.twig' with {'title': 'Actualités'} %}
+{% endblock %}
+
+{% block body -%}
+    <section class="container g-py-100">
+        <!-- Heading -->
+        <div class="u-heading-v6-2 g-mb-60">
+            <h2 class="u-heading-v6__title g-color-black g-font-weight-600 g-mb-30">
+                Liste de vos actualités
+            </h2>
+            <p class=" g-pl-90">Encodez ici vos actualités, cela peut être un petit repartage d'une ancienne activité ou
+                une quelconque information que vous souhaitez partager.</p>
+        </div>
+        <!-- End Heading -->
+        <div class="mb-5">
+            <a class="btn btn-md u-btn-primary g-font-size-default g-rounded-25 g-px-30 g-py-12"
+               href="{{ path('volontariat_dashboard') }}">
+                Retour au tableau de bord</a>
+        </div>
+
+        <div class="mb-5">
+            <a class="btn btn-md u-btn-primary g-font-size-default g-rounded-25 g-px-30 g-py-12"
+               href="{{ path('volontariat_backend_activite_new', {'id':association.id}) }}">
+                Ajouter une actualité</a>
+        </div>
+
+        {% if activites | length > 0 %}
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Editer</th>
+                    <th>Images</th>
+                    <th>Supprimer</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for activite in activites %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('volontariat_activite_show', { 'id': activite.id }) }}">{{ activite }}</a>
+                        </td>
+                        <td>
+                            <a class="u-icon-v1 u-icon-size--sm g-color-gray-dark-v5 g-bg-transparent g-color-purple--hover"
+                               href="{{ path('volontariat_backend_activite_edit', {'id': activite.id}) }}">
+                                <i class="icon-pencil"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a class="u-icon-v1 u-icon-size--sm g-color-gray-dark-v5 g-bg-transparent g-color-purple--hover"
+                               href="{{ path('volontariat_backend_image_activite', {'id': activite.id}) }}">
+                                <i class="icon-picture"></i>
+                            </a>
+                        </td>
+                        <td>
+                            <a class="u-icon-v1 u-icon-size--sm g-color-gray-dark-v5 g-bg-transparent g-color-purple--hover"
+                               href="#!"
+                               data-toggle="modal"
+                               data-activitenom="{{ activite.titre }}"
+                               data-activiteid="{{ activite.id }}"
+                               data-target="#activiteModal">
+                                <i class="icon-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Aucun</p>
+        {% endif %}
+    </section>
+    {% include 'backend/activite/_delete.html.twig' %}
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript">
+        $('#activiteModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var nom = button.data('activitenom'); // Extract info from data-* attributes
+            var cmdid = button.data('activiteid'); // Extract info from data-* attributes
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this);
+            console.log(modal.find('modal-body-nom').value);
+            modal.find('#modal-body-nom').text(nom);
+            modal.find('#modal-body-input').val(cmdid)
+        })
+    </script>
+{% endblock %}

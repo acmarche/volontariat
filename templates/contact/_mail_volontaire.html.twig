@@ -1,0 +1,13 @@
+Bonjour {{ volontaire }}
+
+{{ contactManager.nom }} vous contact via notre plate-forme du volontariat {{ absolute_url(path('volontariat_home')) }}
+
+Voici sa demande :
+
+Nom de l'association : {{ contactManager.associationNom }}
+
+Son email: {{ contactManager.email }}
+
+{{ contactManager.sujet }}
+
+{{ contactManager.contenu }}

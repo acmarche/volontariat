@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/blog.css') }}">
+{% endblock %}
+
+{% block begin_row %}
+<div class="row blog-page ">
+    {% endblock %}
+
+    {% block body %}
+        <!--Blog Post-->
+        <div class="blog margin-bottom-40">
+            <h2>Journée de sensibilisation par la Croix Rouge</h2>
+            <div class="blog-post-tags"></div>
+            <a href="{{ path('volontariat_actu_show') }}">
+                <img class="img-responsive"
+                                                               src="{{ asset('news/resto.jpg') | imagine_filter('acmarche_volontariat_news_thumb') }}"
+                                                               alt=""></a>
+
+            <h1>Détails des news a achever
+            </h1>
+        </div><!--End Blog Post-->
+    {% endblock %}
+
+    {% block end_row %}
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+ {% block breadcrumbs %}
+     {% set url = path('volontariat_association_show', {'id': association.id}) %}
+     {% include 'base/breadcrumbs.html.twig' with {'parent':association,'parent_url': url,'title': besoin} %}
+ {% endblock %}
+
+{% block body %}
+    <section class="container g-py-100">
+        <!-- Heading -->
+        <div class="u-heading-v6-2 g-mb-60">
+            <h2 class="u-heading-v6__title g-color-black g-font-weight-600 g-mb-30">
+                {{ besoin }}
+            </h2>
+            <p class=" g-pl-90">Pour <a href="{{ path('volontariat_association_show',{'id': association.id}) }}">{{ association }}</a></p>
+        </div>
+        <!-- End Heading -->
+        <!-- Unify Pink Outline Panel-->
+        <div class="card g-brd-pink rounded-0">
+            <h3 class="card-header h5 text-white g-bg-pink g-brd-transparent rounded-0">
+                <i class="fa fa-tasks g-font-size-default g-mr-5"></i>
+                {{ besoin }}
+            </h3>
+
+            <div class="card-block">
+                <h4 class="h5">{{ besoin.name }}</h4>
+                <div class="card-text">
+
+                    {{ besoin.requirement | nl2br }}
+
+                    <h4>Quand ?</h4>
+                    {% if besoin.dateBegin %}
+                        Du {{ besoin.dateBegin | date('d-m-Y') }}
+                    {% endif %}
+
+                    {% if besoin.dateEnd %}
+                        au {{ besoin.dateEnd | date('d-m-Y') }}
+                    {% endif %}
+
+                    <h4>Période</h4>
+                    {{ besoin.period | nl2br }}
+
+                    <h4> Lieu de prestation</h4>
+                    {{ besoin.place | nl2br }}
+
+                </div>
+            </div>
+        </div>
+        <!-- End Unify Pink Outline Panel-->
+
+
+    </section>
+
+{% endblock %}

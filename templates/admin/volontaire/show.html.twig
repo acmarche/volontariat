@@ -1,0 +1,110 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block body %}
+
+    <h3>{{ volontaire }}</h3>
+
+    {{ include('admin/volontaire/actions.html.twig') }}
+
+    {% if volontaire.notes %}
+        <h4>Note</h4>
+        <p>{{ volontaire.notes | nl2br }}</p>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-6">
+            <table class="table table-bordered table-hover">
+                <tbody>
+                <tr>
+                    <th>Adresse</th>
+                    <td>
+                        {{ volontaire.address }}<br/>
+                        {{ volontaire.postalCode }} {{ volontaire.city }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>
+                        {% if volontaire.user %}
+                            {{ volontaire.user.email }}
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Téléphone ou mobile</th>
+                    <td>
+                        {{ volontaire.phone }}
+                        {{ volontaire.mobile }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Fax</th>
+                    <td>
+                        {{ volontaire.fax }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Né le</th>
+                    <td>
+                        {% if volontaire.birthday %}
+                            {{ volontaire.birthday|date('d-m-Y') }}
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Job</th>
+                    <td>
+                        {{ volontaire.job }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Disponibilité</th>
+                    <td>
+                        {{ volontaire.availability }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Véhicule(s)</th>
+                    <td>
+                        {{ volontaire.vehicules | join(',') }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Gérer par le compte</th>
+                    <td>
+                        {% if volontaire.user %}
+                            <a href="{{ path('volontariat_admin_utilisateur_show', { 'id': volontaire.user.id }) }}">
+                                {{ volontaire.user }}
+                            </a>
+                            {{ form(dissocier_form) }}
+                        {% endif %}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-6">
+            {% include 'admin/volontaire/secteurs.html.twig' %}
+        </div>
+
+    </div>
+
+    {% if volontaire.imageName %}
+        <img class="thumbnail"
+             src="{{ volontaire.imageName | acmarche_volontariat_download_image(volontaire) | imagine_filter('acmarche_volontariat_thumb') }}"
+             alt="{{ volontaire.imageName }}">
+    {% endif %}
+
+    {% if volontaire.description %}
+        <p>{{ volontaire.description | nl2br }}</p>
+    {% endif %}
+
+    <p class="text-muted">
+        {{ 'Created' | trans }} {{ volontaire.createdAt|date('d-m-Y H:i:s') }}
+        . {{ 'Updated' | trans }} {{ volontaire.updatedAt|date('d-m-Y H:i:s') }}
+    </p>
+
+    {{ include('admin/volontaire/delete.html.twig') }}
+
+{% endblock %}

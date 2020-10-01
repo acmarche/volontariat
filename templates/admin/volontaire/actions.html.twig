@@ -1,0 +1,20 @@
+<a href="{{ path('volontariat_admin_volontaire_edit', { 'id': volontaire.id }) }}" role="button"
+   class="btn btn-primary"><i
+            class="far fa-edit"></i> Editer</a>
+
+<a href="{{ path('volontariat_admin_volontaire_note', { 'id': volontaire.id }) }}" role="button" class="btn btn-primary"><i
+            class="far fa-edit"></i> Notes</a>
+
+<a href="{{ path('volontariat_admin_associer_volontaire', { 'id': volontaire.id }) }}" role="button"
+   class="btn btn-primary"><i
+            class="fas fa-link"></i> Associer un compte</a>
+
+<a href="{{ path('volontariat_volontaire_show', { 'id': volontaire.id }) }}" role="button"
+   class="btn btn-primary" target="apercu"><i class="far fa-eye"></i> Voir sur le site</a>
+
+<a href="{{ path('volontariat_admin_volontaire') }}" class="btn btn-primary" role='button'><i
+            class="fas fa-list"></i>
+    Retour à la Liste
+</a>
+<br/>
+<br/>

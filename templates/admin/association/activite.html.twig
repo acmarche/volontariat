@@ -1,0 +1,33 @@
+<h4>Liste des activitées</h4>
+
+{% if association.activites | length > 0 %}
+    <table class="table table-bordered table-hover">
+        <thead>
+        <tr>
+            <th>Titre</th>
+            <th>Association</th>
+            <th>Validée</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for activite in association.activites %}
+            <tr>
+                <td>
+                    <a href="{{ path('volontariat_admin_activite_show', { 'id': activite.id }) }}">{{ activite }}</a>
+                </td>
+                <td>{{ activite.association }}</td>
+                <td>
+                    {% if activite.valider %}
+                        Oui
+                    {% else %}
+                        Non
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>Aucun</p>
+{% endif %}
+

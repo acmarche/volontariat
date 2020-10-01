@@ -1,0 +1,12 @@
+<h3 class="text-success">Ces volontaires ont choisi les mêmes secteurs</h3>
+<ul class="list-group">
+    {% for volontaire in volontaires %}
+        <li class="list-group-item">
+            <a href="{{ path('volontariat_backend_volontaire_show', {'id':volontaire.id}) }}">
+                {{ volontaire }}
+            </a>
+        </li>
+    {% else %}
+        <p class="text-warning">Aucun</p>
+    {% endfor %}
+</ul>

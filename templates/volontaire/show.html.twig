@@ -1,0 +1,176 @@
+{% extends 'base.html.twig' %}
+
+{% block breadcrumbs %}
+    {% set url = path('volontariat_volontaire') %}
+    {% include 'base/breadcrumbs.html.twig' with {'title': volontaire, 'parent':'Volontaires', 'parent_url': url} %}
+{% endblock %}
+
+{% block body %}
+    <section class="g-py-100">
+        <div class="container">
+            <div class="g-brd-around g-brd-gray-light-v4 g-pa-20 g-mb-40">
+                <div class="row">
+                    <div class="col-lg-4 g-mb-40 g-mb-0--lg">
+                        <!-- User Image -->
+                        {% if volontaire.imageName %}
+                            <div class="g-mb-20">
+                                <img class="img-fluid w-100"
+                                     src="{{ volontaire.imageName | acmarche_volontariat_download_image(volontaire) | imagine_filter('acmarche_volontariat_thumb') }}"
+                                     alt="Image Description">
+                            </div>
+                        {% else %}
+                            <div class="g-mb-20">
+
+                            </div>
+                        {% endif %}
+                        <!-- User Image -->
+
+                        <!-- User Contact Buttons
+
+                        <a class="btn btn-block u-btn-darkgray g-rounded-50 g-py-12 g-mb-10" href="#!">
+                            <i class="icon-call-in g-pos-rel g-top-1 g-mr-5"></i> Contactez moi
+                        </a>-->
+                        <ul class="list-group g-font-weight-300">
+                            <li class="list-group-item g-mr-20">
+                                <i class="icon-location-pin g-pos-rel g-top-1 g-color-gray-dark-v5 g-mr-5"></i>
+                                {{ volontaire.address }}<br/>
+                                {{ volontaire.postalCode }} {{ volontaire.city }}
+                            </li>
+                            <li class="list-group-item g-mr-20">
+                                <i class="icon-envelope g-pos-rel g-top-1 g-color-gray-dark-v5 g-mr-5"></i>
+                                <a class="g-color-main g-color-primary--hover"
+                                   href="mailto:{{ volontaire.email }}">
+                                    {{ volontaire.email }}
+                                </a>
+                            </li>
+                            {% if volontaire.birthday %}
+                                <li class="list-group-item g-mr-20">
+                                    <i class="icon-clock g-pos-rel g-top-1 g-color-gray-dark-v5 g-mr-5"></i> {{ volontaire.birthday|date('d-m-Y') }}
+                                </li>
+                            {% endif %}
+                            <li class="list-group-item g-mr-20">
+                                <i class="icon-phone g-pos-rel g-top-1 g-color-gray-dark-v5 g-mr-5"></i>
+                                {{ volontaire.phone }}
+                                {{ volontaire.mobile }}
+                            </li>
+                        </ul>
+                        {% include 'volontaire/_contact.html.twig' %}
+
+                        <!-- End User Contact Buttons -->
+                    </div>
+
+                    <div class="col-lg-8">
+                        <!-- User Details -->
+                        <div class="d-flex align-items-center justify-content-sm-between g-mb-5">
+                            <h2 class="g-font-weight-300 g-mr-10">{{ volontaire }}</h2>
+                            {% if is_granted('edit', volontaire) %}
+                                            <a title="Modifier"
+                                               href="{{ path('volontariat_admin_volontaire_show', {'id':volontaire.id}) }}"><i
+                                                        class="icon-pencil"></i></a>
+
+                                        {% endif %}
+
+                          <!--   <ul class="list-inline mb-0">
+                                <li class="list-inline-item g-mx-2">
+                                    <a class="u-icon-v1 u-icon-size--sm u-icon-slide-up--hover g-color-gray-light-v1 g-bg-gray-light-v5 g-color-gray-light-v1--hover rounded-circle"
+                                       href="#!">
+                                        <i class="g-font-size-default g-line-height-1 u-icon__elem-regular fa fa-facebook"></i>
+                                        <i class="g-font-size-default g-line-height-0_8 u-icon__elem-hover fa fa-facebook"></i>
+                                    </a>
+                                </li>
+                                <li class="list-inline-item g-mx-2">
+                                    <a class="u-icon-v1 u-icon-size--sm u-icon-slide-up--hover g-color-gray-light-v1 g-bg-gray-light-v5 g-color-gray-light-v1--hover rounded-circle"
+                                       href="#!">
+                                        <i class="g-font-size-default g-line-height-1 u-icon__elem-regular fa fa-twitter"></i>
+                                        <i class="g-font-size-default g-line-height-0_8 u-icon__elem-hover fa fa-twitter"></i>
+                                    </a>
+                                </li>
+                                <li class="list-inline-item g-mx-2">
+                                    <a class="u-icon-v1 u-icon-size--sm u-icon-slide-up--hover g-color-gray-light-v1 g-bg-gray-light-v5 g-color-gray-light-v1--hover rounded-circle"
+                                       href="#!">
+                                        <i class="g-font-size-default g-line-height-1 u-icon__elem-regular fa fa-dribbble"></i>
+                                        <i class="g-font-size-default g-line-height-0_8 u-icon__elem-hover fa fa-dribbble"></i>
+                                    </a>
+                                </li>
+                                <li class="list-inline-item g-mx-2">
+                                    <a class="u-icon-v1 u-icon-size--sm u-icon-slide-up--hover g-color-gray-light-v1 g-bg-gray-light-v5 g-color-gray-light-v1--hover rounded-circle"
+                                       href="#!">
+                                        <i class="g-font-size-default g-line-height-1 u-icon__elem-regular fa fa-linkedin"></i>
+                                        <i class="g-font-size-default g-line-height-0_8 u-icon__elem-hover fa fa-linkedin"></i>
+                                    </a>
+                                </li>
+                            </ul>-->
+                        </div>
+                        <!-- End User Details -->
+
+                        <!-- User Position -->
+                        <h4 class="h6 g-font-weight-300 g-mb-10">
+                            <i class="icon-badge g-pos-rel g-top-1 g-mr-5 g-color-gray-dark-v5"></i> {{ volontaire.job }}
+                        </h4>
+                        <!-- End User Position -->
+
+
+                        <!-- User Info
+                        <ul class="list-inline g-font-weight-300">
+                            <li class="list-inline-item g-mr-20">
+                                <i class="icon-location-pin g-pos-rel g-top-1 g-color-gray-dark-v5 g-mr-5"></i>
+                                {{ volontaire.address }}<br/>
+                                {{ volontaire.postalCode }} {{ volontaire.city }}
+                            </li>
+                            <li class="list-inline-item g-mr-20">
+                                <i class="icon-envelope g-pos-rel g-top-1 g-color-gray-dark-v5 g-mr-5"></i>
+                                <a class="g-color-main g-color-primary--hover"
+                                   href="mailto:{{ volontaire.email }}">
+                                    {{ volontaire.email }}
+                                </a>
+                            </li>
+                            {% if volontaire.birthday %}
+                                <li class="list-inline-item g-mr-20">
+                                    <i class="icon-clock g-pos-rel g-top-1 g-color-gray-dark-v5 g-mr-5"></i> {{ volontaire.birthday|date('d-m-Y') }}
+                                </li>
+                            {% endif %}
+                            <li class="list-inline-item g-mr-20">
+                                <i class="icon-phone g-pos-rel g-top-1 g-color-gray-dark-v5 g-mr-5"></i>
+                                {{ volontaire.phone }}
+                                {{ volontaire.mobile }}
+                            </li>
+                        </ul>-->
+                        <!-- End User Info -->
+
+                        <hr class="g-brd-gray-light-v4 g-my-20">
+
+                        {{ volontaire.availability }}
+
+                        {{ volontaire.description }}
+
+                        <hr class="g-brd-gray-light-v4 g-my-20">
+
+                        <h3 class="h5 g-color-gray-dark-v1 g-mb-10">Secteurs</h3>
+
+                        <ul class="list-unstyled g-mb-12 g-mb-0--md">
+                            {% for secteur in volontaire.secteurs %}
+                                <li class="d-flex align-items-center g-mb-12">
+                                    <i class="icon-check d-block g-color-primary g-mr-8"></i>
+                                    <span class="d-block">{{ secteur }}</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+
+
+                        <p class="lead g-line-height-1_8">
+
+                        <h3 class="h5 g-color-gray-dark-v1 g-mb-10">Véhicule</h3>
+                        {% for vehicule in  volontaire.vehicules %}
+                            {{ vehicule }}
+                        {% endfor %}
+
+                        <hr class="g-brd-gray-light-v4 g-my-20">
+
+                        {% include 'backend/volontaire/associations_communes.html.twig' %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

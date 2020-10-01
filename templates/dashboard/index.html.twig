@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block breadcrumbs %}
+    {% include 'dashboard/_breadcrumb.html.twig' with {'title':'Tableau de bord'} %}
+{% endblock %}
+
+{% block body %}
+    <section class="g-mb-100">
+        <div class="container">
+            <div class="row">
+                <!-- Profile Sidebar -->
+                {% include 'dashboard/_sidebar.html.twig' %}
+                <!-- End Profile Sidebar -->
+
+                <!-- Profle Content -->
+                <div class="col-lg-9">
+                    <!-- User Block -->
+                    <div class="g-brd-around g-brd-gray-light-v4 g-pa-20 g-mb-40">
+
+                      <ul class="list-group">
+                          <li class="list-group-item">
+                              <a href="{{ path('volontariat_backend_volontaire_index') }}">
+                                  Gérer ma fiche de volontaire
+                              </a>
+                          </li>
+                          <li class="list-group-item">
+                              <a href="{{ path('volontariat_backend_association_index') }}">
+                                  Gérer mon association
+                              </a>
+                          </li>
+                          <li class="list-group-item">
+                              <a href="{{ path('volontariat_backend_referencer') }}">
+                                  Référencer une association ou un volontaire
+                              </a>
+                          </li>
+                           <li class="list-group-item">
+                              <a href="{{ path('volontariat_backend_temoignage') }}">
+                                  Gérer mes témoignages
+                              </a>
+                          </li>
+                           <li class="list-group-item">
+                              <a href="{{ path('volontariat_user_change_password') }}">
+                                  Changer mon mot de passe
+                              </a>
+                          </li>
+                          <li class="list-group-item">
+                              <a href="{{ path('volontariat_compte_home') }}">
+                                  Gérer mon compte
+                              </a>
+                          </li>
+                      </ul>
+
+                    </div>
+                    <!-- End User Block -->
+
+                </div>
+                <!-- End Profle Content -->
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+    $('#associationDeleteModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var nom = button.data('nom'); // Extract info from data-* attributes
+        var cmdid = button.data('id'); // Extract info from data-* attributes
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this);
+        modal.find('#modal-body-nom').text(nom);
+        modal.find('#modal-body-input').val(cmdid)
+    })
+</script>
+<script type="text/javascript">
+    $('#volontaireDeleteModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var nom = button.data('nom'); // Extract info from data-* attributes
+        var cmdid = button.data('id'); // Extract info from data-* attributes
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        var modal = $(this);
+        modal.find('#modal-body-nom').text(nom);
+        modal.find('#modal-body-input').val(cmdid)
+    })
+</script>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link href="{{ asset('jquery-ui/jquery-ui.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+
+    <section class="container g-py-100">
+        <!-- Heading -->
+        <div class="u-heading-v6-2 g-mb-60">
+            <h2 class="u-heading-v6__title g-color-black g-font-weight-600 g-mb-30">
+                {{ activite }}
+            </h2>
+        </div>
+
+        {{ form(form) }}
+
+        <a href="{{ path('volontariat_backend_activite', {'id': activite.association.id}) }}">
+            <span class="glyphicon glyphicon-list"></span> Annuler
+        </a>
+
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    {{ include('admin/form/calendar.html.twig') }}
+{% endblock %}

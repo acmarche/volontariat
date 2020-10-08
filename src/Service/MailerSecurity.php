@@ -79,7 +79,7 @@ class MailerSecurity
     public function sendWelcome(User $user)
     {
         $sujet = 'Bienvenue sur la plate-forme du volontariat';
-        $body = $this->twig->render('security/registration/email.welcome.txt.twig', array());
+        $body = $this->twig->render('@Volontariat/security/registration/email.welcome.txt.twig', array());
 
         $this->flashBag->add("success", 'Vous êtes bien inscrit');
 
@@ -93,7 +93,7 @@ class MailerSecurity
     public function sendRequestNewPassword(User $user)
     {
         $body = $this->twig->render(
-            'security/resetting/email.txt.twig',
+            '@Volontariat/security/resetting/email.txt.twig',
             [
                 'user' => $user,
             ]

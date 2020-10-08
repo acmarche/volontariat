@@ -58,7 +58,7 @@ class MailerContact
         $message->setCc($contactManager->getEmail());
 
         $body = $this->twig->render(
-            'contact/_mail_volontaire.html.twig',
+            '@Volontariat/contact/_mail_volontaire.html.twig',
             array(
                 "contactManager" => $contactManager,
                 "volontaire" => $volontaire,
@@ -81,7 +81,7 @@ class MailerContact
         $message->setCc($contactManager->getEmail());
 
         $body = $this->twig->render(
-            'contact/_mail_association.html.twig',
+            '@Volontariat/contact/_mail_association.html.twig',
             array(
                 "contactManager" => $contactManager,
                 "association" => $association,
@@ -102,7 +102,7 @@ class MailerContact
             ->setTo($this->from);
 
         $body = $this->twig->render(
-            'contact/_mail_copy.html.twig',
+            '@Volontariat/contact/_mail_copy.html.twig',
             array(
                 "contactManager" => $contactManager,
             )

@@ -92,7 +92,7 @@ class MailerActivite
         $sujet = 'Une activite a valider sur la plate-forme du volontariat';
 
         $body = $this->twig->render(
-            'mail/activite/to_validate.html.twig',
+            '@Volontariat/mail/activite/to_validate.html.twig',
             array(
                 "activite" => $activite,
                 "user" => $user,
@@ -120,7 +120,7 @@ class MailerActivite
         $sujet = 'Votre activite a été validée sur la plate-forme du volontariat';
 
         $body = $this->twig->render(
-            'mail/activite/validee.html.twig',
+            '@Volontariat/mail/activite/validee.html.twig',
             array(
                 "activite" => $activite,
             )
@@ -147,7 +147,7 @@ class MailerActivite
 
         foreach ($volontaires as $volontaire) {
             $body = $this->twig->render(
-                'mail/activite/new.html.twig',
+                '@Volontariat/mail/activite/new.html.twig',
                 array(
                     "activite" => $activite,
                     "volontaire" => $volontaire,
@@ -164,7 +164,7 @@ class MailerActivite
 
         foreach ($associations as $association) {
             $body = $this->twig->render(
-                'mail/activite/new.html.twig',
+                '@Volontariat/mail/activite/new.html.twig',
                 array(
                     "activite" => $activite,
                     "volontaire" => $association,

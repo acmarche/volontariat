@@ -142,7 +142,7 @@ class Mailer
 
         $sujet = 'Un volontaire de plus sur la plate-forme du volontariat';
         $body = $this->twig->render(
-            'mail/volontaire_new.html.twig',
+            '@Volontariat/mail/volontaire_new.html.twig',
             array(
                 "volontaire" => $volontaire,
             )
@@ -170,7 +170,7 @@ class Mailer
         $sujet = 'Une association a valider sur la plate-forme du volontariat';
 
         $body = $this->twig->render(
-            'mail/association_to_validate.html.twig',
+            '@Volontariat/mail/association_to_validate.html.twig',
             array(
                 "association" => $association,
                 "user" => $user,
@@ -196,7 +196,7 @@ class Mailer
         $sujet = 'Votre association a été validée sur la plate-forme du volontariat';
 
         $body = $this->twig->render(
-            'mail/association_validee.html.twig',
+            '@Volontariat/mail/association_validee.html.twig',
             array(
                 "association" => $association,
             )
@@ -223,7 +223,7 @@ class Mailer
 
         foreach ($volontaires as $volontaire) {
             $body = $this->twig->render(
-                'mail/association_new.html.twig',
+                '@Volontariat/mail/association_new.html.twig',
                 array(
                     "association" => $association,
                     "volontaire" => $volontaire,
@@ -257,7 +257,7 @@ class Mailer
             ->setTo($destinataires);
 
         $body = $this->twig->render(
-            'mail/_recommander_volontaire.html.twig',
+            '@Volontariat/mail/_recommander_volontaire.html.twig',
             array(
                 'volontaire' => $volontaire,
                 'user' => $user,
@@ -291,7 +291,7 @@ class Mailer
             ->setTo($destinataires);
 
         $body = $this->twig->render(
-            'mail/_recommander_association.html.twig',
+            '@Volontariat/mail/_recommander_association.html.twig',
             array(
                 'association' => $association,
                 'user' => $user,
@@ -324,7 +324,7 @@ class Mailer
             ->setTo($destinataires);
 
         $body = $this->twig->render(
-            'mail/_referencer.html.twig',
+            '@Volontariat/mail/_referencer.html.twig',
             array(
                 'nomDestinataire' => $nomDestinataire,
                 'user' => $user,

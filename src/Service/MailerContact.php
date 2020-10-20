@@ -8,6 +8,8 @@ use AcMarche\Volontariat\Manager\ContactManager;
 use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Twig\Environment;
 
 class MailerContact
@@ -25,9 +27,9 @@ class MailerContact
      */
     private $twig;
     /**
-     * @var \Swift_Mailer
+     * @var MailerInterface
      */
-    private $swiftMailer;
+    private $mailer;
     /**
      * @var string
      */
@@ -38,24 +40,25 @@ class MailerContact
         VolontaireRepository $volontaireRepository,
         Environment $twig,
         FlashBagInterface $flashBag,
-        \Swift_Mailer $swiftMailer,
+        MailerInterface $mailer,
         string $from
     ) {
         $this->associationRepository = $associationRepository;
         $this->volontaireRepository = $volontaireRepository;
         $this->twig = $twig;
         $this->flashBag = $flashBag;
-        $this->swiftMailer = $swiftMailer;
+        $this->mailer = $mailer;
         $this->from = $from;
     }
 
     public function sendToVolontaire(Volontaire $volontaire, ContactManager $contactManager)
     {
-        $message = (new \Swift_Message($contactManager->getSujet()))
-            ->setFrom($contactManager->getEmail())
-            ->setTo($volontaire->getEmail());
+        $message = (new Email())
+            ->subject($contactManager->getSujet())
+            ->from($contactManager->getEmail())
+            ->to($volontaire->getEmail());
 
-        $message->setCc($contactManager->getEmail());
+        $message->cc($contactManager->getEmail());
 
         $body = $this->twig->render(
             '@Volontariat/contact/_mail_volontaire.html.twig',
@@ -65,20 +68,21 @@ class MailerContact
             )
         );
 
-        $message->setBody($body);
+        $message->text($body);
 
-        $this->swiftMailer->send($message);
+        $this->mailer->send($message);
 
         $this->sendCopyVolontariat($contactManager);
     }
 
     public function sendToAssociation(Association $association, ContactManager $contactManager)
     {
-        $message = (new \Swift_Message($contactManager->getSujet()))
-            ->setFrom($contactManager->getEmail())
-            ->setTo($association->getEmail());
+        $message = (new Email())
+            ->subject($contactManager->getSujet())
+            ->from($contactManager->getEmail())
+            ->to($association->getEmail());
 
-        $message->setCc($contactManager->getEmail());
+        $message->cc($contactManager->getEmail());
 
         $body = $this->twig->render(
             '@Volontariat/contact/_mail_association.html.twig',
@@ -88,18 +92,19 @@ class MailerContact
             )
         );
 
-        $message->setBody($body, 'text/plain');
+        $message->text($body);
 
-        $this->swiftMailer->send($message);
+        $this->mailer->send($message);
 
         $this->sendCopyVolontariat($contactManager);
     }
 
     protected function sendCopyVolontariat(ContactManager $contactManager)
     {
-        $message = (new \Swift_Message($contactManager->getSujet()))
-            ->setFrom($this->from)
-            ->setTo($this->from);
+        $message = (new Email())
+            ->subject($contactManager->getSujet())
+            ->from($this->from)
+            ->to($this->from);
 
         $body = $this->twig->render(
             '@Volontariat/contact/_mail_copy.html.twig',
@@ -108,8 +113,8 @@ class MailerContact
             )
         );
 
-        $message->setBody($body, 'text/plain');
+        $message->text($body);
 
-        $this->swiftMailer->send($message);
+        $this->mailer->send($message);
     }
 }

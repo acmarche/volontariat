@@ -5,6 +5,9 @@ namespace AcMarche\Volontariat\Service;
 use AcMarche\Volontariat\Entity\Security\User;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\Mailer\Exception\TransportException;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
 
@@ -19,9 +22,9 @@ class MailerSecurity
      */
     private $flashBag;
     /**
-     * @var \Swift_Mailer
+     * @var MailerInterface
      */
-    private $swiftMailer;
+    private $mailer;
     /**
      * @var string
      */
@@ -42,7 +45,7 @@ class MailerSecurity
     public function __construct(
         Environment $twig,
         FlashBagInterface $flashBag,
-        \Swift_Mailer $swiftMailer,
+        MailerInterface $mailer,
         ParameterBagInterface $parameterBag,
         RouterInterface $router,
         string $to,
@@ -50,7 +53,7 @@ class MailerSecurity
     ) {
         $this->twig = $twig;
         $this->flashBag = $flashBag;
-        $this->swiftMailer = $swiftMailer;
+        $this->mailer = $mailer;
         $this->to = $to;
         $this->from = $from;
         $this->parameterBag = $parameterBag;
@@ -59,17 +62,18 @@ class MailerSecurity
 
     public function send($from, $destinataires, $sujet, $body, $bcc = null)
     {
-        $mail = (new \Swift_Message($sujet))
-            ->setFrom($from)
-            ->setTo($destinataires);
+        $mail = (new Email())
+            ->subject($sujet)
+            ->from($from)
+            ->to($destinataires);
 
         if ($bcc) {
-            $mail->setBcc($bcc);
+            $mail->bcc($bcc);
         }
 
-        $mail->setBody($body);
+        $mail->text($body);
 
-        $this->swiftMailer->send($mail);
+        $this->mailer->send($mail);
     }
 
     /**
@@ -85,7 +89,7 @@ class MailerSecurity
 
         try {
             $this->send($this->from, $user->getEmail(), $sujet, $body, $this->from);
-        } catch (\Swift_SwiftException $e) {
+        } catch (TransportException $e) {
             $this->flashBag->add("error", $e->getMessage());
         }
     }
@@ -110,7 +114,7 @@ class MailerSecurity
 
         try {
             $this->send($this->from, $to, $sujet, $body);
-        } catch (\Swift_SwiftException $e) {
+        } catch (TransportException $e) {
             $this->flashBag->add("error", $e->getMessage());
         }
     }

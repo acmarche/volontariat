@@ -10,6 +10,9 @@ use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\Mailer\Exception\TransportException;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
@@ -19,7 +22,7 @@ class Mailer
     private $twig;
     private $session;
     private $messageService;
-    private $swiftMailer;
+    private $mailer;
     private $to;
     private $from;
     /**
@@ -41,7 +44,7 @@ class Mailer
         Environment $twig,
         FlashBagInterface $session,
         MessageService $messageService,
-        \Swift_Mailer $swiftMailer,
+        MailerInterface $swiftMailer,
         RouterInterface $router,
         $to,
         $from
@@ -49,7 +52,7 @@ class Mailer
         $this->twig = $twig;
         $this->session = $session;
         $this->messageService = $messageService;
-        $this->swiftMailer = $swiftMailer;
+        $this->mailer = $swiftMailer;
         $this->to = $to;
         $this->from = $from;
         $this->associationRepository = $associationRepository;
@@ -59,18 +62,18 @@ class Mailer
 
     public function send($from, $destinataires, $sujet, $body, $bcc = null)
     {
-        $mail = (new \Swift_Message($sujet))
-            ->setSubject($sujet)
-            ->setFrom($from)
-            ->setTo($destinataires);
+        $mail = (new Email())
+            ->subject($sujet)
+            ->from($from)
+            ->to($destinataires);
 
         if ($bcc) {
-            $mail->setBcc($bcc);
+            $mail->bcc($bcc);
         }
 
-        $mail->setBody($body);
+        $mail->text($body);
 
-        $this->swiftMailer->send($mail);
+        $this->mailer->send($mail);
     }
 
     /**
@@ -87,12 +90,12 @@ class Mailer
             $from = $this->from;
         }
 
-        $message = (new \Swift_Message($sujet))
-            ->setFrom($from)
-            ->setSubject($sujet);
+        $message = (new Email())
+            ->subject($sujet)
+            ->from($from);
 
         if ($uploadedFile) {
-            $attach = \Swift_Attachment::fromPath($uploadedFile)
+            $attach = $message->attachFromPath($uploadedFile)
                 ->setFilename(
                     $uploadedFile->getClientOriginalName()
                 )
@@ -119,22 +122,22 @@ class Mailer
             }
             $body = preg_replace("#{urltoken}#", $url, $bodyOriginal);
 
-            $message->setBody($body);
+            $message->text($body);
 
             $destinataire = $this->messageService->getEmailEntity($entity);
 
             $message->setTo($destinataire);
 
-            $this->swiftMailer->send($message);
+            $this->mailer->send($message);
         }
     }
 
     /**
      * Préviens les asbl
      * @param Volontaire $volontaire
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function sendNewVolontaire(Volontaire $volontaire)
     {
@@ -151,7 +154,7 @@ class Mailer
         foreach ($emails as $email) {
             try {
                 $this->send($this->from, $email, $sujet, $body);
-            } catch (\Swift_SwiftException $e) {
+            } catch (TransportException $e) {
                 $this->session->add("error", $e->getMessage());
             }
         }
@@ -161,9 +164,9 @@ class Mailer
      * L'admin doit valider une association
      * @param Association $association
      * @param User $user
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function sendAssociationToValider(Association $association, User $user)
     {
@@ -179,7 +182,7 @@ class Mailer
 
         try {
             $this->send($this->from, $this->to, $sujet, $body);
-        } catch (\Swift_SwiftException $e) {
+        } catch (TransportException $e) {
             $this->session->add("error", $e->getMessage());
         }
     }
@@ -187,9 +190,9 @@ class Mailer
     /**
      * Prévient l'asbl qu'elle a été validée
      * @param Association $association
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function sendAssociationValidee(Association $association)
     {
@@ -204,7 +207,7 @@ class Mailer
 
         try {
             $this->send($this->from, $association->getEmail(), $sujet, $body);
-        } catch (\Swift_SwiftException $e) {
+        } catch (TransportException $e) {
             $this->session->add("error", $e->getMessage());
         }
     }
@@ -212,9 +215,9 @@ class Mailer
     /**
      * Les volontaires sont prévenus de l'arrivée d'une nouvelle Asbl
      * @param Association $association
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function sendNewAssociation(Association $association)
     {
@@ -232,7 +235,7 @@ class Mailer
 
             try {
                 $this->send($this->from, $volontaire->getEmail(), $sujet, $body);
-            } catch (\Swift_SwiftException $e) {
+            } catch (TransportException $e) {
             }
         }
     }
@@ -251,10 +254,10 @@ class Mailer
         $from = $data->getFroms();
         $destinataires = $data->getDestinataires();
 
-        $mail = (new \Swift_Message($sujet))
-            ->setSubject($sujet)
-            ->setFrom($from)
-            ->setTo($destinataires);
+        $mail = (new Email())
+            ->subject($sujet)
+            ->from($from)
+            ->to($destinataires);
 
         $body = $this->twig->render(
             '@Volontariat/mail/_recommander_volontaire.html.twig',
@@ -266,9 +269,9 @@ class Mailer
             )
         );
 
-        $mail->setBody($body);
+        $mail->text($body);
 
-        $this->swiftMailer->send($mail);
+        $this->mailer->send($mail);
     }
 
     /**
@@ -285,10 +288,10 @@ class Mailer
         $nom = $data->getNom();
         $destinataires = $data->getDestinataires();
 
-        $mail = (new \Swift_Message($sujet))
-            ->setSubject($sujet)
-            ->setFrom($from)
-            ->setTo($destinataires);
+        $mail = (new Email())
+            ->subject($sujet)
+            ->from($from)
+            ->to($destinataires);
 
         $body = $this->twig->render(
             '@Volontariat/mail/_recommander_association.html.twig',
@@ -300,9 +303,9 @@ class Mailer
             )
         );
 
-        $mail->setBody($body);
+        $mail->text($body);
 
-        $this->swiftMailer->send($mail);
+        $this->mailer->send($mail);
     }
 
     /**
@@ -318,10 +321,10 @@ class Mailer
         $nomDestinataire = $data->getNomDestinataire();
         $destinataires = $data->getDestinataires();
 
-        $mail = (new \Swift_Message($sujet))
-            ->setSubject($sujet)
-            ->setFrom($from)
-            ->setTo($destinataires);
+        $mail = (new Email())
+            ->subject($sujet)
+            ->from($from)
+            ->to($destinataires);
 
         $body = $this->twig->render(
             '@Volontariat/mail/_referencer.html.twig',
@@ -333,8 +336,8 @@ class Mailer
             )
         );
 
-        $mail->setBody($body);
+        $mail->text($body);
 
-        $this->swiftMailer->send($mail);
+        $this->mailer->send($mail);
     }
 }

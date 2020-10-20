@@ -7,6 +7,9 @@ use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\Mailer\Exception\TransportException;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Twig\Environment;
 
 class MailerActivite
@@ -32,9 +35,9 @@ class MailerActivite
      */
     private $messageService;
     /**
-     * @var \Swift_Mailer
+     * @var MailerInterface
      */
-    private $swiftMailer;
+    private $mailer;
     /**
      * @var string
      */
@@ -50,7 +53,7 @@ class MailerActivite
         Environment $twig,
         FlashBagInterface $flashBag,
         MessageService $messageService,
-        \Swift_Mailer $swiftMailer,
+        MailerInterface $mailer,
         string $to,
         string $from
     ) {
@@ -59,33 +62,34 @@ class MailerActivite
         $this->twig = $twig;
         $this->flashBag = $flashBag;
         $this->messageService = $messageService;
-        $this->swiftMailer = $swiftMailer;
+        $this->mailer = $mailer;
         $this->to = $to;
         $this->from = $from;
     }
 
     public function send($from, $destinataires, $sujet, $body, $bcc = null)
     {
-        $mail = (new \Swift_Message($sujet))
+        $mail = (new Email())
+            ->subject($sujet)
             ->setFrom($from)
             ->setTo($destinataires);
 
         if ($bcc) {
-            $mail->setBcc($bcc);
+            $mail->bcc($bcc);
         }
 
-        $mail->setBody($body);
+        $mail->text($body);
 
-        $this->swiftMailer->send($mail);
+        $this->mailer->send($mail);
     }
 
     /**
      * L'admin doit valider une activite
      * @param Activite $activite
      * @param User $user
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function sendRequest(Activite $activite, User $user)
     {
@@ -101,7 +105,7 @@ class MailerActivite
 
         try {
             $this->send($this->from, $this->to, $sujet, $body);
-        } catch (\Swift_SwiftException $e) {
+        } catch (TransportException $e) {
             $this->flashBag->add("error", $e->getMessage());
         }
     }
@@ -109,10 +113,9 @@ class MailerActivite
     /**
      * Prévient l'asbl qu'elle a été validée
      * @param Activite $activite
-     * @return null
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function sendFinish(Activite $activite)
     {
@@ -128,7 +131,7 @@ class MailerActivite
 
         try {
             $this->send($this->from, $user->getEmail(), $sujet, $body);
-        } catch (\Swift_SwiftException $e) {
+        } catch (TransportException $e) {
             $this->flashBag->add("error", $e->getMessage());
         }
     }
@@ -136,9 +139,9 @@ class MailerActivite
     /**
      * Tout le monde est prévenu
      * @param Activite $activite
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function sendNew(Activite $activite)
     {
@@ -156,7 +159,7 @@ class MailerActivite
 
             try {
                 $this->send($this->from, $volontaire->getEmail(), $sujet, $body);
-            } catch (\Swift_SwiftException $e) {
+            } catch (TransportException $e) {
             }
         }
 
@@ -173,7 +176,7 @@ class MailerActivite
 
             try {
                 $this->send($this->from, $association->getEmail(), $sujet, $body);
-            } catch (\Swift_SwiftException $e) {
+            } catch (TransportException $e) {
             }
         }
     }

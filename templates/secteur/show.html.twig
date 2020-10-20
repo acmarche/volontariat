@@ -15,13 +15,13 @@
                     <div class="headline">
                         <h3>Les Associations suivantes ont choisis <strong>{{ secteur }}</strong></h3>
                     </div>
-                    {% include '@Volontariat/secteur/associations.html.twig' with {'associations': associations} %}
+                    {% include '@Volontariat/secteur/_associations.html.twig' with {'associations': associations} %}
                 </div>
                 <div class="col-md-6">
                     <div class="headline">
                         <h3>Les volontaires suivants ont choisis <strong>{{ secteur }}</strong></h3>
                     </div>
-                    {% include '@Volontariat/secteur/volontaires.html.twig' with {'volontaires': volontaires} %}
+                    {% include '@Volontariat/secteur/_volontaires.html.twig' with {'volontaires': volontaires} %}
                 </div>
             </div>
         </div><!--End Blog Post-->

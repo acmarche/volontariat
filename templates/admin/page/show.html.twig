@@ -8,18 +8,18 @@
 
     <h3>{{ page }}</h3>
 
-    {{ include ('admin/page/actions.html.twig' ) }}
+    {{ include ('@Volontariat/admin/page/actions.html.twig' ) }}
 
     <br/><br/>
 
     {{ page.content | raw }}
     <br/><br/>
 
-    {% include'admin/association/gallery-controls.html.twig' %}
+    {% include'@Volontariat/admin/association/gallery-controls.html.twig' %}
 
-    {% include'admin/page/images.html.twig' %}
+    {% include'@Volontariat/admin/page/images.html.twig' %}
 
-    {{ include ('admin/page/delete.html.twig') }}
+    {{ include ('@Volontariat/admin/page/delete.html.twig') }}
 
 {% endblock %}
 

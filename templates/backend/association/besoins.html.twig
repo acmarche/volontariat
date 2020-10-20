@@ -3,7 +3,7 @@
 <ul class="list-group">
     {% for besoin in association.besoins %}
         <li class="list-group-item">
-            <a href="{{ path('volontariat_backend_besoin_show', { 'id': besoin.id }) }}">{{ besoin }}</a>
+            <a href="{{ path('volontariat_backend_besoin_edit', { 'id': besoin.id }) }}">{{ besoin }}</a>
         </li>
     {% else %}
         <li class="list-group-item">Aucun</li>

@@ -13,7 +13,7 @@
                         <article class="g-bg-white">
                             <a href="{{ path('volontariat_association_show', {'id':association.id}) }}">
                                 <figure class="g-pos-rel">
-                                    {% set url = asset('assets/img-temp/400x270/img5.jpg') %}
+                                    {% set url = asset('bundles/volontariat/assets/img-temp/400x270/img5.jpg') %}
 
                                     {% if association.imageName %}
                                         {% set url = association.imageName | acmarche_volontariat_download_image(association) | imagine_filter('acmarche_volontariat_400_270') %}

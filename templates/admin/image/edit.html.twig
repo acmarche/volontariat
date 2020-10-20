@@ -18,7 +18,7 @@
 
     <br/><br/>
     {% if images | length > 0 %}
-        {% include "admin/image/_images.html.twig" with ({ 'images': images, 'form_delete' : form_delete } ) %}
+        {% include "@Volontariat/admin/image/_images.html.twig" with ({ 'images': images, 'form_delete' : form_delete } ) %}
     {% else %}
         <p class="text-warning">Aucune image actuellement</p>
     {% endif %}

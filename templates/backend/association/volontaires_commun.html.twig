@@ -2,7 +2,7 @@
 <ul class="list-group">
     {% for volontaire in volontaires %}
         <li class="list-group-item">
-            <a href="{{ path('volontariat_backend_volontaire_show', {'id':volontaire.id}) }}">
+            <a href="{{ path('volontariat_volontaire_show', {'id':volontaire.id}) }}">
                 {{ volontaire }}
             </a>
         </li>

@@ -31,7 +31,7 @@
         {{ form_end(form) }}
 
         {% if images | length > 0 %}
-            {% include "backend/image_association/_images.html.twig" %}
+            {% include "@Volontariat/backend/image_association/_images.html.twig" %}
         {% else %}
             <p class="text-warning">Aucune image actuellement</p>
         {% endif %}

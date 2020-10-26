@@ -76,8 +76,8 @@ class ValiderController extends AbstractController
             $this->addFlash('success', 'L\' association a bien été validée');
 
             $event = new AssociationEvent($association);
-            $this->eventDispatcher->dispatch(AssociationEvent::ASSOCIATION_VALIDER_FINISH, $event);
-            $this->eventDispatcher->dispatch(AssociationEvent::ASSOCIATION_NEW, $event);
+            $this->eventDispatcher->dispatch( $event,AssociationEvent::ASSOCIATION_VALIDER_FINISH);
+            $this->eventDispatcher->dispatch($event,AssociationEvent::ASSOCIATION_NEW);
 
             return $this->redirectToRoute('volontariat_admin_association_show', ['id' => $association->getId()]);
         }
@@ -109,8 +109,8 @@ class ValiderController extends AbstractController
             $this->addFlash('success', 'L\'activitée a bien été validée');
 
             $event = new ActiviteEvent($activite);
-            $this->eventDispatcher->dispatch(ActiviteEvent::ACTIVITE_VALIDER_FINISH, $event);
-            $this->eventDispatcher->dispatch(ActiviteEvent::ACTIVITE_NEW, $event);
+            $this->eventDispatcher->dispatch($event,ActiviteEvent::ACTIVITE_VALIDER_FINISH);
+            $this->eventDispatcher->dispatch($event,ActiviteEvent::ACTIVITE_NEW);
 
             return $this->redirectToRoute('volontariat_admin_activite_show', ['id' => $activite->getId()]);
         }

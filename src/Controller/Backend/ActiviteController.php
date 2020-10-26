@@ -77,7 +77,7 @@ class ActiviteController extends AbstractController
             $this->addFlash("warning", "L'activitée doit être validée par un administrateur");
 
             $event = new ActiviteEvent($activite);
-            $this->eventDispatcher->dispatch(ActiviteEvent::ACTIVITE_VALIDER_REQUEST, $event);
+            $this->eventDispatcher->dispatch($event, ActiviteEvent::ACTIVITE_VALIDER_REQUEST);
 
             return $this->redirectToRoute('volontariat_backend_image_activite', ['id' => $activite->getId()]);
         }

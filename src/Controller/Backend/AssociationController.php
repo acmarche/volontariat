@@ -97,7 +97,7 @@ class AssociationController extends AbstractController
             $this->addFlash("warning", "L' association doit être validée par un administrateur");
 
             $event = new AssociationEvent($association);
-            $this->eventDispatcher->dispatch(AssociationEvent::ASSOCIATION_VALIDER_REQUEST, $event);
+            $this->eventDispatcher->dispatch($event,AssociationEvent::ASSOCIATION_VALIDER_REQUEST);
 
             return $this->redirectToRoute('volontariat_backend_association_index');
         }

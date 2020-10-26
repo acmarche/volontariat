@@ -95,7 +95,7 @@ class VolontaireController extends AbstractController
             $this->addFlash("success", "Le volontaire a bien été ajouté");
 
             $event = new VolontaireEvent($volontaire);
-            $this->eventDispatcher->dispatch(VolontaireEvent::VOLONTAIRE_NEW, $event);
+            $this->eventDispatcher->dispatch($event, VolontaireEvent::VOLONTAIRE_NEW);
 
             return $this->redirectToRoute('volontariat_backend_volontaire_index');
         }

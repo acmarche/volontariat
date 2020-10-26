@@ -20,7 +20,7 @@ class PageController extends AbstractController
     }
 
     /**
-     * @Route("/page/{slugname}",name="volontariat_page_show")
+     * @Route("/page/{slug}",name="volontariat_page_show")
      *
      */
     public function show(Page $page)

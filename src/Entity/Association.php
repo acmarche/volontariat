@@ -6,7 +6,9 @@ use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\InterfaceDef\Uploadable;
 use AcMarche\Volontariat\Validator\Constraints as AcMarcheAssert;
 use Doctrine\ORM\Mapping as ORM;
+use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
+use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -19,9 +21,10 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @ORM\Table(name="association")
  * @Vich\Uploadable
  */
-class Association implements Uploadable, TimestampableInterface
+class Association implements Uploadable, TimestampableInterface, SluggableInterface
 {
     use TimestampableTrait;
+    use SluggableTrait;
 
     /**
      * @var integer|null $id
@@ -47,13 +50,6 @@ class Association implements Uploadable, TimestampableInterface
      * @var string|null $slug
      */
     protected $slug;
-
-    /**
-     * @var string|null $slugname
-     * Gedmo\Slug(fields={"nom"}, separator="-", updatable=true)
-     * @ORM\Column(length=70, unique=true)
-     */
-    private $slugname;
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -373,6 +369,17 @@ class Association implements Uploadable, TimestampableInterface
         return null;
     }
 
+
+    public function getSluggableFields(): array
+    {
+        return ['nom'];
+    }
+
+    public function shouldGenerateUniqueSlugs(): bool
+    {
+        return true;
+    }
+
     /**
      * STOP
      */
@@ -421,54 +428,6 @@ class Association implements Uploadable, TimestampableInterface
     public function getNom()
     {
         return $this->nom;
-    }
-
-    /**
-     * Set slug.
-     *
-     * @param string|null $slug
-     *
-     * @return Association
-     */
-    public function setSlug($slug = null)
-    {
-        $this->slug = $slug;
-
-        return $this;
-    }
-
-    /**
-     * Get slug.
-     *
-     * @return string|null
-     */
-    public function getSlug()
-    {
-        return $this->slug;
-    }
-
-    /**
-     * Set slugname.
-     *
-     * @param string $slugname
-     *
-     * @return Association
-     */
-    public function setSlugname($slugname)
-    {
-        $this->slugname = $slugname;
-
-        return $this;
-    }
-
-    /**
-     * Get slugname.
-     *
-     * @return string
-     */
-    public function getSlugname()
-    {
-        return $this->slugname;
     }
 
     /**

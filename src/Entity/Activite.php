@@ -3,9 +3,11 @@
 namespace AcMarche\Volontariat\Entity;
 
 use AcMarche\Volontariat\Entity\Security\User;
-use Doctrine\ORM\Mapping as ORM;
 use AcMarche\Volontariat\InterfaceDef\Uploadable;
+use Doctrine\ORM\Mapping as ORM;
+use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
+use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -15,9 +17,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="activite")
  *
  */
-class Activite implements Uploadable, TimestampableInterface
+class Activite implements Uploadable, TimestampableInterface, SluggableInterface
 {
     use TimestampableTrait;
+    use SluggableTrait;
 
     /**
      * @var integer|null $id
@@ -36,13 +39,6 @@ class Activite implements Uploadable, TimestampableInterface
      * @Assert\NotBlank()
      */
     protected $titre;
-
-    /**
-     * @var string|null $slugname
-     * Gedmo\Slug(fields={"titre"}, separator="-", updatable=true)
-     * @ORM\Column(length=120, unique=true)
-     */
-    private $slugname;
 
     /**
      * content
@@ -99,6 +95,16 @@ class Activite implements Uploadable, TimestampableInterface
         return isset($images[0]['url']) ? $images[0]['url'] : null;
     }
 
+    public function getSluggableFields(): array
+    {
+        return ['titre'];
+    }
+
+    public function shouldGenerateUniqueSlugs(): bool
+    {
+        return true;
+    }
+
     /**
      * STOP
      */
@@ -135,30 +141,6 @@ class Activite implements Uploadable, TimestampableInterface
     public function getTitre()
     {
         return $this->titre;
-    }
-
-    /**
-     * Set slugname.
-     *
-     * @param string $slugname
-     *
-     * @return Activite
-     */
-    public function setSlugname($slugname)
-    {
-        $this->slugname = $slugname;
-
-        return $this;
-    }
-
-    /**
-     * Get slugname.
-     *
-     * @return string
-     */
-    public function getSlugname()
-    {
-        return $this->slugname;
     }
 
     /**

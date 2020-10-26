@@ -6,7 +6,9 @@ use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\InterfaceDef\Uploadable;
 use AcMarche\Volontariat\Validator\Constraints as AcMarcheAssert;
 use Doctrine\ORM\Mapping as ORM;
+use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
+use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -18,9 +20,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass="AcMarche\Volontariat\Repository\VolontaireRepository")
  *
  */
-class Volontaire implements Uploadable, TimestampableInterface
+class Volontaire implements Uploadable, TimestampableInterface, SluggableInterface
 {
     use TimestampableTrait;
+    use SluggableTrait;
 
     /**
      * @var integer|null $id
@@ -59,13 +62,6 @@ class Volontaire implements Uploadable, TimestampableInterface
      * @var string|null $slug
      */
     protected $slug;
-
-    /**
-     * @var string |null
-     * Gedmo\Slug(fields={"name","surname"}, separator="-", updatable=true)
-     * @ORM\Column(length=70, unique=true)
-     */
-    private $slugname;
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -284,6 +280,16 @@ class Volontaire implements Uploadable, TimestampableInterface
      */
     protected $notes;
 
+    public function getSluggableFields(): array
+    {
+        return ['nom', 'prenom'];
+    }
+
+    public function shouldGenerateUniqueSlugs(): bool
+    {
+        return true;
+    }
+
     /**
      * STOP
      */
@@ -378,54 +384,6 @@ class Volontaire implements Uploadable, TimestampableInterface
     public function getSurname()
     {
         return $this->surname;
-    }
-
-    /**
-     * Set slug.
-     *
-     * @param string|null $slug
-     *
-     * @return Volontaire
-     */
-    public function setSlug($slug = null)
-    {
-        $this->slug = $slug;
-
-        return $this;
-    }
-
-    /**
-     * Get slug.
-     *
-     * @return string|null
-     */
-    public function getSlug()
-    {
-        return $this->slug;
-    }
-
-    /**
-     * Set slugname.
-     *
-     * @param string $slugname
-     *
-     * @return Volontaire
-     */
-    public function setSlugname($slugname)
-    {
-        $this->slugname = $slugname;
-
-        return $this;
-    }
-
-    /**
-     * Get slugname.
-     *
-     * @return string
-     */
-    public function getSlugname()
-    {
-        return $this->slugname;
     }
 
     /**
@@ -995,4 +953,5 @@ class Volontaire implements Uploadable, TimestampableInterface
 
         return $this;
     }
+
 }

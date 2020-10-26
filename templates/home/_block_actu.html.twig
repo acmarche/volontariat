@@ -49,7 +49,7 @@
                 <div class="masonry-grid-item col-sm-6 col-lg-4 g-mb-30">
                     <!-- Blog Grid Modern Blocks -->
                     <article class="u-shadow-v21 u-shadow-v21--hover g-transition-0_3">
-                        <a href="{{ path('volontariat_page_show', {'slugname': page.slugname}) }}">
+                        <a href="{{ path('volontariat_page_show', {'slug': page.slug}) }}">
                             {% if page.firstImage %}
                                 <img class="img-fluid w-100 g-rounded-top-5"
                                      src="{{ page.firstImage | imagine_filter('acmarche_volontariat_400_270') }}"
@@ -68,7 +68,7 @@
 
                             <h2 class="h5 g-color-black g-font-weight-600 mb-4">
                                 <a class="u-link-v5 g-color-black g-color-primary--hover g-cursor-pointer"
-                                   href="{{ path('volontariat_page_show', {'slugname': page.slugname}) }}">
+                                   href="{{ path('volontariat_page_show', {'slug': page.slug}) }}">
                                     {{ page }}
                                 </a>
                             </h2>

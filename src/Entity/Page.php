@@ -4,6 +4,8 @@ namespace AcMarche\Volontariat\Entity;
 
 use AcMarche\Volontariat\InterfaceDef\Uploadable;
 use Doctrine\ORM\Mapping as ORM;
+use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
+use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -12,8 +14,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="page")
  *
  */
-class Page implements Uploadable
+class Page implements Uploadable, SluggableInterface
 {
+    use SluggableTrait;
+
     /**
      * @var integer|null $id
      *
@@ -33,13 +37,6 @@ class Page implements Uploadable
     protected $title;
 
     /**
-     * @var string|null $slugname
-     * Gedmo\Slug(fields={"title"}, separator="-", updatable=true)
-     * @ORM\Column(length=70, unique=true)
-     */
-    private $slugname;
-
-    /**
      * content
      *
      * @ORM\Column(type="text", nullable=false)
@@ -49,18 +46,18 @@ class Page implements Uploadable
     protected $content;
 
     /**
-    * @ORM\Column(type="integer", nullable=true)
-    * @Assert\Type(type="integer")
-    * @var integer|null $ordre
-    */
+     * @ORM\Column(type="integer", nullable=true)
+     * @Assert\Type(type="integer")
+     * @var integer|null $ordre
+     */
     protected $ordre;
 
     /**
-    * @var boolean
-    *
-    * @ORM\Column(type="boolean", nullable=false, options={"default" = "0"})
-    *
-    */
+     * @var boolean
+     *
+     * @ORM\Column(type="boolean", nullable=false, options={"default" = "0"})
+     *
+     */
     private $actualite = false;
 
     /**
@@ -93,10 +90,20 @@ class Page implements Uploadable
         $this->images = [];
     }
 
+
+    public function getSluggableFields(): array
+    {
+        return ['title'];
+    }
+
+    public function shouldGenerateUniqueSlugs(): bool
+    {
+        return true;
+    }
+
     /**
      * STOP
      */
-
 
     /**
      * Get id
@@ -130,30 +137,6 @@ class Page implements Uploadable
     public function getTitle()
     {
         return $this->title;
-    }
-
-    /**
-     * Set slugname
-     *
-     * @param string $slugname
-     *
-     * @return Page
-     */
-    public function setSlugname($slugname)
-    {
-        $this->slugname = $slugname;
-
-        return $this;
-    }
-
-    /**
-     * Get slugname
-     *
-     * @return string
-     */
-    public function getSlugname()
-    {
-        return $this->slugname;
     }
 
     /**

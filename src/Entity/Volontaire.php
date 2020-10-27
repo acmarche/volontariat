@@ -5,6 +5,7 @@ namespace AcMarche\Volontariat\Entity;
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\InterfaceDef\Uploadable;
 use AcMarche\Volontariat\Validator\Constraints as AcMarcheAssert;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
@@ -282,7 +283,7 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
 
     public function getSluggableFields(): array
     {
-        return ['nom', 'prenom'];
+        return ['name', 'surname'];
     }
 
     public function shouldGenerateUniqueSlugs(): bool
@@ -299,9 +300,9 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
      */
     public function __construct()
     {
-        $this->vehicules = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->secteurs = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->association = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->vehicules = new ArrayCollection();
+        $this->secteurs = new ArrayCollection();
+        $this->association = new ArrayCollection();
     }
 
     /**

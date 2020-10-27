@@ -151,7 +151,7 @@ class VolontaireController extends AbstractController
     public function deleteAction(Request $request)
     {
         $id = intval($request->request->get('id'));
-        var_dump($id);
+
         $volontaire = $this->volontaireRepository->find($id);
 
         $this->denyAccessUnlessGranted('delete', $volontaire, "Vous n'avez pas accès.");

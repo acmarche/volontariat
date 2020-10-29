@@ -5,6 +5,7 @@ namespace AcMarche\Volontariat\Entity;
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\InterfaceDef\Uploadable;
 use AcMarche\Volontariat\Validator\Constraints as AcMarcheAssert;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
@@ -390,9 +391,9 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
      */
     public function __construct()
     {
-        $this->secteurs = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->besoins = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->activites = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->secteurs = new ArrayCollection();
+        $this->besoins = new ArrayCollection();
+        $this->activites = new ArrayCollection();
         $this->images = [];
     }
 

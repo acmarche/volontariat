@@ -126,7 +126,7 @@ class Mailer
 
             $destinataire = $this->messageService->getEmailEntity($entity);
 
-            $message->setTo($destinataire);
+            $message->to($destinataire);
 
             $this->mailer->send($message);
         }

@@ -71,8 +71,8 @@ class MailerActivite
     {
         $mail = (new Email())
             ->subject($sujet)
-            ->setFrom($from)
-            ->setTo($destinataires);
+            ->from($from)
+            ->to($destinataires);
 
         if ($bcc) {
             $mail->bcc($bcc);

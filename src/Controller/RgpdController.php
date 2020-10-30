@@ -50,9 +50,9 @@ class RgpdController extends AbstractController
         $css = $webpath.'bootstrap/css/bootstrap.min.css';
 
         $message = (new Email('Nouveau site et le rgpd'))
-            ->setFrom('volontariat@marche.be')
-            ->setTo($user->getEmail())
-            ->setBcc('jf@marche.be');
+            ->from('volontariat@marche.be')
+            ->to($user->getEmail())
+            ->bcc('jf@marche.be');
 
         $marche_cid = $message->embed(
             $message->fromPath($webpath.'images/Marche.png')

@@ -26,12 +26,14 @@ class PageController extends AbstractController
     public function show(Page $page)
     {
         $images = $this->fileHelper->getImages($page);
+        $documents = $this->fileHelper->getDocuments($page);
 
         return $this->render(
             '@Volontariat/page/show.html.twig',
             [
                 'page' => $page,
                 'images' => $images,
+                'documents' => $documents,
             ]
         );
     }

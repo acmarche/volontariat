@@ -73,6 +73,11 @@ class ImagePageController extends AbstractController
             if ($file instanceof UploadedFile) {
                 $fileName = md5(uniqid()).'.'.$file->guessClientExtension();
 
+                $mime = $file->getClientMimeType();
+                if (!preg_match('#image#', $mime)) {
+                    return new Response('ko');
+                }
+
                 try {
                     $this->fileHelper->uploadFile($page, $file, $fileName);
                 } catch (FileException $error) {

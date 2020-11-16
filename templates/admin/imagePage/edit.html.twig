@@ -6,7 +6,7 @@
 
 {% block body %}
 
-    <h3>Gestion des images pour {{ page }}</h3>
+    <h3>Gestion des <strong>images</strong> pour {{ page }}</h3>
 
     <a href="{{ path('volontariat_admin_page_show', { 'id': page.id }) }}" class="btn btn-primary"
        role="button"><i class="fas fa-list"></i> Retour à la page</a>
@@ -34,7 +34,7 @@
             dictDefaultMessage: "Glissez ici vos images ou cliquez sur cette zone pour ajouter des photos",
             init: function () {
                 this.on("addedfile", function (file) {
-                    console.log("finished");
+
                 });
             }
         };

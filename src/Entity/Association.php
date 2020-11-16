@@ -370,7 +370,6 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
         return null;
     }
 
-
     public function getSluggableFields(): array
     {
         return ['nom'];

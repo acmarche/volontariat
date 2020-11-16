@@ -7,6 +7,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Mime\MimeTypes;
 
 class FileHelper
 {
@@ -61,10 +62,15 @@ class FileHelper
                 $name = $file->getFilename();
                 $url = $webDirectory.$name;
                 $size = $file->getSize();
+                $mime = MimeTypes::getDefault()->guessMimeType($file->getPathname());
+                if (!preg_match('#image#', $mime)) {
+                    continue;
+                }
 
                 $f['size'] = $size;
                 $f['name'] = $name;
                 $f['url'] = $url;
+                $f['mime'] = $mime;
                 $f['i'] = $i; //pour id zoom
                 $i++;
 

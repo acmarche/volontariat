@@ -13,6 +13,7 @@
     <link href="{{ asset('bundles/volontariat/css/datepicker.css') }}" rel="stylesheet">
     <link href="{{ asset('bundles/volontariat/css/print.css') }}" rel="stylesheet" media="print">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
+    <link href="{{ asset('bundles/volontariat/lightGallery/dist/css/lightgallery.css') }}" rel="stylesheet">
 </head>
 <body>
 {% set action = app.request.attributes.get("_route") %}
@@ -52,6 +53,14 @@
         crossorigin="anonymous"></script>
 <script src="{{ asset('bundles/volontariat/bootstrap/js/bootstrap.min.js') }}"></script>
 
+<script src="{{ asset('bundles/volontariat/lightGallery/dist/js/lightgallery.min.js') }}"
+        crossorigin="anonymous"></script>
+
+<!-- A jQuery plugin that adds cross-browser mouse wheel support. (Optional) -->
+<script src="{{ asset('bundles/volontariat/lightGallery/lib/jquery.mousewheel.min.js') }}"></script>
+<!-- lightgallery plugins -->
+<script src="{{ asset('bundles/volontariat/lightGallery/modules/lg-fullscreen.min.js') }}"></script>
+<script src="{{ asset('bundles/volontariat/lightGallery/modules/lg-zoom.min.js') }}"></script>
 {% block scripts %}
 
 {% endblock %}

@@ -1,8 +1,9 @@
-<div id="links">
+<div id="lightgallery">
     {% for image in images %}
-        <a href="{{ image.url | imagine_filter('acmarche_volontariat_zoom_thumb') }}" title="{{ image.name }}"
-           data-gallery>
-            <img src="{{ image.url | imagine_filter('acmarche_volontariat_edit_thumb') }}" alt="img">
+        <a href="{{ image.url | imagine_filter('acmarche_volontariat_zoom_thumb') }}" title="{{ image.name }}">
+            {% if 'image' in image.mime %}
+                <img src="{{ image.url | imagine_filter('acmarche_volontariat_edit_thumb') }}" alt="img" class="img-thumbnail">
+            {% endif %}
         </a>
     {% endfor %}
 </div>

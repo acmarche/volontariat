@@ -23,7 +23,13 @@
 
 {% endblock %}
 
-{% block javascripts %}
-    <script src="{{ asset('bundles/volontariat/blueimp/js/blueimp-gallery.min.js') }}"></script>
-    <script src="{{ asset('bundles/volontariat/js/gallery.js') }}"></script>
+{% block scripts %}
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#lightgallery").lightGallery({
+
+                }
+            );
+        });
+    </script>
 {% endblock %}

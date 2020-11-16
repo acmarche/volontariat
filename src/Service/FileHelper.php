@@ -45,7 +45,7 @@ class FileHelper
         $fs->remove($directory);
     }
 
-    public function getImages(Uploadable $uploadable, $max = 60)
+    public function getFiles(Uploadable $uploadable)
     {
         $finder = new Finder();
         $files = array();
@@ -63,9 +63,6 @@ class FileHelper
                 $url = $webDirectory.$name;
                 $size = $file->getSize();
                 $mime = MimeTypes::getDefault()->guessMimeType($file->getPathname());
-                if (!preg_match('#image#', $mime)) {
-                    continue;
-                }
 
                 $f['size'] = $size;
                 $f['name'] = $name;
@@ -75,12 +72,33 @@ class FileHelper
                 $i++;
 
                 $files[] = $f;
-                if ($i > $max) {
-                    break;
-                }
             }
         }
 
+        return $files;
+    }
+
+    public function getImages(Uploadable $uploadable, $max = 60)
+    {
+        $files = $this->getFiles($uploadable);
+        foreach ($files as $i => $file) {
+            if (!preg_match('#image#', $file['mime'])) {
+                unset($files[$i]);
+            }
+        }
+
+        return $files;
+    }
+
+    public function getDocuments(Uploadable $uploadable, $max = 60)
+    {
+        $files = $this->getFiles($uploadable);
+
+        foreach ($files as $i => $file) {
+            if (preg_match('#image#', $file['mime'])) {
+                unset($files[$i]);
+            }
+        }
         return $files;
     }
 

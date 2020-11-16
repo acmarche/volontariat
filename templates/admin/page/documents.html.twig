@@ -1,0 +1,11 @@
+<h3>Documents</h3>
+<hr>
+<ul class="list-group">
+    {% for document in documents %}
+        <li class="list-group-item">
+            <a href="{{ document.url }}" title="{{ document.name }}">
+                {{ document.name }}
+            </a>
+        </li>
+    {% endfor %}
+</ul>

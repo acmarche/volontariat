@@ -1,3 +1,5 @@
+<h3>Images</h3>
+<hr>
 <div id="lightgallery">
     {% for image in images %}
         <a href="{{ image.url | imagine_filter('acmarche_volontariat_zoom_thumb') }}" title="{{ image.name }}">

@@ -47,7 +47,7 @@ class ImagePageController extends AbstractController
             ->setAction($this->generateUrl('volontariat_admin_page_image_upload', array('id' => $page->getId())))
             ->getForm();
 
-        $images = $this->fileHelper->getImages($page);
+        $images = $this->fileHelper->getFiles($page);
         $deleteForm = $this->createDeleteForm($page->getId());
 
         return $this->render(
@@ -71,12 +71,8 @@ class ImagePageController extends AbstractController
             $file = $request->files->get('file');
 
             if ($file instanceof UploadedFile) {
-                $fileName = md5(uniqid()).'.'.$file->guessClientExtension();
-
-                $mime = $file->getClientMimeType();
-                if (!preg_match('#image#', $mime)) {
-                    return new Response('ko');
-                }
+                $orignalName = preg_replace('#.'.$file->guessClientExtension().'#','',$file->getClientOriginalName());
+                $fileName = $orignalName.'-'.uniqid().'.'.$file->guessClientExtension();
 
                 try {
                     $this->fileHelper->uploadFile($page, $file, $fileName);
@@ -87,6 +83,7 @@ class ImagePageController extends AbstractController
 
             return new Response('okid');
         }
+        return new Response('ko');
     }
 
     /**

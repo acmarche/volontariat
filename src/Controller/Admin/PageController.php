@@ -93,12 +93,14 @@ class PageController extends AbstractController
     {
         $deleteForm = $this->createDeleteForm($page);
         $images = $this->fileHelper->getImages($page);
+        $docs = $this->fileHelper->getDocuments($page);
 
         return $this->render(
             '@Volontariat/admin/page/show.html.twig',
             array(
                 'page' => $page,
                 'images' => $images,
+                'documents' => $docs,
                 'delete_form' => $deleteForm->createView(),
             )
         );

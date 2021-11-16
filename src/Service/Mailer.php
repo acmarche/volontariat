@@ -95,14 +95,12 @@ class Mailer
             ->from($from);
 
         if ($uploadedFile) {
-            $attach = $message->attachFromPath($uploadedFile)
-                ->setFilename(
-                    $uploadedFile->getClientOriginalName()
-                )
-                ->setContentType(
-                    $uploadedFile->getClientMimeType()
-                );
-            $message->attach($attach);
+            $message->attachFromPath(
+                $uploadedFile,
+                $uploadedFile->getClientOriginalName(),
+                $uploadedFile->getClientMimeType()
+            );
+            //$message->attach($attach);
         }
 
         foreach ($entities as $entity) {

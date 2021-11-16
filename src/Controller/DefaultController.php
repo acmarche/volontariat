@@ -33,7 +33,7 @@ class DefaultController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $args = ['valider' => true];
         $activites = $em->getRepository(Activite::class)->findBy($args);
-        $pages = $em->getRepository(Page::class)->findBy(['actualite' => true]);
+        $pages = $em->getRepository(Page::class)->findRecent();
 
         foreach ($activites as $activite) {
             $activite->setImages($this->fileHelper->getImages($activite));

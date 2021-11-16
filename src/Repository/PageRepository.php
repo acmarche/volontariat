@@ -18,6 +18,15 @@ class PageRepository extends ServiceEntityRepository
         parent::__construct($registry, Page::class);
     }
 
+    /**
+     * @return array|Page[]
+     */
+    public function findRecent(): array
+    {
+        return $this->createQueryBuilder('page')
+            ->andWhere('page.actualite = 1')
+            ->orderBy('page.ordre', 'DESC')->getQuery()->getResult();
+    }
 
     public function insert(Page $page)
     {

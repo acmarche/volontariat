@@ -25,7 +25,7 @@ class PageRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('page')
             ->andWhere('page.actualite = 1')
-            ->orderBy('page.ordre', 'DESC')->getQuery()->getResult();
+            ->orderBy('page.id', 'DESC')->getQuery()->getResult();
     }
 
     public function insert(Page $page)

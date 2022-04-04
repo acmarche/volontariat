@@ -136,7 +136,7 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface, S
      */
     public function getPassword(): string
     {
-        return (string)$this->password;
+        return $this->password;
     }
 
     public function setPassword(string $password): self

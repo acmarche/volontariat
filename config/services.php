@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
+use AcMarche\Volontariat\Manager\TokenManager;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
@@ -36,4 +38,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->load('AcMarche\Volontariat\\', __DIR__.'/../src/*')
         ->exclude([__DIR__.'/../src/{Entity,Migrations,Tests,Kernel.php,DataFixtures}']);
+
+    $services->set(TokenManager::class)
+        ->arg('$formLoginAuthenticator', service('security.authenticator.form_login.main'));
 };

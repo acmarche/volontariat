@@ -13,6 +13,8 @@ use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Repository\TokenRepository;
 use AcMarche\Volontariat\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
+use Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator;
 
 class TokenManager
 {

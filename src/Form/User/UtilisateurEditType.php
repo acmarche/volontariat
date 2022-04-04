@@ -12,21 +12,11 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class UtilisateurEditType extends AbstractType
 {
-    /**
-     * @var AuthorizationCheckerInterface
-     */
-    private $authorizationChecker;
-
-    public function __construct(AuthorizationCheckerInterface $authorizationChecker)
+    public function __construct(private AuthorizationCheckerInterface $authorizationChecker)
     {
-        $this->authorizationChecker = $authorizationChecker;
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->remove("username")
@@ -45,15 +35,12 @@ class UtilisateurEditType extends AbstractType
         }
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return UtilisateurType::class;
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             array(

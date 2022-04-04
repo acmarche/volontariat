@@ -8,11 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class ContactVolontaireType extends AbstractType
 {
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add(
@@ -25,7 +21,7 @@ class ContactVolontaireType extends AbstractType
             );
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return ContactBaseType::class;
     }

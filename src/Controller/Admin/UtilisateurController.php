@@ -2,6 +2,10 @@
 
 namespace AcMarche\Volontariat\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\FormInterface;
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Form\User\ChangePasswordType;
 use AcMarche\Volontariat\Form\User\UtilisateurEditType;
@@ -15,61 +19,28 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-/**
- * @Route("/admin/utilisateur")
- * @IsGranted("ROLE_VOLONTARIAT_ADMIN")
- */
+#[Route(path: '/admin/utilisateur')]
+#[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class UtilisateurController extends AbstractController
 {
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-    /**
-     * @var AssociationRepository
-     */
-    private $associationRepository;
-    /**
-     * @var VolontaireRepository
-     */
-    private $volontaireRepository;
-    /**
-     * @var UserPasswordEncoderInterface
-     */
-    private $userPasswordEncoder;
-    /**
-     * @var PasswordManager
-     */
-    private $passwordManager;
-
-    public function __construct(
-        UserRepository $userRepository,
-        AssociationRepository $associationRepository,
-        VolontaireRepository $volontaireRepository,
-        PasswordManager $passwordManager
-    ) {
-        $this->userRepository = $userRepository;
-        $this->associationRepository = $associationRepository;
-        $this->volontaireRepository = $volontaireRepository;
-        $this->passwordManager = $passwordManager;
+    private UserPasswordHasherInterface $userPasswordEncoder;
+    public function __construct(private UserRepository $userRepository, private AssociationRepository $associationRepository, private VolontaireRepository $volontaireRepository, private PasswordManager $passwordManager)
+    {
     }
-
     /**
      * Lists all Utilisateur entities.
      *
-     * @Route("/", name="volontariat_admin_utilisateur", methods={"GET"})
      *
      */
-    public function indexAction()
+    #[Route(path: '/', name: 'volontariat_admin_utilisateur', methods: ['GET'])]
+    public function indexAction() : Response
     {
         $users = $this->userRepository->findBy([], ['nom' => 'ASC']);
         foreach ($users as $user) {
             $user->setCountVolontaires(count($this->volontaireRepository->findBy(['user' => $user])));
             $user->setCountAssociations(count($this->associationRepository->findBy(['user' => $user])));
         }
-
         return $this->render(
             '@Volontariat/admin/utilisateur/index.html.twig',
             array(
@@ -77,22 +48,18 @@ class UtilisateurController extends AbstractController
             )
         );
     }
-
     /**
      * Displays a form to create a new Utilisateur utilisateur.
      *
-     * @Route("/new", name="volontariat_admin_utilisateur_new", methods={"GET","POST"})
      *
      */
-    public function newAction(Request $request)
+    #[Route(path: '/new', name: 'volontariat_admin_utilisateur_new', methods: ['GET', 'POST'])]
+    public function newAction(Request $request) : Response
     {
         $utilisateur = new User();
-
         $form = $this->createForm(UtilisateurType::class, $utilisateur)
             ->add('submit', SubmitType::class, array('label' => 'Create'));
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->userRepository->insert($utilisateur);
 
@@ -100,7 +67,6 @@ class UtilisateurController extends AbstractController
 
             return $this->redirectToRoute('volontariat_admin_utilisateur');
         }
-
         return $this->render(
             '@Volontariat/admin/utilisateur/new.html.twig',
             array(
@@ -109,20 +75,17 @@ class UtilisateurController extends AbstractController
             )
         );
     }
-
     /**
      * Finds and displays a Utilisateur utilisateur.
      *
-     * @Route("/{id}", name="volontariat_admin_utilisateur_show", methods={"GET"})
      *
      */
-    public function showAction(User $utilisateur)
+    #[Route(path: '/{id}', name: 'volontariat_admin_utilisateur_show', methods: ['GET'])]
+    public function showAction(User $utilisateur) : Response
     {
         $deleteForm = $this->createDeleteForm($utilisateur);
         $volontaires = $this->volontaireRepository->search(['user' => $utilisateur]);
-
         $associations = $this->associationRepository->search(['user' => $utilisateur]);
-
         return $this->render(
             '@Volontariat/admin/utilisateur/show.html.twig',
             array(
@@ -133,27 +96,23 @@ class UtilisateurController extends AbstractController
             )
         );
     }
-
     /**
      * Displays a form to edit an existing Utilisateur utilisateur.
      *
-     * @Route("/{id}/edit", name="volontariat_admin_utilisateur_edit", methods={"GET","POST"})
      *
      */
-    public function editAction(Request $request, User $utilisateur)
+    #[Route(path: '/{id}/edit', name: 'volontariat_admin_utilisateur_edit', methods: ['GET', 'POST'])]
+    public function editAction(Request $request, User $utilisateur) : Response
     {
         $editForm = $this->createForm(UtilisateurEditType::class, $utilisateur)
             ->add('submit', SubmitType::class, array('label' => 'Update'));
-
         $editForm->handleRequest($request);
-
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->userRepository->save();
             $this->addFlash("success", "L'utilisateur a bien été modifié");
 
             return $this->redirectToRoute('volontariat_admin_utilisateur');
         }
-
         return $this->render(
             '@Volontariat/admin/utilisateur/edit.html.twig',
             array(
@@ -162,17 +121,14 @@ class UtilisateurController extends AbstractController
             )
         );
     }
-
     /**
      * Deletes a Utilisateur utilisateur.
-     *
-     * @Route("/{id}", name="volontariat_admin_utilisateur_delete", methods={"DELETE"})
      */
-    public function deleteAction(Request $request, User $user)
+    #[Route(path: '/{id}', name: 'volontariat_admin_utilisateur_delete', methods: ['DELETE'])]
+    public function deleteAction(Request $request, User $user) : RedirectResponse
     {
         $form = $this->createDeleteForm($user);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $volontaires = $this->volontaireRepository->findBy(['user' => $user]);
             foreach ($volontaires as $volontaire) {
@@ -189,23 +145,19 @@ class UtilisateurController extends AbstractController
 
             $this->addFlash("success", "L'utilisateur a bien été supprimé");
         }
-
         return $this->redirectToRoute('volontariat_admin_utilisateur');
     }
-
     /**
      * Displays a form to edit an existing categorie entity.
      *
-     * @Route("/password/{id}", name="volontariat_admin_utilisateur_password", methods={"GET","POST"})
      *
      */
-    public function password(Request $request, User $user)
+    #[Route(path: '/password/{id}', name: 'volontariat_admin_utilisateur_password', methods: ['GET', 'POST'])]
+    public function password(Request $request, User $user) : Response
     {
         $form = $this->createForm(ChangePasswordType::class, $user)
             ->add('submit', SubmitType::class, ['label' => 'Valider']);
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->passwordManager->changePassword($user, $form->getData()->getPlainPassword());
             $this->userRepository->save();
@@ -214,7 +166,6 @@ class UtilisateurController extends AbstractController
 
             return $this->redirectToRoute('volontariat_admin_utilisateur_show', ['id' => $user->getId()]);
         }
-
         return $this->render(
             '@Volontariat/admin/utilisateur/password.html.twig',
             [
@@ -223,19 +174,18 @@ class UtilisateurController extends AbstractController
             ]
         );
     }
-
     /**
      * Creates a form to delete a Utilisateur utilisateur by id.
      *
      * @param mixed $id The utilisateur id
      *
-     * @return \Symfony\Component\Form\FormInterface The form
+     * @return FormInterface The form
      */
-    private function createDeleteForm(User $user)
+    private function createDeleteForm(User $user): FormInterface
     {
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('volontariat_admin_utilisateur_delete', array('id' => $user->getId())))
-            ->setMethod('DELETE')
+            ->setMethod(Request::METHOD_DELETE)
             ->add('submit', SubmitType::class, array('label' => 'Delete', 'attr' => array('class' => 'btn-danger')))
             ->getForm();
     }

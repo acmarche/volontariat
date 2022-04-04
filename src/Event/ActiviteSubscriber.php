@@ -9,21 +9,15 @@
 
 namespace AcMarche\Volontariat\Event;
 
+use Symfony\Component\Security\Core\User\UserInterface;
 use AcMarche\Volontariat\Service\MailerActivite;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class ActiviteSubscriber implements EventSubscriberInterface
 {
-    private $mailerActivite;
-    private $token;
-
-    public function __construct(
-        MailerActivite $mailer,
-        TokenStorageInterface $tokenStorage
-    ) {
-        $this->mailerActivite = $mailer;
-        $this->token = $tokenStorage;
+    public function __construct(private MailerActivite $mailerActivite, private TokenStorageInterface $token)
+    {
     }
 
     /**
@@ -44,7 +38,7 @@ class ActiviteSubscriber implements EventSubscriberInterface
      *
      * @return array The event names to listen to
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             ActiviteEvent::ACTIVITE_VALIDER_REQUEST => 'activiteRequest',
@@ -55,10 +49,8 @@ class ActiviteSubscriber implements EventSubscriberInterface
 
     /**
      * Mail indiquant a l'admin qu'il doit valider
-     * @param ActiviteEvent $event
-
      */
-    public function activiteRequest(ActiviteEvent $event)
+    public function activiteRequest(ActiviteEvent $event): void
     {
         $activite = $event->getActivite();
         $user = $this->getCurrentUser();
@@ -67,10 +59,8 @@ class ActiviteSubscriber implements EventSubscriberInterface
 
     /**
      * Previent l'asbl qu'elle a été validée
-     * @param ActiviteEvent $event
-
      */
-    public function activiteValidee(ActiviteEvent $event)
+    public function activiteValidee(ActiviteEvent $event): void
     {
         $activite = $event->getActivite();
         $this->mailerActivite->sendFinish($activite);
@@ -78,16 +68,14 @@ class ActiviteSubscriber implements EventSubscriberInterface
 
     /**
      * Mail indiquant aux volontaires qu'une asbl a été ajoutée
-     * @param ActiviteEvent $event
-
      */
-    public function activiteNew(ActiviteEvent $event)
+    public function activiteNew(ActiviteEvent $event): void
     {
         $activite = $event->getActivite();
         $this->mailerActivite->sendNew($activite);
     }
 
-    protected function getCurrentUser()
+    protected function getCurrentUser(): ?UserInterface
     {
         $token = $this->token->getToken();
 

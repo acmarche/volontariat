@@ -12,11 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class MessagePublicType extends AbstractType
 {
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $froms = $options['froms'];
 
@@ -42,10 +38,7 @@ class MessagePublicType extends AbstractType
             );
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             array(

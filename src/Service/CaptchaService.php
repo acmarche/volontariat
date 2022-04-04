@@ -12,22 +12,15 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class CaptchaService
 {
-    /**
-     * @var ParameterBagInterface
-     */
-    private $parameterBag;
-
-    public function __construct(ParameterBagInterface $parameterBag)
+    public function __construct(private ParameterBagInterface $parameterBag)
     {
-        $this->parameterBag = $parameterBag;
     }
 
     /**
      *
-     * @param string $token
      * @return mixed
      */
-    public function captchaverify(string $token)
+    public function captchaverify(string $token): bool
     {
         $secret = $this->parameterBag->get('acmarche_volontariat_captcha_secret_key');
 
@@ -48,7 +41,7 @@ class CaptchaService
         );
         $response = curl_exec($ch);
         curl_close($ch);
-        $data = json_decode($response);
+        $data = json_decode($response, null, 512, JSON_THROW_ON_ERROR);
 
         return (boolean)$data->success;
     }

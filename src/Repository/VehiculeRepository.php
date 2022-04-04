@@ -20,24 +20,24 @@ class VehiculeRepository extends ServiceEntityRepository
     }
 
 
-    public function insert(Vehicule $vehicule)
+    public function insert(Vehicule $vehicule): void
     {
         $this->_em->persist($vehicule);
         $this->save();
     }
 
-    public function save()
+    public function save(): void
     {
         $this->_em->flush();
     }
 
-    public function remove(Vehicule $vehicule)
+    public function remove(Vehicule $vehicule): void
     {
         $this->_em->remove($vehicule);
         $this->save();
     }
 
-    public function findAll()
+    public function findAll(): array
     {
         return $this->findBy(array(), array('nom' => 'ASC'));
     }
@@ -45,7 +45,7 @@ class VehiculeRepository extends ServiceEntityRepository
     /**
      * @return Vehicule[]
      */
-    public function getForSearch()
+    public function getForSearch(): array
     {
         $qb = $this->createQueryBuilder('vehicule');
 

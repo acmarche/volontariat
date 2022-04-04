@@ -5,38 +5,21 @@ use TwitterPhp\RestApiException;
 
 class Application extends Base
 {
-    /**
-     * @var string
-     */
-    private $_consumerKey;
+    private ?string $_bearersToken = null;
 
     /**
-     * @var string
+     * @param string $_consumerKey
+     * @param string $_consumerSecret
      */
-    private $_consumerSecret;
-
-    /**
-     * @var string
-     */
-    private $_bearersToken = null;
-
-    /**
-     * @param string $consumerKey
-     * @param string $consumerSecret
-     */
-    public function __construct($consumerKey,$consumerSecret)
+    public function __construct(private $_consumerKey, private $_consumerSecret)
     {
-        $this->_consumerKey = $consumerKey;
-        $this->_consumerSecret = $consumerSecret;
     }
 
     /**
      * @param string $url
-     * @param array $parameters
      * @param $method
-     * @return array
      */
-    protected function _buildHeaders($url,array $parameters = null,$method)
+    protected function _buildHeaders($url,array $parameters = null,$method): array
     {
         return $headers = array(
                     "Authorization: Bearer " . $this->_getBearerToken()
@@ -48,11 +31,10 @@ class Application extends Base
      *
      * @link https://dev.twitter.com/docs/auth/application-only-auth
      *
-     * @throws \TwitterPhp\RestApiException
-     * @return string
+     * @throws RestApiException
      */
-    private function _getBearerToken() {
-        if (!$this->_bearersToken) {
+    private function _getBearerToken(): string {
+        if ($this->_bearersToken === '' || $this->_bearersToken === '0') {
             $token = urlencode($this->_consumerKey) . ':' . urlencode($this->_consumerSecret);
             $token = base64_encode($token);
 

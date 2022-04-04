@@ -12,42 +12,19 @@ use Twig\Environment;
 
 class MailerSecurity
 {
-    /**
-     * @var Environment
-     */
-    private $twig;
-    /**
-     * @var FlashBagInterface
-     */
-    private $flashBag;
-    /**
-     * @var MailerInterface
-     */
-    private $mailer;
-    /**
-     * @var string
-     */
-    private $to;
-    /**
-     * @var string
-     */
-    private $from;
+    private FlashBagInterface $flashBag;
 
     public function __construct(
-        Environment $twig,
+        private Environment $twig,
         RequestStack $requestStack,
-        MailerInterface $mailer,
-        string $to,
-        string $from
+        private MailerInterface $mailer,
+        private string $to,
+        private string $from
     ) {
-        $this->twig = $twig;
         $this->flashBag = $requestStack->getSession()->getFlashBag();
-        $this->mailer = $mailer;
-        $this->to = $to;
-        $this->from = $from;
     }
 
-    public function send($from, $destinataires, $sujet, $body, $bcc = null)
+    public function send($from, $destinataires, $sujet, $body, $bcc = null): void
     {
         $mail = (new Email())
             ->subject($sujet)
@@ -67,7 +44,7 @@ class MailerSecurity
      * Lors de la création du compte
      * @param $user
      */
-    public function sendWelcome(User $user)
+    public function sendWelcome(User $user): void
     {
         $sujet = 'Bienvenue sur la plate-forme du volontariat';
         $body = $this->twig->render('@Volontariat/security/registration/email.welcome.txt.twig', array());
@@ -81,7 +58,7 @@ class MailerSecurity
         }
     }
 
-    public function sendRequestNewPassword(User $user)
+    public function sendRequestNewPassword(User $user): void
     {
         $body = $this->twig->render(
             '@Volontariat/security/resetting/email.txt.twig',
@@ -95,7 +72,7 @@ class MailerSecurity
         $this->send($this->from, $user->getEmail(), $sujet, $body);
     }
 
-    public function sendError(string $sujet, string $body)
+    public function sendError(string $sujet, string $body): void
     {
         $to = "jf@marche.be";
 

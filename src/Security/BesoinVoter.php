@@ -20,14 +20,12 @@ class BesoinVoter extends Voter
 {
     // Defining these constants is overkill for this simple application, but for real
     // applications, it's a recommended practice to avoid relying on "magic strings"
-    const SHOW = 'show';
-    const EDIT = 'edit';
-    const DELETE = 'delete';
-    private $decisionManager;
+    public const SHOW = 'show';
+    public const EDIT = 'edit';
+    public const DELETE = 'delete';
 
-    public function __construct(AccessDecisionManagerInterface $decisionManager)
+    public function __construct(private AccessDecisionManagerInterface $decisionManager)
     {
-        $this->decisionManager = $decisionManager;
     }
 
     /**
@@ -53,34 +51,23 @@ class BesoinVoter extends Voter
         if ($this->decisionManager->decide($token, ['ROLE_VOLONTARIAT_ADMIN'])) {
             return true;
         }
-
-        switch ($attribute) {
-            case self::SHOW:
-                return $this->canView($besoin, $token);
-            case self::EDIT:
-                return $this->canEdit($besoin, $token);
-            case self::DELETE:
-                return $this->canDelete($besoin, $token);
-        }
-
-        return false;
+        return match ($attribute) {
+            self::SHOW => $this->canView($besoin, $token),
+            self::EDIT => $this->canEdit($besoin, $token),
+            self::DELETE => $this->canDelete($besoin, $token),
+            default => false,
+        };
     }
 
     /**
      * Voir dans l'admin
-     * @param Besoin $besoin
-     * @param TokenInterface $token
-     * @return bool
      */
-    private function canView(Besoin $besoin, TokenInterface $token)
+    private function canView(Besoin $besoin, TokenInterface $token): bool
     {
-        if ($this->canEdit($besoin, $token)) {
-            return true;
-        }
-        return false;
+        return (bool) $this->canEdit($besoin, $token);
     }
 
-    private function canEdit(Besoin $besoin, TokenInterface $token)
+    private function canEdit(Besoin $besoin, TokenInterface $token): bool
     {
         $user = $token->getUser();
         $associationUser = $besoin->getAssociation()->getUser();
@@ -88,12 +75,8 @@ class BesoinVoter extends Voter
         return $user === $associationUser;
     }
 
-    private function canDelete(Besoin $besoin, TokenInterface $token)
+    private function canDelete(Besoin $besoin, TokenInterface $token): bool
     {
-        if ($this->canEdit($besoin, $token)) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->canEdit($besoin, $token);
     }
 }

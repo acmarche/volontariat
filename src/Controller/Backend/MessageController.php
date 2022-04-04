@@ -2,6 +2,8 @@
 
 namespace AcMarche\Volontariat\Controller\Backend;
 
+use Doctrine\ORM\NonUniqueResultException;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Volontariat\Entity\Message;
 use AcMarche\Volontariat\Form\MessagePublicType;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
@@ -20,60 +22,32 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 /**
  * Besoin controller.
  *
- * @Route("/backend/message")
- * @IsGranted("ROLE_VOLONTARIAT")
  *
  */
+#[Route(path: '/backend/message')]
+#[IsGranted('ROLE_VOLONTARIAT')]
 class MessageController extends AbstractController
 {
-    /**
-     * @var AssociationService
-     */
-    private $associationService;
-    /**
-     * @var MessageService
-     */
-    private $messageService;
-    /**
-     * @var Mailer
-     */
-    private $mailer;
-    /**
-     * @var VolontaireRepository
-     */
-    private $volontaireRepository;
-
-    public function __construct(
-        AssociationService $associationService,
-        VolontaireRepository $volontaireRepository,
-        MessageService $messageService,
-        Mailer $mailer
-    ) {
-        $this->associationService = $associationService;
-        $this->messageService = $messageService;
-        $this->mailer = $mailer;
-        $this->volontaireRepository = $volontaireRepository;
+    public function __construct(private AssociationService $associationService, private VolontaireRepository $volontaireRepository, private MessageService $messageService, private Mailer $mailer)
+    {
     }
-
     /**
      * Displays a form to create a new message.
      *
-     * @Route("/new", name="volontariat_backend_message_new")
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
-    public function newAction(Request $request)
+    #[Route(path: '/new', name: 'volontariat_backend_message_new')]
+    public function newAction(Request $request) : Response
     {
         if (!$this->canAccess()) {
             $this->addFlash('warning', 'Vous ne pouvez pas accéder à cette page');
             $this->redirectToRoute('volontariat_dashboard');
         }
         $session = $request->getSession();
-
         $user = $this->getUser();
         $associations = $this->associationService->getAssociationsByUser($user, true);
         $froms = $this->messageService->getFroms($user, $associations);
-
         $message = new Message();
         // $message->setFroms($froms);
         $form = $this->createForm(
@@ -82,7 +56,6 @@ class MessageController extends AbstractController
             ['froms' => $froms]
         )
             ->add('submit', SubmitType::class, array('label' => 'Envoyer'));
-
         $form->handleRequest($request);
         $destinataires = [];
         $key = VolontariatConstante::VOLONTAIRE_SEARCH;
@@ -90,7 +63,6 @@ class MessageController extends AbstractController
             $data = unserialize($session->get($key), false);
             $destinataires = $this->volontaireRepository->search($data);
         }
-
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $from = $data->getFroms();
@@ -99,8 +71,8 @@ class MessageController extends AbstractController
 
             $this->addFlash(
                 'success',
-                'Votre message a bien été envoyé à '.count($destinataires).' destinataires : '.
-                join(
+                'Votre message a bien été envoyé à '.(is_countable($destinataires) ? count($destinataires) : 0).' destinataires : '.
+                implode(
                     ', ',
                     $destinataires
                 )
@@ -108,7 +80,6 @@ class MessageController extends AbstractController
 
             return $this->redirectToRoute('volontariat_volontaire');
         }
-
         return $this->render(
             '@Volontariat/message/new.html.twig',
             [
@@ -118,8 +89,7 @@ class MessageController extends AbstractController
             ]
         );
     }
-
-    protected function canAccess()
+    protected function canAccess(): bool
     {
         $user = $this->getUser();
         if ($user->hasRole('ROLE_VOLONTARIAT_ADMIN')) {

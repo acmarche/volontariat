@@ -10,27 +10,22 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class LoadDataCommand extends Command
 {
-    /**
-     * @var TokenManager
-     */
-    private $tokenManager;
+    protected static $defaultName = 'acvolontariat:generatetoken';
 
-    public function __construct(string $name = null, TokenManager $tokenManager)
+    public function __construct(private TokenManager $tokenManager, string $name = null)
     {
         parent::__construct($name);
-        $this->tokenManager = $tokenManager;
     }
 
-    protected function configure()
+    protected function configure(): void
     {
-        $this
-            ->setName('acvolontariat:generatetoken')
-            ->setDescription('Génère des tokens');
+        $this->setDescription('Génère des tokens');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->tokenManager->createForAllUsers();
+        return 0;
     }
 
 

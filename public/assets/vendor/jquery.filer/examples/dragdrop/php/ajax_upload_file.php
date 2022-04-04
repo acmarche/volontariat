@@ -1,5 +1,5 @@
 <?php
-    include('../../../php/class.uploader.php');
+    include(__DIR__ . '/../../../php/class.uploader.php');
 
     $uploader = new Uploader();
     $data = $uploader->upload($_FILES['files'], array(
@@ -23,12 +23,12 @@
     if($data['isComplete']){
         $files = $data['data'];
 
-        echo json_encode($files['metas'][0]['name']);
+        echo json_encode($files['metas'][0]['name'], JSON_THROW_ON_ERROR);
     }
 
     if($data['hasErrors']){
         $errors = $data['errors'];
-        echo json_encode($errors);
+        echo json_encode($errors, JSON_THROW_ON_ERROR);
     }
 
     exit;

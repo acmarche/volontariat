@@ -4,86 +4,54 @@ namespace AcMarche\Volontariat\Entity;
 
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\InterfaceDef\Uploadable;
+use AcMarche\Volontariat\Repository\ActiviteRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * Marche\VolontaireBundle\Entity\Activite
- * @ORM\Entity(repositoryClass="AcMarche\Volontariat\Repository\ActiviteRepository")
- * @ORM\Table(name="activite")
- *
- */
-class Activite implements Uploadable, TimestampableInterface, SluggableInterface
+#[ORM\Entity(repositoryClass: ActiviteRepository::class)]
+#[ORM\Table(name: 'activite')]
+class Activite implements Uploadable, TimestampableInterface, SluggableInterface, Stringable
 {
     use TimestampableTrait;
     use SluggableTrait;
 
-    /**
-     * @var integer|null $id
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     *
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    protected int $id;
 
-    /**
-     * @var string|null $title
-     *
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank()
-     */
-    protected $titre;
+    #[ORM\Column(type: 'string')]
+    #[Assert\NotBlank]
+    protected string $titre;
 
-    /**
-     * content
-     *
-     * @ORM\Column(type="text", nullable=false)
-     * @Assert\NotBlank()
-     * @var string|null $content
-     */
-    protected $content;
+    #[ORM\Column(type: 'text', nullable: false)]
+    #[Assert\NotBlank]
+    protected ?string $content;
 
-    /**
-     * @ORM\Column(type="text", nullable=false)
-     * @Assert\NotBlank()
-     * @var string|null $lieu
-     */
-    protected $lieu;
+    #[ORM\Column(type: 'text', nullable: false)]
+    #[Assert\NotBlank]
+    protected ?string $lieu;
+    #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => 0])]
+    private ?bool $valider = false;
 
-    /**
-     * @var boolean|null
-     *
-     * @ORM\Column(type="boolean", nullable=false, options={"default" = "0"})
-     *
-     */
-    private $valider = false;
-
-    /**
-     * @var User|null $user
-     * @ORM\ManyToOne(targetEntity="AcMarche\Volontariat\Entity\Security\User", cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false)
-     */
-    protected $user;
-
+    #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: false)]
+    protected ?User $user;
     /**
      * @var Association|null $association
-     * @ORM\ManyToOne(targetEntity="AcMarche\Volontariat\Entity\Association", inversedBy="activites")
-     * @ORM\JoinColumn(nullable=false)
      */
-    protected $association;
+    #[ORM\ManyToOne(targetEntity: Association::class, inversedBy: 'activites')]
+    #[ORM\JoinColumn(nullable: false)]
+    protected array $association;
 
-    /**
-     * @var array
-     */
-    protected $images;
+    protected array $images;
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getTitre();
     }
@@ -92,7 +60,7 @@ class Activite implements Uploadable, TimestampableInterface, SluggableInterface
     {
         $images = $this->getImages();
 
-        return isset($images[0]['url']) ? $images[0]['url'] : null;
+        return $images[0]['url'] ?? null;
     }
 
     public function getSluggableFields(): array
@@ -104,17 +72,13 @@ class Activite implements Uploadable, TimestampableInterface, SluggableInterface
     {
         return true;
     }
-
     /**
      * STOP
      */
-
     /**
      * Get id.
-     *
-     * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -123,10 +87,8 @@ class Activite implements Uploadable, TimestampableInterface, SluggableInterface
      * Set titre.
      *
      * @param string $titre
-     *
-     * @return Activite
      */
-    public function setTitre($titre)
+    public function setTitre($titre): static
     {
         $this->titre = $titre;
 
@@ -135,10 +97,8 @@ class Activite implements Uploadable, TimestampableInterface, SluggableInterface
 
     /**
      * Get titre.
-     *
-     * @return string
      */
-    public function getTitre()
+    public function getTitre(): string
     {
         return $this->titre;
     }
@@ -147,10 +107,8 @@ class Activite implements Uploadable, TimestampableInterface, SluggableInterface
      * Set content.
      *
      * @param string $content
-     *
-     * @return Activite
      */
-    public function setContent($content)
+    public function setContent($content): static
     {
         $this->content = $content;
 
@@ -159,10 +117,8 @@ class Activite implements Uploadable, TimestampableInterface, SluggableInterface
 
     /**
      * Get content.
-     *
-     * @return string
      */
-    public function getContent()
+    public function getContent(): ?string
     {
         return $this->content;
     }
@@ -171,10 +127,8 @@ class Activite implements Uploadable, TimestampableInterface, SluggableInterface
      * Set lieu.
      *
      * @param string $lieu
-     *
-     * @return Activite
      */
-    public function setLieu($lieu)
+    public function setLieu($lieu): static
     {
         $this->lieu = $lieu;
 
@@ -183,10 +137,8 @@ class Activite implements Uploadable, TimestampableInterface, SluggableInterface
 
     /**
      * Get lieu.
-     *
-     * @return string
      */
-    public function getLieu()
+    public function getLieu(): ?string
     {
         return $this->lieu;
     }
@@ -194,11 +146,9 @@ class Activite implements Uploadable, TimestampableInterface, SluggableInterface
     /**
      * Set user.
      *
-     * @param \AcMarche\Volontariat\Entity\Security\User|null $user
-     *
-     * @return Activite
+     * @param User|null $user
      */
-    public function setUser(\AcMarche\Volontariat\Entity\Security\User $user = null)
+    public function setUser(User $user = null): static
     {
         $this->user = $user;
 
@@ -207,10 +157,8 @@ class Activite implements Uploadable, TimestampableInterface, SluggableInterface
 
     /**
      * Get user.
-     *
-     * @return \AcMarche\Volontariat\Entity\Security\User|null
      */
-    public function getUser()
+    public function getUser(): ?User
     {
         return $this->user;
     }
@@ -218,11 +166,9 @@ class Activite implements Uploadable, TimestampableInterface, SluggableInterface
     /**
      * Set association.
      *
-     * @param \AcMarche\Volontariat\Entity\Association $association
      *
-     * @return Activite
      */
-    public function setAssociation(\AcMarche\Volontariat\Entity\Association $association)
+    public function setAssociation(Association $association): static
     {
         $this->association = $association;
 
@@ -231,10 +177,8 @@ class Activite implements Uploadable, TimestampableInterface, SluggableInterface
 
     /**
      * Get association.
-     *
-     * @return \AcMarche\Volontariat\Entity\Association
      */
-    public function getAssociation()
+    public function getAssociation(): ?Association
     {
         return $this->association;
     }
@@ -243,10 +187,8 @@ class Activite implements Uploadable, TimestampableInterface, SluggableInterface
      * Set valider.
      *
      * @param bool $valider
-     *
-     * @return Activite
      */
-    public function setValider($valider)
+    public function setValider($valider): static
     {
         $this->valider = $valider;
 
@@ -255,34 +197,23 @@ class Activite implements Uploadable, TimestampableInterface, SluggableInterface
 
     /**
      * Get valider.
-     *
-     * @return bool
      */
-    public function getValider()
+    public function getValider(): ?bool
     {
         return $this->valider;
     }
 
-    /**
-     * @return array
-     */
-    public function getImages(): ?array
+    public function getImages(): array
     {
         return $this->images;
     }
 
-    /**
-     * @param array $images
-     */
     public function setImages(array $images): void
     {
         $this->images = $images;
     }
 
-    /**
-     * @return string
-     */
-    public function getPath()
+    public function getPath(): string
     {
         return 'activite';
     }

@@ -10,27 +10,20 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class AssociationPublicType extends AbstractType
 {
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->remove('valider');
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(array(
             'data_class' => Association::class
         ));
     }
 
-    public function getParent()
+    public function getParent(): ?string
     {
         return AssocationType::class ;
     }

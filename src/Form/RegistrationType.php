@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class RegistrationType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add(
@@ -39,7 +39,7 @@ class RegistrationType extends AbstractType
         $builder->remove('username');
     }
 
-    public function getParent()
+    public function getParent(): string
     {
         return RegistrationFormType::class;
     }

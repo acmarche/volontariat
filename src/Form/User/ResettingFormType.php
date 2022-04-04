@@ -20,7 +20,7 @@ class ResettingFormType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('plainPassword', RepeatedType::class, array(
             'type' => PasswordType::class,
@@ -38,7 +38,7 @@ class ResettingFormType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(array(
             'data_class' => User::class,

@@ -2,6 +2,7 @@
 
 namespace AcMarche\Volontariat\Controller;
 
+use Doctrine\Persistence\ManagerRegistry;
 use AcMarche\Volontariat\Entity\Activite;
 use AcMarche\Volontariat\Service\FileHelper;
 
@@ -13,52 +14,40 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  *
  * @package AppBundle\Controller
- * @Route("/activite")
  *
  */
+#[Route(path: '/activite')]
 class ActiviteController extends AbstractController
 {
-    /**
-     * @var FileHelper
-     */
-    private $fileHelper;
-
-    public function __construct(FileHelper $fileHelper)
+    public function __construct(private FileHelper $fileHelper, private ManagerRegistry $managerRegistry)
     {
-        $this->fileHelper = $fileHelper;
     }
-
     /**
      * Liste des activités
-     * @Route("/",name="volontariat_activite")
      *
      * @param FileHelper $this ->fileHelper
-     * @return Response
      */
-    public function indexAction()
+    #[Route(path: '/', name: 'volontariat_activite')]
+    public function indexAction() : Response
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->managerRegistry->getManager();
         $activites = $em->getRepository(Activite::class)->findAll();
-
         foreach ($activites as $activite) {
             $activite->setImages($this->fileHelper->getImages($activite));
         }
-
         return $this->render('@Volontariat/activite/show.html.twig', [
             'activites' => $activites,
         ]);
     }
-
     /**
      * Displays a form to edit an existing Volontaire entity.
      *
-     * @Route("/{id}", name="volontariat_activite_show", methods={"GET"})
      *
      */
-    public function showAction(Activite $activite)
+    #[Route(path: '/{id}', name: 'volontariat_activite_show', methods: ['GET'])]
+    public function showAction(Activite $activite) : Response
     {
         $images = $this->fileHelper->getImages($activite);
-
         return $this->render('@Volontariat/activite/show.html.twig', array(
             'association' => $activite->getAssociation(),
             'images' => $images,

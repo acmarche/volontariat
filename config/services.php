@@ -33,8 +33,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->private()
         ->bind('$to', '%acmarche_volontariat_email_to%')
         ->bind('$from', '%acmarche_volontariat_email_from%')
-        ->bind('$uploadPath', '%acmarche_volontariat_upload_directory%')
-        ->bind('$downloadPath', '%acmarche_volontariat_download_directory%');
+        ->bind('$rootUploadPath', '%acmarche_volontariat_upload_directory%')
+        ->bind('$rootDownloadPath', '%acmarche_volontariat_download_directory%');
 
     $services->load('AcMarche\Volontariat\\', __DIR__.'/../src/*')
         ->exclude([__DIR__.'/../src/{Entity,Migrations,Tests,Kernel.php,DataFixtures}']);

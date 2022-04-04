@@ -2,6 +2,9 @@
 
 namespace AcMarche\Volontariat\Service;
 
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 use AcMarche\Volontariat\Entity\Activite;
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Repository\AssociationRepository;
@@ -15,54 +18,21 @@ use Twig\Environment;
 
 class MailerActivite
 {
-    /**
-     * @var AssociationRepository
-     */
-    private $associationRepository;
-    /**
-     * @var VolontaireRepository
-     */
-    private $volontaireRepository;
-    /**
-     * @var Environment
-     */
-    private $twig;
-    /**
-     * @var FlashBagInterface
-     */
-    private $flashBag;
-    /**
-     * @var MailerInterface
-     */
-    private $mailer;
-    /**
-     * @var string
-     */
-    private $to;
-    /**
-     * @var string
-     */
-    private $from;
+    private FlashBagInterface $flashBag;
 
     public function __construct(
-        AssociationRepository $associationRepository,
-        VolontaireRepository $volontaireRepository,
-        Environment $twig,
+        private AssociationRepository $associationRepository,
+        private VolontaireRepository $volontaireRepository,
+        private Environment $twig,
         RequestStack $requestStack,
-        MailerInterface $mailer,
-        string $to,
-        string $from
+        private MailerInterface $mailer,
+        private string $to,
+        private string $from
     ) {
-        $this->associationRepository = $associationRepository;
-        $this->volontaireRepository = $volontaireRepository;
-        $this->twig = $twig;
         $this->flashBag = $requestStack->getSession()->getFlashBag();
-        $this->mailer = $mailer;
-        $this->to = $to;
-        $this->from = $from;
     }
 
-    public function send($from, $destinataires, $sujet, $body, $bcc = null)
+    public function send($from, $destinataires, $sujet, $body, $bcc = null): void
     {
         $mail = (new Email())
             ->subject($sujet)
@@ -80,13 +50,11 @@ class MailerActivite
 
     /**
      * L'admin doit valider une activite
-     * @param Activite $activite
-     * @param User $user
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function sendRequest(Activite $activite, User $user)
+    public function sendRequest(Activite $activite, User $user): void
     {
         $sujet = 'Une activite a valider sur la plate-forme du volontariat';
 
@@ -107,12 +75,11 @@ class MailerActivite
 
     /**
      * Prévient l'asbl qu'elle a été validée
-     * @param Activite $activite
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function sendFinish(Activite $activite)
+    public function sendFinish(Activite $activite): void
     {
         $user = $activite->getUser();
         $sujet = 'Votre activite a été validée sur la plate-forme du volontariat';
@@ -133,12 +100,11 @@ class MailerActivite
 
     /**
      * Tout le monde est prévenu
-     * @param Activite $activite
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function sendNew(Activite $activite)
+    public function sendNew(Activite $activite): void
     {
         $sujet = 'Volontariat : '.$activite->getTitre();
         $volontaires = $this->volontaireRepository->findBy(['valider' => true]);
@@ -154,7 +120,7 @@ class MailerActivite
 
             try {
                 $this->send($this->from, $volontaire->getEmail(), $sujet, $body);
-            } catch (TransportException $e) {
+            } catch (TransportException) {
             }
         }
 
@@ -171,7 +137,7 @@ class MailerActivite
 
             try {
                 $this->send($this->from, $association->getEmail(), $sujet, $body);
-            } catch (TransportException $e) {
+            } catch (TransportException) {
             }
         }
     }

@@ -2,6 +2,8 @@
 
 namespace AcMarche\Volontariat\Controller;
 
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Volontariat\Entity\Applicant;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Form\ApplicantType;
@@ -16,42 +18,27 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * Class RegisterController
  * @package AcMarche\Admin\Security\Controller
- * @Route("/demandeur")
  */
+#[Route(path: '/demandeur')]
 class ApplicantController extends AbstractController
 {
-    /**
-     * @var ApplicantRepository
-     */
-    private $applicantRepository;
-    /**
-     * @var Mailer
-     */
-    private $mailer;
-
-    public function __construct(ApplicantRepository $applicantRepository, Mailer $mailer)
+    public function __construct(private ApplicantRepository $applicantRepository, private Mailer $mailer, private ManagerRegistry $managerRegistry)
     {
-        $this->applicantRepository = $applicantRepository;
-        $this->mailer = $mailer;
     }
-
     /**
      * Displays a form to create a new Applicant applicant.
      *
-     * @Route("/", name="volontariatapplicant_new", methods={"GET","POST"})
      *
      */
-    public function newAction(Request $request)
+    #[Route(path: '/', name: 'volontariatapplicant_new', methods: ['GET', 'POST'])]
+    public function newAction(Request $request) : Response
     {
         $applicant = new Applicant();
-
         $form = $this->createForm(ApplicantType::class, $applicant)
             ->add('submit', SubmitType::class, array('label' => 'Create'));
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->managerRegistry->getManager();
             $em->persist($applicant);
             $em->flush();
             $this->addFlash("success", "Vos coordonnées ont bien été enregistrées");
@@ -69,7 +56,6 @@ class ApplicantController extends AbstractController
 
             return $this->redirectToRoute('volontariat_home');
         }
-
         return $this->render(
             '@Volontariat/applicant/new.html.twig',
             array(
@@ -78,5 +64,4 @@ class ApplicantController extends AbstractController
             )
         );
     }
-
 }

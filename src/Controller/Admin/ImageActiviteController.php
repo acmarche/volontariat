@@ -2,6 +2,8 @@
 
 namespace AcMarche\Volontariat\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Form\FormInterface;
 use AcMarche\Volontariat\Entity\Activite;
 use AcMarche\Volontariat\Service\FileHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -15,39 +17,29 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Image controller.
- *
- * @Route("/admin/activite/images")
- * @IsGranted("ROLE_VOLONTARIAT_ADMIN")
  */
+#[Route(path: '/admin/activite/images')]
+#[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class ImageActiviteController extends AbstractController
 {
-    /**
-     * @var FileHelper
-     */
-    private $fileHelper;
-
-    public function __construct(FileHelper $fileHelper)
+    public function __construct(private FileHelper $fileHelper)
     {
-        $this->fileHelper = $fileHelper;
     }
-
     /**
      * Displays a form to create a new Image entity.
      *
-     * @Route("/new/{id}", name="volontariat_admin_activite_image_edit", methods={"GET"})
      *
      */
-    public function editAction(Activite $activite)
+    #[Route(path: '/new/{id}', name: 'volontariat_admin_activite_image_edit', methods: ['GET'])]
+    public function editAction(Activite $activite) : Response
     {
         $form = $this->createFormBuilder()
             ->setAction(
                 $this->generateUrl('volontariat_admin_activite_image_upload', array('id' => $activite->getId()))
             )
             ->getForm();
-
         $images = $this->fileHelper->getImages($activite);
         $deleteForm = $this->createDeleteForm($activite->getId());
-
         return $this->render(
             '@Volontariat/admin/imageActivite/edit.html.twig',
             [
@@ -58,11 +50,8 @@ class ImageActiviteController extends AbstractController
             ]
         );
     }
-
-    /**
-     * @Route("/upload/{id}", name="volontariat_admin_activite_image_upload", methods={"POST"})
-     */
-    public function uploadAction(Request $request, Activite $activite)
+    #[Route(path: '/upload/{id}', name: 'volontariat_admin_activite_image_upload', methods: ['POST'])]
+    public function uploadAction(Request $request, Activite $activite) : Response
     {
         if ($request->isXmlHttpRequest()) {
             $file = $request->files->get('file');
@@ -80,18 +69,16 @@ class ImageActiviteController extends AbstractController
             return new Response('okid');
         }
     }
-
     /**
      * Deletes a Image entity.
      *
-     * @Route("/delete/{id}", name="volontariat_admin_activite_image_delete", methods={"DELETE"})
      *
      */
-    public function deleteAction(Request $request, Activite $activite)
+    #[Route(path: '/delete/{id}', name: 'volontariat_admin_activite_image_delete', methods: ['DELETE'])]
+    public function deleteAction(Request $request, Activite $activite) : RedirectResponse
     {
         $form = $this->createDeleteForm($activite->getId());
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $files = $request->get('img', false);
 
@@ -105,27 +92,25 @@ class ImageActiviteController extends AbstractController
                 try {
                     $this->fileHelper->deleteOneDoc($activite, $filename);
                     $this->addFlash('success', "L'image $filename a bien été supprimée");
-                } catch (FileException $e) {
+                } catch (FileException) {
                     $this->addFlash('error', "L'image  $filename n'a pas pu être supprimée. ");
                 }
             }
         }
-
         return $this->redirectToRoute('volontariat_admin_activite_image_edit', array('id' => $activite->getId()));
     }
-
     /**
      * Creates a form to delete a Image entity by id.
      *
      * @param mixed $id The entity id
      *
-     * @return \Symfony\Component\Form\FormInterface The form
+     * @return FormInterface The form
      */
-    private function createDeleteForm($id)
+    private function createDeleteForm($id): FormInterface
     {
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('volontariat_admin_activite_image_delete', array('id' => $id)))
-            ->setMethod('DELETE')
+            ->setMethod(Request::METHOD_DELETE)
             ->add(
                 'submit',
                 SubmitType::class,

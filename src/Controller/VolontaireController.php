@@ -2,6 +2,7 @@
 
 namespace AcMarche\Volontariat\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Form\Search\SearchVolontaireType;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
@@ -15,67 +16,34 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
  * Class VolontaireController
- *
- * @Route("/volontaire")
  */
+#[Route(path: '/volontaire')]
 class VolontaireController extends AbstractController
 {
-    /**
-     * @var Session
-     */
-    private $session;
-    /**
-     * @var VolontaireRepository
-     */
-    private $volontaireRepository;
-    /**
-     * @var VolontaireService
-     */
-    private $volontaireService;
-    /**
-     * @var AuthorizationCheckerInterface
-     */
-    private $authorizationChecker;
-
-    public function __construct(
-        VolontaireRepository $volontaireRepository,
-        VolontaireService $volontaireService,
-        AuthorizationCheckerInterface $authorizationChecker
-    ) {
-        $this->volontaireRepository = $volontaireRepository;
-        $this->volontaireService = $volontaireService;
-        $this->authorizationChecker = $authorizationChecker;
+    private Session $session;
+    public function __construct(private VolontaireRepository $volontaireRepository, private VolontaireService $volontaireService, private AuthorizationCheckerInterface $authorizationChecker)
+    {
     }
-
-    /**
-     * @Route("/", name="volontariat_volontaire")
-     *
-     */
-    public function indexAction(Request $request)
+    #[Route(path: '/', name: 'volontariat_volontaire')]
+    public function indexAction(Request $request) : Response
     {
         $data = array();
         $session = $request->getSession();
         $key = VolontariatConstante::VOLONTAIRE_SEARCH;
         $search = false;
-
         if ($session->has($key)) {
             $data = unserialize($session->get($key));
             $search = true;
         }
-
         $session = $request->getSession();
         $search_form = $this->createForm(SearchVolontaireType::class, $data);
-
         $search_form->handleRequest($request);
-
         if ($search_form->isSubmitted() && $search_form->isValid()) {
             $data = $search_form->getData();
             $search = true;
             $session->set($key, serialize($data));
         }
-
         $volontaires = $this->volontaireRepository->search($data);
-
         if (!$this->authorizationChecker->isGranted('index')) {
             return $this->render(
                 '@Volontariat/volontaire/index_not_connected.html.twig',
@@ -84,7 +52,6 @@ class VolontaireController extends AbstractController
                 )
             );
         }
-
         return $this->render(
             '@Volontariat/volontaire/index.html.twig',
             array(
@@ -94,17 +61,15 @@ class VolontaireController extends AbstractController
             )
         );
     }
-
     /**
      * Finds and displays a Volontaire entity.
      *
-     * @Route("/{id}", name="volontariat_volontaire_show")
      *
      */
-    public function showAction(Volontaire $volontaire)
+    #[Route(path: '/{id}', name: 'volontariat_volontaire_show')]
+    public function showAction(Volontaire $volontaire) : Response
     {
         $associations = $this->volontaireService->getAssociationsWithSameSecteur($volontaire);
-
         if (!$this->authorizationChecker->isGranted('show', $volontaire)) {
             return $this->render(
                 '@Volontariat/volontaire/show_not_connected.html.twig',
@@ -114,7 +79,6 @@ class VolontaireController extends AbstractController
                 )
             );
         }
-
         return $this->render(
             '@Volontariat/volontaire/show.html.twig',
             array(
@@ -122,8 +86,5 @@ class VolontaireController extends AbstractController
                 'associations' => $associations,
             )
         );
-
     }
-
-
 }

@@ -13,18 +13,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SearchAssociationType extends AbstractType
 {
-    protected $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(protected EntityManagerInterface $entityManager)
     {
-        $this->entityManager = $entityManager;
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $secteurs = $this->entityManager->getRepository(Secteur::class)->getForSearch();
 
@@ -59,10 +52,7 @@ class SearchAssociationType extends AbstractType
             );
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(array());
     }

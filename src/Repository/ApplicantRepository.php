@@ -18,18 +18,18 @@ class ApplicantRepository extends ServiceEntityRepository
         parent::__construct($registry, Applicant::class);
     }
 
-    public function insert(Applicant $applicant)
+    public function insert(Applicant $applicant): void
     {
         $this->_em->persist($applicant);
         $this->save();
     }
 
-    public function save()
+    public function save(): void
     {
         $this->_em->flush();
     }
 
-    public function remove(Applicant $applicant)
+    public function remove(Applicant $applicant): void
     {
         $this->_em->remove($applicant);
         $this->save();

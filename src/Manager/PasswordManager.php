@@ -13,25 +13,18 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class PasswordManager
 {
-    /**
-     * @var UserPasswordHasherInterface
-     */
-    private $userPasswordEncoder;
-
-    public function __construct(
-        UserPasswordHasherInterface $userPasswordEncoder
-    ) {
-        $this->userPasswordEncoder = $userPasswordEncoder;
+    public function __construct(private UserPasswordHasherInterface $userPasswordEncoder)
+    {
     }
 
-    public function changePassword(User $user, string $plainPassword)
+    public function changePassword(User $user, string $plainPassword): void
     {
         $passwordCrypted = $this->userPasswordEncoder->hashPassword($user, $plainPassword);
         $user->setPassword($passwordCrypted);
         $user->setPlainPassword($plainPassword);//pour envoie par mail
     }
 
-    public function cryptPassword(User $user)
+    public function cryptPassword(User $user): void
     {
         $passwordCrypted = $this->userPasswordEncoder->hashPassword($user, $user->getPlainPassword());
         $user->setPassword($passwordCrypted);

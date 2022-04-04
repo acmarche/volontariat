@@ -2,6 +2,7 @@
 
 namespace AcMarche\Volontariat\Repository;
 
+use Doctrine\ORM\NonUniqueResultException;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Secteur;
 use AcMarche\Volontariat\Entity\Volontaire;
@@ -22,18 +23,18 @@ class VolontaireRepository extends ServiceEntityRepository
     }
 
 
-    public function insert(Volontaire $volontaire)
+    public function insert(Volontaire $volontaire): void
     {
         $this->_em->persist($volontaire);
         $this->save();
     }
 
-    public function save()
+    public function save(): void
     {
         $this->_em->flush();
     }
 
-    public function remove(Volontaire $volontaire)
+    public function remove(Volontaire $volontaire): void
     {
         $this->_em->remove($volontaire);
         $this->save();
@@ -42,19 +43,19 @@ class VolontaireRepository extends ServiceEntityRepository
     /**
      * @param $args
      * @return Volontaire[]|Volontaire
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
-    public function search($args)
+    public function search($args): array|Volontaire
     {
-        $nom = isset($args['nom']) ? $args['nom'] : null;
-        $secteur = isset($args['secteur']) ? $args['secteur'] : null;
-        $secteurs = isset($args['secteurs']) ? $args['secteurs'] : null;
-        $vehicule = isset($args['vehicule']) ? $args['vehicule'] : null;
-        $user = isset($args['user']) ? $args['user'] : null;
-        $localite = isset($args['city']) ? $args['city'] : null;
-        $one = isset($args['one']) ? $args['one'] : null;
-        $valider = isset($args['valider']) ? $args['valider'] : null;
-        $createdAt = isset($args['createdAt']) ? $args['createdAt'] : null;
+        $nom = $args['nom'] ?? null;
+        $secteur = $args['secteur'] ?? null;
+        $secteurs = $args['secteurs'] ?? null;
+        $vehicule = $args['vehicule'] ?? null;
+        $user = $args['user'] ?? null;
+        $localite = $args['city'] ?? null;
+        $one = $args['one'] ?? null;
+        $valider = $args['valider'] ?? null;
+        $createdAt = $args['createdAt'] ?? null;
 
         $qb = $this->createQueryBuilder('volontaire');
         $qb->leftJoin('volontaire.association', 'association', 'WITH');
@@ -83,8 +84,8 @@ class VolontaireRepository extends ServiceEntityRepository
                 ->setParameter('secteur', $secteur);
         }
 
-        if (is_array($secteurs) && count($secteurs) > 0) {
-            $secteursIds = join(",", $secteurs);
+        if (is_array($secteurs) && $secteurs !== []) {
+            $secteursIds = implode(",", $secteurs);
 
             $qb->andwhere("secteurs IN ($secteursIds) ");
         }
@@ -115,15 +116,13 @@ class VolontaireRepository extends ServiceEntityRepository
             return $query->getOneOrNullResult();
         }
 
-        $results = $query->getResult();
-
-        return $results;
+        return $query->getResult();
     }
 
     /**
      * @return Volontaire[]
      */
-    public function getForAssociation()
+    public function getForAssociation(): array
     {
         $qb = $this->createQueryBuilder('volontaire');
         $qb->andwhere('volontaire.user IS NULL');
@@ -145,7 +144,7 @@ class VolontaireRepository extends ServiceEntityRepository
      * @param int $max
      * @return Volontaire[]
      */
-    public function getRecent($max = 8)
+    public function getRecent($max = 8): array
     {
         $qb = $this->createQueryBuilder('volontaire');
 
@@ -153,12 +152,11 @@ class VolontaireRepository extends ServiceEntityRepository
         $qb->addOrderBy('RAND()');
 
         $query = $qb->getQuery();
-        $results = $query->getResult();
 
-        return $results;
+        return $query->getResult();
     }
 
-    public function getLocalitesForSearch()
+    public function getLocalitesForSearch(): array
     {
         $qb = $this->createQueryBuilder('volontaire');
 

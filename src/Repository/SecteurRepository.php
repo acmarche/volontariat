@@ -2,6 +2,7 @@
 
 namespace AcMarche\Volontariat\Repository;
 
+use Doctrine\ORM\QueryBuilder;
 use AcMarche\Volontariat\Entity\Secteur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -19,24 +20,24 @@ class SecteurRepository extends ServiceEntityRepository
     }
 
 
-    public function insert(Secteur $secteur)
+    public function insert(Secteur $secteur): void
     {
         $this->_em->persist($secteur);
         $this->save();
     }
 
-    public function save()
+    public function save(): void
     {
         $this->_em->flush();
     }
 
-    public function remove(Secteur $secteur)
+    public function remove(Secteur $secteur): void
     {
         $this->_em->remove($secteur);
         $this->save();
     }
 
-    public function findAll()
+    public function findAll(): array
     {
         return $this->findBy(array(), array('name' => 'ASC'));
     }
@@ -44,7 +45,7 @@ class SecteurRepository extends ServiceEntityRepository
     /**
      * @return Secteur[]
      */
-    public function getForSearch()
+    public function getForSearch(): array
     {
         $qb = $this->createQueryBuilder('secteur');
 
@@ -63,7 +64,7 @@ class SecteurRepository extends ServiceEntityRepository
     }
 
 
-    public function secteursActifs()
+    public function secteursActifs(): QueryBuilder
     {
         $qb = $this->createQueryBuilder('secteur');
         $qb->andWhere('secteur.display = 1');

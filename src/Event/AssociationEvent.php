@@ -14,20 +14,17 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class AssociationEvent extends Event
 {
-    const ASSOCIATION_NEW = VolontariatConstante::ASSOCIATION_NEW;
-    const ASSOCIATION_EDIT = VolontariatConstante::ASSOCIATION_EDIT;
-    const ASSOCIATION_DELETE = VolontariatConstante::ASSOCIATION_DELETE;
-    const ASSOCIATION_VALIDER_REQUEST = VolontariatConstante::ASSOCIATION_VALIDER_REQUEST;
-    const ASSOCIATION_VALIDER_FINISH = VolontariatConstante::ASSOCIATION_VALIDER_FINISH;
+    public const ASSOCIATION_NEW = VolontariatConstante::ASSOCIATION_NEW;
+    public const ASSOCIATION_EDIT = VolontariatConstante::ASSOCIATION_EDIT;
+    public const ASSOCIATION_DELETE = VolontariatConstante::ASSOCIATION_DELETE;
+    public const ASSOCIATION_VALIDER_REQUEST = VolontariatConstante::ASSOCIATION_VALIDER_REQUEST;
+    public const ASSOCIATION_VALIDER_FINISH = VolontariatConstante::ASSOCIATION_VALIDER_FINISH;
 
-    protected $association;
-
-    public function __construct(Association $association)
+    public function __construct(protected Association $association)
     {
-        $this->association = $association;
     }
 
-    public function getAssociation()
+    public function getAssociation(): Association
     {
         return $this->association;
     }

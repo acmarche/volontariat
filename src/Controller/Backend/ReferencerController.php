@@ -2,6 +2,7 @@
 
 namespace AcMarche\Volontariat\Controller\Backend;
 
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Volontariat\Entity\Message;
 use AcMarche\Volontariat\Form\Contact\ReferencerType;
 use AcMarche\Volontariat\Manager\ContactManager;
@@ -19,74 +20,29 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class ContactController
  * @package AcMarche\Volontariat\Controller
- * @Route("/backend/referencer")
  */
+#[Route(path: '/backend/referencer')]
 class ReferencerController extends AbstractController
 {
-    /**
-     * @var ContactManager
-     */
-    private $contactManager;
-    /**
-     * @var MailerContact
-     */
-    private $mailerContact;
-    /**
-     * @var CaptchaService
-     */
-    private $captchaService;
-    /**
-     * @var AssociationService
-     */
-    private $associationService;
-    /**
-     * @var MessageService
-     */
-    private $messageService;
-    /**
-     * @var Mailer
-     */
-    private $mailer;
-
-    public function __construct(
-        ContactManager $contactManager,
-        MailerContact $mailerContact,
-        Mailer $mailer,
-        CaptchaService $captchaService,
-        AssociationService $associationService,
-        MessageService $messageService
-    ) {
-        $this->contactManager = $contactManager;
-        $this->mailerContact = $mailerContact;
-        $this->captchaService = $captchaService;
-        $this->associationService = $associationService;
-        $this->messageService = $messageService;
-        $this->mailer = $mailer;
-    }
-
-    /**
-     * @Route("/",name="volontariat_backend_referencer")
-     * @IsGranted("ROLE_VOLONTARIAT")
-     */
-    public function index(Request $request)
+    public function __construct(private ContactManager $contactManager, private MailerContact $mailerContact, private Mailer $mailer, private CaptchaService $captchaService, private AssociationService $associationService, private MessageService $messageService)
     {
-        if ($user = $this->getUser()) {
+    }
+    #[Route(path: '/', name: 'volontariat_backend_referencer')]
+    #[IsGranted('ROLE_VOLONTARIAT')]
+    public function index(Request $request) : Response
+    {
+        if (($user = $this->getUser()) !== null) {
             $this->contactManager->populateFromUser($user);
         }
-
         $user = $this->getUser();
         $associations = $this->associationService->getAssociationsByUser($user, true);
         $froms = $this->messageService->getFroms($user, $associations);
-
         $message = new Message();
         $nom = $this->messageService->getNom($user);
         $message->setNom($nom);
-
         $form = $this->createForm(ReferencerType::class, $message, ['froms' => $froms])
             ->add('Envoyer', SubmitType::class);
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             if (!$this->captchaService->captchaverify($request->get('g-recaptcha-response'))) {
@@ -98,9 +54,7 @@ class ReferencerController extends AbstractController
 
             return $this->redirectToRoute('volontariat_dashboard');
         }
-
         $keySite = $this->getParameter('acmarche_volontariat_captcha_site_key');
-
         return $this->render(
             '@Volontariat/contact/referencer.html.twig',
             [
@@ -109,6 +63,4 @@ class ReferencerController extends AbstractController
             ]
         );
     }
-
-
 }

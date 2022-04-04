@@ -21,25 +21,15 @@ class VolontaireVoter extends Voter
 {
     // Defining these constants is overkill for this simple application, but for real
     // applications, it's a recommended practice to avoid relying on "magic strings"
-    const INDEX = 'index';
-    const SHOW = 'show';
-    const EDIT = 'edit';
-    const DELETE = 'delete';
-    private $decisionManager;
-    /**
-     * @var AssociationService
-     */
-    private $associationService;
+    public const INDEX = 'index';
+    public const SHOW = 'show';
+    public const EDIT = 'edit';
+    public const DELETE = 'delete';
 
-    /**
-     * @var User $user
-     */
-    private $user;
+    private ?User $user = null;
 
-    public function __construct(AccessDecisionManagerInterface $decisionManager, AssociationService $associationService)
+    public function __construct(private AccessDecisionManagerInterface $decisionManager, private AssociationService $associationService)
     {
-        $this->decisionManager = $decisionManager;
-        $this->associationService = $associationService;
     }
 
     /**
@@ -47,10 +37,8 @@ class VolontaireVoter extends Voter
      */
     protected function supports($attribute, $subject):bool
     {
-        if ($subject) {
-            if (!$subject instanceof Volontaire) {
-                return false;
-            }
+        if ($subject && !$subject instanceof Volontaire) {
+            return false;
         }
 
         return in_array(
@@ -75,33 +63,24 @@ class VolontaireVoter extends Voter
         if ($this->decisionManager->decide($token, ['ROLE_VOLONTARIAT_ADMIN'])) {
             return true;
         }
-
-        switch ($attribute) {
-            case self::INDEX:
-                return $this->canIndex();
-            case self::SHOW:
-                return $this->canView($volontaire, $token);
-            case self::EDIT:
-                return $this->canEdit($volontaire, $token);
-            case self::DELETE:
-                return $this->canDelete($volontaire, $token);
-        }
-
-        return false;
+        return match ($attribute) {
+            self::INDEX => $this->canIndex(),
+            self::SHOW => $this->canView($volontaire, $token),
+            self::EDIT => $this->canEdit($volontaire, $token),
+            self::DELETE => $this->canDelete($volontaire, $token),
+            default => false,
+        };
     }
 
-    private function canIndex()
+    private function canIndex(): bool
     {
         return $this->associationService->hasValidAssociation($this->user);
     }
 
     /**
      * Voir dans l'admin
-     * @param Volontaire $volontaire
-     * @param TokenInterface $token
-     * @return bool
      */
-    private function canView(Volontaire $volontaire, TokenInterface $token)
+    private function canView(Volontaire $volontaire, TokenInterface $token): bool
     {
         if ($this->canEdit($volontaire, $token)) {
             return true;
@@ -110,19 +89,15 @@ class VolontaireVoter extends Voter
         return $this->associationService->hasValidAssociation($this->user);
     }
 
-    private function canEdit(Volontaire $volontaire, TokenInterface $token)
+    private function canEdit(Volontaire $volontaire, TokenInterface $token): bool
     {
         $user = $token->getUser();
 
         return $user === $volontaire->getUser();
     }
 
-    private function canDelete(Volontaire $volontaire, TokenInterface $token)
+    private function canDelete(Volontaire $volontaire, TokenInterface $token): bool
     {
-        if ($this->canEdit($volontaire, $token)) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->canEdit($volontaire, $token);
     }
 }

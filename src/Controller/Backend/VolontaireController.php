@@ -2,6 +2,10 @@
 
 namespace AcMarche\Volontariat\Controller\Backend;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\FormInterface;
 use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Event\VolontaireEvent;
 use AcMarche\Volontariat\Form\VolontairePublicType;
@@ -17,45 +21,20 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Volontaire controller.
  *
- * @Route("/backend/volontaire")
- * @IsGranted("ROLE_VOLONTARIAT")
  *
  */
+#[Route(path: '/backend/volontaire')]
+#[IsGranted('ROLE_VOLONTARIAT')]
 class VolontaireController extends AbstractController
 {
-    /**
-     * @var FileHelper
-     */
-    private $fileHelper;
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-    /**
-     * @var VolontaireRepository
-     */
-    private $volontaireRepository;
-
-    public function __construct(
-        VolontaireRepository $volontaireRepository,
-        FileHelper $fileHelper,
-        EventDispatcherInterface $eventDispatcher
-    ) {
-        $this->fileHelper = $fileHelper;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->volontaireRepository = $volontaireRepository;
+    public function __construct(private VolontaireRepository $volontaireRepository, private FileHelper $fileHelper, private EventDispatcherInterface $eventDispatcher, private ManagerRegistry $managerRegistry)
+    {
     }
-
-    /**
-     * @Route("/", name="volontariat_backend_volontaire_index", methods={"GET"})
-     *
-     */
-    public function indexAction()
+    #[Route(path: '/', name: 'volontariat_backend_volontaire_index', methods: ['GET'])]
+    public function indexAction() : Response
     {
         $volontaires = $this->volontaireRepository->findBy(['user' => $this->getUser()]);
-
         $formDeleteVolontaire = $this->createDeleteForm();
-
         return $this->render(
             '@Volontariat/backend/volontaire/index.html.twig',
             array(
@@ -64,13 +43,11 @@ class VolontaireController extends AbstractController
             )
         );
     }
-
     /**
      * Displays a form to create a new Volontaire volontaire.
-     *
-     * @Route("/new", name="volontariat_backend_volontaire_new", methods={"GET","POST"})
      */
-    public function newAction(Request $request)
+    #[Route(path: '/new', name: 'volontariat_backend_volontaire_new', methods: ['GET', 'POST'])]
+    public function newAction(Request $request) : Response
     {
         $user = $this->getUser();
         $volontaire = new Volontaire();
@@ -78,14 +55,11 @@ class VolontaireController extends AbstractController
         $volontaire->setSurname($user->getPrenom());
         $volontaire->setName($user->getNom());
         $volontaire->setEmail($user->getEmail());
-
         $form = $this->createForm(VolontairePublicType::class, $volontaire)
             ->add('submit', SubmitType::class, array('label' => 'Create'));
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->managerRegistry->getManager();
             $em->persist($volontaire);
             $em->flush();//ici pour avoir id
 
@@ -99,7 +73,6 @@ class VolontaireController extends AbstractController
 
             return $this->redirectToRoute('volontariat_backend_volontaire_index');
         }
-
         return $this->render(
             '@Volontariat/backend/volontaire/new.html.twig',
             array(
@@ -108,23 +81,19 @@ class VolontaireController extends AbstractController
             )
         );
     }
-
     /**
      * Displays a form to edit an existing Volontaire volontaire.
      *
-     * @Route("/{id}/edit", name="volontariat_backend_volontaire_edit")
-     * @IsGranted("edit",  subject="volontaire")
      *
      */
-    public function editAction(Request $request, Volontaire $volontaire)
+    #[Route(path: '/{id}/edit', name: 'volontariat_backend_volontaire_edit')]
+    #[IsGranted('edit', subject: 'volontaire')]
+    public function editAction(Request $request, Volontaire $volontaire) : Response
     {
-        $em = $this->getDoctrine()->getManager();
-
+        $em = $this->managerRegistry->getManager();
         $form = $this->createForm(VolontairePublicType::class, $volontaire)
             ->add('submit', SubmitType::class, array('label' => 'Update'));
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->fileHelper->traitementFiles($volontaire);
             $em->flush();
@@ -133,7 +102,6 @@ class VolontaireController extends AbstractController
 
             return $this->redirectToRoute('volontariat_backend_volontaire_index');
         }
-
         return $this->render(
             '@Volontariat/backend/volontaire/edit.html.twig',
             array(
@@ -142,43 +110,34 @@ class VolontaireController extends AbstractController
             )
         );
     }
-
     /**
      * Deletes a Volontaire volontaire.
-     *
-     * @Route("/delete", name="volontariat_backend_volontaire_delete", methods={"DELETE"})
      */
-    public function deleteAction(Request $request)
+    #[Route(path: '/delete', name: 'volontariat_backend_volontaire_delete', methods: ['DELETE'])]
+    public function deleteAction(Request $request) : RedirectResponse
     {
-        $id = intval($request->request->get('id'));
-
+        $id = (int) $request->request->get('id');
         $volontaire = $this->volontaireRepository->find($id);
-
         $this->denyAccessUnlessGranted('delete', $volontaire, "Vous n'avez pas accès.");
-
         $form = $this->createDeleteForm();
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->managerRegistry->getManager();
 
             $em->remove($volontaire);
             $em->flush();
 
             $this->addFlash('success', 'Le volontaire a bien été supprimé');
         }
-
         return $this->redirectToRoute('volontariat_backend_volontaire_index');
     }
-
-    private function createDeleteForm()
+    private function createDeleteForm(): FormInterface
     {
         return $this->createFormBuilder()
             ->setAction(
                 $this->generateUrl('volontariat_backend_volontaire_delete')
             )
-            ->setMethod('DELETE')
+            ->setMethod(Request::METHOD_DELETE)
             ->getForm();
     }
 }

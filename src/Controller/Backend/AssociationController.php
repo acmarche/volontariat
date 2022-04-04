@@ -2,6 +2,10 @@
 
 namespace AcMarche\Volontariat\Controller\Backend;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\FormInterface;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Event\AssociationEvent;
 use AcMarche\Volontariat\Form\AssociationPublicType;
@@ -16,46 +20,24 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Association controller.
- *
- * @Route("/backend/association")
- * @IsGranted("ROLE_VOLONTARIAT")
  */
+#[Route(path: '/backend/association')]
+#[IsGranted('ROLE_VOLONTARIAT')]
 class AssociationController extends AbstractController
 {
-    /**
-     * @var FileHelper
-     */
-    private $fileHelper;
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-    /**
-     * @var AssociationRepository
-     */
-    private $associationRepository;
-
-    public function __construct(
-        AssociationRepository $associationRepository,
-        FileHelper $fileHelper,
-        EventDispatcherInterface $eventDispatcher
-    ) {
-        $this->fileHelper = $fileHelper;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->associationRepository = $associationRepository;
+    public function __construct(private AssociationRepository $associationRepository, private FileHelper $fileHelper, private EventDispatcherInterface $eventDispatcher, private ManagerRegistry $managerRegistry)
+    {
     }
-
     /**
      * Lists all Association entities.
      *
-     * @Route("/", name="volontariat_backend_association_index", methods={"GET"})
      *
      */
-    public function indexAction()
+    #[Route(path: '/', name: 'volontariat_backend_association_index', methods: ['GET'])]
+    public function indexAction() : Response
     {
         $associations = $this->associationRepository->findBy(['user' => $this->getUser()]);
         $formDeleteAssociation = $this->createDeleteForm();
-
         return $this->render(
             '@Volontariat/backend/association/index.html.twig',
             array(
@@ -64,26 +46,22 @@ class AssociationController extends AbstractController
             )
         );
     }
-
     /**
      * Displays a form to create a new Association association.
      *
-     * @Route("/new", name="volontariat_backend_association_new", methods={"GET","POST"})
      *
      */
-    public function newAction(Request $request)
+    #[Route(path: '/new', name: 'volontariat_backend_association_new', methods: ['GET', 'POST'])]
+    public function newAction(Request $request) : Response
     {
         $user = $this->getUser();
         $association = new Association();
         $association->setUser($user);
-
         $form = $this->createForm(AssociationPublicType::class, $association)
             ->add('submit', SubmitType::class, array('label' => 'Create'));
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->managerRegistry->getManager();
 
             $association->setValider(false);
             $em->persist($association);
@@ -101,7 +79,6 @@ class AssociationController extends AbstractController
 
             return $this->redirectToRoute('volontariat_backend_association_index');
         }
-
         return $this->render(
             '@Volontariat/backend/association/new.html.twig',
             array(
@@ -110,23 +87,18 @@ class AssociationController extends AbstractController
             )
         );
     }
-
     /**
      * Displays a form to edit an existing Association association.
      *
-     * @Route("/{id}/edit", name="volontariat_backend_association_edit")
-     * use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;("is_granted('edit', association)")
      *
      */
-    public function editAction(Request $request, Association $association)
+    #[Route(path: '/{id}/edit', name: 'volontariat_backend_association_edit')]
+    public function editAction(Request $request, Association $association) : Response
     {
-        $em = $this->getDoctrine()->getManager();
-
+        $em = $this->managerRegistry->getManager();
         $form = $this->createForm(AssociationPublicType::class, $association)
             ->add('submit', SubmitType::class, array('label' => 'Update'));
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $this->fileHelper->traitementFiles($association);
             $em->flush();
@@ -135,7 +107,6 @@ class AssociationController extends AbstractController
 
             return $this->redirectToRoute('volontariat_backend_association_index');
         }
-
         return $this->render(
             '@Volontariat/backend/association/edit.html.twig',
             array(
@@ -144,43 +115,34 @@ class AssociationController extends AbstractController
             )
         );
     }
-
     /**
      * Deletes a Association association.
-     *
-     * @Route("/delete", name="volontariat_backend_association_delete", methods={"DELETE"})
      */
-    public function deleteAction(Request $request)
+    #[Route(path: '/delete', name: 'volontariat_backend_association_delete', methods: ['DELETE'])]
+    public function deleteAction(Request $request) : RedirectResponse
     {
-        $id = intval($request->request->get('associationid'));
-
+        $id = (int) $request->request->get('associationid');
         $association = $this->associationRepository->find($id);
-
         $this->denyAccessUnlessGranted('delete', $association, "Vous n'avez pas accès.");
-
         $form = $this->createDeleteForm();
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->managerRegistry->getManager();
 
             $em->remove($association);
             $em->flush();
 
             $this->addFlash('success', 'L\' association a bien été supprimée');
         }
-
         return $this->redirectToRoute('volontariat_backend_association_index');
     }
-
-    private function createDeleteForm()
+    private function createDeleteForm(): FormInterface
     {
         return $this->createFormBuilder()
             ->setAction(
                 $this->generateUrl('volontariat_backend_association_delete')
             )
-            ->setMethod('DELETE')
+            ->setMethod(Request::METHOD_DELETE)
             ->getForm();
     }
 }

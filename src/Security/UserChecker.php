@@ -21,7 +21,7 @@ class UserChecker implements UserCheckerInterface
      *
      * @throws AccountStatusException
      */
-    public function checkPreAuth(UserInterface $user)
+    public function checkPreAuth(UserInterface $user): bool
     {
         return true;
     }
@@ -31,7 +31,7 @@ class UserChecker implements UserCheckerInterface
      *
      * @throws AccountStatusException
      */
-    public function checkPostAuth(UserInterface $user)
+    public function checkPostAuth(UserInterface $user): void
     {
         if (!$user instanceof User) {
             return;

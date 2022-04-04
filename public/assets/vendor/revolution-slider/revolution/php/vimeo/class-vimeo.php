@@ -18,7 +18,7 @@ class TP_vimeo {
 	 * @access   private
 	 * @var      array    $stream    Stream Data Array
 	 */
-	private $stream;
+	private ?array $stream = null;
 
 	/**
 	 * Get Vimeo User Videos
@@ -34,9 +34,7 @@ class TP_vimeo {
 			$url = "https://vimeo.com/api/v2/".$type."/".$value."/videos.json";
 		}
 		
-		$rsp = json_decode(file_get_contents($url));
-		
-		return $rsp;
+		return json_decode(file_get_contents($url), null, 512, JSON_THROW_ON_ERROR);
 	}
 
 	/**
@@ -45,7 +43,7 @@ class TP_vimeo {
 	 * @since    1.0.0
 	 * @param    string    $videos 	Vimeo Output Data
 	 */
-	private function vimeo_output_array($videos,$count){
+	private function vimeo_output_array($videos,$count): void{
 		foreach ($videos as $video) {
 			if($count-- == 0) break;
 

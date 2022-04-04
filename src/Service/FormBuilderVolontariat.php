@@ -8,6 +8,8 @@
 
 namespace AcMarche\Volontariat\Service;
 
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Entity\Volontaire;
@@ -17,27 +19,14 @@ use Symfony\Component\Routing\RouterInterface;
 
 class FormBuilderVolontariat
 {
-    /**
-     * @var RouterInterface
-     */
-    private $router;
-    /**
-     * @var FormFactoryInterface
-     */
-    private $formFactory;
-
-    public function __construct(RouterInterface $router, FormFactoryInterface $formFactory)
+    public function __construct(private RouterInterface $router, private FormFactoryInterface $formFactory)
     {
-        $this->router = $router;
-        $this->formFactory = $formFactory;
     }
 
     /**
-     * @param Association|Volontaire $object
      * @param string $type
-     * @return \Symfony\Component\Form\FormInterface
      */
-    public function createDissocierForm($object)
+    public function createDissocierForm(Association|Volontaire $object): FormInterface
     {
         $url = $this->router->generate('volontariat_admin_dissocier_volontaire', array('id' => $object->getId()));
 
@@ -47,7 +36,7 @@ class FormBuilderVolontariat
 
         return $this->formFactory->createBuilder()
             ->setAction($url)
-            ->setMethod('DELETE')
+            ->setMethod(Request::METHOD_DELETE)
             ->add(
                 'submit',
                 SubmitType::class,

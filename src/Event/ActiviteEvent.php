@@ -14,20 +14,17 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class ActiviteEvent extends Event
 {
-    const ACTIVITE_NEW = VolontariatConstante::ACTIVITE_NEW;
-    const ACTIVITE_EDIT = VolontariatConstante::ACTIVITE_EDIT;
-    const ACTIVITE_DELETE = VolontariatConstante::ACTIVITE_DELETE;
-    const ACTIVITE_VALIDER_REQUEST = VolontariatConstante::ACTIVITE_VALIDER_REQUEST;
-    const ACTIVITE_VALIDER_FINISH = VolontariatConstante::ACTIVITE_VALIDER_FINISH;
+    public const ACTIVITE_NEW = VolontariatConstante::ACTIVITE_NEW;
+    public const ACTIVITE_EDIT = VolontariatConstante::ACTIVITE_EDIT;
+    public const ACTIVITE_DELETE = VolontariatConstante::ACTIVITE_DELETE;
+    public const ACTIVITE_VALIDER_REQUEST = VolontariatConstante::ACTIVITE_VALIDER_REQUEST;
+    public const ACTIVITE_VALIDER_FINISH = VolontariatConstante::ACTIVITE_VALIDER_FINISH;
 
-    protected $activite;
-
-    public function __construct(Activite $activite)
+    public function __construct(protected Activite $activite)
     {
-        $this->activite = $activite;
     }
 
-    public function getActivite()
+    public function getActivite(): Activite
     {
         return $this->activite;
     }

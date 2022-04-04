@@ -2,6 +2,8 @@
 
 namespace AcMarche\Volontariat\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Form\Admin\AssocierAssociationType;
@@ -15,48 +17,24 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @Route("/link")
- * @IsGranted("ROLE_VOLONTARIAT_ADMIN")
- */
+#[Route(path: '/link')]
+#[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class LinkController extends AbstractController
 {
-    /**
-     * @var AssociationRepository
-     */
-    private $associationRepository;
-    /**
-     * @var VolontaireRepository
-     */
-    private $volontaireRepository;
-    /**
-     * @var FormBuilderVolontariat
-     */
-    private $formBuilder;
-
-    public function __construct(
-        AssociationRepository $associationRepository,
-        VolontaireRepository $volontaireRepository,
-        FormBuilderVolontariat $formBuilder
-    ) {
-        $this->associationRepository = $associationRepository;
-        $this->volontaireRepository = $volontaireRepository;
-        $this->formBuilder = $formBuilder;
+    public function __construct(private AssociationRepository $associationRepository, private VolontaireRepository $volontaireRepository, private FormBuilderVolontariat $formBuilder)
+    {
     }
-
     /**
      * Displays a form to create a new Compte entity.
      *
-     * @Route("/volontaire/{id}", name="volontariat_admin_associer_volontaire",methods={"GET","POST"})
      *
      */
-    public function associerVolontaireAction(Request $request, Volontaire $volontaire)
+    #[Route(path: '/volontaire/{id}', name: 'volontariat_admin_associer_volontaire', methods: ['GET', 'POST'])]
+    public function associerVolontaireAction(Request $request, Volontaire $volontaire) : Response
     {
         $form = $this->createForm(AssocierVolontaireType::class)
             ->add('submit', SubmitType::class, array('label' => 'Associer'));
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $user = $data->getUsers();
@@ -69,7 +47,6 @@ class LinkController extends AbstractController
 
             return $this->redirectToRoute('volontariat_admin_volontaire_show', ['id' => $volontaire->getId()]);
         }
-
         return $this->render(
             '@Volontariat/admin/link/volontaire.html.twig',
             array(
@@ -78,20 +55,17 @@ class LinkController extends AbstractController
             )
         );
     }
-
     /**
      * Displays a form to create a new Compte entity.
      *
-     * @Route("/association/{id}", name="volontariat_admin_associer_association", methods={"GET","POST"})
      *
      */
-    public function associerAssociationAction(Request $request, Association $association)
+    #[Route(path: '/association/{id}', name: 'volontariat_admin_associer_association', methods: ['GET', 'POST'])]
+    public function associerAssociationAction(Request $request, Association $association) : Response
     {
         $form = $this->createForm(AssocierAssociationType::class)
             ->add('submit', SubmitType::class, array('label' => 'Associer'));
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $user = $data->getUsers();
@@ -104,7 +78,6 @@ class LinkController extends AbstractController
 
             return $this->redirectToRoute('volontariat_admin_association_show', ['id' => $association->getId()]);
         }
-
         return $this->render(
             '@Volontariat/admin/link/asbl.html.twig',
             array(
@@ -113,44 +86,33 @@ class LinkController extends AbstractController
             )
         );
     }
-
-    /**
-     *
-     * @Route("/volontaire/dissocier/{id}", name="volontariat_admin_dissocier_volontaire", methods={"DELETE"})
-     */
-    public function dissocierVolontaireAction(Request $request, Volontaire $volontaire)
+    #[Route(path: '/volontaire/dissocier/{id}', name: 'volontariat_admin_dissocier_volontaire', methods: ['DELETE'])]
+    public function dissocierVolontaireAction(Request $request, Volontaire $volontaire) : RedirectResponse
     {
         $form = $this->formBuilder->createDissocierForm($volontaire);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $volontaire->setUser(null);
 
             $this->volontaireRepository->save();
             $this->addFlash('success', 'Le compte ont bien été dissocié');
         }
-
         return $this->redirectToRoute('volontariat_admin_volontaire_show', array('id' => $volontaire->getId()));
     }
-
     /**
      * Deletes a  entity.
-     *
-     * @Route("/association/dissocier/{id}", name="volontariat_admin_dissocier_association", methods={"DELETE"})
      */
-    public function dissocierAssociationAction(Request $request, Association $association)
+    #[Route(path: '/association/dissocier/{id}', name: 'volontariat_admin_dissocier_association', methods: ['DELETE'])]
+    public function dissocierAssociationAction(Request $request, Association $association) : RedirectResponse
     {
         $form = $this->formBuilder->createDissocierForm($association);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $association->setUser(null);
             $this->associationRepository->save();
 
             $this->addFlash('success', 'Le compte ont bien été dissociée');
         }
-
         return $this->redirectToRoute('volontariat_admin_association_show', array('id' => $association->getId()));
     }
-
 }

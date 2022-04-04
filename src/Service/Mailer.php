@@ -2,6 +2,9 @@
 
 namespace AcMarche\Volontariat\Service;
 
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Message;
 use AcMarche\Volontariat\Entity\Security\User;
@@ -20,50 +23,25 @@ use Twig\Environment;
 
 class Mailer
 {
-    private $twig;
     private $session;
-    private $messageService;
-    private $mailer;
-    private $to;
-    private $from;
-    /**
-     * @var AssociationRepository
-     */
-    private $associationRepository;
-    /**
-     * @var VolontaireRepository
-     */
-    private $volontaireRepository;
-    /**
-     * @var RouterInterface
-     */
-    private $router;
 
     private FlashBagInterface $flashBag;
 
     public function __construct(
-        AssociationRepository $associationRepository,
-        VolontaireRepository $volontaireRepository,
-        Environment $twig,
+        private AssociationRepository $associationRepository,
+        private VolontaireRepository $volontaireRepository,
+        private Environment $twig,
 RequestStack $requestStack,
-        MessageService $messageService,
-        MailerInterface $mailer,
-        RouterInterface $router,
-        $to,
-        $from
+        private MessageService $messageService,
+        private MailerInterface $mailer,
+        private RouterInterface $router,
+        private $to,
+        private $from
     ) {
-        $this->twig = $twig;
         $this->flashBag = $requestStack->getSession()->getFlashBag();
-        $this->messageService = $messageService;
-        $this->mailer = $mailer;
-        $this->to = $to;
-        $this->from = $from;
-        $this->associationRepository = $associationRepository;
-        $this->volontaireRepository = $volontaireRepository;
-        $this->router = $router;
     }
 
-    public function send($from, $destinataires, $sujet, $body, $bcc = null)
+    public function send($from, $destinataires, $sujet, $body, $bcc = null): void
     {
         $mail = (new Email())
             ->subject($sujet)
@@ -81,10 +59,9 @@ RequestStack $requestStack,
 
     /**
      *
-     * @param Message $data
      * @param $entities Volontaire[]|Association[]
      */
-    public function sendMessage(Message $data, $entities, $from = null, UploadedFile $uploadedFile = null)
+    public function sendMessage(Message $data, $entities, $from = null, UploadedFile $uploadedFile = null): void
     {
         $attach = null;
         $sujet = $data->getSujet();
@@ -97,7 +74,7 @@ RequestStack $requestStack,
             ->subject($sujet)
             ->from($from);
 
-        if ($uploadedFile) {
+        if ($uploadedFile !== null) {
             $message->attachFromPath(
                 $uploadedFile,
                 $uploadedFile->getClientOriginalName(),
@@ -135,12 +112,11 @@ RequestStack $requestStack,
 
     /**
      * Préviens les asbl
-     * @param Volontaire $volontaire
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function sendNewVolontaire(Volontaire $volontaire)
+    public function sendNewVolontaire(Volontaire $volontaire): void
     {
         $emails = $this->associationRepository->getAllEmail();
 
@@ -163,13 +139,11 @@ RequestStack $requestStack,
 
     /**
      * L'admin doit valider une association
-     * @param Association $association
-     * @param User $user
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function sendAssociationToValider(Association $association, User $user)
+    public function sendAssociationToValider(Association $association, User $user): void
     {
         $sujet = 'Une association a valider sur la plate-forme du volontariat';
 
@@ -190,12 +164,11 @@ RequestStack $requestStack,
 
     /**
      * Prévient l'asbl qu'elle a été validée
-     * @param Association $association
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function sendAssociationValidee(Association $association)
+    public function sendAssociationValidee(Association $association): void
     {
         $sujet = 'Votre association a été validée sur la plate-forme du volontariat';
 
@@ -215,12 +188,11 @@ RequestStack $requestStack,
 
     /**
      * Les volontaires sont prévenus de l'arrivée d'une nouvelle Asbl
-     * @param Association $association
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function sendNewAssociation(Association $association)
+    public function sendNewAssociation(Association $association): void
     {
         $sujet = 'Une nouvelle association sur la plate-forme du volontariat';
         $volontaires = $this->volontaireRepository->findBy(['valider' => true]);
@@ -236,18 +208,12 @@ RequestStack $requestStack,
 
             try {
                 $this->send($this->from, $volontaire->getEmail(), $sujet, $body);
-            } catch (TransportException $e) {
+            } catch (TransportException) {
             }
         }
     }
 
-    /**
-     *
-     * @param Message $data
-     * @param Volontaire $volontaire
-     * @param User $user
-     */
-    public function sendRecommanderVolontaire(Message $data, Volontaire $volontaire, User $user)
+    public function sendRecommanderVolontaire(Message $data, Volontaire $volontaire, User $user): void
     {
         $sujet = $data->getSujet();
         $contenu = $data->getContenu();
@@ -275,13 +241,7 @@ RequestStack $requestStack,
         $this->mailer->send($mail);
     }
 
-    /**
-     *
-     * @param Message $data
-     * @param Association $association
-     * @param User $user
-     */
-    public function sendRecommanderAssociation(Message $data, Association $association, User $user)
+    public function sendRecommanderAssociation(Message $data, Association $association, User $user): void
     {
         $sujet = $data->getSujet();
         $contenu = $data->getContenu();
@@ -313,7 +273,7 @@ RequestStack $requestStack,
      * @param Message $data
      * @param User $user
      */
-    public function sendReferencer($data, $user)
+    public function sendReferencer($data, $user): void
     {
         $sujet = $data->getSujet();
         $contenu = $data->getContenu();

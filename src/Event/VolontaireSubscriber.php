@@ -16,20 +16,14 @@ use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
 
 class VolontaireSubscriber implements EventSubscriberInterface
 {
-    private $em;
-    private $mailer;
-    private $token;
     private $session;
 
     public function __construct(
-        EntityManagerInterface $em,
-        Mailer $mailer,
-        TokenStorageInterface $tokenStorage,
+        private EntityManagerInterface $em,
+        private Mailer $mailer,
+        private TokenStorageInterface $token,
         RequestStack $requestStack
     ) {
-        $this->em = $em;
-        $this->mailer = $mailer;
-        $this->token = $tokenStorage;
         $this->session = $requestStack->getSession();
     }
 
@@ -51,7 +45,7 @@ class VolontaireSubscriber implements EventSubscriberInterface
      *
      * @return array The event names to listen to
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             VolontaireEvent::VOLONTAIRE_NEW => 'volontaireNew',
@@ -60,12 +54,11 @@ class VolontaireSubscriber implements EventSubscriberInterface
 
     /**
      * Mail envoyé aux associations
-     * @param VolontaireEvent $event
      * @throws \Twig_Error_Loader
      * @throws \Twig_Error_Runtime
      * @throws \Twig_Error_Syntax
      */
-    public function volontaireNew(VolontaireEvent $event)
+    public function volontaireNew(VolontaireEvent $event): void
     {
         $volontaire = $event->getVolontaire();
         $user = $volontaire->getUser();

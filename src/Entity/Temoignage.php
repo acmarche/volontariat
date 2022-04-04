@@ -8,72 +8,43 @@
 
 namespace AcMarche\Volontariat\Entity;
 
-use AcMarche\Volontariat\Entity\Security\User;
+use AcMarche\Volontariat\Repository\TemoignageRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- *
- * @ORM\Entity(repositoryClass="AcMarche\Volontariat\Repository\TemoignageRepository")
- * @ORM\Table(name="temoignage")
- *
- */
-class Temoignage
+#[ORM\Entity(repositoryClass: TemoignageRepository::class)]
+#[ORM\Table(name: 'temoignage')]
+class Temoignage implements Stringable
 {
-    /**
-     * @var integer|null $id
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     *
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    protected int $id;
 
-    /**
-     * @var string|null $nom
-     *
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank()
-     */
-    protected $nom;
+    #[ORM\Column(type: 'string')]
+    #[Assert\NotBlank]
+    protected string $nom;
 
-    /**
-     * @var string|null $village
-     *
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank()
-     */
-    protected $village;
+    #[ORM\Column(type: 'string')]
+    #[Assert\NotBlank]
+    protected string $village;
 
-    /**
-     * Description
-     *
-     * @ORM\Column(type="text")
-     * @Assert\NotBlank()
-     *
-     * @var string|null $message
-     */
-    protected $message;
+    #[ORM\Column(type: 'text')]
+    #[Assert\NotBlank]
+    protected ?string $message;
+    #[ORM\Column(type: 'string', nullable: true)]
+    private ?string $user = null;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     * @var string|null $user
-     */
-    private $user;
-
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getNom();
     }
 
-
     /**
      * Get id.
-     *
-     * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -82,10 +53,8 @@ class Temoignage
      * Set prenom.
      *
      * @param string $nom
-     *
-     * @return Temoignage
      */
-    public function setNom($nom)
+    public function setNom($nom): static
     {
         $this->nom = $nom;
 
@@ -94,10 +63,8 @@ class Temoignage
 
     /**
      * Get prenom.
-     *
-     * @return string
      */
-    public function getNom()
+    public function getNom(): ?string
     {
         return $this->nom;
     }
@@ -106,10 +73,8 @@ class Temoignage
      * Set village.
      *
      * @param string $village
-     *
-     * @return Temoignage
      */
-    public function setVillage($village)
+    public function setVillage($village): static
     {
         $this->village = $village;
 
@@ -118,10 +83,8 @@ class Temoignage
 
     /**
      * Get village.
-     *
-     * @return string
      */
-    public function getVillage()
+    public function getVillage(): ?string
     {
         return $this->village;
     }
@@ -130,10 +93,8 @@ class Temoignage
      * Set message.
      *
      * @param string $message
-     *
-     * @return Temoignage
      */
-    public function setMessage($message)
+    public function setMessage($message): static
     {
         $this->message = $message;
 
@@ -142,18 +103,13 @@ class Temoignage
 
     /**
      * Get message.
-     *
-     * @return string
      */
-    public function getMessage()
+    public function getMessage(): ?string
     {
         return $this->message;
     }
 
-    /**
-     * @return User
-     */
-    public function getUser()
+    public function getUser(): ?string
     {
         return $this->user;
     }

@@ -28,18 +28,18 @@ class PageRepository extends ServiceEntityRepository
             ->orderBy('page.id', 'DESC')->getQuery()->getResult();
     }
 
-    public function insert(Page $page)
+    public function insert(Page $page): void
     {
         $this->_em->persist($page);
         $this->save();
     }
 
-    public function save()
+    public function save(): void
     {
         $this->_em->flush();
     }
 
-    public function remove(Page $page)
+    public function remove(Page $page): void
     {
         $this->_em->remove($page);
         $this->save();

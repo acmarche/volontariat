@@ -15,29 +15,15 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class AssociationService
 {
-    /**
-     * @var AssociationRepository
-     */
-    private $associationRepository;
-    /**
-     * @var AuthorizationCheckerInterface
-     */
-    private $authorizationChecker;
-
-    public function __construct(
-        AssociationRepository $associationRepository,
-        AuthorizationCheckerInterface $authorizationChecker
-    ) {
-        $this->associationRepository = $associationRepository;
-        $this->authorizationChecker = $authorizationChecker;
+    public function __construct(private AssociationRepository $associationRepository, private AuthorizationCheckerInterface $authorizationChecker)
+    {
     }
 
     /**
-     * @param User $user
      * @param bool $valider
      * @return Association[]
      */
-    public function getAssociationsByUser(User $user, $valider = false)
+    public function getAssociationsByUser(User $user, $valider = false): array
     {
         $args = [];
         $args['user'] = $user;
@@ -48,18 +34,8 @@ class AssociationService
         return $this->associationRepository->findBy($args);
     }
 
-    /**
-     * @param User $user
-     * @return bool
-     */
-    public function hasValidAssociation(User $user)
+    public function hasValidAssociation(User $user): bool
     {
-        if ($this->authorizationChecker->isGranted('ROLE_VOLONTARIAT')) {
-            if (count($this->getAssociationsByUser($user, true)) > 0) {
-                return true;
-            }
-        }
-
-        return false;
+        return $this->authorizationChecker->isGranted('ROLE_VOLONTARIAT') && $this->getAssociationsByUser($user, true) !== [];
     }
 }

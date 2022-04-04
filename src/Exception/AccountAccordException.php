@@ -15,7 +15,7 @@ class AccountAccordException extends AccountStatusException
     /**
      * {@inheritdoc}
      */
-    public function getMessageKey()
+    public function getMessageKey(): string
     {
         return 'Pas de accord.';
     }

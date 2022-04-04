@@ -20,14 +20,12 @@ class TemoignageVoter extends Voter
 {
     // Defining these constants is overkill for this simple application, but for real
     // applications, it's a recommended practice to avoid relying on "magic strings"
-    const SHOW = 'show';
-    const EDIT = 'edit';
-    const DELETE = 'delete';
-    private $decisionManager;
+    public const SHOW = 'show';
+    public const EDIT = 'edit';
+    public const DELETE = 'delete';
 
-    public function __construct(AccessDecisionManagerInterface $decisionManager)
+    public function __construct(private AccessDecisionManagerInterface $decisionManager)
     {
-        $this->decisionManager = $decisionManager;
     }
 
     /**
@@ -53,34 +51,23 @@ class TemoignageVoter extends Voter
         if ($this->decisionManager->decide($token, ['ROLE_VOLONTARIAT_ADMIN'])) {
             return true;
         }
-
-        switch ($attribute) {
-            case self::SHOW:
-                return $this->canView($temoignage, $token);
-            case self::EDIT:
-                return $this->canEdit($temoignage, $token);
-            case self::DELETE:
-                return $this->canDelete($temoignage, $token);
-        }
-
-        return false;
+        return match ($attribute) {
+            self::SHOW => $this->canView($temoignage, $token),
+            self::EDIT => $this->canEdit($temoignage, $token),
+            self::DELETE => $this->canDelete($temoignage, $token),
+            default => false,
+        };
     }
 
     /**
      * Voir dans l'admin
-     * @param Temoignage $temoignage
-     * @param TokenInterface $token
-     * @return bool
      */
-    private function canView(Temoignage $temoignage, TokenInterface $token)
+    private function canView(Temoignage $temoignage, TokenInterface $token): bool
     {
-        if ($this->canEdit($temoignage, $token)) {
-            return true;
-        }
-        return false;
+        return (bool) $this->canEdit($temoignage, $token);
     }
 
-    private function canEdit(Temoignage $temoignage, TokenInterface $token)
+    private function canEdit(Temoignage $temoignage, TokenInterface $token): bool
     {
         $user = $token->getUser();
         $associationUser = $temoignage->getUser();
@@ -88,12 +75,8 @@ class TemoignageVoter extends Voter
         return $user === $associationUser;
     }
 
-    private function canDelete(Temoignage $temoignage, TokenInterface $token)
+    private function canDelete(Temoignage $temoignage, TokenInterface $token): bool
     {
-        if ($this->canEdit($temoignage, $token)) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->canEdit($temoignage, $token);
     }
 }

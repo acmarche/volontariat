@@ -4,282 +4,171 @@ namespace AcMarche\Volontariat\Entity;
 
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\InterfaceDef\Uploadable;
+use AcMarche\Volontariat\Repository\VolontaireRepository;
 use AcMarche\Volontariat\Validator\Constraints as AcMarcheAssert;
+use DateTime;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use Stringable;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Volontaire
- * @ORM\Table(name="volontaire")
- * @ORM\Entity(repositoryClass="AcMarche\Volontariat\Repository\VolontaireRepository")
  *
  */
-class Volontaire implements Uploadable, TimestampableInterface, SluggableInterface
+#[ORM\Table(name: 'volontaire')]
+#[ORM\Entity(repositoryClass: VolontaireRepository::class)]
+class Volontaire implements Uploadable, TimestampableInterface, SluggableInterface, Stringable
 {
+    public DateTimeInterface $updated;
     use TimestampableTrait;
     use SluggableTrait;
 
-    /**
-     * @var integer|null $id
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    protected int $id;
 
-    /**
-     * @var string|null $civility
-     *
-     * @ORM\Column(type="string", nullable=true)
-     */
-    protected $civility;
+    #[ORM\Column(type: 'string', nullable: true)]
+    protected ?string $civility;
 
-    /**
-     * @var string|null $name
-     *
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank()
-     */
-    protected $name;
+    #[ORM\Column(type: 'string')]
+    #[Assert\NotBlank]
+    protected string $name;
 
+    #[ORM\Column(type: 'string', nullable: true)]
+    #[Assert\NotNull]
+    protected ?string $surname;
     /**
-     * @ORM\Column(type="string", nullable=true)
-     * @Assert\NotNull()
-     * @var string|null $surname
-     */
-    protected $surname;
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     *
      * @var string|null $slug
      */
+    #[ORM\Column(type: 'string', nullable: true)]
     protected $slug;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     * @var string |null $address
-     */
-    protected $address;
+    #[ORM\Column(type: 'string', nullable: true)]
+    protected ?string $address;
 
+    #[ORM\Column(type: 'smallint', nullable: true)]
+    protected ?int $number;
     /**
-     * @ORM\Column(type="smallint", nullable=true)
-     *
-     * @var integer|null $number
-     */
-    protected $number;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     *
-     * @Assert\NotBlank
      * @AcMarcheAssert\CodePostalIsBelgium
-     *
-     * @var integer|null $postalCode
      */
-    protected $postalCode;
+    #[ORM\Column(type: 'integer', nullable: true)]
+    #[Assert\NotBlank]
+    protected ?int $postalCode;
 
-    /**
-     * @ORM\Column(type="string", nullable=false)
-     *
-     * @var string|null $city
-     */
-    protected $city;
+    #[ORM\Column(type: 'string', nullable: false)]
+    protected ?string $city;
 
-    /**
-     * @var string|null
-     * @ORM\Column(name="email")
-     * @Assert\Email(
-     *     message = "The email '{{ value }}' is not a valid email."
-     * )
-     */
-    protected $email;
+    #[ORM\Column(name: 'email')]
+    #[Assert\Email(message: "The email '{{ value }}' is not a valid email.")]
+    protected string $email;
 
-    /**
-     * @ORM\Column(type="string", nullable=true )
-     *
-     * @var string|null $phone
-     */
-    protected $phone;
+    #[ORM\Column(type: 'string', nullable: true)]
+    protected ?string $phone;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     *
-     * @var string|null $mobile
-     */
-    protected $mobile;
+    #[ORM\Column(type: 'string', nullable: true)]
+    protected ?string $mobile;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     *
-     * @var string|null $fax
-     */
-    protected $fax;
+    #[ORM\Column(type: 'string', nullable: true)]
+    protected ?string $fax;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     * @Assert\Type("\DateTime")
-     * @var \DateTime|null $birthday
-     */
-    protected $birthday;
-
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    #[Assert\Type(DateTime::class)]
+    protected DateTimeInterface $birthday;
     /**
      * Métier actuel ou ancien job
-     *
-     * @ORM\Column(type="text", nullable=true)
-     *
-     * @var string|null $job
      */
-    protected $job;
-
+    #[ORM\Column(type: 'text', nullable: true)]
+    protected ?string $job;
     /**
      * Secteur (version libre)
-     * @var string|null
-     * @ORM\Column(type="text", nullable=true)
-     *
      */
-    protected $secteur;
-
+    #[ORM\Column(type: 'text', nullable: true)]
+    protected ?string $secteur;
     /**
      * Disponible quand (we, apres journee)
-     * @ORM\Column(type="text", nullable=true)
-     *
-     * @var string|null $availability
      */
-    protected $availability;
-
+    #[ORM\Column(type: 'text', nullable: true)]
+    protected ?string $availability;
     /**
      * dispose d'un véhicule
-     * @ORM\Column(type="string", nullable=true)
-     *
-     * @var string|null $car
      */
-    protected $car;
-
+    #[ORM\Column(type: 'string', nullable: true)]
+    protected ?string $car;
     /**
      * @var Vehicule[]|iterable $vehicules
-     * @ORM\ManyToMany(targetEntity="AcMarche\Volontariat\Entity\Vehicule", inversedBy="volontaires", cascade={"persist"})
-     * ORM\JoinTable(name="v")
      */
-    private $vehicules;
+    #[ORM\ManyToMany(targetEntity: Vehicule::class, inversedBy: 'volontaires', cascade: ['persist'])]
+    private Collection $vehicules;
 
-    /**
-     * volontaire connu par
-     * @ORM\Column(type="text", nullable=true)
-     *
-     * @var string|null $known_by
-     */
-    protected $known_by;
+    #[ORM\Column(type: 'text', nullable: true)]
+    protected ?string $known_by;
 
-    /**
-     *
-     * @ORM\Column(type="text", nullable=true)
-     *
-     * @var string|null $description
-     */
-    protected $description;
-
+    #[ORM\Column(type: 'text', nullable: true)]
+    protected ?string $description;
     /**
      * @var Secteur[]|iterable $secteurs
-     * @ORM\ManyToMany(targetEntity="AcMarche\Volontariat\Entity\Secteur", inversedBy="volontaires")
-     * @ORM\OrderBy({"name"="ASC"})
      */
-    protected $secteurs;
-
+    #[ORM\ManyToMany(targetEntity: Secteur::class, inversedBy: 'volontaires')]
+    #[ORM\OrderBy(['name' => 'ASC'])]
+    protected Collection $secteurs;
     /**
-     * @var Association|null $association
      * membres des association
-     * @ORM\ManyToMany(targetEntity="AcMarche\Volontariat\Entity\Association")
-     *
+     * @var Association[] $association
      */
-    private $association;
+    #[ORM\ManyToMany(targetEntity: Association::class)]
+    private Collection|null $association = null;
+    #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'])]
+    private ?User $user = null;
+    #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => 1])]
+    private bool $valider = true;
+    #[ORM\Column(type: 'boolean', nullable: true)]
+    private ?bool $inactif = null;
 
-    /**
-     * @var User|null $user
-     * @ORM\ManyToOne(targetEntity="AcMarche\Volontariat\Entity\Security\User", cascade={"persist"})
-     *
-     */
-    private $user;
+    #[Assert\Image(maxSize: '5M')]
+    protected ?File $image;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", nullable=false, options={"default" = "1"})
-     *
-     */
-    private $valider = true;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    protected ?string $imageName;
 
-    /**
-     * @var bool|null
-     *
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $inactif;
-
-    /**
-     *
-     * @Assert\Image(
-     *     maxSize = "5M"
-     * )
-     * @var UploadedFile|null $image
-     */
-    protected $image;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     *
-     * @var string|null $imageName
-     */
-    protected $imageName;
-
-    /**
-     *
-     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $file
-     */
-    public function setImage(File $file = null)
+    public function setImage(File|UploadedFile $file = null): void
     {
         $this->image = $file;
 
-        if ($file) {
+        if ($file !== null) {
             // It is required that at least one field changes if you are using doctrine
             // otherwise the event listeners won't be called and the file is lost
-            $this->updated = new \DateTime('now');
+            $this->updated = new DateTime('now');
         }
     }
 
-    /**
-     * @return File
-     */
-    public function getImage()
+    public function getImage(): ?File
     {
         return $this->image;
     }
 
-    public function getPath()
+    public function getPath(): string
     {
         return 'volontaire';
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getSurname().' '.$this->getName();
     }
 
-    /**
-     *
-     * @ORM\Column(type="text", nullable=true)
-     *
-     * @var string|null $notes
-     */
-    protected $notes;
+    #[ORM\Column(type: 'text', nullable: true)]
+    protected ?string $notes;
 
     public function getSluggableFields(): array
     {
@@ -294,7 +183,6 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
     /**
      * STOP
      */
-
     /**
      * Constructor
      */
@@ -307,10 +195,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
 
     /**
      * Get id.
-     *
-     * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -319,10 +205,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
      * Set civility.
      *
      * @param string|null $civility
-     *
-     * @return Volontaire
      */
-    public function setCivility($civility = null)
+    public function setCivility($civility = null): static
     {
         $this->civility = $civility;
 
@@ -331,10 +215,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
 
     /**
      * Get civility.
-     *
-     * @return string|null
      */
-    public function getCivility()
+    public function getCivility(): ?string
     {
         return $this->civility;
     }
@@ -343,10 +225,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
      * Set name.
      *
      * @param string $name
-     *
-     * @return Volontaire
      */
-    public function setName($name)
+    public function setName($name): static
     {
         $this->name = $name;
 
@@ -355,10 +235,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
 
     /**
      * Get name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -367,10 +245,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
      * Set surname.
      *
      * @param string|null $surname
-     *
-     * @return Volontaire
      */
-    public function setSurname($surname = null)
+    public function setSurname($surname = null): static
     {
         $this->surname = $surname;
 
@@ -379,10 +255,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
 
     /**
      * Get surname.
-     *
-     * @return string|null
      */
-    public function getSurname()
+    public function getSurname(): ?string
     {
         return $this->surname;
     }
@@ -391,10 +265,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
      * Set address.
      *
      * @param string|null $address
-     *
-     * @return Volontaire
      */
-    public function setAddress($address = null)
+    public function setAddress($address = null): static
     {
         $this->address = $address;
 
@@ -403,10 +275,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
 
     /**
      * Get address.
-     *
-     * @return string|null
      */
-    public function getAddress()
+    public function getAddress(): ?string
     {
         return $this->address;
     }
@@ -415,10 +285,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
      * Set number.
      *
      * @param int|null $number
-     *
-     * @return Volontaire
      */
-    public function setNumber($number = null)
+    public function setNumber($number = null): static
     {
         $this->number = $number;
 
@@ -427,10 +295,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
 
     /**
      * Get number.
-     *
-     * @return int|null
      */
-    public function getNumber()
+    public function getNumber(): ?int
     {
         return $this->number;
     }
@@ -439,10 +305,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
      * Set postalCode.
      *
      * @param int|null $postalCode
-     *
-     * @return Volontaire
      */
-    public function setPostalCode($postalCode = null)
+    public function setPostalCode($postalCode = null): static
     {
         $this->postalCode = $postalCode;
 
@@ -451,10 +315,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
 
     /**
      * Get postalCode.
-     *
-     * @return int|null
      */
-    public function getPostalCode()
+    public function getPostalCode(): ?int
     {
         return $this->postalCode;
     }
@@ -463,10 +325,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
      * Set city.
      *
      * @param string $city
-     *
-     * @return Volontaire
      */
-    public function setCity($city)
+    public function setCity($city): static
     {
         $this->city = $city;
 
@@ -475,10 +335,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
 
     /**
      * Get city.
-     *
-     * @return string
      */
-    public function getCity()
+    public function getCity(): ?string
     {
         return $this->city;
     }
@@ -487,10 +345,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
      * Set email.
      *
      * @param string $email
-     *
-     * @return Volontaire
      */
-    public function setEmail($email)
+    public function setEmail($email): static
     {
         $this->email = $email;
 
@@ -499,10 +355,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
 
     /**
      * Get email.
-     *
-     * @return string
      */
-    public function getEmail()
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -511,10 +365,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
      * Set phone.
      *
      * @param string|null $phone
-     *
-     * @return Volontaire
      */
-    public function setPhone($phone = null)
+    public function setPhone($phone = null): static
     {
         $this->phone = $phone;
 
@@ -523,10 +375,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
 
     /**
      * Get phone.
-     *
-     * @return string|null
      */
-    public function getPhone()
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
@@ -535,10 +385,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
      * Set mobile.
      *
      * @param string|null $mobile
-     *
-     * @return Volontaire
      */
-    public function setMobile($mobile = null)
+    public function setMobile($mobile = null): static
     {
         $this->mobile = $mobile;
 
@@ -547,10 +395,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
 
     /**
      * Get mobile.
-     *
-     * @return string|null
      */
-    public function getMobile()
+    public function getMobile(): ?string
     {
         return $this->mobile;
     }
@@ -559,10 +405,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
      * Set fax.
      *
      * @param string|null $fax
-     *
-     * @return Volontaire
      */
-    public function setFax($fax = null)
+    public function setFax($fax = null): static
     {
         $this->fax = $fax;
 
@@ -571,10 +415,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
 
     /**
      * Get fax.
-     *
-     * @return string|null
      */
-    public function getFax()
+    public function getFax(): ?string
     {
         return $this->fax;
     }
@@ -582,11 +424,9 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
     /**
      * Set birthday.
      *
-     * @param \DateTime|null $birthday
      *
-     * @return Volontaire
      */
-    public function setBirthday($birthday = null)
+    public function setBirthday(DateTime|DateTimeImmutable $birthday = null): static
     {
         $this->birthday = $birthday;
 
@@ -596,9 +436,9 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
     /**
      * Get birthday.
      *
-     * @return \DateTime|null
+     * @return DateTime|DateTimeImmutable|null
      */
-    public function getBirthday()
+    public function getBirthday(): ?\DateTimeInterface
     {
         return $this->birthday;
     }
@@ -607,10 +447,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
      * Set job.
      *
      * @param string|null $job
-     *
-     * @return Volontaire
      */
-    public function setJob($job = null)
+    public function setJob($job = null): static
     {
         $this->job = $job;
 
@@ -619,10 +457,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
 
     /**
      * Get job.
-     *
-     * @return string|null
      */
-    public function getJob()
+    public function getJob(): ?string
     {
         return $this->job;
     }
@@ -631,10 +467,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
      * Set secteur.
      *
      * @param string|null $secteur
-     *
-     * @return Volontaire
      */
-    public function setSecteur($secteur = null)
+    public function setSecteur($secteur = null): static
     {
         $this->secteur = $secteur;
 
@@ -643,10 +477,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
 
     /**
      * Get secteur.
-     *
-     * @return string|null
      */
-    public function getSecteur()
+    public function getSecteur(): ?string
     {
         return $this->secteur;
     }
@@ -655,10 +487,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
      * Set availability.
      *
      * @param string|null $availability
-     *
-     * @return Volontaire
      */
-    public function setAvailability($availability = null)
+    public function setAvailability($availability = null): static
     {
         $this->availability = $availability;
 
@@ -667,10 +497,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
 
     /**
      * Get availability.
-     *
-     * @return string|null
      */
-    public function getAvailability()
+    public function getAvailability(): ?string
     {
         return $this->availability;
     }
@@ -679,10 +507,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
      * Set car.
      *
      * @param string|null $car
-     *
-     * @return Volontaire
      */
-    public function setCar($car = null)
+    public function setCar($car = null): static
     {
         $this->car = $car;
 
@@ -691,10 +517,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
 
     /**
      * Get car.
-     *
-     * @return string|null
      */
-    public function getCar()
+    public function getCar(): ?string
     {
         return $this->car;
     }
@@ -703,10 +527,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
      * Set knownBy.
      *
      * @param string|null $knownBy
-     *
-     * @return Volontaire
      */
-    public function setKnownBy($knownBy = null)
+    public function setKnownBy($knownBy = null): static
     {
         $this->known_by = $knownBy;
 
@@ -715,10 +537,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
 
     /**
      * Get knownBy.
-     *
-     * @return string|null
      */
-    public function getKnownBy()
+    public function getKnownBy(): ?string
     {
         return $this->known_by;
     }
@@ -727,10 +547,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
      * Set suggestion.
      *
      * @param string|null $description
-     *
-     * @return Volontaire
      */
-    public function setDescription($description = null)
+    public function setDescription($description = null): static
     {
         $this->description = $description;
 
@@ -739,10 +557,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
 
     /**
      * Get suggestion.
-     *
-     * @return string|null
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -751,10 +567,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
      * Set valider.
      *
      * @param bool $valider
-     *
-     * @return Volontaire
      */
-    public function setValider($valider)
+    public function setValider($valider): static
     {
         $this->valider = $valider;
 
@@ -763,10 +577,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
 
     /**
      * Get valider.
-     *
-     * @return bool
      */
-    public function getValider()
+    public function getValider(): bool
     {
         return $this->valider;
     }
@@ -775,10 +587,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
      * Set imageName.
      *
      * @param string|null $imageName
-     *
-     * @return Volontaire
      */
-    public function setImageName($imageName = null)
+    public function setImageName($imageName = null): static
     {
         $this->imageName = $imageName;
 
@@ -787,10 +597,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
 
     /**
      * Get imageName.
-     *
-     * @return string|null
      */
-    public function getImageName()
+    public function getImageName(): ?string
     {
         return $this->imageName;
     }
@@ -798,11 +606,9 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
     /**
      * Add vehicule.
      *
-     * @param \AcMarche\Volontariat\Entity\Vehicule $vehicule
      *
-     * @return Volontaire
      */
-    public function addVehicule(\AcMarche\Volontariat\Entity\Vehicule $vehicule)
+    public function addVehicule(Vehicule $vehicule): static
     {
         $this->vehicules[] = $vehicule;
 
@@ -812,21 +618,18 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
     /**
      * Remove vehicule.
      *
-     * @param \AcMarche\Volontariat\Entity\Vehicule $vehicule
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeVehicule(\AcMarche\Volontariat\Entity\Vehicule $vehicule)
+    public function removeVehicule(Vehicule $vehicule): bool
     {
         return $this->vehicules->removeElement($vehicule);
     }
 
     /**
      * Get vehicules.
-     *
-     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getVehicules()
+    public function getVehicules(): iterable
     {
         return $this->vehicules;
     }
@@ -834,11 +637,9 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
     /**
      * Add secteur.
      *
-     * @param \AcMarche\Volontariat\Entity\Secteur $secteur
      *
-     * @return Volontaire
      */
-    public function addSecteur(\AcMarche\Volontariat\Entity\Secteur $secteur)
+    public function addSecteur(Secteur $secteur): static
     {
         $this->secteurs[] = $secteur;
 
@@ -848,21 +649,18 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
     /**
      * Remove secteur.
      *
-     * @param \AcMarche\Volontariat\Entity\Secteur $secteur
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeSecteur(\AcMarche\Volontariat\Entity\Secteur $secteur)
+    public function removeSecteur(Secteur $secteur): bool
     {
         return $this->secteurs->removeElement($secteur);
     }
 
     /**
      * Get secteurs.
-     *
-     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getSecteurs()
+    public function getSecteurs(): iterable
     {
         return $this->secteurs;
     }
@@ -870,11 +668,9 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
     /**
      * Add association.
      *
-     * @param \AcMarche\Volontariat\Entity\Association $association
      *
-     * @return Volontaire
      */
-    public function addAssociation(\AcMarche\Volontariat\Entity\Association $association)
+    public function addAssociation(Association $association): static
     {
         $this->association[] = $association;
 
@@ -884,21 +680,18 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
     /**
      * Remove association.
      *
-     * @param \AcMarche\Volontariat\Entity\Association $association
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeAssociation(\AcMarche\Volontariat\Entity\Association $association)
+    public function removeAssociation(Association $association): bool
     {
         return $this->association->removeElement($association);
     }
 
     /**
      * Get association.
-     *
-     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getAssociation()
+    public function getAssociation(): ?Association
     {
         return $this->association;
     }
@@ -906,11 +699,9 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
     /**
      * Set user.
      *
-     * @param \AcMarche\Volontariat\Entity\Security\User|null $user
-     *
-     * @return Volontaire
+     * @param User|null $user
      */
-    public function setUser(\AcMarche\Volontariat\Entity\Security\User $user = null)
+    public function setUser(User $user = null): static
     {
         $this->user = $user;
 
@@ -919,25 +710,17 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
 
     /**
      * Get user.
-     *
-     * @return \AcMarche\Volontariat\Entity\Security\User|null
      */
-    public function getUser()
+    public function getUser(): ?User
     {
         return $this->user;
     }
 
-    /**
-     * @return bool|null
-     */
     public function getInactif(): ?bool
     {
         return $this->inactif;
     }
 
-    /**
-     * @param bool|null $inactif
-     */
     public function setInactif(?bool $inactif): void
     {
         $this->inactif = $inactif;
@@ -954,5 +737,4 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
 
         return $this;
     }
-
 }

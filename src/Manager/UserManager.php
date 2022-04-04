@@ -14,21 +14,8 @@ use AcMarche\Volontariat\Security\SecurityData;
 
 class UserManager
 {
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-    /**
-     * @var PasswordManager
-     */
-    private $passwordManager;
-
-    public function __construct(
-        UserRepository $userRepository,
-        PasswordManager $passwordManager
-    ) {
-        $this->userRepository = $userRepository;
-        $this->passwordManager = $passwordManager;
+    public function __construct(private UserRepository $userRepository, private PasswordManager $passwordManager)
+    {
     }
 
     public function newInstance(): User
@@ -36,7 +23,7 @@ class UserManager
         return new User();
     }
 
-    public function insert(User $user)
+    public function insert(User $user): void
     {
         $user->setEmail($user->getEmail());
         $user->setRoles([SecurityData::getRoleVolontariat()]);
@@ -44,26 +31,25 @@ class UserManager
         $this->userRepository->insert($user);
     }
 
-    public function save()
+    public function save(): void
     {
         $this->userRepository->save();
     }
 
-    public function delete(User $user)
+    public function delete(User $user): void
     {
         $this->userRepository->remove($user);
     }
 
     /**
-     * @param string $email
      * @return User|null
      */
-    public function findOneByEmail(string $email)
+    public function findOneByEmail(string $email): ?User
     {
         return $this->userRepository->findOneBy(['email' => $email]);
     }
 
-    public function updateUser()
+    public function updateUser(): void
     {
         $this->userRepository->save();
     }

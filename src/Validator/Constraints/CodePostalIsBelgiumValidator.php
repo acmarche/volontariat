@@ -14,19 +14,13 @@ use Symfony\Component\Validator\ConstraintValidator;
 
 class CodePostalIsBelgiumValidator extends ConstraintValidator
 {
-    /**
-     * @var CodePostalRepository
-     */
-    private $codePostalRepository;
-
-    public function __construct(CodePostalRepository $codePostalRepository)
+    public function __construct(private CodePostalRepository $codePostalRepository)
     {
-        $this->codePostalRepository = $codePostalRepository;
     }
 
-    public function validate($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint): void
     {
-        if (!$this->codePostalRepository->findBy(['code' => intval($value)])) {
+        if (!$this->codePostalRepository->findBy(['code' => (int) $value])) {
             $this->context->buildViolation($constraint->message)
                 ->setParameter('{{ string }}', $value)
                 ->addViolation();

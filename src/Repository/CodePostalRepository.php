@@ -19,18 +19,18 @@ class CodePostalRepository extends ServiceEntityRepository
     }
 
 
-    public function insert(CodePostal $codePostal)
+    public function insert(CodePostal $codePostal): void
     {
         $this->_em->persist($codePostal);
         $this->save();
     }
 
-    public function save()
+    public function save(): void
     {
         $this->_em->flush();
     }
 
-    public function remove(CodePostal $codePostal)
+    public function remove(CodePostal $codePostal): void
     {
         $this->_em->remove($codePostal);
         $this->save();

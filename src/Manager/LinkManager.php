@@ -30,33 +30,21 @@ class LinkManager
      */
     protected $users;
 
-    /**
-     * @return Volontaire|null
-     */
     public function getVolontaire(): ?Volontaire
     {
         return $this->volontaire;
     }
 
-    /**
-     * @param Volontaire|null $volontaire
-     */
     public function setVolontaire(?Volontaire $volontaire): void
     {
         $this->volontaire = $volontaire;
     }
 
-    /**
-     * @return Association|null
-     */
     public function getAssociation(): ?Association
     {
         return $this->association;
     }
 
-    /**
-     * @param Association|null $association
-     */
     public function setAssociation(?Association $association): void
     {
         $this->association = $association;
@@ -65,7 +53,7 @@ class LinkManager
     /**
      * @return User[]|iterable
      */
-    public function getUsers()
+    public function getUsers(): iterable
     {
         return $this->users;
     }

@@ -20,18 +20,18 @@ class TemoignageRepository extends ServiceEntityRepository
     }
 
 
-    public function insert(Temoignage $temoignage)
+    public function insert(Temoignage $temoignage): void
     {
         $this->_em->persist($temoignage);
         $this->save();
     }
 
-    public function save()
+    public function save(): void
     {
         $this->_em->flush();
     }
 
-    public function remove(Temoignage $temoignage)
+    public function remove(Temoignage $temoignage): void
     {
         $this->_em->remove($temoignage);
         $this->save();

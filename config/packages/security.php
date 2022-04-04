@@ -22,7 +22,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'merite_user_provider' => [
                     'entity' => [
                         'class' => User::class,
-                        'property' => 'username',
+                        'property' => 'email',
                     ],
                 ],
             ],

@@ -2,6 +2,8 @@
 
 namespace AcMarche\Volontariat\Controller\Backend;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Form\FormInterface;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Service\FileHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -15,38 +17,27 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Image controller.
- *
- * @Route("/backend/association/images")
- * @IsGranted("ROLE_VOLONTARIAT")
  */
+#[Route(path: '/backend/association/images')]
+#[IsGranted('ROLE_VOLONTARIAT')]
 class ImageAssociationController extends AbstractController
 {
-    /**
-     * @var FileHelper
-     */
-    private $fileHelper;
-
-    public function __construct(FileHelper $fileHelper)
+    public function __construct(private FileHelper $fileHelper)
     {
-        $this->fileHelper = $fileHelper;
     }
-
     /**
      * Displays a form to create a new Image entity.
-     *
-     * @Route("/{id}", name="volontariat_backend_images_association", methods={"GET"})
-     * @IsGranted("edit", subject="association")
      */
-    public function editAction(Association $association)
+    #[Route(path: '/{id}', name: 'volontariat_backend_images_association', methods: ['GET'])]
+    #[IsGranted('edit', subject: 'association')]
+    public function editAction(Association $association) : Response
     {
         $form = $this->createFormBuilder()
             ->setAction($this->generateUrl('volontariat_backend_image_upload', array('id' => $association->getId())))
-            ->setMethod('POST')
+            ->setMethod(Request::METHOD_POST)
             ->getForm();
-
         $images = $this->fileHelper->getImages($association);
         $deleteForm = $this->createDeleteForm($association->getId());
-
         return $this->render(
             '@Volontariat/backend/image_association/edit.html.twig',
             [
@@ -57,12 +48,9 @@ class ImageAssociationController extends AbstractController
             ]
         );
     }
-
-    /**
-     * @Route("/upload/{id}", name="volontariat_backend_image_upload", methods={"POST"})
-     * @IsGranted("edit", subject="association")
-     */
-    public function uploadAction(Request $request, Association $association)
+    #[Route(path: '/upload/{id}', name: 'volontariat_backend_image_upload', methods: ['POST'])]
+    #[IsGranted('edit', subject: 'association')]
+    public function uploadAction(Request $request, Association $association) : Response
     {
         if ($request->isXmlHttpRequest()) {
             $file = $request->files->get('file');
@@ -80,18 +68,15 @@ class ImageAssociationController extends AbstractController
             return new Response('okid');
         }
     }
-
     /**
      * Deletes a Image entity.
-     *
-     * @Route("/delete/{id}", name="volontariat_backend_image_delete", methods={"DELETE"})
-     * @IsGranted("edit", subject="association")
      */
-    public function deleteAction(Request $request, Association $association)
+    #[Route(path: '/delete/{id}', name: 'volontariat_backend_image_delete', methods: ['DELETE'])]
+    #[IsGranted('edit', subject: 'association')]
+    public function deleteAction(Request $request, Association $association) : RedirectResponse
     {
         $form = $this->createDeleteForm($association->getId());
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $files = $request->get('img', false);
 
@@ -108,27 +93,25 @@ class ImageAssociationController extends AbstractController
                 try {
                     $this->fileHelper->deleteOneDoc($association, $filename);
                     $this->addFlash('success', "L'image $filename a bien été supprimée");
-                } catch (FileException $e) {
+                } catch (FileException) {
                     $this->addFlash('error', "L'image  $filename n'a pas pu être supprimée. ");
                 }
             }
         }
-
         return $this->redirectToRoute('volontariat_backend_images_association', array('id' => $association->getId()));
     }
-
     /**
      * Creates a form to delete a Image entity by id.
      *
      * @param mixed $id The entity id
      *
-     * @return \Symfony\Component\Form\FormInterface The form
+     * @return FormInterface The form
      */
-    private function createDeleteForm($id)
+    private function createDeleteForm($id): FormInterface
     {
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('volontariat_backend_image_delete', array('id' => $id)))
-            ->setMethod('DELETE')
+            ->setMethod(Request::METHOD_DELETE)
             ->add(
                 'submit',
                 SubmitType::class,

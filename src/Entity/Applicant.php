@@ -2,94 +2,54 @@
 
 namespace AcMarche\Volontariat\Entity;
 
-use AcMarche\Volontariat\Entity\Security\User;
-use AcMarche\Volontariat\InterfaceDef\Uploadable;
+use AcMarche\Volontariat\Repository\ApplicantRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Serializer\Annotation\Groups;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
-use AcMarche\Volontariat\Validator\Constraints as AcMarcheAssert;
 
 /**
  * Volontaire
- * @ORM\Table(name="applicant")
- * @ORM\Entity(repositoryClass="AcMarche\Volontariat\Repository\ApplicantRepository")
  *
  *
  */
-class Applicant  implements TimestampableInterface
+#[ORM\Table(name: 'applicant')]
+#[ORM\Entity(repositoryClass: ApplicantRepository::class)]
+class Applicant implements TimestampableInterface, Stringable
 {
     use TimestampableTrait;
 
-    /**
-     * @var integer|null $id
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     *
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    protected int $id;
 
-    /**
-     * @var string|null $name
-     *
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank()
-     */
-    protected $name;
+    #[ORM\Column(type: 'string')]
+    #[Assert\NotBlank]
+    protected string $name;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     * @Assert\NotNull()
-     * @var string|null $surname
-     *
-     */
-    protected $surname;
+    #[ORM\Column(type: 'string', nullable: true)]
+    #[Assert\NotNull]
+    protected ?string $surname;
 
-    /**
-     * @ORM\Column(type="string", nullable=false)
-     *
-     * @var string|null $city
-     *
-     */
-    protected $city;
+    #[ORM\Column(type: 'string', nullable: false)]
+    protected ?string $city;
 
-    /**
-     * @var string|null
-     * @ORM\Column(name="email", nullable=true)
-     * @Assert\Email(
-     *     message = "The email '{{ value }}' is not a valid email."
-     * )
-     */
-    protected $email;
+    #[ORM\Column(name: 'email', nullable: true)]
+    #[Assert\Email(message: "The email '{{ value }}' is not a valid email.")]
+    protected ?string $email;
 
-    /**
-     * @ORM\Column(type="string", nullable=true )
-     *
-     * @var string|null $phone
-     */
-    protected $phone;
+    #[ORM\Column(type: 'string', nullable: true)]
+    protected ?string $phone;
 
-    /**
-     *
-     * @ORM\Column(type="text", nullable=true)
-     *
-     * @var string|null $description
-     */
-    protected $description;
-    /**
-     *
-     * @ORM\Column(type="text", nullable=true)
-     *
-     * @var string|null $notes
-     */
-    protected $notes;
+    #[ORM\Column(type: 'text', nullable: true)]
+    protected ?string $description;
 
-    public function __toString()
+    #[ORM\Column(type: 'text', nullable: true)]
+    protected ?string $notes;
+
+    public function __toString(): string
     {
         return $this->getSurname().' '.$this->getName();
     }
@@ -182,6 +142,4 @@ class Applicant  implements TimestampableInterface
 
         return $this;
     }
-
-
 }

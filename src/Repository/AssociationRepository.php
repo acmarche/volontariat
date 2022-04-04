@@ -2,6 +2,7 @@
 
 namespace AcMarche\Volontariat\Repository;
 
+use Doctrine\ORM\NonUniqueResultException;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Secteur;
 use AcMarche\Volontariat\Entity\Volontaire;
@@ -21,18 +22,18 @@ class AssociationRepository extends ServiceEntityRepository
         parent::__construct($registry, Association::class);
     }
 
-    public function insert(Association $association)
+    public function insert(Association $association): void
     {
         $this->_em->persist($association);
         $this->save();
     }
 
-    public function save()
+    public function save(): void
     {
         $this->_em->flush();
     }
 
-    public function remove(Association $association)
+    public function remove(Association $association): void
     {
         $this->_em->remove($association);
         $this->save();
@@ -41,7 +42,7 @@ class AssociationRepository extends ServiceEntityRepository
     /**
      * @return Association[]
      */
-    public function findAll()
+    public function findAll(): array
     {
         return $this->findBy(array(), array('nom' => 'ASC'));
     }
@@ -49,16 +50,16 @@ class AssociationRepository extends ServiceEntityRepository
     /**
      * @param $args
      * @return Association[]
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function search($args)
     {
-        $nom = isset($args['nom']) ? $args['nom'] : null;
-        $secteur = isset($args['secteur']) ? $args['secteur'] : null;
-        $secteurs = isset($args['secteurs']) ? $args['secteurs'] : null;
-        $user = isset($args['user']) ? $args['user'] : null;
-        $one = isset($args['one']) ? $args['one'] : null;
-        $valider = isset($args['valider']) ? $args['valider'] : true;
+        $nom = $args['nom'] ?? null;
+        $secteur = $args['secteur'] ?? null;
+        $secteurs = $args['secteurs'] ?? null;
+        $user = $args['user'] ?? null;
+        $one = $args['one'] ?? null;
+        $valider = $args['valider'] ?? true;
 
         $qb = $this->createQueryBuilder('association');
         $qb->leftJoin('association.secteurs', 'secteurs', 'WITH');
@@ -79,7 +80,7 @@ class AssociationRepository extends ServiceEntityRepository
         }
 
         if (is_array($secteurs)) {
-            $secteursIds = join(",", $secteurs);
+            $secteursIds = implode(",", $secteurs);
             $qb->andwhere('secteurs = :secteurs ')
                 ->setParameter('secteurs', '(' . $secteursIds . ')');
         }
@@ -105,15 +106,13 @@ class AssociationRepository extends ServiceEntityRepository
             return $query->getOneOrNullResult();
         }
 
-        $results = $query->getResult();
-
-        return $results;
+        return $query->getResult();
     }
 
     /**
      * @return Association[]
      */
-    public function getForAssociation()
+    public function getForAssociation(): array
     {
         $qb = $this->createQueryBuilder('association');
 
@@ -136,7 +135,7 @@ class AssociationRepository extends ServiceEntityRepository
      * @param int $limit
      * @return Association[]
      */
-    public function getRecent($limit = 8)
+    public function getRecent($limit = 8): array
     {
         $qb = $this->createQueryBuilder('association');
         // $qb->leftJoin('a.secteurs', 'secteurs', 'WITH');
@@ -146,12 +145,11 @@ class AssociationRepository extends ServiceEntityRepository
         $qb->addOrderBy('RAND()');
 
         $query = $qb->getQuery();
-        $results = $query->getResult();
 
-        return $results;
+        return $query->getResult();
     }
 
-    public function getAllEmail()
+    public function getAllEmail(): array
     {
         $qb = $this->createQueryBuilder('a');
         $qb->andWhere("a.mailing = 0");

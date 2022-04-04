@@ -8,6 +8,7 @@
 
 namespace AcMarche\Volontariat\Event;
 
+use Symfony\Component\Security\Core\User\UserInterface;
 use AcMarche\Volontariat\Service\Mailer;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -15,18 +16,8 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class AssociationSubscriber implements EventSubscriberInterface
 {
-    private $em;
-    private $mailer;
-    private $token;
-
-    public function __construct(
-        EntityManagerInterface $em,
-        Mailer $mailer,
-        TokenStorageInterface $tokenStorage
-    ) {
-        $this->em = $em;
-        $this->mailer = $mailer;
-        $this->token = $tokenStorage;
+    public function __construct(private EntityManagerInterface $em, private Mailer $mailer, private TokenStorageInterface $token)
+    {
     }
 
     /**
@@ -47,7 +38,7 @@ class AssociationSubscriber implements EventSubscriberInterface
      *
      * @return array The event names to listen to
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             AssociationEvent::ASSOCIATION_VALIDER_REQUEST => 'associationRequest',
@@ -58,10 +49,8 @@ class AssociationSubscriber implements EventSubscriberInterface
 
     /**
      * Mail indiquant a l'admin qu'il doit valider
-     * @param AssociationEvent $event
-
      */
-    public function associationRequest(AssociationEvent $event)
+    public function associationRequest(AssociationEvent $event): void
     {
         $association = $event->getAssociation();
         $user = $this->getCurrentUser();
@@ -70,10 +59,8 @@ class AssociationSubscriber implements EventSubscriberInterface
 
     /**
      * Previent l'asbl qu'elle a été validée
-     * @param AssociationEvent $event
-
      */
-    public function associationValideeFinish(AssociationEvent $event)
+    public function associationValideeFinish(AssociationEvent $event): void
     {
         $association = $event->getAssociation();
 
@@ -83,16 +70,14 @@ class AssociationSubscriber implements EventSubscriberInterface
 
     /**
      * Mail indiquant aux volontaires qu'une asbl a été ajoutée
-     * @param AssociationEvent $event
-
      */
-    public function associationNew(AssociationEvent $event)
+    public function associationNew(AssociationEvent $event): void
     {
         $association = $event->getAssociation();
         $this->mailer->sendNewAssociation($association);
     }
 
-    protected function getCurrentUser()
+    protected function getCurrentUser(): ?UserInterface
     {
         $token = $this->token->getToken();
         return $user = $token->getUser();

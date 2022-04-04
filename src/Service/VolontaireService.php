@@ -15,24 +15,11 @@ use AcMarche\Volontariat\Repository\VolontaireRepository;
 
 class VolontaireService
 {
-    /**
-     * @var VolontaireRepository
-     */
-    private $volontaireRepository;
-    /**
-     * @var AssociationRepository
-     */
-    private $associationRepository;
-
-    public function __construct(
-        VolontaireRepository $volontaireRepository,
-        AssociationRepository $associationRepository
-    ) {
-        $this->volontaireRepository = $volontaireRepository;
-        $this->associationRepository = $associationRepository;
+    public function __construct(private VolontaireRepository $volontaireRepository, private AssociationRepository $associationRepository)
+    {
     }
 
-    public function getVolontairesByUser(User $user, $valider = false)
+    public function getVolontairesByUser(User $user, $valider = false): array
     {
         $args = [];
         $args['user'] = $user;
@@ -43,9 +30,9 @@ class VolontaireService
         return $this->volontaireRepository->findBy($args);
     }
 
-    public function hasValidVolontaire(User $user)
+    public function hasValidVolontaire(User $user): bool
     {
-        return count($this->getVolontairesByUser($user, true)) > 0;
+        return (is_countable($this->getVolontairesByUser($user, true)) ? count($this->getVolontairesByUser($user, true)) : 0) > 0;
     }
 
     public function getAssociationsWithSameSecteur(Volontaire $volontaire)

@@ -2,6 +2,9 @@
 
 namespace AcMarche\Volontariat\Controller\Admin;
 
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Response;
+use Doctrine\ORM\NonUniqueResultException;
 use AcMarche\Volontariat\Entity\Message;
 use AcMarche\Volontariat\Form\Admin\MessageType;
 use AcMarche\Volontariat\Service\Mailer;
@@ -15,60 +18,40 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Besoin controller.
  *
- * @Route("/admin/message")
- * @IsGranted("ROLE_VOLONTARIAT_ADMIN")
  *
  */
+#[Route(path: '/admin/message')]
+#[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class MessageController extends AbstractController
 {
-    /**
-     * @var MessageService
-     */
-    private $messageService;
-    /**
-     * @var Mailer
-     */
-    private $mailer;
-
-    public function __construct(MessageService $messageService, Mailer $mailer)
+    public function __construct(private MessageService $messageService, private Mailer $mailer, private ManagerRegistry $managerRegistry)
     {
-        $this->messageService = $messageService;
-        $this->mailer = $mailer;
     }
-
-    /**
-     * @Route("/", name="volontariat_admin_message")
-     *
-     */
-    public function indexAction()
+    #[Route(path: '/', name: 'volontariat_admin_message')]
+    public function indexAction() : Response
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->managerRegistry->getManager();
         $messages = [];
-
         $args = array('is_publish' => 1);
         $user = $this->getUser();
-
-        if ($user) {
+        if ($user !== null) {
             if (true === $user->hasRole('ROLE_ADMIN')) {
                 $messages = $em->getRepository(Message::class)->findAll();
             }
         } else {
             $messages = $em->getRepository(Message::class)->findBy($args);
         }
-
-        $count = count($messages);
-
+        $count = is_countable($messages) ? count($messages) : 0;
         return $this->render('@Volontariat/admin/message/index.html.twig', array('messages' => $messages, 'count' => $count));
     }
-
     /**
      * Displays a form to create a new Page message.
      *
-     * @Route("/new/{query}", name="volontariat_admin_message_new")
      *
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
-    public function newAction(Request $request, $query = null)
+    #[Route(path: '/new/{query}', name: 'volontariat_admin_message_new')]
+    public function newAction(Request $request, $query = null) : Response
     {
         $message = new Message();
         $form = $this->createForm(
@@ -79,11 +62,8 @@ class MessageController extends AbstractController
             ]
         )
             ->add('submit', SubmitType::class, array('label' => 'Envoyer'));
-
         $form->handleRequest($request);
-
         $destinataires = $this->messageService->getDestinataires($query);
-
         if ($form->isSubmitted() && $form->isValid()) {
 
             $data = $form->getData();
@@ -97,8 +77,8 @@ class MessageController extends AbstractController
 
             $this->addFlash(
                 'success',
-                'Votre message a bien été envoyé à '.count($destinataires).' destinataires : '.
-                join(
+                'Votre message a bien été envoyé à '.(is_countable($destinataires) ? count($destinataires) : 0).' destinataires : '.
+                implode(
                     ', ',
                     $destinataires
                 )
@@ -106,7 +86,6 @@ class MessageController extends AbstractController
 
             return $this->redirectToRoute('volontariat_admin_message_new');
         }
-
         return $this->render(
             '@Volontariat/admin/message/new.html.twig',
             array(

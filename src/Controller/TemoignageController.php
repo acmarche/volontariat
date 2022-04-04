@@ -13,31 +13,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- *
- * @Route("/temoignage")
- *
- *
- */
+#[Route(path: '/temoignage')]
 class TemoignageController extends AbstractController
 {
-    /**
-     * @var TemoignageRepository
-     */
-    private $temoignageRepository;
-
-    public function __construct(TemoignageRepository $temoignageRepository)
+    public function __construct(private TemoignageRepository $temoignageRepository)
     {
-        $this->temoignageRepository = $temoignageRepository;
     }
-
-    /**
-     * @Route("/", name="volontariat_temoignage", methods={"GET"})
-     */
-    public function index(): Response
+    #[Route(path: '/', name: 'volontariat_temoignage', methods: ['GET'])]
+    public function index() : Response
     {
         $temoignages = $this->temoignageRepository->findAll();
-
         return $this->render(
             '@Volontariat/temoignage/index.html.twig',
             ['temoignages' => $temoignages]

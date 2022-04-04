@@ -8,45 +8,32 @@
 
 namespace AcMarche\Volontariat\Entity;
 
+use AcMarche\Volontariat\Repository\VehiculeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use phpDocumentor\Reflection\Types\Iterable_;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * Marche\VolontaireBundle\Entity\Page
- * @ORM\Entity(repositoryClass="AcMarche\Volontariat\Repository\VehiculeRepository")
- * @ORM\Table(name="vehicule")
- *
- */
-class Vehicule
+#[ORM\Entity(repositoryClass: VehiculeRepository::class)]
+#[ORM\Table(name: 'vehicule')]
+class Vehicule implements Stringable
 {
-    /**
-     * @var integer|null $id
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     *
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    protected int $id;
 
-    /**
-     * @var string|null $nom
-     *
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank()
-     */
-    protected $nom;
-
+    #[ORM\Column(type: 'string')]
+    #[Assert\NotBlank]
+    protected string $nom;
     /**
      * @var Volontaire[]|iterable
-     * @ORM\ManyToMany(targetEntity="AcMarche\Volontariat\Entity\Volontaire", mappedBy="vehicules")
-     * */
-    private $volontaires;
+     */
+    #[ORM\ManyToMany(targetEntity: Volontaire::class, mappedBy: 'vehicules')]
+    private Collection $volontaires;
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getNom();
     }
@@ -56,15 +43,13 @@ class Vehicule
      */
     public function __construct()
     {
-        $this->volontaires = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->volontaires = new ArrayCollection();
     }
 
     /**
      * Get id
-     *
-     * @return integer
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -73,10 +58,8 @@ class Vehicule
      * Set nom
      *
      * @param string $nom
-     *
-     * @return Vehicule
      */
-    public function setNom($nom)
+    public function setNom($nom): static
     {
         $this->nom = $nom;
 
@@ -85,10 +68,8 @@ class Vehicule
 
     /**
      * Get nom
-     *
-     * @return string
      */
-    public function getNom()
+    public function getNom(): ?string
     {
         return $this->nom;
     }
@@ -96,11 +77,9 @@ class Vehicule
     /**
      * Add volontaire
      *
-     * @param \AcMarche\Volontariat\Entity\Volontaire $volontaire
      *
-     * @return Vehicule
      */
-    public function addVolontaire(\AcMarche\Volontariat\Entity\Volontaire $volontaire)
+    public function addVolontaire(Volontaire $volontaire): static
     {
         $this->volontaires[] = $volontaire;
 
@@ -109,20 +88,16 @@ class Vehicule
 
     /**
      * Remove volontaire
-     *
-     * @param \AcMarche\Volontariat\Entity\Volontaire $volontaire
      */
-    public function removeVolontaire(\AcMarche\Volontariat\Entity\Volontaire $volontaire)
+    public function removeVolontaire(Volontaire $volontaire): void
     {
         $this->volontaires->removeElement($volontaire);
     }
 
     /**
      * Get volontaires
-     *
-     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getVolontaires()
+    public function getVolontaires(): iterable
     {
         return $this->volontaires;
     }

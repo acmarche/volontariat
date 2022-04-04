@@ -2,6 +2,8 @@
 
 namespace AcMarche\Volontariat\Controller;
 
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Besoin;
 use AcMarche\Volontariat\Form\Admin\BesoinType;
@@ -17,20 +19,19 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  *
  * @package AppBundle\Controller
- * @Route("/besoin")
  *
  */
+#[Route(path: '/besoin')]
 class BesoinController extends AbstractController
 {
-    /**
-     * @Route("/",name="volontariat_besoin")
-     *
-     */
-    public function indexAction()
+    public function __construct(private ManagerRegistry $managerRegistry)
     {
-        $em = $this->getDoctrine()->getManager();
+    }
+    #[Route(path: '/', name: 'volontariat_besoin')]
+    public function indexAction() : Response
+    {
+        $em = $this->managerRegistry->getManager();
         $besoins = $em->getRepository(Besoin::class)->findAll();
-
         return $this->render(
             '@Volontariat/besoin/index.html.twig',
             [
@@ -38,14 +39,13 @@ class BesoinController extends AbstractController
             ]
         );
     }
-
     /**
      * Displays a form to edit an existing Volontaire entity.
      *
-     * @Route("/{id}", name="volontariat_besoin_show", methods={"GET"})
      *
      */
-    public function showAction(Besoin $besoin)
+    #[Route(path: '/{id}', name: 'volontariat_besoin_show', methods: ['GET'])]
+    public function showAction(Besoin $besoin) : Response
     {
         return $this->render(
             '@Volontariat/besoin/show.html.twig',

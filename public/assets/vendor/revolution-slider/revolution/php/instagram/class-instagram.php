@@ -13,22 +13,13 @@
 class TP_instagram {
 
 	/**
-	 * API key
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $api_key    Instagram API key
-	 */
-	private $api_key;
-
-	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
 	 * @param      string    $api_key	Instagram API key.
 	 */
-	public function __construct($api_key) {
-		$this->api_key = $api_key;
+	public function __construct(private $api_key)
+	{
 	}
 
 	/**
@@ -40,7 +31,7 @@ class TP_instagram {
 	public function get_public_photos($search_user_id){
 		//call the API and decode the response
 		$url = "https://api.instagram.com/v1/users/".$search_user_id."/media/recent?access_token=".$this->api_key."&client_id=".$search_user_id;
-		$rsp = json_decode(file_get_contents($url));
+		$rsp = json_decode(file_get_contents($url), null, 512, JSON_THROW_ON_ERROR);
 		return $rsp->data;
 	}
 

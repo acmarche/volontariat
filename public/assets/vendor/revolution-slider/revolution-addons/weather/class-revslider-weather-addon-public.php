@@ -22,24 +22,6 @@
  */
 class Revslider_Weather_Addon_Public {
 
-	/**
-	 * The ID of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $plugin_name    The ID of this plugin.
-	 */
-	private $plugin_name;
-
-	/**
-	 * The version of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $version    The current version of this plugin.
-	 */
-	private $version;
-
 	private $weather;
 
 	/**
@@ -49,11 +31,8 @@ class Revslider_Weather_Addon_Public {
 	 * @param      string    $plugin_name       The name of the plugin.
 	 * @param      string    $version    The version of this plugin.
 	 */
-	public function __construct( $plugin_name, $version ) {
-
-		$this->plugin_name = $plugin_name;
-		$this->version = $version;
-
+	public function __construct(private $plugin_name, private $version)
+	{
 	}
 
 	/**
@@ -61,7 +40,7 @@ class Revslider_Weather_Addon_Public {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_styles() {
+	public function enqueue_styles(): void {
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -84,7 +63,7 @@ class Revslider_Weather_Addon_Public {
 	 *
 	 * @since    1.0.0
 	 */
-	public function enqueue_scripts() {
+	public function enqueue_scripts(): void {
 
 		/**
 		 * This function is provided for demonstration purposes only.
@@ -106,7 +85,7 @@ class Revslider_Weather_Addon_Public {
 	 * Get Information from Slide and call the weather
 	 * @since    1.0.0
 	 */
-	public function revslider_add_layer_html($slider, $slide){
+	public function revslider_add_layer_html($slider, $slide): void{
 		//global $revslider_weather;
 
 		$sliderParams = $slider->getParams();
@@ -145,13 +124,13 @@ class Revslider_Weather_Addon_Public {
 	 */
 	public function rev_addon_insert_meta($record){
 
-		$params = json_decode($record["params"]);
+		$params = json_decode($record["params"], null, 512, JSON_THROW_ON_ERROR);
 		
-		$type = isset($params->{"revslider-weather-location-type"}) ? $params->{"revslider-weather-location-type"} : '';
-		$woeid = isset($params->{"revslider-weather-location-woeid"}) ? $params->{"revslider-weather-location-woeid"} : '';
-		$name = isset($params->{"revslider-weather-location-name"}) ? $params->{"revslider-weather-location-name"} : '';
-		$unit = isset($params->{"revslider-weather-unit"}) ? $params->{"revslider-weather-unit"} : '';
-		$params->params_10 = (!isset($params->params_10)) ? '' : $params->params_10;
+		$type = $params->{"revslider-weather-location-type"} ?? '';
+		$woeid = $params->{"revslider-weather-location-woeid"} ?? '';
+		$name = $params->{"revslider-weather-location-name"} ?? '';
+		$unit = $params->{"revslider-weather-unit"} ?? '';
+		$params->params_10 ??= '';
 		
 		//Get weather information dependent from Slider options
 		$revslider_weather = $this->get_weather($type,$woeid,$name,$unit);
@@ -161,7 +140,7 @@ class Revslider_Weather_Addon_Public {
 		$params->params_10_chars = 1200;
 		$params->params_10 = $params->params_10 . '{"revslider-weather-addon" : { "type" : "' . $type . '" ,"name" : "' . $name . '" ,"woeid" : "' . $woeid . '" ,"unit" : "' . $unit . '" }}';
 
-		$record["params"] = json_encode($params);
+		$record["params"] = json_encode($params, JSON_THROW_ON_ERROR);
 
 		if(strpos($record["layers"], "%weather_icon%")) wp_enqueue_style( $this->plugin_name . '_icons', plugin_dir_url( __FILE__ ) . 'css/revslider-weather-addon-icon.css', array(), $this->version, 'all' );
 		
@@ -172,7 +151,7 @@ class Revslider_Weather_Addon_Public {
 		$def_icon = '30';
 		$results = false;
 		
-		if(!empty($revslider_weather) && isset($revslider_weather->query) && isset($revslider_weather->query->results) && isset($revslider_weather->query->results->channel)) {
+		if(!empty($revslider_weather) && (property_exists($revslider_weather, 'query') && $revslider_weather->query !== null) && (property_exists($revslider_weather->query, 'results') && $revslider_weather->query->results !== null) && (property_exists($revslider_weather->query->results, 'channel') && $revslider_weather->query->results->channel !== null)) {
 			
 			$results = true;
 			$values = array(
@@ -338,7 +317,7 @@ class Revslider_Weather_Addon_Public {
 			$record["layers"]);
 
 			//Check for forecasts
-			$forecasts = preg_match_all('/\\%weather_.*?_forecast:[0-9]\\%/', $record["layers"], $matches);
+			$forecasts = preg_match_all('/\%weather_.*?_forecast:\d\%/', $record["layers"], $matches);
 			
 			if($forecasts){
 				
@@ -350,7 +329,7 @@ class Revslider_Weather_Addon_Public {
 							$forecast = explode(":", $forecast);
 							$what = $forecast[0];
 							$when = $forecast[1];
-							if(strpos($what, "alt_") !== false){
+							if(str_contains($what, "alt_")){
 								
 								$what = str_replace("alt_", "", $what);
 								
@@ -413,36 +392,34 @@ class Revslider_Weather_Addon_Public {
 	 * Convert Temp Fahrenheit to Celsius
 	 * @since    1.0.0
 	 */
-	public function fahrenheit_to_celsius($given_value)
+	public function fahrenheit_to_celsius($given_value): float
     {
-        $celsius=5/9*($given_value-32);
-        return $celsius ;
+        return 5/9*($given_value-32) ;
     }
 
     /**
 	 * Convert Temp Celsius to Fahrenheit
 	 * @since    1.0.0
 	 */
-    public function celsius_to_fahrenheit($given_value)
+    public function celsius_to_fahrenheit($given_value): float|int
     {
-        $fahrenheit=$given_value*9/5+32;
-        return $fahrenheit ;
+        return $given_value*9/5+32 ;
     }
 
     /**
 	 * Ajax Function for refreshing on screen weather data dynamically
 	 * @since    1.0.0
 	 */
-	public function revslider_weather_addon_refresh(){
+	public function revslider_weather_addon_refresh(): void{
 		$weather_data = $_POST["weather"]["revslider-weather-addon"];
 		$weather_data["type"] = sanitize_title( $weather_data["type"] );
 		$weather_data["name"] = sanitize_title( $weather_data["name"] );
 		$weather_data["unit"] = sanitize_title( $weather_data["unit"] );
-		$weather_data["woeid"] = intval( $weather_data["woeid"] );
+		$weather_data["woeid"] = (int) $weather_data["woeid"];
 		
 		$revslider_weather = $this->get_weather( $weather_data["type"] , $weather_data["woeid"] , $weather_data["name"] , $weather_data["unit"] );
 
-		echo json_encode($revslider_weather);
+		echo json_encode($revslider_weather, JSON_THROW_ON_ERROR);
 	}
 
 }

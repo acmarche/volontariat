@@ -19,18 +19,18 @@ class GroupRepository extends ServiceEntityRepository
         parent::__construct($registry, Group::class);
     }
 
-    public function insert(Group $group)
+    public function insert(Group $group): void
     {
         $this->_em->persist($group);
         $this->save();
     }
 
-    public function save()
+    public function save(): void
     {
         $this->_em->flush();
     }
 
-    public function remove(Group $group)
+    public function remove(Group $group): void
     {
         $this->_em->remove($group);
         $this->save();

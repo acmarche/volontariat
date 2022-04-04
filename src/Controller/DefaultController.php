@@ -2,6 +2,8 @@
 
 namespace AcMarche\Volontariat\Controller;
 
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Volontariat\Entity\Activite;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Besoin;
@@ -14,39 +16,26 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DefaultController extends AbstractController
 {
-    /**
-     * @var FileHelper
-     */
-    private $fileHelper;
-
-    public function __construct(FileHelper $fileHelper)
+    public function __construct(private FileHelper $fileHelper, private ManagerRegistry $managerRegistry)
     {
-        $this->fileHelper = $fileHelper;
     }
 
-    /**
-     * @Route("/",name="volontariat_home")
-     *
-     */
-    public function index()
+    #[Route(path: '/', name: 'volontariat_home')]
+    public function index() : Response
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->managerRegistry->getManager();
         $args = ['valider' => true];
         $activites = $em->getRepository(Activite::class)->findBy($args);
         $pages = $em->getRepository(Page::class)->findRecent();
-
         foreach ($activites as $activite) {
             $activite->setImages($this->fileHelper->getImages($activite));
         }
-
         foreach ($pages as $page) {
             $page->setImages($this->fileHelper->getImages($page));
         }
-
         $volontaires = $em->getRepository(Volontaire::class)->getRecent();
         $associations = $em->getRepository(Association::class)->getRecent();
         $besoins = $em->getRepository(Besoin::class)->getRecent();
-
         return $this->render('@Volontariat/default/index.html.twig', [
             'activites' => $activites,
             'pages' => $pages,
@@ -56,11 +45,8 @@ class DefaultController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/contact",name="volontariat_contact")
-     *
-     */
-    public function contact()
+    #[Route(path: '/contact', name: 'volontariat_contact')]
+    public function contact() : Response
     {
         return $this->render('@Volontariat/default/contact.html.twig', []);
     }

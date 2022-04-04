@@ -4,47 +4,22 @@ namespace TwitterPhp\Connection;
 class User extends Base
 {
     /**
-     * @var string
+     * @param string $_consumerKey
+     * @param string $_consumerSecret
+     * @param string $_accessToken
+     * @param string $_accessTokenSecret
      */
-    private $_consumerKey;
-
-    /**
-     * @var string
-     */
-    private $_consumerSecret;
-
-    /**
-     * @var string
-     */
-    private $_accessToken;
-
-    /**
-     * @var string
-     */
-    private $_accessTokenSecret;
-
-    /**
-     * @param string $consumerKey
-     * @param string $consumerSecret
-     * @param string $accessToken
-     * @param string $accessTokenSecret
-     */
-    public function __construct($consumerKey,$consumerSecret,$accessToken,$accessTokenSecret)
+    public function __construct(private $_consumerKey, private $_consumerSecret, private $_accessToken, private $_accessTokenSecret)
     {
-        $this->_consumerKey = $consumerKey;
-        $this->_consumerSecret = $consumerSecret;
-        $this->_accessToken = $accessToken;
-        $this->_accessTokenSecret = $accessTokenSecret;
     }
 
     /**
      * @param string $url
-     * @param array $parameters
      * @param $method
-     * @return array
      */
-    protected function _buildHeaders($url,array $parameters = null,$method)
+    protected function _buildHeaders($url,array $parameters = null,$method): array
     {
+        $headers = [];
         $oauthHeaders = array(
             'oauth_version' => '1.0',
             'oauth_consumer_key' => $this->_consumerKey,
@@ -72,11 +47,9 @@ class User extends Base
 
     /**
      * @param $url
-     * @param array $params
      * @param $method
-     * @return string
      */
-    private function _buildOauthSignature($url,array $params,$method)
+    private function _buildOauthSignature($url,array $params,$method): string
     {
         ksort($params);
         $sortedParams = array();

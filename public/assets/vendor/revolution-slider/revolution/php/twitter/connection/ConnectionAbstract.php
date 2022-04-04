@@ -11,36 +11,35 @@ abstract class Base
     /**
      * Url for Twitter api
      */
-    const TWITTER_API_URL = 'https://api.twitter.com';
+    public const TWITTER_API_URL = 'https://api.twitter.com';
 
     /**
      * Twitter URL that authenticates bearer tokens
      */
-    const TWITTER_API_AUTH_URL = 'https://api.twitter.com/oauth2/token/';
+    public const TWITTER_API_AUTH_URL = 'https://api.twitter.com/oauth2/token/';
 
     /**
      * Version of Twitter api
      */
-    const TWITTER_API_VERSION = '1.1';
+    public const TWITTER_API_VERSION = '1.1';
 
     /**
      * Timeout value for curl connections
      */
-    const DEFAULT_TIMEOUT = 10;
+    public const DEFAULT_TIMEOUT = 10;
 
     /**
      * METHOD GET
      */
-    const METHOD_GET = 'GET';
+    public const METHOD_GET = 'GET';
 
     /**
      * METHOD POST
      */
-    const METHOD_POST = 'POST';
+    public const METHOD_POST = 'POST';
 
     /**
      * @param string $url
-     * @param array $parameters
      * @param $method
      * @return array
      */
@@ -53,7 +52,6 @@ abstract class Base
      * @link https://dev.twitter.com/docs/api/1.1
      *
      * @param $resource
-     * @param array $parameters
      * @return mixed
      */
     public function get($resource, array $parameters = array())
@@ -75,7 +73,6 @@ abstract class Base
      * @link https://dev.twitter.com/docs/api/1.1
      *
      * @param $resource
-     * @param array $parameters
      * @return mixed
      */
     public function post($resource, array $parameters = array())
@@ -95,7 +92,6 @@ abstract class Base
     /**
      * Call Twitter api
      *
-     * @param array $params
      * @return array
      */
     protected function _callApi(array $params)
@@ -106,7 +102,7 @@ abstract class Base
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, self::DEFAULT_TIMEOUT);
         $response = curl_exec($curl);
-        return json_decode($response,true);
+        return json_decode($response,true, 512, JSON_THROW_ON_ERROR);
     }
 
     /**

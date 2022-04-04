@@ -20,14 +20,12 @@ class AssociationVoter extends Voter
 {
     // Defining these constants is overkill for this simple application, but for real
     // applications, it's a recommended practice to avoid relying on "magic strings"
-    const SHOW = 'show';
-    const EDIT = 'edit';
-    const DELETE = 'delete';
-    private $decisionManager;
+    public const SHOW = 'show';
+    public const EDIT = 'edit';
+    public const DELETE = 'delete';
 
-    public function __construct(AccessDecisionManagerInterface $decisionManager)
+    public function __construct(private AccessDecisionManagerInterface $decisionManager)
     {
-        $this->decisionManager = $decisionManager;
     }
 
     /**
@@ -53,46 +51,31 @@ class AssociationVoter extends Voter
         if ($this->decisionManager->decide($token, ['ROLE_VOLONTARIAT_ADMIN'])) {
             return true;
         }
-
-        switch ($attribute) {
-            case self::SHOW:
-                return $this->canView($association, $token);
-            case self::EDIT:
-                return $this->canEdit($association, $token);
-            case self::DELETE:
-                return $this->canDelete($association, $token);
-        }
-
-        return false;
+        return match ($attribute) {
+            self::SHOW => $this->canView($association, $token),
+            self::EDIT => $this->canEdit($association, $token),
+            self::DELETE => $this->canDelete($association, $token),
+            default => false,
+        };
     }
 
     /**
      * Voir dans l'admin
-     * @param Association $association
-     * @param TokenInterface $token
-     * @return bool
      */
-    private function canView(Association $association, TokenInterface $token)
+    private function canView(Association $association, TokenInterface $token): bool
     {
-        if ($this->canEdit($association, $token)) {
-            return true;
-        }
-        return false;
+        return (bool) $this->canEdit($association, $token);
     }
 
-    private function canEdit(Association $association, TokenInterface $token)
+    private function canEdit(Association $association, TokenInterface $token): bool
     {
         $user = $token->getUser();
 
         return $user === $association->getUser();
     }
 
-    private function canDelete(Association $association, TokenInterface $token)
+    private function canDelete(Association $association, TokenInterface $token): bool
     {
-        if ($this->canEdit($association, $token)) {
-            return true;
-        }
-
-        return false;
+        return (bool) $this->canEdit($association, $token);
     }
 }

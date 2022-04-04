@@ -13,22 +13,13 @@
 class TP_flickr {
 
 	/**
-	 * API key
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $api_key    flickr API key
-	 */
-	private $api_key;
-
-	/**
 	 * API params
 	 *
 	 * @since    1.0.0
 	 * @access   private
 	 * @var      array    $api_param_defaults    Basic params to call with API
 	 */
-	private $api_param_defaults;
+	private array $api_param_defaults;
 
 	/**
 	 * Basic URL
@@ -37,7 +28,7 @@ class TP_flickr {
 	 * @access   private
 	 * @var      string    $url    Url to fetch user from
 	 */
-	private $flickr_url;
+	private ?string $flickr_url = null;
 
 	/**
 	 * Initialize the class and set its properties.
@@ -45,8 +36,7 @@ class TP_flickr {
 	 * @since    1.0.0
 	 * @param      string    $api_key	flickr API key.
 	 */
-	public function __construct($api_key) {
-		$this->api_key = $api_key;
+	public function __construct(private $api_key) {
 		$this->api_param_defaults = array(
 		  'api_key' => $this->api_key,
 		  'format' => 'json',
@@ -69,8 +59,7 @@ class TP_flickr {
 
 		//call the API and decode the response
 		$url = "https://api.flickr.com/services/rest/?".implode('&', $encoded_params);
-		$rsp = json_decode(file_get_contents($url));
-		return $rsp;
+		return json_decode(file_get_contents($url), null, 512, JSON_THROW_ON_ERROR);
 	}
 
 	/**
@@ -249,14 +238,14 @@ class TP_flickr {
 	 * @since    1.0.0
 	 * @param    string    $num 	flickr photo id
 	 */
-	public static function base_encode($num, $alphabet='123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ') {
+	public static function base_encode($num, $alphabet='123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ'): string {
 		$base_count = strlen($alphabet);
 		$encoded = '';
 		while ($num >= $base_count) {
 			$div = $num/$base_count;
-			$mod = ($num-($base_count*intval($div)));
+			$mod = ($num-($base_count*(int) $div));
 			$encoded = $alphabet[$mod] . $encoded;
-			$num = intval($div);
+			$num = (int) $div;
 		}
 		if ($num) $encoded = $alphabet[$num] . $encoded;
 		return $encoded;

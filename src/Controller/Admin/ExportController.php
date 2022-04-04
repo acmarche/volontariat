@@ -2,6 +2,10 @@
 
 namespace AcMarche\Volontariat\Controller\Admin;
 
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Response;
+use Doctrine\ORM\NonUniqueResultException;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Service\VolontariatConstante;
@@ -16,56 +20,45 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * Export controller.
- *
- * @Route("/admin/export")
- * @IsGranted("ROLE_VOLONTARIAT_ADMIN")
  */
+#[Route(path: '/admin/export')]
+#[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class ExportController extends AbstractController
 {
-    /**
-     * @Route("/volontaire/xls", name="volontariat_admin_volontaire_xls", methods={"GET"})
-     */
-    public function volontaireXlsAction(Request $request)
+    public function __construct(private ManagerRegistry $managerRegistry)
+    {
+    }
+    #[Route(path: '/volontaire/xls', name: 'volontariat_admin_volontaire_xls', methods: ['GET'])]
+    public function volontaireXlsAction(Request $request) : StreamedResponse
     {
         $spreadsheet = new Spreadsheet();
         $this->volontaireXSLObject($request, $spreadsheet);
-
         $writer = new Xlsx($spreadsheet);
-
         $response = new StreamedResponse(
             function () use ($writer) {
                 $writer->save('php://output');
             },
-            200,
+            Response::HTTP_OK,
             []
         );
         $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
         $response->headers->set('Content-Disposition', 'attachment;filename=volontaires.xls');
         $response->headers->set('Pragma', 'public');
         $response->headers->set('Cache-Control', 'maxage=1');
-
         return $response;
     }
-
     /**
-     * @param Request $request
-     * @param Spreadsheet $spreadsheet
-     * @return \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet
      * @throws Exception
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
-    private function volontaireXSLObject(Request $request, Spreadsheet $spreadsheet)
+    private function volontaireXSLObject(Request $request, Spreadsheet $spreadsheet): Worksheet
     {
         $session = $request->getSession();
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->managerRegistry->getManager();
 
         $critere = $session->get(VolontariatConstante::VOLONTAIRE_ADMIN_SEARCH, false);
 
-        if ($critere) {
-            $data_s = unserialize($critere);
-        } else {
-            $data_s = array();
-        }
+        $data_s = $critere ? unserialize($critere) : array();
 
         $volontaires = $em->getRepository(Volontaire::class)->search($data_s);
 
@@ -113,7 +106,7 @@ class ExportController extends AbstractController
                 ->setCellValue('J'.$l, $volontaire->getEmail())
                 ->setCellValue('K'.$l, $volontaire->getJob())
                 ->setCellValue('L'.$l, $volontaire->getAvailability())
-                ->setCellValue('M'.$l, join(",", $vehicules))
+                ->setCellValue('M'.$l, implode(",", $vehicules))
                 ->setCellValue('N'.$l, $volontaire->getDescription());
             $l++;
         }

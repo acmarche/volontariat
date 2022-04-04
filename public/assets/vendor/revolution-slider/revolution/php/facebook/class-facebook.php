@@ -17,7 +17,7 @@ class TP_facebook {
 	 * @since    1.0.0
 	 * @param    string    $user_url URL of the Page
 	 */
-	public function get_user_from_url($user_url){
+	public function get_user_from_url($user_url): string{
 		$theid = str_replace("https", "", $user_url);
 		$theid = str_replace("http", "", $theid);
 		$theid = str_replace("://", "", $theid);
@@ -39,7 +39,7 @@ class TP_facebook {
 	public function get_photo_sets($user_id,$item_count=10){
 		//photoset params
 		$url = "https://graph.facebook.com/$user_id/albums";
-		$photo_sets_list = json_decode(file_get_contents($url));
+		$photo_sets_list = json_decode(file_get_contents($url), null, 512, JSON_THROW_ON_ERROR);
 		return $photo_sets_list->data;
 	}
 
@@ -52,7 +52,7 @@ class TP_facebook {
 	 */
 	public function get_photo_set_photos($photo_set_id,$item_count=10){
 		$url = "https://graph.facebook.com/v2.0/$photo_set_id?fields=photos";
-		$photo_set_photos = json_decode(file_get_contents($url));
+		$photo_set_photos = json_decode(file_get_contents($url), null, 512, JSON_THROW_ON_ERROR);
 		return $photo_set_photos->photos->data;
 	}
 
@@ -66,7 +66,7 @@ class TP_facebook {
 	public function get_post_feed($user,$app_id,$app_secret,$item_count=10){
 		$oauth = file_get_contents("https://graph.facebook.com/oauth/access_token?type=client_cred&client_id=".$app_id."&client_secret=".$app_secret);
 		$url = "https://graph.facebook.com/$user/feed?".$oauth."&fields=id,from,message,picture,link,name,icon,privacy,type,status_type,object_id,application,created_time,updated_time,is_hidden,is_expired,likes,comments";
-		$feed = json_decode(file_get_contents($url));
+		$feed = json_decode(file_get_contents($url), null, 512, JSON_THROW_ON_ERROR);
 		return $feed->data;
 	}
 
@@ -76,14 +76,13 @@ class TP_facebook {
 	 * @since    1.0.0
 	 * @param    string    $url 	facebook Output Data
 	 */
-	public static function decode_facebook_url($url) {
+	public static function decode_facebook_url($url): string {
 		$url = str_replace('u00253A',':',$url);
 		$url = str_replace('\u00255C\u00252F','/',$url);
 		$url = str_replace('u00252F','/',$url);
 		$url = str_replace('u00253F','?',$url);
 		$url = str_replace('u00253D','=',$url);
-		$url = str_replace('u002526','&',$url);
-		return $url;
+		return str_replace('u002526','&',$url);
 	}
 }
 ?>

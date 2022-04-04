@@ -16,18 +16,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SearchVolontaireType extends AbstractType
 {
-    protected $entityManager;
-
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(protected EntityManagerInterface $entityManager)
     {
-        $this->entityManager = $entityManager;
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $secteurs = $this->entityManager->getRepository(Secteur::class)->getForSearch();
         $vehicules = $this->entityManager->getRepository(Vehicule::class)->getForSearch();
@@ -94,10 +87,7 @@ class SearchVolontaireType extends AbstractType
             );
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(array());
     }

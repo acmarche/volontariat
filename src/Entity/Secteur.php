@@ -2,73 +2,49 @@
 
 namespace AcMarche\Volontariat\Entity;
 
+use AcMarche\Volontariat\Repository\SecteurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use phpDocumentor\Reflection\Types\Iterable_;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass="AcMarche\Volontariat\Repository\SecteurRepository")
- * @ORM\Table(name="secteur")
- *
- */
-class Secteur
+#[ORM\Entity(repositoryClass: SecteurRepository::class)]
+#[ORM\Table(name: 'secteur')]
+class Secteur implements Stringable
 {
-    /**
-     * @var integer|null $id
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     *
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    protected int $id;
 
-    /**
-     * @var string|null $name
-     *
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank()
-     */
-    protected $name;
+    #[ORM\Column(type: 'string')]
+    #[Assert\NotBlank]
+    protected ?string $name;
 
-    /**
-     * @var string|null $description
-     *
-     * @ORM\Column(type="string", nullable=true)
-     *
-     */
-    protected $description;
-
-    /**
-     * @var boolean $mailing
-     *
-     * @ORM\Column(type="boolean", nullable=false, options={"default" = "1"})
-     *
-     */
-    private $display = true;
-
+    #[ORM\Column(type: 'string', nullable: true)]
+    protected ?string $description;
+    #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => 1])]
+    private bool $display = true;
     /**
      * @var Association[]|iterable
-     * @ORM\ManyToMany(targetEntity="AcMarche\Volontariat\Entity\Association", mappedBy="secteurs")
-     * @ORM\OrderBy({"nom": "ASC"})
      */
-    protected $associations;
-
+    #[ORM\ManyToMany(targetEntity: Association::class, mappedBy: 'secteurs')]
+    #[ORM\OrderBy(['nom' => 'ASC'])]
+    protected Collection $associations;
     /**
      * @var Volontaire[]|iterable
-     * @ORM\ManyToMany(targetEntity="AcMarche\Volontariat\Entity\Volontaire", mappedBy="secteurs")
-     * @ORM\OrderBy({"name": "ASC"})
      */
-    protected $volontaires;
+    #[ORM\ManyToMany(targetEntity: Volontaire::class, mappedBy: 'secteurs')]
+    #[ORM\OrderBy(['name' => 'ASC'])]
+    protected Collection $volontaires;
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getName();
     }
 
-    public function toStringWithDescription()
+    public function toStringWithDescription(): string
     {
         $txt = $this->getName();
         if ($this->getDescription()) {
@@ -77,27 +53,22 @@ class Secteur
 
         return $txt;
     }
-
     /**
      * STOP
      */
-
-
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->associations = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->volontaires = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->associations = new ArrayCollection();
+        $this->volontaires = new ArrayCollection();
     }
 
     /**
      * Get id.
-     *
-     * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -106,10 +77,8 @@ class Secteur
      * Set name.
      *
      * @param string $name
-     *
-     * @return Secteur
      */
-    public function setName($name)
+    public function setName($name): static
     {
         $this->name = $name;
 
@@ -118,10 +87,8 @@ class Secteur
 
     /**
      * Get name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -130,10 +97,8 @@ class Secteur
      * Set description.
      *
      * @param string|null $description
-     *
-     * @return Secteur
      */
-    public function setDescription($description = null)
+    public function setDescription($description = null): static
     {
         $this->description = $description;
 
@@ -142,10 +107,8 @@ class Secteur
 
     /**
      * Get description.
-     *
-     * @return string|null
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -153,11 +116,9 @@ class Secteur
     /**
      * Add association.
      *
-     * @param \AcMarche\Volontariat\Entity\Association $association
      *
-     * @return Secteur
      */
-    public function addAssociation(\AcMarche\Volontariat\Entity\Association $association)
+    public function addAssociation(Association $association): static
     {
         $this->associations[] = $association;
 
@@ -167,21 +128,18 @@ class Secteur
     /**
      * Remove association.
      *
-     * @param \AcMarche\Volontariat\Entity\Association $association
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeAssociation(\AcMarche\Volontariat\Entity\Association $association)
+    public function removeAssociation(Association $association): bool
     {
         return $this->associations->removeElement($association);
     }
 
     /**
      * Get associations.
-     *
-     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getAssociations()
+    public function getAssociations(): iterable
     {
         return $this->associations;
     }
@@ -189,11 +147,9 @@ class Secteur
     /**
      * Add volontaire.
      *
-     * @param \AcMarche\Volontariat\Entity\Volontaire $volontaire
      *
-     * @return Secteur
      */
-    public function addVolontaire(\AcMarche\Volontariat\Entity\Volontaire $volontaire)
+    public function addVolontaire(Volontaire $volontaire): static
     {
         $this->volontaires[] = $volontaire;
 
@@ -203,26 +159,23 @@ class Secteur
     /**
      * Remove volontaire.
      *
-     * @param \AcMarche\Volontariat\Entity\Volontaire $volontaire
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeVolontaire(\AcMarche\Volontariat\Entity\Volontaire $volontaire)
+    public function removeVolontaire(Volontaire $volontaire): bool
     {
         return $this->volontaires->removeElement($volontaire);
     }
 
     /**
      * Get volontaires.
-     *
-     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getVolontaires()
+    public function getVolontaires(): iterable
     {
         return $this->volontaires;
     }
 
-    public function getDisplay(): ?bool
+    public function getDisplay(): bool
     {
         return $this->display;
     }

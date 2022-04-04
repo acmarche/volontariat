@@ -2,120 +2,69 @@
 
 namespace AcMarche\Volontariat\Entity\Security;
 
+use AcMarche\Volontariat\Repository\UserRepository;
+use DateTime;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
 use Symfony\Component\Security\Core\User\LegacyPasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * @ORM\Entity(repositoryClass="AcMarche\Volontariat\Repository\UserRepository")
- * @ORM\Table(name="users")
- */
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\Table(name: 'users')]
 class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface, Stringable
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
-
+    #[ORM\Column(type: 'string', length: 180, unique: true)]
+    private string $email;
+    #[ORM\Column(type: 'array', nullable: true)]
+    private iterable $roles = [];
     /**
-     * @var string
-     * @ORM\Column(type="string", length=180, unique=true)
+     * The hashed password
      */
-    private $email;
+    #[ORM\Column(type: 'string')]
+    private string $password;
+    #[ORM\Column(type: 'string', nullable: true)]
+    private ?string $salt;
+    #[ORM\Column(type: 'string', length: 100, nullable: true)]
+    private ?string $nom;
+    #[ORM\Column(type: 'string', length: 100, nullable: true)]
+    private ?string $prenom;
+    #[ORM\Column(type: 'boolean', nullable: true)]
+    private ?bool $accord = null;
 
-    /**
-     * @var iterable $roles
-     * @ORM\Column(type="array", nullable=true)
-     */
-    private $roles = [];
-
-    /**
-     * @var string The hashed password
-     * @ORM\Column(type="string")
-     */
-    private $password;
-
-    /**
-     * @var string
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private $salt;
-
-    /**
-     * @ORM\Column(type="string", length=100, nullable=true)
-     */
-    private $nom;
-
-    /**
-     * @ORM\Column(type="string", length=100, nullable=true)
-     */
-    private $prenom;
-
-    /**
-     * @var bool|null
-     *
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $accord;
-
-    /**
-     * @var \DateTime|null
-     *
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $accord_date;
-
-    /**
-     * @var Token|null $token
-     * @ORM\OneToOne(targetEntity="AcMarche\Volontariat\Entity\Security\Token", mappedBy="user", cascade={"remove"})
-     */
-    private $token;
-
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    private ?\DateTimeInterface $accord_date = null;
+    #[ORM\OneToOne(targetEntity: Token::class, mappedBy: 'user', cascade: ['remove'])]
+    private ?Token $token = null;
     /**
      * Random string sent to the user email address in order to verify it.
-     * @ORM\Column(name="confirmation_token",type="string", length=180, unique=true, nullable=true)
-     * @var string|null
      */
-    private $confirmationToken;
+    #[ORM\Column(name: 'confirmation_token', type: 'string', length: 180, unique: true, nullable: true)]
+    private ?string $confirmationToken = null;
+    private ?string $plain_password = null;
+    private int $countAssociations = 0;
+    private int $countVolontaires = 0;
 
-    /**
-     * @var string|null
-     *
-     */
-    private $plain_password;
-    /**
-     * @var int
-     */
-    private $countAssociations= 0 ;
-    /**
-     * @var int
-     */
-    private $countVolontaires = 0;
-
-    public function setCountVolontaires(int $count)
+    public function setCountVolontaires(int $count): void
     {
         $this->countVolontaires = $count;
     }
 
-    public function setCountAssociations(int $count)
+    public function setCountAssociations(int $count): void
     {
         $this->countAssociations = $count;
     }
 
-    /**
-     * @return int
-     */
     public function getCountAssociations(): int
     {
         return $this->countAssociations;
     }
 
-    /**
-     * @return int
-     */
     public function getCountVolontaires(): int
     {
         return $this->countVolontaires;
@@ -123,7 +72,7 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface, S
 
     public function __toString()
     {
-        return (string)$this->email;
+        return $this->email;
     }
 
     public function getId(): ?int
@@ -131,7 +80,7 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface, S
         return $this->id;
     }
 
-    public function getEmail(): ?string
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -158,7 +107,7 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface, S
         return $this->email;
     }
 
-    public function hasRole($role)
+    public function hasRole($role): bool
     {
         return in_array(strtoupper($role), $this->getRoles(), true);
     }
@@ -208,7 +157,7 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface, S
     /**
      * @see UserInterface
      */
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
@@ -245,9 +194,6 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface, S
         return $this;
     }
 
-    /**
-     * @return null|string
-     */
     public function getPlainPassword(): ?string
     {
         return $this->plain_password;
@@ -260,68 +206,49 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface, S
         return $this;
     }
 
-    /**
-     * @return bool|null
-     */
     public function getAccord(): ?bool
     {
         return $this->accord;
     }
 
-    /**
-     * @param bool|null $accord
-     */
     public function setAccord(?bool $accord): void
     {
         $this->accord = $accord;
     }
 
     /**
-     * @return \DateTime|null
+     * @return DateTime|DateTimeImmutable|null
      */
-    public function getAccordDate(): ?\DateTime
+    public function getAccordDate(): ?DateTimeInterface
     {
         return $this->accord_date;
     }
 
     /**
-     * @param \DateTime|null $accord_date
+     * @param DateTime|null $accord_date
      */
-    public function setAccordDate(?\DateTime $accord_date): void
+    public function setAccordDate(?DateTimeInterface $accord_date): void
     {
         $this->accord_date = $accord_date;
     }
 
-    /**
-     * @return Token|null
-     */
     public function getToken(): ?Token
     {
         return $this->token;
     }
 
-    /**
-     * @param Token|null $token
-     */
     public function setToken(?Token $token): void
     {
         $this->token = $token;
     }
 
-    /**
-     * @return null|string
-     */
     public function getConfirmationToken(): ?string
     {
         return $this->confirmationToken;
     }
 
-    /**
-     * @param null|string $confirmationToken
-     */
     public function setConfirmationToken(?string $confirmationToken): void
     {
         $this->confirmationToken = $confirmationToken;
     }
-
 }

@@ -2,102 +2,74 @@
 
 namespace AcMarche\Volontariat\Entity;
 
+use AcMarche\Volontariat\Repository\BesoinRepository;
+use DateTime;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Besoin
  *
- * @ORM\Table(name="besoin")
- * @ORM\Entity(repositoryClass="AcMarche\Volontariat\Repository\BesoinRepository")
  *
  */
-class Besoin
+#[ORM\Table(name: 'besoin')]
+#[ORM\Entity(repositoryClass: BesoinRepository::class)]
+class Besoin implements Stringable
 {
-    /**
-     * @var integer|null $id
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     *
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    protected int $id;
 
-    /**
-     * @var string|null
-     * @ORM\Column(type="string", nullable=false)
-     * @ORM\OrderBy({"intitule"="ASC"})
-     * @Assert\NotBlank()
-     */
-    protected $name;
+    #[ORM\Column(type: 'string', nullable: false)]
+    #[ORM\OrderBy(['intitule' => 'ASC'])]
+    #[Assert\NotBlank]
+    protected ?string $name;
 
-    /**
-     * @ORM\Column(type="datetime")
-     * @Assert\Type("\DateTime")
-     * @var \DateTime|null $date_begin
-     */
-    protected $date_begin;
+    #[ORM\Column(type: 'datetime')]
+    #[Assert\Type(DateTime::class)]
+    protected ?DateTimeInterface $date_begin;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     * @Assert\Type("\DateTime")
-     * @var \DateTime|null $date_end
-     */
-    protected $date_end;
-
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    #[Assert\Type(DateTime::class)]
+    protected ?DateTimeInterface $date_end;
     /**
      * Description
-     *
-     * @ORM\Column(type="text")
-     * @Assert\NotBlank()
-     *
-     * @var string|null $requirement
      */
-    protected $requirement;
-
+    #[ORM\Column(type: 'text')]
+    #[Assert\NotBlank]
+    protected ?string $requirement;
     /**
      * quand
-     * @ORM\Column(type="text")
-     * @Assert\NotBlank()
-     *
-     * @var string|null $period
      */
-    protected $period;
-
+    #[ORM\Column(type: 'text')]
+    #[Assert\NotBlank]
+    protected ?string $period;
     /**
      * lieu
-     *
-     * @ORM\Column(type="text")
-     * @Assert\NotBlank()
-     *
-     * @var string|null $place
      */
-    protected $place;
+    #[ORM\Column(type: 'text')]
+    #[Assert\NotBlank]
+    protected ?string $place;
 
-    /**
-     * @var Association|null $association
-     * @ORM\ManyToOne(targetEntity="AcMarche\Volontariat\Entity\Association", inversedBy="besoins")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    protected $association;
+    #[ORM\ManyToOne(targetEntity: Association::class, inversedBy: 'besoins')]
+    #[ORM\JoinColumn(nullable: false)]
+    protected ?Association $association;
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getName();
     }
-
     /**
      * STOP
      */
-
-
     /**
      * Get id.
-     *
-     * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -106,10 +78,8 @@ class Besoin
      * Set name.
      *
      * @param string $name
-     *
-     * @return Besoin
      */
-    public function setName($name)
+    public function setName($name): static
     {
         $this->name = $name;
 
@@ -118,10 +88,8 @@ class Besoin
 
     /**
      * Get name.
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -129,11 +97,9 @@ class Besoin
     /**
      * Set dateBegin.
      *
-     * @param \DateTime $dateBegin
-     *
-     * @return Besoin
+     * @param DateTime $dateBegin
      */
-    public function setDateBegin($dateBegin)
+    public function setDateBegin(DateTimeInterface $dateBegin): static
     {
         $this->date_begin = $dateBegin;
 
@@ -143,9 +109,9 @@ class Besoin
     /**
      * Get dateBegin.
      *
-     * @return \DateTime
+     * @return DateTime|DateTimeImmutable|null
      */
-    public function getDateBegin()
+    public function getDateBegin(): ?\DateTimeInterface
     {
         return $this->date_begin;
     }
@@ -153,11 +119,9 @@ class Besoin
     /**
      * Set dateEnd.
      *
-     * @param \DateTime|null $dateEnd
      *
-     * @return Besoin
      */
-    public function setDateEnd($dateEnd = null)
+    public function setDateEnd(DateTime|DateTimeImmutable $dateEnd = null): static
     {
         $this->date_end = $dateEnd;
 
@@ -167,9 +131,9 @@ class Besoin
     /**
      * Get dateEnd.
      *
-     * @return \DateTime|null
+     * @return DateTime|DateTimeImmutable|null
      */
-    public function getDateEnd()
+    public function getDateEnd(): ?\DateTimeInterface
     {
         return $this->date_end;
     }
@@ -178,10 +142,8 @@ class Besoin
      * Set requirement.
      *
      * @param string $requirement
-     *
-     * @return Besoin
      */
-    public function setRequirement($requirement)
+    public function setRequirement($requirement): static
     {
         $this->requirement = $requirement;
 
@@ -190,10 +152,8 @@ class Besoin
 
     /**
      * Get requirement.
-     *
-     * @return string
      */
-    public function getRequirement()
+    public function getRequirement(): ?string
     {
         return $this->requirement;
     }
@@ -202,10 +162,8 @@ class Besoin
      * Set period.
      *
      * @param string $period
-     *
-     * @return Besoin
      */
-    public function setPeriod($period)
+    public function setPeriod($period): static
     {
         $this->period = $period;
 
@@ -214,10 +172,8 @@ class Besoin
 
     /**
      * Get period.
-     *
-     * @return string
      */
-    public function getPeriod()
+    public function getPeriod(): ?string
     {
         return $this->period;
     }
@@ -226,10 +182,8 @@ class Besoin
      * Set place.
      *
      * @param string $place
-     *
-     * @return Besoin
      */
-    public function setPlace($place)
+    public function setPlace($place): static
     {
         $this->place = $place;
 
@@ -238,10 +192,8 @@ class Besoin
 
     /**
      * Get place.
-     *
-     * @return string
      */
-    public function getPlace()
+    public function getPlace(): ?string
     {
         return $this->place;
     }
@@ -249,11 +201,9 @@ class Besoin
     /**
      * Set association.
      *
-     * @param \AcMarche\Volontariat\Entity\Association $association
      *
-     * @return Besoin
      */
-    public function setAssociation(\AcMarche\Volontariat\Entity\Association $association)
+    public function setAssociation(Association $association): static
     {
         $this->association = $association;
 
@@ -262,10 +212,8 @@ class Besoin
 
     /**
      * Get association.
-     *
-     * @return \AcMarche\Volontariat\Entity\Association
      */
-    public function getAssociation()
+    public function getAssociation(): ?Association
     {
         return $this->association;
     }

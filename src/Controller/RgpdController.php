@@ -2,26 +2,27 @@
 
 namespace AcMarche\Volontariat\Controller;
 
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use AcMarche\Volontariat\Entity\Security\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class RgpdController extends AbstractController
 {
-    /**
-     * @Route("/rgpd/")
-     *
-     */
-    public function index(MailerInterface $mailer)
+    public function __construct(private ManagerRegistry $managerRegistry)
     {
-        $em = $this->getDoctrine()->getManager();
+    }
+    #[Route(path: '/rgpd/')]
+    public function index(MailerInterface $mailer) : Response
+    {
+        $em = $this->managerRegistry->getManager();
         $user = $this->getUser();
         $message = $this->generateMailInfo($user);
         $mailer->send($message);
-
         return $this->render(
             '@Volontariat/admin/default/index.html.twig',
             [
@@ -29,17 +30,13 @@ class RgpdController extends AbstractController
         );
     }
 
-    /**
-     * @Route("/set", name="volontariat_admin_home22")
-     *
-     */
-    public function setUser(UserPasswordEncoderInterface $passwordEncoder)
+    #[Route(path: '/set', name: 'volontariat_admin_home22')]
+    public function setUser(UserPasswordHasherInterface $passwordEncoder) : Response
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->managerRegistry->getManager();
         $user = $em->getRepository(User::class)->findOneBy(['email' => 'jf@marche.be']);
         $user->setPassword($passwordEncoder->encodePassword($user, "homer22"));
         $em->flush();
-
         return $this->render('@Volontariat/admin/default/index.html.twig');
     }
 
@@ -67,8 +64,7 @@ class RgpdController extends AbstractController
                         'css' => file_get_contents($css),
                         'logo' => $marche_cid,
                     )
-                ),
-                'text/html'
+                )
             )
             ->addPart(
                 $this->renderView(

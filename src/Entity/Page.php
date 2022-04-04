@@ -3,77 +3,50 @@
 namespace AcMarche\Volontariat\Entity;
 
 use AcMarche\Volontariat\InterfaceDef\Uploadable;
+use AcMarche\Volontariat\Repository\PageRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
+use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Marche\VolontaireBundle\Entity\Page
- * @ORM\Entity(repositoryClass="AcMarche\Volontariat\Repository\PageRepository")
- * @ORM\Table(name="page")
  *
  */
-class Page implements Uploadable, SluggableInterface
+#[ORM\Entity(repositoryClass: PageRepository::class)]
+#[ORM\Table(name: 'page')]
+class Page implements Uploadable, SluggableInterface, Stringable
 {
     use SluggableTrait;
 
-    /**
-     * @var integer|null $id
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     *
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    protected int $id;
 
-    /**
-     * @var string|null $title
-     *
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank()
-     */
-    protected $title;
+    #[ORM\Column(type: 'string')]
+    #[Assert\NotBlank]
+    protected string $title;
 
-    /**
-     * content
-     *
-     * @ORM\Column(type="text", nullable=false)
-     * @Assert\NotBlank()
-     * @var string|null $content
-     */
-    protected $content;
+    #[ORM\Column(type: 'text', nullable: false)]
+    #[Assert\NotBlank]
+    protected ?string $content;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     * @Assert\Type(type="integer")
-     * @var integer|null $ordre
-     */
-    protected $ordre;
+    #[ORM\Column(type: 'integer', nullable: true)]
+    #[Assert\Type(type: 'integer')]
+    protected ?int $ordre;
+    #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => 0])]
+    private bool $actualite = false;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(type="boolean", nullable=false, options={"default" = "0"})
-     *
-     */
-    private $actualite = false;
+    protected array $images;
 
-    /**
-     * @var iterable
-     */
-    protected $images;
-
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getTitle();
     }
 
-    /**
-     * @return string
-     */
-    public function getPath()
+    public function getPath(): string
     {
         return 'page';
     }
@@ -82,14 +55,13 @@ class Page implements Uploadable, SluggableInterface
     {
         $images = $this->getImages();
 
-        return isset($images[0]['url']) ? $images[0]['url'] : null;
+        return $images[0]['url'] ?? null;
     }
 
     public function __construct()
     {
         $this->images = [];
     }
-
 
     public function getSluggableFields(): array
     {
@@ -100,17 +72,13 @@ class Page implements Uploadable, SluggableInterface
     {
         return true;
     }
-
     /**
      * STOP
      */
-
     /**
      * Get id
-     *
-     * @return integer
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -119,10 +87,8 @@ class Page implements Uploadable, SluggableInterface
      * Set title
      *
      * @param string $title
-     *
-     * @return Page
      */
-    public function setTitle($title)
+    public function setTitle($title): static
     {
         $this->title = $title;
 
@@ -131,10 +97,8 @@ class Page implements Uploadable, SluggableInterface
 
     /**
      * Get title
-     *
-     * @return string
      */
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->title;
     }
@@ -143,10 +107,8 @@ class Page implements Uploadable, SluggableInterface
      * Set content
      *
      * @param string $content
-     *
-     * @return Page
      */
-    public function setContent($content)
+    public function setContent($content): static
     {
         $this->content = $content;
 
@@ -155,10 +117,8 @@ class Page implements Uploadable, SluggableInterface
 
     /**
      * Get content
-     *
-     * @return string
      */
-    public function getContent()
+    public function getContent(): ?string
     {
         return $this->content;
     }
@@ -167,10 +127,8 @@ class Page implements Uploadable, SluggableInterface
      * Set ordre
      *
      * @param integer $ordre
-     *
-     * @return Page
      */
-    public function setOrdre($ordre)
+    public function setOrdre($ordre): static
     {
         $this->ordre = $ordre;
 
@@ -179,47 +137,33 @@ class Page implements Uploadable, SluggableInterface
 
     /**
      * Get ordre
-     *
-     * @return integer
      */
-    public function getOrdre()
+    public function getOrdre(): ?int
     {
         return $this->ordre;
     }
 
-    /**
-     * @return bool
-     */
     public function isActualite(): bool
     {
         return $this->actualite;
     }
 
-    /**
-     * @param bool $actualite
-     */
     public function setActualite(bool $actualite): void
     {
         $this->actualite = $actualite;
     }
 
-    /**
-     * @return array
-     */
     public function getImages(): array
     {
         return $this->images;
     }
 
-    /**
-     * @param array $images
-     */
     public function setImages(array $images): void
     {
         $this->images = $images;
     }
 
-    public function getActualite(): ?bool
+    public function getActualite(): bool
     {
         return $this->actualite;
     }

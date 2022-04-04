@@ -1,5 +1,6 @@
 <?php 
-include 'RestApi.php';
+use TwitterPhp\RestApi;
+include __DIR__ . '/RestApi.php';
 /**
  * Twitter
  *
@@ -13,52 +14,13 @@ include 'RestApi.php';
 class TP_twitter {
 
   /**
-   * Consumer Key
-   *
-   * @since    1.0.0
-   * @access   private
-   * @var      string    $consumer_key    Consumer Key
-   */
-  private $consumer_key;
-
-  /**
-   * Consumer Secret
-   *
-   * @since    1.0.0
-   * @access   private
-   * @var      string    $consumer_secret    Consumer Secret
-   */
-  private $consumer_secret;
-
-  /**
-   * Access Token
-   *
-   * @since    1.0.0
-   * @access   private
-   * @var      string    $access_token    Access Token
-   */
-  private $access_token;
-
-  /**
-   * Access Token Secret
-   *
-   * @since    1.0.0
-   * @access   private
-   * @var      string    $access_token_secret    Access Token Secret
-   */
-  private $access_token_secret;
-
-  /**
    * Initialize the class and set its properties.
    *
    * @since    1.0.0
    * @param      string    $api_key flickr API key.
    */
-  public function __construct($consumer_key,$consumer_secret,$access_token,$access_token_secret) {
-    $this->consumer_key         =   $consumer_key;
-    $this->consumer_secret      =   $consumer_secret;
-    $this->access_token         =   $access_token;
-    $this->access_token_secret  =   $access_token_secret;
+  public function __construct(private $consumer_key, private $consumer_secret, private $access_token, private $access_token_secret)
+  {
   }
 
   /**
@@ -68,7 +30,7 @@ class TP_twitter {
    * @param    string    $twitter_account   Twitter account without trailing @ char
    */
   public function get_public_photos($twitter_account){
-    $twitter = new \TwitterPhp\RestApi($this->consumer_key,$this->consumer_secret,$this->access_token,$this->access_token_secret);
+    $twitter = new RestApi($this->consumer_key,$this->consumer_secret,$this->access_token,$this->access_token_secret);
     /*
      * Connect as application
      * https://dev.twitter.com/docs/auth/application-only-auth

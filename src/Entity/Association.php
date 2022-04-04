@@ -4,13 +4,20 @@ namespace AcMarche\Volontariat\Entity;
 
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\InterfaceDef\Uploadable;
+use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Validator\Constraints as AcMarcheAssert;
+use DateTime;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use Stringable;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -18,271 +25,143 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * Association
- * @ORM\Entity(repositoryClass="AcMarche\Volontariat\Repository\AssociationRepository")
- * @ORM\Table(name="association")
  * @Vich\Uploadable
  */
-class Association implements Uploadable, TimestampableInterface, SluggableInterface
+#[ORM\Entity(repositoryClass: AssociationRepository::class)]
+#[ORM\Table(name: 'association')]
+class Association implements Uploadable, TimestampableInterface, SluggableInterface, Stringable
 {
+    public DateTimeInterface $updated;
     use TimestampableTrait;
     use SluggableTrait;
 
-    /**
-     * @var integer|null $id
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     *
-     */
-    protected $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
+    protected int $id;
 
-    /**
-     * @var string|null $nom
-     *
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank()
-     */
-    protected $nom;
+    #[ORM\Column(type: 'string')]
+    #[Assert\NotBlank]
+    protected ?string $nom;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     *
-     * @var string|null $slug
-     */
+    #[ORM\Column(type: 'string', nullable: true)]
     protected $slug;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     *
-     * @var string|null $address
-     */
-    protected $address;
+    #[ORM\Column(type: 'string', nullable: true)]
+    protected ?string $address;
 
+    #[ORM\Column(type: 'string', nullable: true)]
+    protected ?string $number;
     /**
-     * @ORM\Column(type="string", nullable=true)
-     *
-     * @var string|null $number
-     */
-    protected $number;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
      * @AcMarcheAssert\CodePostalIsBelgium
-     * @var integer|null $postalCode
      */
-    protected $postalCode;
+    #[ORM\Column(type: 'integer', nullable: true)]
+    protected ?int $postalCode;
 
-    /**
-     * @var string|null $city
-     *
-     * @ORM\Column(type="string", nullable=true)
-     *
-     */
-    protected $city;
+    #[ORM\Column(type: 'string', nullable: true)]
+    protected ?string $city;
 
-    /**
-     * @var string|null $email
-     * @ORM\Column(name="email")
-     * @Assert\Email(
-     *     message = "The email '{{ value }}' is not a valid email."
-     * )
-     */
-    protected $email;
+    #[ORM\Column(name: 'email')]
+    #[Assert\Email(message: "The email '{{ value }}' is not a valid email.")]
+    protected ?string $email;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     *
-     * @var string|null $web_site
-     */
-    protected $web_site;
+    #[ORM\Column(type: 'string', nullable: true)]
+    protected ?string $web_site;
 
-    /**
-     * @var string|null $phone
-     * @ORM\Column(type="string", nullable=true )
-     *
-     */
-    protected $phone;
+    #[ORM\Column(type: 'string', nullable: true)]
+    protected ?string $phone;
 
-    /**
-     * @var string|null $mobile
-     *
-     * @ORM\Column(type="string", nullable=true)
-     *
-     */
-    protected $mobile;
+    #[ORM\Column(type: 'string', nullable: true)]
+    protected ?string $mobile;
 
-    /**
-     * @var string|null $fax
-     * @ORM\Column(type="string", nullable=true)
-     *
-     */
-    protected $fax;
+    #[ORM\Column(type: 'string', nullable: true)]
+    protected ?string $fax;
 
-    /**
-     * Description générale de l'association
-     *
-     * @ORM\Column(type="text", nullable=true)
-     * @Assert\Length(max=600)
-     * @var string|null $description
-     */
-    protected $description;
-
+    #[ORM\Column(type: 'text', nullable: true)]
+    #[Assert\Length(max: 600)]
+    protected ?string $description;
     /**
      * Description des besoins permanent
-     *
-     * @ORM\Column(type="text", nullable=true)
-     *
-     * @var string|null $requirement
      */
-    protected $requirement;
-
+    #[ORM\Column(type: 'text', nullable: true)]
+    protected ?string $requirement;
     /**
      * lieu besoins permanents
-     *
-     * @ORM\Column(type="text", nullable=true)
-     * @var string|null $place
      */
-    protected $place;
-
+    #[ORM\Column(type: 'text', nullable: true)]
+    protected ?string $place;
     /**
      * contact besoins permanents
-     *
-     * @ORM\Column(type="text", nullable=true)
-     * @var string|null $contact
      */
-    protected $contact;
-
+    #[ORM\Column(type: 'text', nullable: true)]
+    protected ?string $contact;
     /**
      * @var Secteur[]|iterable $secteurs
-     * @ORM\ManyToMany(targetEntity="AcMarche\Volontariat\Entity\Secteur", inversedBy="associations")
      */
-    protected $secteurs;
-
+    #[ORM\ManyToMany(targetEntity: Secteur::class, inversedBy: 'associations')]
+    protected Collection $secteurs;
     /**
      * @var Besoin[]|iterable $besoins
-     * @ORM\OneToMany(targetEntity="AcMarche\Volontariat\Entity\Besoin", mappedBy="association", cascade={"remove"})
      */
-    protected $besoins;
-
+    #[ORM\OneToMany(targetEntity: Besoin::class, mappedBy: 'association', cascade: ['remove'])]
+    protected Collection $besoins;
     /**
      * @var Activite[]|iterable $activites
-     * @ORM\OneToMany(targetEntity="AcMarche\Volontariat\Entity\Activite", mappedBy="association", cascade={"remove"})
      */
-    protected $activites;
+    #[ORM\OneToMany(targetEntity: Activite::class, mappedBy: 'association', cascade: ['remove'])]
+    protected Collection $activites;
 
-    /**
-     * @var User|null $user
-     * @ORM\ManyToOne(targetEntity="AcMarche\Volontariat\Entity\Security\User", cascade={"persist"})
-     *
-     */
-    protected $user;
+    #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'])]
+    protected User $user;
+    #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => 0])]
+    private bool $valider = false;
+    #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => 1])]
+    private bool $mailing = true;
 
-    /**
-     * @var boolean $valider
-     *
-     * @ORM\Column(type="boolean", nullable=false, options={"default" = "0"})
-     *
-     */
-    private $valider = false;
+    #[Assert\Image(maxSize: '5M')]
+    protected ?File $image;
 
-    /**
-     * @var boolean $mailing
-     *
-     * @ORM\Column(type="boolean", nullable=false, options={"default" = "1"})
-     *
-     */
-    private $mailing = true;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    protected ?string $imageName;
 
-    /**
-     *
-     * @Assert\Image(
-     *     maxSize = "5M"
-     * )
-     * @var UploadedFile|null $image
-     */
-    protected $image;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     *
-     * @var string|null $imageName
-     */
-    protected $imageName;
-
-    /**
-     *
-     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $file
-     */
-    public function setImage(File $file = null)
+    public function setImage(File|UploadedFile $file = null): void
     {
         $this->image = $file;
 
-        if ($file) {
+        if ($file !== null) {
             // It is required that at least one field changes if you are using doctrine
             // otherwise the event listeners won't be called and the file is lost
-            $this->updated = new \DateTime('now');
+            $this->updated = new DateTime('now');
         }
     }
 
-    /**
-     * @return File
-     */
-    public function getImage()
+    public function getImage(): ?File
     {
         return $this->image;
     }
 
-    public function getPath()
+    public function getPath(): string
     {
         return 'association';
     }
 
     /**
-     * NOTE: This is not a mapped field of entity metadata, just a simple property.
-     *
      * @Vich\UploadableField(mapping="association_file", fileNameProperty="fileName", size="fileSize")
-     *
-     * @var File|null $fileFile
      */
-    private $fileFile;
+    private ?File $fileFile = null;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $fileName = null;
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $fileDescriptif = null;
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $fileSize = null;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     *
-     * @var string|null $fileName
-     */
-    private $fileName;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     *
-     * @var string|null $fileDescriptif
-     */
-    private $fileDescriptif;
-
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     *
-     * @var integer|null $fileSize
-     */
-    private $fileSize;
-
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getNom();
     }
 
-    /**
-     * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
-     * of 'UploadedFile' is injected into this setter to trigger the  update. If this
-     * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
-     * must be able to accept an instance of 'File' as the bundle will inject one here
-     * during Doctrine hydration.
-     *
-     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $file
-     */
-    public function setFileFile(?File $file = null): void
+    public function setFileFile(File|UploadedFile $file = null): void
     {
         $this->fileFile = $file;
 
@@ -290,8 +169,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
             // It is required that at least one field changes if you are using doctrine
             // otherwise the event listeners won't be called and the file is lost
             try {
-                $this->updatedAt = new \DateTimeImmutable();
-            } catch (\Exception $e) {
+                $this->updatedAt = new DateTimeImmutable();
+            } catch (Exception) {
             }
         }
     }
@@ -329,23 +208,14 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
         return $this->fileDescriptif;
     }
 
-    /**
-     * @param string $fileDescriptif
-     */
     public function setFileDescriptif(string $fileDescriptif): void
     {
         $this->fileDescriptif = $fileDescriptif;
     }
 
-    /**
-     * @var array $images
-     */
-    private $images;
+    private array $images;
 
-    /**
-     * @return array
-     */
-    public function getImages()
+    public function getImages(): array
     {
         return $this->images;
     }
@@ -363,7 +233,7 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
      */
     public function getFirstImage()
     {
-        if (count($this->images) > 0) {
+        if ($this->images !== []) {
             return $this->images[0];
         }
 
@@ -380,14 +250,6 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
         return true;
     }
 
-    /**
-     * STOP
-     */
-
-
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         $this->secteurs = new ArrayCollection();
@@ -395,13 +257,15 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
         $this->activites = new ArrayCollection();
         $this->images = [];
     }
+    /**
+     * STOP
+     */
+
 
     /**
      * Get id.
-     *
-     * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -410,10 +274,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
      * Set nom.
      *
      * @param string $nom
-     *
-     * @return Association
      */
-    public function setNom($nom)
+    public function setNom($nom): static
     {
         $this->nom = $nom;
 
@@ -422,10 +284,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
 
     /**
      * Get nom.
-     *
-     * @return string
      */
-    public function getNom()
+    public function getNom(): ?string
     {
         return $this->nom;
     }
@@ -434,10 +294,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
      * Set address.
      *
      * @param string|null $address
-     *
-     * @return Association
      */
-    public function setAddress($address = null)
+    public function setAddress($address = null): static
     {
         $this->address = $address;
 
@@ -446,10 +304,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
 
     /**
      * Get address.
-     *
-     * @return string|null
      */
-    public function getAddress()
+    public function getAddress(): ?string
     {
         return $this->address;
     }
@@ -458,10 +314,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
      * Set number.
      *
      * @param string|null $number
-     *
-     * @return Association
      */
-    public function setNumber($number = null)
+    public function setNumber($number = null): static
     {
         $this->number = $number;
 
@@ -470,10 +324,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
 
     /**
      * Get number.
-     *
-     * @return string|null
      */
-    public function getNumber()
+    public function getNumber(): ?string
     {
         return $this->number;
     }
@@ -482,10 +334,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
      * Set postalCode.
      *
      * @param int|null $postalCode
-     *
-     * @return Association
      */
-    public function setPostalCode($postalCode = null)
+    public function setPostalCode($postalCode = null): static
     {
         $this->postalCode = $postalCode;
 
@@ -494,10 +344,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
 
     /**
      * Get postalCode.
-     *
-     * @return int|null
      */
-    public function getPostalCode()
+    public function getPostalCode(): ?int
     {
         return $this->postalCode;
     }
@@ -506,10 +354,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
      * Set city.
      *
      * @param string|null $city
-     *
-     * @return Association
      */
-    public function setCity($city = null)
+    public function setCity($city = null): static
     {
         $this->city = $city;
 
@@ -518,10 +364,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
 
     /**
      * Get city.
-     *
-     * @return string|null
      */
-    public function getCity()
+    public function getCity(): ?string
     {
         return $this->city;
     }
@@ -530,10 +374,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
      * Set email.
      *
      * @param string $email
-     *
-     * @return Association
      */
-    public function setEmail($email)
+    public function setEmail($email): static
     {
         $this->email = $email;
 
@@ -542,10 +384,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
 
     /**
      * Get email.
-     *
-     * @return string
      */
-    public function getEmail()
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -554,10 +394,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
      * Set webSite.
      *
      * @param string|null $webSite
-     *
-     * @return Association
      */
-    public function setWebSite($webSite = null)
+    public function setWebSite($webSite = null): static
     {
         $this->web_site = $webSite;
 
@@ -566,10 +404,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
 
     /**
      * Get webSite.
-     *
-     * @return string|null
      */
-    public function getWebSite()
+    public function getWebSite(): ?string
     {
         return $this->web_site;
     }
@@ -578,10 +414,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
      * Set phone.
      *
      * @param string|null $phone
-     *
-     * @return Association
      */
-    public function setPhone($phone = null)
+    public function setPhone($phone = null): static
     {
         $this->phone = $phone;
 
@@ -590,10 +424,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
 
     /**
      * Get phone.
-     *
-     * @return string|null
      */
-    public function getPhone()
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
@@ -602,10 +434,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
      * Set mobile.
      *
      * @param string|null $mobile
-     *
-     * @return Association
      */
-    public function setMobile($mobile = null)
+    public function setMobile($mobile = null): static
     {
         $this->mobile = $mobile;
 
@@ -614,10 +444,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
 
     /**
      * Get mobile.
-     *
-     * @return string|null
      */
-    public function getMobile()
+    public function getMobile(): ?string
     {
         return $this->mobile;
     }
@@ -626,10 +454,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
      * Set fax.
      *
      * @param string|null $fax
-     *
-     * @return Association
      */
-    public function setFax($fax = null)
+    public function setFax($fax = null): static
     {
         $this->fax = $fax;
 
@@ -638,10 +464,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
 
     /**
      * Get fax.
-     *
-     * @return string|null
      */
-    public function getFax()
+    public function getFax(): ?string
     {
         return $this->fax;
     }
@@ -650,10 +474,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
      * Set description.
      *
      * @param string|null $description
-     *
-     * @return Association
      */
-    public function setDescription($description = null)
+    public function setDescription($description = null): static
     {
         $this->description = $description;
 
@@ -662,10 +484,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
 
     /**
      * Get description.
-     *
-     * @return string|null
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -674,10 +494,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
      * Set requirement.
      *
      * @param string|null $requirement
-     *
-     * @return Association
      */
-    public function setRequirement($requirement = null)
+    public function setRequirement($requirement = null): static
     {
         $this->requirement = $requirement;
 
@@ -686,10 +504,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
 
     /**
      * Get requirement.
-     *
-     * @return string|null
      */
-    public function getRequirement()
+    public function getRequirement(): ?string
     {
         return $this->requirement;
     }
@@ -698,10 +514,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
      * Set place.
      *
      * @param string|null $place
-     *
-     * @return Association
      */
-    public function setPlace($place = null)
+    public function setPlace($place = null): static
     {
         $this->place = $place;
 
@@ -710,10 +524,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
 
     /**
      * Get place.
-     *
-     * @return string|null
      */
-    public function getPlace()
+    public function getPlace(): ?string
     {
         return $this->place;
     }
@@ -722,10 +534,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
      * Set contact.
      *
      * @param string|null $contact
-     *
-     * @return Association
      */
-    public function setContact($contact = null)
+    public function setContact($contact = null): static
     {
         $this->contact = $contact;
 
@@ -734,10 +544,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
 
     /**
      * Get contact.
-     *
-     * @return string|null
      */
-    public function getContact()
+    public function getContact(): ?string
     {
         return $this->contact;
     }
@@ -746,10 +554,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
      * Set valider.
      *
      * @param bool $valider
-     *
-     * @return Association
      */
-    public function setValider($valider)
+    public function setValider($valider): static
     {
         $this->valider = $valider;
 
@@ -758,10 +564,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
 
     /**
      * Get valider.
-     *
-     * @return bool
      */
-    public function getValider()
+    public function getValider(): bool
     {
         return $this->valider;
     }
@@ -770,10 +574,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
      * Set imageName.
      *
      * @param string|null $imageName
-     *
-     * @return Association
      */
-    public function setImageName($imageName = null)
+    public function setImageName($imageName = null): static
     {
         $this->imageName = $imageName;
 
@@ -782,10 +584,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
 
     /**
      * Get imageName.
-     *
-     * @return string|null
      */
-    public function getImageName()
+    public function getImageName(): ?string
     {
         return $this->imageName;
     }
@@ -793,11 +593,9 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
     /**
      * Add secteur.
      *
-     * @param \AcMarche\Volontariat\Entity\Secteur $secteur
      *
-     * @return Association
      */
-    public function addSecteur(\AcMarche\Volontariat\Entity\Secteur $secteur)
+    public function addSecteur(Secteur $secteur): static
     {
         $this->secteurs[] = $secteur;
 
@@ -807,21 +605,18 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
     /**
      * Remove secteur.
      *
-     * @param \AcMarche\Volontariat\Entity\Secteur $secteur
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeSecteur(\AcMarche\Volontariat\Entity\Secteur $secteur)
+    public function removeSecteur(Secteur $secteur): bool
     {
         return $this->secteurs->removeElement($secteur);
     }
 
     /**
      * Get secteurs.
-     *
-     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getSecteurs()
+    public function getSecteurs(): iterable
     {
         return $this->secteurs;
     }
@@ -829,11 +624,9 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
     /**
      * Add besoin.
      *
-     * @param \AcMarche\Volontariat\Entity\Besoin $besoin
      *
-     * @return Association
      */
-    public function addBesoin(\AcMarche\Volontariat\Entity\Besoin $besoin)
+    public function addBesoin(Besoin $besoin): static
     {
         $this->besoins[] = $besoin;
 
@@ -843,21 +636,18 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
     /**
      * Remove besoin.
      *
-     * @param \AcMarche\Volontariat\Entity\Besoin $besoin
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeBesoin(\AcMarche\Volontariat\Entity\Besoin $besoin)
+    public function removeBesoin(Besoin $besoin): bool
     {
         return $this->besoins->removeElement($besoin);
     }
 
     /**
      * Get besoins.
-     *
-     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getBesoins()
+    public function getBesoins(): iterable
     {
         return $this->besoins;
     }
@@ -865,11 +655,9 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
     /**
      * Set user.
      *
-     * @param \AcMarche\Volontariat\Entity\Security\User|null $user
-     *
-     * @return Association
+     * @param User|null $user
      */
-    public function setUser(\AcMarche\Volontariat\Entity\Security\User $user = null)
+    public function setUser(User $user = null): static
     {
         $this->user = $user;
 
@@ -878,10 +666,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
 
     /**
      * Get user.
-     *
-     * @return \AcMarche\Volontariat\Entity\Security\User|null
      */
-    public function getUser()
+    public function getUser(): ?User
     {
         return $this->user;
     }
@@ -889,11 +675,9 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
     /**
      * Add activite.
      *
-     * @param \AcMarche\Volontariat\Entity\Activite $activite
      *
-     * @return Association
      */
-    public function addActivite(\AcMarche\Volontariat\Entity\Activite $activite)
+    public function addActivite(Activite $activite): static
     {
         $this->activites[] = $activite;
 
@@ -903,26 +687,23 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
     /**
      * Remove activite.
      *
-     * @param \AcMarche\Volontariat\Entity\Activite $activite
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeActivite(\AcMarche\Volontariat\Entity\Activite $activite)
+    public function removeActivite(Activite $activite): bool
     {
         return $this->activites->removeElement($activite);
     }
 
     /**
      * Get activites.
-     *
-     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getActivites()
+    public function getActivites(): iterable
     {
         return $this->activites;
     }
 
-    public function getMailing(): ?bool
+    public function getMailing(): bool
     {
         return $this->mailing;
     }

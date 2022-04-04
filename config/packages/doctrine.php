@@ -15,7 +15,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'mappings' => [
                     'AcMarche\Volontariat' => [
                         'is_bundle' => false,
-                        'type' => 'annotation',
                         'dir' => '%kernel.project_dir%/src/AcMarche/Volontariat/src/Entity',
                         'prefix' => 'AcMarche\Volontariat',
                         'alias' => 'AcMarcheVolontariat',

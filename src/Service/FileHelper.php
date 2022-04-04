@@ -2,6 +2,7 @@
 
 namespace AcMarche\Volontariat\Service;
 
+use Symfony\Component\HttpFoundation\File\File;
 use AcMarche\Volontariat\InterfaceDef\Uploadable;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -11,25 +12,20 @@ use Symfony\Component\Mime\MimeTypes;
 
 class FileHelper
 {
-    private $rootUploadPath;
-    private $rootDownloadPath;
-
-    public function __construct(string $uploadPath, string $downloadPath)
+    public string $directorySeparator;
+    public function __construct(private string $rootUploadPath, private string $rootDownloadPath)
     {
-        $this->rootUploadPath = $uploadPath;
-        $this->rootDownloadPath = $downloadPath;
         $this->directorySeparator = DIRECTORY_SEPARATOR;
     }
 
-    public function uploadFile(Uploadable $uploadable, UploadedFile $file, $fileName)
+    public function uploadFile(Uploadable $uploadable, UploadedFile $file, $fileName): File
     {
         $directory = $this->getUploadPath($uploadable);
-        $result = $file->move($directory, $fileName);
 
-        return $result;
+        return $file->move($directory, $fileName);
     }
 
-    public function deleteOneDoc(Uploadable $uploadable, $filename)
+    public function deleteOneDoc(Uploadable $uploadable, $filename): void
     {
         $directory = $this->getUploadPath($uploadable);
         $file = $directory.$this->directorySeparator.$filename;
@@ -38,14 +34,14 @@ class FileHelper
         $fs->remove($file);
     }
 
-    public function deleteAllDocs(Uploadable $uploadable)
+    public function deleteAllDocs(Uploadable $uploadable): void
     {
         $directory = $this->getUploadPath($uploadable);
         $fs = new Filesystem();
         $fs->remove($directory);
     }
 
-    public function getFiles(Uploadable $uploadable)
+    public function getFiles(Uploadable $uploadable): array
     {
         $finder = new Finder();
         $files = array();
@@ -102,14 +98,14 @@ class FileHelper
         return $files;
     }
 
-    public function traitementFiles($entity)
+    public function traitementFiles($entity): void
     {
         if ($photoName = $this->traitementFile($entity->getImage(), $entity)) {
             $entity->setImageName($photoName);
         }
     }
 
-    protected function traitementFile($file, Uploadable $uploadable)
+    protected function traitementFile($file, Uploadable $uploadable): ?string
     {
         if ($file instanceof UploadedFile) {
             $fileName = md5(uniqid()).'.'.$file->guessExtension();
@@ -126,18 +122,18 @@ class FileHelper
         return null;
     }
 
-    protected function makePath(Uploadable $uploadable)
+    protected function makePath(Uploadable $uploadable): string
     {
         return DIRECTORY_SEPARATOR.$uploadable->getPath().$this->directorySeparator.$uploadable->getId(
             ).$this->directorySeparator;
     }
 
-    public function getUploadPath(Uploadable $uploadable)
+    public function getUploadPath(Uploadable $uploadable): string
     {
         return $this->rootUploadPath.$this->makePath($uploadable);
     }
 
-    public function getDownloadPath(Uploadable $uploadable)
+    public function getDownloadPath(Uploadable $uploadable): string
     {
         return $this->rootDownloadPath.$this->makePath($uploadable);
     }

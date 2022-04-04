@@ -2,6 +2,8 @@
 
 namespace AcMarche\Volontariat\Controller\Admin;
 
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Volontariat\Entity\Activite;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Event\ActiviteEvent;
@@ -19,36 +21,20 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Valider controller.
- *
- * @Route("/admin/valider")
- * @IsGranted("ROLE_VOLONTARIAT_ADMIN")
  */
+#[Route(path: '/admin/valider')]
+#[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class ValiderController extends AbstractController
 {
-    /**
-     * @var AssociationRepository
-     */
-    private $associationRepository;
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    public function __construct(AssociationRepository $associationRepository, EventDispatcherInterface $eventDispatcher)
+    public function __construct(private AssociationRepository $associationRepository, private EventDispatcherInterface $eventDispatcher, private ManagerRegistry $managerRegistry)
     {
-        $this->associationRepository = $associationRepository;
-        $this->eventDispatcher = $eventDispatcher;
     }
-
-    /**
-     * @Route("/", name="volontariat_admin_valider", methods={"GET","POST"})
-     */
-    public function indexAction()
+    #[Route(path: '/', name: 'volontariat_admin_valider', methods: ['GET', 'POST'])]
+    public function indexAction() : Response
     {
-        $em = $this->getDoctrine()->getManager();
+        $em = $this->managerRegistry->getManager();
         $associations = $this->associationRepository->findBy(['valider' => false]);
         $activites = $em->getRepository(Activite::class)->findBy(['valider' => false]);
-
         return $this->render(
             '@Volontariat/admin/valider/index.html.twig',
             array(
@@ -57,20 +43,13 @@ class ValiderController extends AbstractController
             )
         );
     }
-
-    /**
-     * @Route("/association/{id}/edit", name="volontariat_admin_association_valider")
-     *
-     */
-    public function associationAction(Request $request, Association $association)
+    #[Route(path: '/association/{id}/edit', name: 'volontariat_admin_association_valider')]
+    public function associationAction(Request $request, Association $association) : Response
     {
-        $em = $this->getDoctrine()->getManager();
-
+        $em = $this->managerRegistry->getManager();
         $form = $this->createForm(ValiderType::class, $association)
             ->add('submit', SubmitType::class, array('label' => 'Valider'));
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $em->flush();
             $this->addFlash('success', 'L\' association a bien été validée');
@@ -81,7 +60,6 @@ class ValiderController extends AbstractController
 
             return $this->redirectToRoute('volontariat_admin_association_show', ['id' => $association->getId()]);
         }
-
         return $this->render(
             '@Volontariat/admin/valider/association.html.twig',
             array(
@@ -90,20 +68,13 @@ class ValiderController extends AbstractController
             )
         );
     }
-
-    /**
-     * @Route("/activite/{id}/edit", name="volontariat_admin_activite_valider")
-     *
-     */
-    public function activiteAction(Request $request, Activite $activite)
+    #[Route(path: '/activite/{id}/edit', name: 'volontariat_admin_activite_valider')]
+    public function activiteAction(Request $request, Activite $activite) : Response
     {
-        $em = $this->getDoctrine()->getManager();
-
+        $em = $this->managerRegistry->getManager();
         $form = $this->createForm(ValiderType::class, $activite)
             ->add('submit', SubmitType::class, array('label' => 'Valider'));
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $em->flush();
             $this->addFlash('success', 'L\'activitée a bien été validée');
@@ -114,7 +85,6 @@ class ValiderController extends AbstractController
 
             return $this->redirectToRoute('volontariat_admin_activite_show', ['id' => $activite->getId()]);
         }
-
         return $this->render(
             '@Volontariat/admin/valider/activite.html.twig',
             array(

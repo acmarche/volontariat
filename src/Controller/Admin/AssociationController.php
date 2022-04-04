@@ -2,6 +2,10 @@
 
 namespace AcMarche\Volontariat\Controller\Admin;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\FormInterface;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Form\Search\SearchAssociationType;
 use AcMarche\Volontariat\Form\Admin\AssocationType;
@@ -18,66 +22,39 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Association controller.
- *
- * @Route("/admin/association")
- * @IsGranted("ROLE_VOLONTARIAT_ADMIN")
  */
+#[Route(path: '/admin/association')]
+#[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class AssociationController extends AbstractController
 {
-    /**
-     * @var AssociationRepository
-     */
-    private $associationRepository;
-    /**
-     * @var FileHelper
-     */
-    private $fileHelper;
-    /**
-     * @var FormBuilderVolontariat
-     */
-    private $formBuilderVolontariat;
-
-    public function __construct(
-        AssociationRepository $associationRepository,
-        FileHelper $fileHelper,
-        FormBuilderVolontariat $formBuilderVolontariat
-    ) {
-        $this->associationRepository = $associationRepository;
-        $this->fileHelper = $fileHelper;
-        $this->formBuilderVolontariat = $formBuilderVolontariat;
+    public function __construct(private AssociationRepository $associationRepository, private FileHelper $fileHelper, private FormBuilderVolontariat $formBuilderVolontariat, private ManagerRegistry $managerRegistry)
+    {
     }
-
     /**
      * Lists all Association entities.
      *
-     * @Route("/", name="volontariat_admin_association", methods={"GET","POST"})
      *
      */
-    public function indexAction(Request $request)
+    #[Route(path: '/', name: 'volontariat_admin_association', methods: ['GET', 'POST'])]
+    public function indexAction(Request $request) : Response
     {
         $session = $request->getSession();
         $data = array();
         $data['valider'] = 2;
         $key = VolontariatConstante::ASSOCIATION_ADMIN_SEARCH;
-
         if ($session->has($key)) {
             $data = unserialize($session->get($key));
         }
-
         $search_form = $this->createForm(
             SearchAssociationType::class,
             $data
         );
-
         $search_form->handleRequest($request);
-
         if ($search_form->isSubmitted() && $search_form->isValid()) {
             $data = $search_form->getData();
         }
-
         $session->set($key, serialize($data));
         $associations = $this->associationRepository->search($data);
-
         return $this->render(
             '@Volontariat/admin/association/index.html.twig',
             array(
@@ -86,23 +63,20 @@ class AssociationController extends AbstractController
             )
         );
     }
-
     /**
      * Displays a form to create a new Association association.
      *
-     * @Route("/new", name="volontariat_admin_association_new", methods={"GET","POST"})
      *
      */
-    public function newAction(Request $request)
+    #[Route(path: '/new', name: 'volontariat_admin_association_new', methods: ['GET', 'POST'])]
+    public function newAction(Request $request) : Response
     {
         $association = new Association();
         $form = $this->createForm(AssocationType::class, $association)
             ->add('submit', SubmitType::class, array('label' => 'Create'));
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->managerRegistry->getManager();
             $em->persist($association);
             $em->flush();
 
@@ -112,7 +86,6 @@ class AssociationController extends AbstractController
 
             return $this->redirectToRoute('volontariat_admin_association_show', ['id' => $association->getId()]);
         }
-
         return $this->render(
             '@Volontariat/admin/association/new.html.twig',
             array(
@@ -121,20 +94,17 @@ class AssociationController extends AbstractController
             )
         );
     }
-
     /**
      * Finds and displays a Association association.
      *
-     * @Route("/{id}/show", name="volontariat_admin_association_show")
      *
      */
-    public function showAction(Association $association)
+    #[Route(path: '/{id}/show', name: 'volontariat_admin_association_show')]
+    public function showAction(Association $association) : Response
     {
         $images = $this->fileHelper->getImages($association);
         $dissocierForm = $this->formBuilderVolontariat->createDissocierForm($association);
-
         $deleteForm = $this->createDeleteForm($association);
-
         return $this->render(
             '@Volontariat/admin/association/show.html.twig',
             array(
@@ -145,22 +115,18 @@ class AssociationController extends AbstractController
             )
         );
     }
-
     /**
      * Displays a form to edit an existing Association association.
      *
-     * @Route("/{id}/edit", name="volontariat_admin_association_edit")
      *
      */
-    public function editAction(Request $request, Association $association)
+    #[Route(path: '/{id}/edit', name: 'volontariat_admin_association_edit')]
+    public function editAction(Request $request, Association $association) : Response
     {
-        $em = $this->getDoctrine()->getManager();
-
+        $em = $this->managerRegistry->getManager();
         $form = $this->createForm(AssocationType::class, $association)
             ->add('submit', SubmitType::class, array('label' => 'Update'));
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $em->flush();
             $this->fileHelper->traitementFiles($association);
@@ -169,7 +135,6 @@ class AssociationController extends AbstractController
 
             return $this->redirectToRoute('volontariat_admin_association_show', ['id' => $association->getId()]);
         }
-
         return $this->render(
             '@Volontariat/admin/association/edit.html.twig',
             array(
@@ -178,37 +143,31 @@ class AssociationController extends AbstractController
             )
         );
     }
-
     /**
      * Deletes a Association association.
-     *
-     * @Route("/{id}/delete", name="volontariat_admin_association_delete", methods={"DELETE"})
      */
-    public function deleteAction(Association $association, Request $request)
+    #[Route(path: '/{id}/delete', name: 'volontariat_admin_association_delete', methods: ['DELETE'])]
+    public function deleteAction(Association $association, Request $request) : RedirectResponse
     {
         $form = $this->createDeleteForm($association);
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->managerRegistry->getManager();
 
             $em->remove($association);
             $em->flush();
 
             $this->addFlash('success', 'Le association a bien été supprimé');
         }
-
         return $this->redirectToRoute('volontariat_admin_association');
     }
-
-    private function createDeleteForm(Association $association)
+    private function createDeleteForm(Association $association): FormInterface
     {
         return $this->createFormBuilder()
             ->setAction(
                 $this->generateUrl('volontariat_admin_association_delete', array('id' => $association->getId()))
             )
-            ->setMethod('DELETE')
+            ->setMethod(Request::METHOD_DELETE)
             ->add('submit', SubmitType::class, array('label' => 'Delete', 'attr' => array('class' => 'btn-danger')))
             ->getForm();
     }

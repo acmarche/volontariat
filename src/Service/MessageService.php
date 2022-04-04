@@ -17,37 +17,20 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class MessageService
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-    /**
-     * @var SessionInterface
-     */
-    private $session;
-    /**
-     * @var VolontaireService
-     */
-    private $volontaireService;
-    /**
-     * @var AssociationService
-     */
-    private $associationService;
+    private SessionInterface $session;
 
     public function __construct(
-        EntityManagerInterface $em,
+        private EntityManagerInterface $em,
         RequestStack $requestStack,
-        VolontaireService $volontaireService,
-        AssociationService $associationService
+        private VolontaireService $volontaireService,
+        private AssociationService $associationService
     ) {
-        $this->em = $em;
         $this->session = $requestStack->getSession();
-        $this->volontaireService = $volontaireService;
-        $this->associationService = $associationService;
     }
 
     public function getDestinataires($query, $isSelect = false)
     {
+        $key = null;
         $args = [];
 
         switch ($query) {
@@ -101,7 +84,7 @@ class MessageService
      * @param $entities Volontaire[]|Association[]
      * @return string[]
      */
-    public function getEmails($entities)
+    public function getEmails($entities): array
     {
         $emails = [];
         foreach ($entities as $entity) {
@@ -112,11 +95,9 @@ class MessageService
     }
 
     /**
-     * @param User $user
      * @param Association[] $associations
-     * @return array
      */
-    public function getFroms(User $user, $associations)
+    public function getFroms(User $user, $associations): array
     {
         $froms = [];
         $froms[$user->getEmail()] = $user->getEmail();
@@ -127,18 +108,14 @@ class MessageService
         return $froms;
     }
 
-    /**
-     * @param User $user
-     * @return string
-     */
-    public function getNom(User $user)
+    public function getNom(User $user): string
     {
         $volontaires = $this->volontaireService->getVolontairesByUser($user);
-        if (count($volontaires) > 0) {
+        if ((is_countable($volontaires) ? count($volontaires) : 0) > 0) {
             return $volontaires[0]->getName().' '.$volontaires[0]->getSurname();
         }
         $associations = $this->associationService->getAssociationsByUser($user);
-        if (count($associations) > 0) {
+        if ($associations !== []) {
             return $associations[0]->getNom();
         }
 
@@ -147,10 +124,8 @@ class MessageService
 
     /**
      * @param $entity Volontaire|Association
-     *
-     * @return User|null
      */
-    public function getUser($entity)
+    public function getUser($entity): ?User
     {
         return $entity->getUser();
     }

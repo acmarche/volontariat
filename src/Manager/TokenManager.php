@@ -8,6 +8,8 @@
 
 namespace AcMarche\Volontariat\Manager;
 
+use Exception;
+use DateTime;
 use AcMarche\Volontariat\Entity\Security\Token;
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Repository\TokenRepository;
@@ -27,9 +29,9 @@ class TokenManager
 
     }
 
-    public function getInstance(User $user)
+    public function getInstance(User $user): Token
     {
-        if (!$token = $this->tokenRepository->findOneBy(['user' => $user])) {
+        if (($token = $this->tokenRepository->findOneBy(['user' => $user])) === null) {
             $token = new Token();
             $token->setUser($user);
             $this->tokenRepository->persist($token);
@@ -43,10 +45,10 @@ class TokenManager
         $token = $this->getInstance($user);
         try {
             $token->setValue(bin2hex(random_bytes(20)));
-        } catch (\Exception $e) {
+        } catch (Exception) {
         }
 
-        $expireTime = new \DateTime('+90 day');
+        $expireTime = new DateTime('+90 day');
         $token->setExpireAt($expireTime);
 
         $this->tokenRepository->save();
@@ -54,14 +56,14 @@ class TokenManager
         return $token;
     }
 
-    public function isExpired(Token $token)
+    public function isExpired(Token $token): bool
     {
-        $today = new \DateTime('today');
+        $today = new DateTime('today');
 
         return $today > $token->getExpireAt();
     }
 
-    public function createForAllUsers()
+    public function createForAllUsers(): void
     {
         $users = $this->userRepository->findAll();
         foreach ($users as $user) {

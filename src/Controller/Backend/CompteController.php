@@ -2,6 +2,9 @@
 
 namespace AcMarche\Volontariat\Controller\Backend;
 
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Form\FormInterface;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Entity\Volontaire;
@@ -18,55 +21,26 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 /**
  * Class CompteController
  * @package AcMarche\Volontariat\Controller
- * @Route("/compte")
- * @IsGranted("ROLE_VOLONTARIAT")
  */
+#[Route(path: '/compte')]
+#[IsGranted('ROLE_VOLONTARIAT')]
 class CompteController extends AbstractController
 {
-
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-    /**
-     * @var UserManager
-     */
-    private $userManager;
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
-
-    public function __construct(
-        EventDispatcherInterface $eventDispatcher,
-        UserManager $userManager,
-        TokenStorageInterface $tokenStorage
-    ) {
-        $this->eventDispatcher = $eventDispatcher;
-        $this->userManager = $userManager;
-        $this->tokenStorage = $tokenStorage;
+    public function __construct(private EventDispatcherInterface $eventDispatcher, private UserManager $userManager, private TokenStorageInterface $tokenStorage, private ManagerRegistry $managerRegistry)
+    {
     }
-
-    /**
-     *
-     * @Route("/", name="volontariat_compte_home")
-     *
-     */
-    public function indexAction(Request $request)
+    #[Route(path: '/', name: 'volontariat_compte_home')]
+    public function indexAction(Request $request) : Response
     {
         $user = $this->getUser();
-
         $formProfil = $this->createForm(UtilisateurEditType::class, $user);
-
         $formProfil->handleRequest($request);
-
         if ($formProfil->isSubmitted() && $formProfil->isValid()) {
             $this->userManager->updateUser();
             $this->addFlash('success', 'Profil mis à jour');
 
             return $this->redirectToRoute('volontariat_compte_home');
         }
-
         return $this->render(
             '@Volontariat/dashboard/settings/index.html.twig',
             [
@@ -76,21 +50,17 @@ class CompteController extends AbstractController
             ]
         );
     }
-
     /**
      * Deletes a Utilisateur utilisateur.
-     *
-     * @Route("/delete", name="volontariat_backend_utilisateur_delete", methods={"GET","DELETE"})
      */
-    public function deleteAction(Request $request)
+    #[Route(path: '/delete', name: 'volontariat_backend_utilisateur_delete', methods: ['GET', 'DELETE'])]
+    public function deleteAction(Request $request) : Response
     {
-
         $user = $this->getUser();
         $form = $this->createDeleteForm($user);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em = $this->managerRegistry->getManager();
             $volontaires = $em->getRepository(Volontaire::class)->findBy(['user' => $user]);
             foreach ($volontaires as $volontaire) {
                 $em->remove($volontaire);
@@ -111,7 +81,6 @@ class CompteController extends AbstractController
 
             return $this->redirectToRoute('app_logout');
         }
-
         return $this->render(
             '@Volontariat/dashboard/delete.html.twig',
             [
@@ -119,19 +88,18 @@ class CompteController extends AbstractController
             ]
         );
     }
-
     /**
      * Creates a form to delete a Utilisateur utilisateur by id.
      *
      * @param mixed $id The utilisateur id
      *
-     * @return \Symfony\Component\Form\FormInterface The form
+     * @return FormInterface The form
      */
-    private function createDeleteForm(User $user)
+    private function createDeleteForm(User $user): FormInterface
     {
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('volontariat_backend_utilisateur_delete', array('id' => $user->getId())))
-            ->setMethod('DELETE')
+            ->setMethod(Request::METHOD_DELETE)
             ->add('submit', SubmitType::class, array('label' => 'Delete', 'attr' => array('class' => 'btn-danger')))
             ->getForm();
     }

@@ -14,18 +14,15 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 class VolontaireEvent extends Event
 {
-    const VOLONTAIRE_NEW = VolontariatConstante::VOLONTAIRE_NEW;
-    const VOLONTAIRE_EDIT = VolontariatConstante::VOLONTAIRE_EDIT;
-    const VOLONTAIRE_DELETE = VolontariatConstante::VOLONTAIRE_DELETE;
+    public const VOLONTAIRE_NEW = VolontariatConstante::VOLONTAIRE_NEW;
+    public const VOLONTAIRE_EDIT = VolontariatConstante::VOLONTAIRE_EDIT;
+    public const VOLONTAIRE_DELETE = VolontariatConstante::VOLONTAIRE_DELETE;
 
-    protected $volontaire;
-
-    public function __construct(Volontaire $volontaire)
+    public function __construct(protected Volontaire $volontaire)
     {
-        $this->volontaire = $volontaire;
     }
 
-    public function getVolontaire()
+    public function getVolontaire(): Volontaire
     {
         return $this->volontaire;
     }

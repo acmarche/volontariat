@@ -21,11 +21,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class VolontaireType extends AbstractType
 {
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add(
@@ -122,9 +118,7 @@ class VolontaireType extends AbstractType
                     'required' => false,
                     'multiple' => true,
                     'expanded' => true,
-                    'query_builder' => function (SecteurRepository $er) {
-                        return $er->secteursActifs();
-                    }
+                    'query_builder' => fn(SecteurRepository $er) => $er->secteursActifs()
                 ]
             )
             ->add(
@@ -147,10 +141,7 @@ class VolontaireType extends AbstractType
         //   ->add('user', RegistrationFormType::class)
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
             array(

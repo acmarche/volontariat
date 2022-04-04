@@ -2,6 +2,7 @@
 
 namespace AcMarche\Volontariat\Repository;
 
+use DateTime;
 use AcMarche\Volontariat\Entity\Besoin;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -19,18 +20,18 @@ class BesoinRepository extends ServiceEntityRepository
     }
 
 
-    public function insert(Besoin $besoin)
+    public function insert(Besoin $besoin): void
     {
         $this->_em->persist($besoin);
         $this->save();
     }
 
-    public function save()
+    public function save(): void
     {
         $this->_em->flush();
     }
 
-    public function remove(Besoin $besoin)
+    public function remove(Besoin $besoin): void
     {
         $this->_em->remove($besoin);
         $this->save();
@@ -40,9 +41,9 @@ class BesoinRepository extends ServiceEntityRepository
      * @param int $max
      * @return Besoin[]
      */
-    public function getRecent($max = 5)
+    public function getRecent($max = 5): array
     {
-        $now = new \DateTime();
+        $now = new DateTime();
 
         $qb = $this->createQueryBuilder('so');
         $qb->leftJoin('so.association', 'association', 'WITH');
@@ -55,8 +56,7 @@ class BesoinRepository extends ServiceEntityRepository
         $qb->addOrderBy('so.date_begin', 'DESC');
 
         $query = $qb->getQuery();
-        $results = $query->getResult();
 
-        return $results;
+        return $query->getResult();
     }
 }

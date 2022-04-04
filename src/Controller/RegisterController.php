@@ -2,6 +2,7 @@
 
 namespace AcMarche\Volontariat\Controller;
 
+use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Form\User\RegisterType;
 use AcMarche\Volontariat\Manager\TokenManager;
@@ -14,48 +15,23 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class RegisterController
  * @package AcMarche\Admin\Security\Controller
- * @Route("/register")
  */
+#[Route(path: '/register')]
 class RegisterController extends AbstractController
 {
-    /**
-     * @var MailerSecurity
-     */
-    private $mailer;
-    /**
-     * @var UserManager
-     */
-    private $userManager;
-    /**
-     * @var TokenManager
-     */
-    private $tokenManager;
-
-    public function __construct(
-        UserManager $userManager,
-        TokenManager $tokenManager,
-        MailerSecurity $mailer
-    ) {
-        $this->mailer = $mailer;
-        $this->userManager = $userManager;
-        $this->tokenManager = $tokenManager;
+    public function __construct(private UserManager $userManager, private TokenManager $tokenManager, private MailerSecurity $mailer)
+    {
     }
-
-    /**
-     * @Route("/", name="volontariat_register", methods={"GET","POST"})
-     */
-    public function register(Request $request)
+    #[Route(path: '/', name: 'volontariat_register', methods: ['GET', 'POST'])]
+    public function register(Request $request) : Response
     {
         $user = new User();
-
         $form = $this->createForm(RegisterType::class, $user);
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
 
             $email = $form->getData()->getEmail();
-            if ($this->userManager->findOneByEmail($email)) {
+            if ($this->userManager->findOneByEmail($email) !== null) {
                 $this->addFlash('danger', 'Un utilisateur a déjà cet email');
 
                 return $this->redirectToRoute('volontariat_register');
@@ -69,7 +45,6 @@ class RegisterController extends AbstractController
 
             return $this->redirectToRoute('volontariat_dashboard');
         }
-
         return $this->render(
             '@Volontariat/security/registration/register.html.twig',
             [

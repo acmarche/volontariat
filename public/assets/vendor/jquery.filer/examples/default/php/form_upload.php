@@ -1,5 +1,5 @@
 <?php
-    include('../../../php/class.uploader.php');
+    include(__DIR__ . '/../../../php/class.uploader.php');
 
     $uploader = new Uploader();
     $data = $uploader->upload($_FILES['files'], array(

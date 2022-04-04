@@ -11,30 +11,11 @@ use Twig\Environment;
 
 class MailerContact
 {
-    /**
-     * @var Environment
-     */
-    private $twig;
-    /**
-     * @var MailerInterface
-     */
-    private $mailer;
-    /**
-     * @var string
-     */
-    private $from;
-
-    public function __construct(
-        Environment $twig,
-        MailerInterface $mailer,
-        string $from
-    ) {
-        $this->twig = $twig;
-        $this->mailer = $mailer;
-        $this->from = $from;
+    public function __construct(private Environment $twig, private MailerInterface $mailer, private string $from)
+    {
     }
 
-    public function sendToVolontaire(Volontaire $volontaire, ContactManager $contactManager)
+    public function sendToVolontaire(Volontaire $volontaire, ContactManager $contactManager): void
     {
         $message = (new Email())
             ->subject($contactManager->getSujet())
@@ -58,7 +39,7 @@ class MailerContact
         $this->sendCopyVolontariat($contactManager);
     }
 
-    public function sendToAssociation(Association $association, ContactManager $contactManager)
+    public function sendToAssociation(Association $association, ContactManager $contactManager): void
     {
         $message = (new Email())
             ->subject($contactManager->getSujet())
@@ -82,7 +63,7 @@ class MailerContact
         $this->sendCopyVolontariat($contactManager);
     }
 
-    protected function sendCopyVolontariat(ContactManager $contactManager)
+    protected function sendCopyVolontariat(ContactManager $contactManager): void
     {
         $message = (new Email())
             ->subject($contactManager->getSujet())

@@ -44,7 +44,7 @@ class Mailer
         Environment $twig,
         FlashBagInterface $session,
         MessageService $messageService,
-        MailerInterface $swiftMailer,
+        MailerInterface $mailer,
         RouterInterface $router,
         $to,
         $from
@@ -52,7 +52,7 @@ class Mailer
         $this->twig = $twig;
         $this->session = $session;
         $this->messageService = $messageService;
-        $this->mailer = $swiftMailer;
+        $this->mailer = $mailer;
         $this->to = $to;
         $this->from = $from;
         $this->associationRepository = $associationRepository;

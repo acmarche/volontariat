@@ -15,10 +15,15 @@
                     </header>
 
                     {% if error %}
-                        <div id="login-alert" class="alert alert-danger">
-                            {{ error.messageKey|trans(error.messageData, 'security') }}
+                        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                    {% endif %}
+
+                    {% if app.user %}
+                        <div class="mb-3">
+                            You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
                         </div>
                     {% endif %}
+
                     <!-- Form -->
                     <form class="g-py-15" method="post">
                         <div class="mb-4">
@@ -28,7 +33,7 @@
                                                 class="icon-finance-067 u-line-icon-pro"></i></span>
                                 </div>
                                 <input class="form-control g-color-black g-bg-white g-brd-gray-light-v4 g-py-15 g-px-15"
-                                       type="email" placeholder="Adresse email" name="email">
+                                       type="email" placeholder="Adresse email" name="email" value="{{ last_username }}" >
                             </div>
                         </div>
 
@@ -53,7 +58,8 @@
                                     </label>
                                 </div>
                                 <div class="col align-self-center text-right">
-                                    <a class="g-font-size-12" href="{{ path('volontariat_password_lost') }}">Mot de passe oublié?</a>
+                                    <a class="g-font-size-12" href="{{ path('volontariat_password_lost') }}">Mot de
+                                        passe oublié?</a>
                                 </div>
                             </div>
                         </div>
@@ -70,7 +76,8 @@
 
                     <footer class="text-center">
                         <p class="g-color-gray-dark-v5 g-font-size-13 mb-0">Pas encore de compte? <a
-                                    class="g-font-weight-600" href="{{ path('volontariat_register') }}">M'enregistrer</a>
+                                    class="g-font-weight-600"
+                                    href="{{ path('volontariat_register') }}">M'enregistrer</a>
                         </p>
                     </footer>
                 </div>

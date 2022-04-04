@@ -33,7 +33,7 @@ class AssociationVoter extends Voter
     /**
      * {@inheritdoc}
      */
-    protected function supports($attribute, $subject)
+    protected function supports($attribute, $subject):bool
     {
         // this voter is only executed for three specific permissions on Post objects
         return $subject instanceof Association && in_array($attribute, [self::SHOW, self::EDIT, self::DELETE]);
@@ -42,7 +42,7 @@ class AssociationVoter extends Voter
     /**
      * {@inheritdoc}
      */
-    protected function voteOnAttribute($attribute, $association, TokenInterface $token)
+    protected function voteOnAttribute($attribute, $association, TokenInterface $token):bool
     {
         $user = $token->getUser();
 

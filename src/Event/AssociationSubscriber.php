@@ -59,9 +59,7 @@ class AssociationSubscriber implements EventSubscriberInterface
     /**
      * Mail indiquant a l'admin qu'il doit valider
      * @param AssociationEvent $event
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+
      */
     public function associationRequest(AssociationEvent $event)
     {
@@ -73,9 +71,7 @@ class AssociationSubscriber implements EventSubscriberInterface
     /**
      * Previent l'asbl qu'elle a été validée
      * @param AssociationEvent $event
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+
      */
     public function associationValideeFinish(AssociationEvent $event)
     {
@@ -88,9 +84,7 @@ class AssociationSubscriber implements EventSubscriberInterface
     /**
      * Mail indiquant aux volontaires qu'une asbl a été ajoutée
      * @param AssociationEvent $event
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+
      */
     public function associationNew(AssociationEvent $event)
     {

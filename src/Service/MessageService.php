@@ -12,9 +12,8 @@ use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Entity\Volontaire;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class MessageService
 {
@@ -22,14 +21,6 @@ class MessageService
      * @var EntityManagerInterface
      */
     private $em;
-    /**
-     * @var AuthorizationCheckerInterface
-     */
-    private $authorizationChecker;
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
     /**
      * @var SessionInterface
      */
@@ -45,16 +36,12 @@ class MessageService
 
     public function __construct(
         EntityManagerInterface $em,
-        AuthorizationCheckerInterface $authorizationChecker,
-        TokenStorageInterface $tokenStorage,
-        SessionInterface $session,
+        RequestStack $requestStack,
         VolontaireService $volontaireService,
         AssociationService $associationService
     ) {
         $this->em = $em;
-        $this->authorizationChecker = $authorizationChecker;
-        $this->tokenStorage = $tokenStorage;
-        $this->session = $session;
+        $this->session = $requestStack->getSession();
         $this->volontaireService = $volontaireService;
         $this->associationService = $associationService;
     }

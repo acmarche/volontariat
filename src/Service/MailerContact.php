@@ -5,23 +5,12 @@ namespace AcMarche\Volontariat\Service;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Manager\ContactManager;
-use AcMarche\Volontariat\Repository\AssociationRepository;
-use AcMarche\Volontariat\Repository\VolontaireRepository;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Twig\Environment;
 
 class MailerContact
 {
-    /**
-     * @var AssociationRepository
-     */
-    private $associationRepository;
-    /**
-     * @var VolontaireRepository
-     */
-    private $volontaireRepository;
     /**
      * @var Environment
      */
@@ -36,17 +25,11 @@ class MailerContact
     private $from;
 
     public function __construct(
-        AssociationRepository $associationRepository,
-        VolontaireRepository $volontaireRepository,
         Environment $twig,
-        FlashBagInterface $flashBag,
         MailerInterface $mailer,
         string $from
     ) {
-        $this->associationRepository = $associationRepository;
-        $this->volontaireRepository = $volontaireRepository;
         $this->twig = $twig;
-        $this->flashBag = $flashBag;
         $this->mailer = $mailer;
         $this->from = $from;
     }

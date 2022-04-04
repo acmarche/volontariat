@@ -10,7 +10,6 @@ use AcMarche\Volontariat\Service\MailerSecurity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * Class RegisterController
@@ -19,10 +18,6 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 class RegisterController extends AbstractController
 {
-    /**
-     * @var UserPasswordEncoderInterface
-     */
-    private $userPasswordEncoder;
     /**
      * @var MailerSecurity
      */
@@ -39,10 +34,8 @@ class RegisterController extends AbstractController
     public function __construct(
         UserManager $userManager,
         TokenManager $tokenManager,
-        UserPasswordEncoderInterface $userPasswordEncoder,
         MailerSecurity $mailer
     ) {
-        $this->userPasswordEncoder = $userPasswordEncoder;
         $this->mailer = $mailer;
         $this->userManager = $userManager;
         $this->tokenManager = $tokenManager;

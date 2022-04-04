@@ -56,9 +56,7 @@ class ActiviteSubscriber implements EventSubscriberInterface
     /**
      * Mail indiquant a l'admin qu'il doit valider
      * @param ActiviteEvent $event
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+
      */
     public function activiteRequest(ActiviteEvent $event)
     {
@@ -70,9 +68,7 @@ class ActiviteSubscriber implements EventSubscriberInterface
     /**
      * Previent l'asbl qu'elle a été validée
      * @param ActiviteEvent $event
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+
      */
     public function activiteValidee(ActiviteEvent $event)
     {
@@ -83,9 +79,7 @@ class ActiviteSubscriber implements EventSubscriberInterface
     /**
      * Mail indiquant aux volontaires qu'une asbl a été ajoutée
      * @param ActiviteEvent $event
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+
      */
     public function activiteNew(ActiviteEvent $event)
     {

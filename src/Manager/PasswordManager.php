@@ -9,31 +9,31 @@
 namespace AcMarche\Volontariat\Manager;
 
 use AcMarche\Volontariat\Entity\Security\User;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class PasswordManager
 {
     /**
-     * @var UserPasswordEncoderInterface
+     * @var UserPasswordHasherInterface
      */
     private $userPasswordEncoder;
 
     public function __construct(
-        UserPasswordEncoderInterface $userPasswordEncoder
+        UserPasswordHasherInterface $userPasswordEncoder
     ) {
         $this->userPasswordEncoder = $userPasswordEncoder;
     }
 
     public function changePassword(User $user, string $plainPassword)
     {
-        $passwordCrypted = $this->userPasswordEncoder->encodePassword($user, $plainPassword);
+        $passwordCrypted = $this->userPasswordEncoder->hashPassword($user, $plainPassword);
         $user->setPassword($passwordCrypted);
         $user->setPlainPassword($plainPassword);//pour envoie par mail
     }
 
     public function cryptPassword(User $user)
     {
-        $passwordCrypted = $this->userPasswordEncoder->encodePassword($user, $user->getPlainPassword());
+        $passwordCrypted = $this->userPasswordEncoder->hashPassword($user, $user->getPlainPassword());
         $user->setPassword($passwordCrypted);
     }
 }

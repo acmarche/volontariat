@@ -9,6 +9,7 @@ use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\MailerInterface;
@@ -38,11 +39,13 @@ class Mailer
      */
     private $router;
 
+    private FlashBagInterface $flashBag;
+
     public function __construct(
         AssociationRepository $associationRepository,
         VolontaireRepository $volontaireRepository,
         Environment $twig,
-        FlashBagInterface $session,
+RequestStack $requestStack,
         MessageService $messageService,
         MailerInterface $mailer,
         RouterInterface $router,
@@ -50,7 +53,7 @@ class Mailer
         $from
     ) {
         $this->twig = $twig;
-        $this->session = $session;
+        $this->flashBag = $requestStack->getSession()->getFlashBag();
         $this->messageService = $messageService;
         $this->mailer = $mailer;
         $this->to = $to;
@@ -153,7 +156,7 @@ class Mailer
             try {
                 $this->send($this->from, $email, $sujet, $body);
             } catch (TransportException $e) {
-                $this->session->add("error", $e->getMessage());
+                $this->flashBag->add("error", $e->getMessage());
             }
         }
     }
@@ -181,7 +184,7 @@ class Mailer
         try {
             $this->send($this->from, $this->to, $sujet, $body);
         } catch (TransportException $e) {
-            $this->session->add("error", $e->getMessage());
+            $this->flashBag->add("error", $e->getMessage());
         }
     }
 
@@ -206,7 +209,7 @@ class Mailer
         try {
             $this->send($this->from, $association->getEmail(), $sujet, $body);
         } catch (TransportException $e) {
-            $this->session->add("error", $e->getMessage());
+            $this->flashBag->add("error", $e->getMessage());
         }
     }
 

@@ -12,39 +12,17 @@ use AcMarche\Volontariat\Entity\Security\Token;
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Repository\TokenRepository;
 use AcMarche\Volontariat\Repository\UserRepository;
-use AcMarche\Volontariat\Security\AppAuthenticator;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 
 class TokenManager
 {
-    /**
-     * @var TokenRepository
-     */
-    private $tokenRepository;
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-    /**
-     * @var GuardAuthenticatorHandler
-     */
-    private $guardAuthenticatorHandler;
-    /**
-     * @var AppAuthenticator
-     */
-    private $appAuthenticator;
-
     public function __construct(
-        GuardAuthenticatorHandler $guardAuthenticatorHandler,
-        AppAuthenticator $appAuthenticator,
-        TokenRepository $tokenRepository,
-        UserRepository $userRepository
+        private UserAuthenticatorInterface $userAuthenticator,
+        private FormLoginAuthenticator $formLoginAuthenticator,
+        private TokenRepository $tokenRepository,
+        private UserRepository $userRepository
     ) {
-        $this->tokenRepository = $tokenRepository;
-        $this->userRepository = $userRepository;
-        $this->guardAuthenticatorHandler = $guardAuthenticatorHandler;
-        $this->appAuthenticator = $appAuthenticator;
+
     }
 
     public function getInstance(User $user)
@@ -89,13 +67,13 @@ class TokenManager
         }
     }
 
-    public function loginUser(Request $request, User $user, $firewallName)
+    public function loginUser(Request $request, User $user, $firewallName): void
     {
-        $this->guardAuthenticatorHandler->authenticateUserAndHandleSuccess(
+        $this->userAuthenticator->authenticateUser(
             $user,
+            $this->formLoginAuthenticator,
             $request,
-            $this->appAuthenticator,
-            $firewallName
         );
     }
+
 }

@@ -12,14 +12,9 @@ use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class VolontaireService
 {
-
-
     /**
      * @var VolontaireRepository
      */
@@ -28,31 +23,13 @@ class VolontaireService
      * @var AssociationRepository
      */
     private $associationRepository;
-    /**
-     * @var AuthorizationCheckerInterface
-     */
-    private $authorizationChecker;
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
-    /**
-     * @var SessionInterface
-     */
-    private $session;
 
     public function __construct(
         VolontaireRepository $volontaireRepository,
-        AssociationRepository $associationRepository,
-        AuthorizationCheckerInterface $authorizationChecker,
-        TokenStorageInterface $tokenStorage,
-        SessionInterface $session
+        AssociationRepository $associationRepository
     ) {
         $this->volontaireRepository = $volontaireRepository;
         $this->associationRepository = $associationRepository;
-        $this->authorizationChecker = $authorizationChecker;
-        $this->tokenStorage = $tokenStorage;
-        $this->session = $session;
     }
 
     public function getVolontairesByUser(User $user, $valider = false)

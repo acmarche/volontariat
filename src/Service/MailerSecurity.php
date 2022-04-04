@@ -3,12 +3,11 @@
 namespace AcMarche\Volontariat\Service;
 
 use AcMarche\Volontariat\Entity\Security\User;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
-use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
 
 class MailerSecurity
@@ -33,31 +32,19 @@ class MailerSecurity
      * @var string
      */
     private $from;
-    /**
-     * @var ParameterBagInterface
-     */
-    private $parameterBag;
-    /**
-     * @var RouterInterface
-     */
-    private $router;
 
     public function __construct(
         Environment $twig,
-        FlashBagInterface $flashBag,
+        RequestStack $requestStack,
         MailerInterface $mailer,
-        ParameterBagInterface $parameterBag,
-        RouterInterface $router,
         string $to,
         string $from
     ) {
         $this->twig = $twig;
-        $this->flashBag = $flashBag;
+        $this->flashBag = $requestStack->getSession()->getFlashBag();
         $this->mailer = $mailer;
         $this->to = $to;
         $this->from = $from;
-        $this->parameterBag = $parameterBag;
-        $this->router = $router;
     }
 
     public function send($from, $destinataires, $sujet, $body, $bcc = null)

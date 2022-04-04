@@ -42,15 +42,10 @@ class MessageController extends AbstractController
      * @var VolontaireRepository
      */
     private $volontaireRepository;
-    /**
-     * @var Session
-     */
-    private $session;
 
     public function __construct(
         AssociationService $associationService,
         VolontaireRepository $volontaireRepository,
-        SessionInterface $session,
         MessageService $messageService,
         Mailer $mailer
     ) {
@@ -58,7 +53,6 @@ class MessageController extends AbstractController
         $this->messageService = $messageService;
         $this->mailer = $mailer;
         $this->volontaireRepository = $volontaireRepository;
-        $this->session = $session;
     }
 
     /**
@@ -74,6 +68,7 @@ class MessageController extends AbstractController
             $this->addFlash('warning', 'Vous ne pouvez pas accéder à cette page');
             $this->redirectToRoute('volontariat_dashboard');
         }
+        $session = $request->getSession();
 
         $user = $this->getUser();
         $associations = $this->associationService->getAssociationsByUser($user, true);
@@ -91,8 +86,8 @@ class MessageController extends AbstractController
         $form->handleRequest($request);
         $destinataires = [];
         $key = VolontariatConstante::VOLONTAIRE_SEARCH;
-        if ($this->session->has($key)) {
-            $data = unserialize($this->session->get($key), false);
+        if ($session->has($key)) {
+            $data = unserialize($session->get($key), false);
             $destinataires = $this->volontaireRepository->search($data);
         }
 

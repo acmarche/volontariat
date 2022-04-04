@@ -2,18 +2,17 @@
 
 
 use AcMarche\Volontariat\Entity\Security\User;
-use AcMarche\Volontariat\Security\AppAuthenticator;
+use AcMarche\Volontariat\Security\VolontariatAuthenticator;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
+
     $containerConfigurator->extension(
         'security',
         [
-            'encoders' => [
+            'password_hashers' => [
                 User::class => [
-                    'algorithm' => 'sha512',
-                    'encode_as_base64' => false,
-                    'iterations' => 1,
+                    'algorithm' => 'auto',
                 ],
             ],
         ]
@@ -35,7 +34,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         [
             'firewalls' => [
                 'main' => [
-                    'guard' => ['authenticators' => [AppAuthenticator::class]],
+                    'custom_authenticator' => [VolontariatAuthenticator::class],
                     'logout' => ['path' => 'app_logout'],
                 ],
             ],

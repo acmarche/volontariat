@@ -3,13 +3,15 @@
 namespace AcMarche\Volontariat\Entity\Security;
 
 use Doctrine\ORM\Mapping as ORM;
+use Stringable;
+use Symfony\Component\Security\Core\User\LegacyPasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass="AcMarche\Volontariat\Repository\UserRepository")
  * @ORM\Table(name="users")
  */
-class User implements UserInterface
+class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface, Stringable
 {
     /**
      * @ORM\Id()
@@ -148,7 +150,12 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string)$this->email;
+        return $this->email;
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->email;
     }
 
     public function hasRole($role)
@@ -193,7 +200,7 @@ class User implements UserInterface
     /**
      * @see UserInterface
      */
-    public function getSalt()
+    public function getSalt(): ?string
     {
         return (string)$this->salt;  // not needed when using the "bcrypt" algorithm in security.yaml
     }

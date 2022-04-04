@@ -11,7 +11,7 @@ namespace AcMarche\Volontariat\Event;
 use AcMarche\Volontariat\Service\Mailer;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
 
 class VolontaireSubscriber implements EventSubscriberInterface
@@ -25,12 +25,12 @@ class VolontaireSubscriber implements EventSubscriberInterface
         EntityManagerInterface $em,
         Mailer $mailer,
         TokenStorageInterface $tokenStorage,
-        SessionInterface $session
+        RequestStack $requestStack
     ) {
         $this->em = $em;
         $this->mailer = $mailer;
         $this->token = $tokenStorage;
-        $this->session = $session;
+        $this->session = $requestStack->getSession();
     }
 
     /**

@@ -6,6 +6,7 @@ use AcMarche\Volontariat\Entity\Activite;
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\MailerInterface;
@@ -31,10 +32,6 @@ class MailerActivite
      */
     private $flashBag;
     /**
-     * @var MessageService
-     */
-    private $messageService;
-    /**
      * @var MailerInterface
      */
     private $mailer;
@@ -51,8 +48,7 @@ class MailerActivite
         AssociationRepository $associationRepository,
         VolontaireRepository $volontaireRepository,
         Environment $twig,
-        FlashBagInterface $flashBag,
-        MessageService $messageService,
+        RequestStack $requestStack,
         MailerInterface $mailer,
         string $to,
         string $from
@@ -60,8 +56,7 @@ class MailerActivite
         $this->associationRepository = $associationRepository;
         $this->volontaireRepository = $volontaireRepository;
         $this->twig = $twig;
-        $this->flashBag = $flashBag;
-        $this->messageService = $messageService;
+        $this->flashBag = $requestStack->getSession()->getFlashBag();
         $this->mailer = $mailer;
         $this->to = $to;
         $this->from = $from;

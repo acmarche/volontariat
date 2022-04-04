@@ -45,7 +45,7 @@ class VolontaireVoter extends Voter
     /**
      * {@inheritdoc}
      */
-    protected function supports($attribute, $subject)
+    protected function supports($attribute, $subject):bool
     {
         if ($subject) {
             if (!$subject instanceof Volontaire) {
@@ -62,7 +62,7 @@ class VolontaireVoter extends Voter
     /**
      * {@inheritdoc}
      */
-    protected function voteOnAttribute($attribute, $volontaire, TokenInterface $token)
+    protected function voteOnAttribute($attribute, $volontaire, TokenInterface $token):bool
     {
         $user = $token->getUser();
 

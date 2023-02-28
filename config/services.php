@@ -26,11 +26,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters->set('acmarche_volontariat_captcha_secret_key', '%env(RECAPTCHA_SECRET_KEY)%');
 
     $services = $containerConfigurator->services();
-
-    $services->defaults()
+    $services = $services
+        ->defaults()
         ->autowire()
         ->autoconfigure()
-        ->private()
         ->bind('$to', '%acmarche_volontariat_email_to%')
         ->bind('$from', '%acmarche_volontariat_email_from%')
         ->bind('$rootUploadPath', '%acmarche_volontariat_upload_directory%')

@@ -15,11 +15,6 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Besoin controller.
- *
- *
- */
 #[Route(path: '/admin/message')]
 #[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class MessageController extends AbstractController
@@ -44,12 +39,7 @@ class MessageController extends AbstractController
         $count = is_countable($messages) ? count($messages) : 0;
         return $this->render('@Volontariat/admin/message/index.html.twig', array('messages' => $messages, 'count' => $count));
     }
-    /**
-     * Displays a form to create a new Page message.
-     *
-     *
-     * @throws NonUniqueResultException
-     */
+
     #[Route(path: '/new/{query}', name: 'volontariat_admin_message_new')]
     public function newAction(Request $request, $query = null) : Response
     {

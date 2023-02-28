@@ -16,23 +16,14 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class RegisterController
- * @package AcMarche\Admin\Security\Controller
- */
 #[Route(path: '/admin/applicant')]
 #[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class ApplicantController extends AbstractController
 {
-    public function __construct(private ApplicantRepository $applicantRepository, private ManagerRegistry $managerRegistry)
+    public function __construct(private ManagerRegistry $managerRegistry)
     {
     }
-    /**
-     * Lists all Applicant applicants.
-     *
-     *
-     *
-     */
+
     #[Route(path: '/', name: 'volontariat_admin_applicant')]
     public function indexAction() : Response
     {
@@ -46,11 +37,7 @@ class ApplicantController extends AbstractController
             )
         );
     }
-    /**
-     * Displays a form to create a new Applicant applicant.
-     *
-     *
-     */
+
     #[Route(path: '/new/', name: 'volontariat_admin_applicant_new', methods: ['GET', 'POST'])]
     public function newAction(Request $request) : Response
     {
@@ -74,11 +61,7 @@ class ApplicantController extends AbstractController
             )
         );
     }
-    /**
-     * Finds and displays a Applicant applicant.
-     *
-     *
-     */
+
     #[Route(path: '/{id}/show', name: 'volontariat_admin_applicant_show')]
     public function showAction(Applicant $applicant) : Response
     {
@@ -91,11 +74,7 @@ class ApplicantController extends AbstractController
             )
         );
     }
-    /**
-     * Displays a form to edit an existing Applicant applicant.
-     *
-     *
-     */
+
     #[Route(path: '/{id}/edit', name: 'volontariat_admin_applicant_edit')]
     public function editAction(Request $request, Applicant $applicant) : Response
     {
@@ -118,11 +97,7 @@ class ApplicantController extends AbstractController
             )
         );
     }
-    /**
-     * Displays a form to edit an existing Applicant applicant.
-     *
-     *
-     */
+
     #[Route(path: '/{id}/note', name: 'volontariat_admin_applicant_note')]
     public function notes(Request $request, Applicant $applicant) : Response
     {
@@ -145,9 +120,7 @@ class ApplicantController extends AbstractController
             )
         );
     }
-    /**
-     * Deletes a Applicant applicant.
-     */
+
     #[Route(path: '/{id}/delete', name: 'volontariat_admin_applicant_delete', methods: ['DELETE'])]
     public function deleteAction(Applicant $applicant, Request $request) : RedirectResponse
     {

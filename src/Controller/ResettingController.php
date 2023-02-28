@@ -19,10 +19,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class RegisterController
- * @package AcMarche\Admin\Security\Controller
- */
 #[Route(path: 'password/lost')]
 class ResettingController extends AbstractController
 {

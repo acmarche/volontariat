@@ -12,10 +12,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class RegisterController
- * @package AcMarche\Admin\Security\Controller
- */
 #[Route(path: '/register')]
 class RegisterController extends AbstractController
 {

@@ -17,9 +17,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Activite controller.
- */
 #[Route(path: '/backend/activite')]
 #[IsGranted('ROLE_VOLONTARIAT')]
 class ActiviteController extends AbstractController
@@ -27,12 +24,7 @@ class ActiviteController extends AbstractController
     public function __construct(private EventDispatcherInterface $eventDispatcher, private ManagerRegistry $managerRegistry)
     {
     }
-    /**
-     * Lists all Activite entities.
-     *
-     * use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;("is_granted('edit', association)")
-     *
-     */
+
     #[Route(path: '/index/{id}', name: 'volontariat_backend_activite', methods: ['GET'])]
     public function indexAction(Association $association) : Response
     {
@@ -43,9 +35,7 @@ class ActiviteController extends AbstractController
             'form_delete' => $formDelete->createView(),
         ));
     }
-    /**
-     * Displays a form to create a new Activite activite.
-     */
+
     #[Route(path: '/new/{id}', name: 'volontariat_backend_activite_new', methods: ['GET', 'POST'])]
     #[IsGranted('edit', subject: 'association')]
     public function new(Request $request, Association $association) : Response
@@ -75,11 +65,7 @@ class ActiviteController extends AbstractController
             'form' => $form->createView(),
         ));
     }
-    /**
-     * Displays a form to edit an existing Activite activite.
-     *
-     *
-     */
+
     #[Route(path: '/{id}/edit', name: 'volontariat_backend_activite_edit', methods: ['GET', 'POST'])]
     #[IsGranted('edit', subject: 'activite')]
     public function editAction(Request $request, Activite $activite) : Response
@@ -102,11 +88,7 @@ class ActiviteController extends AbstractController
             'form' => $editForm->createView(),
         ));
     }
-    /**
-     * Deletes a Activite activite.
-     *
-     *
-     */
+
     #[Route(path: '/', name: 'volontariat_backend_activite_delete', methods: ['DELETE'])]
     public function deleteAction(Request $request) : RedirectResponse
     {
@@ -132,13 +114,7 @@ class ActiviteController extends AbstractController
         }
         return $this->redirectToRoute('volontariat_backend_activite', ['id' => $association->getId()]);
     }
-    /**
-     * Creates a form to delete a Activite activite by id.
-     *
-     * @param mixed $id The activite id
-     *
-     * @return FormInterface The form
-     */
+
     private function createDeleteForm(): FormInterface
     {
         return $this->createFormBuilder()

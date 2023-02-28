@@ -7,10 +7,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class DefaultController
- * @package AcMarche\Volontariat\Controller
- */
 #[Route(path: '/admin')]
 #[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class DefaultController extends AbstractController

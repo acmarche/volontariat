@@ -2,15 +2,15 @@
 
 namespace AcMarche\Volontariat\Controller\Backend;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Form\FormInterface;
 use AcMarche\Volontariat\Entity\Temoignage;
 use AcMarche\Volontariat\Form\Admin\TemoignageType;
 use AcMarche\Volontariat\Repository\TemoignageRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,19 +19,19 @@ use Symfony\Component\Routing\Annotation\Route;
 #[IsGranted('ROLE_VOLONTARIAT')]
 class TemoignageController extends AbstractController
 {
-    public function __construct(private TemoignageRepository $temoignageRepository, private ManagerRegistry $managerRegistry)
-    {
+    public function __construct(
+        private TemoignageRepository $temoignageRepository,
+        private ManagerRegistry $managerRegistry
+    ) {
     }
-    /**
-     * Lists all Temoignage entities.
-     *
-     */
+
     #[Route(path: '/', name: 'volontariat_backend_temoignage', methods: ['GET'])]
-    public function index() : Response
+    public function index(): Response
     {
         $user = $this->getUser();
         $temoignages = $this->temoignageRepository->findBy(['user' => $user->getUserIdentifier()]);
         $formDelete = $this->createDeleteForm();
+
         return $this->render(
             '@Volontariat/backend/temoignage/index.html.twig',
             [
@@ -40,13 +40,9 @@ class TemoignageController extends AbstractController
             ]
         );
     }
-    /**
-     * Creates a new Temoignage entity.
-     *
-     *
-     */
+
     #[Route(path: '/new', name: 'volontariat_backend_temoignage_new', methods: ['GET', 'POST'])]
-    public function new(Request $request) : Response
+    public function new(Request $request): Response
     {
         $user = $this->getUser();
         $temoignage = new Temoignage();
@@ -64,6 +60,7 @@ class TemoignageController extends AbstractController
 
             return $this->redirectToRoute('volontariat_backend_temoignage');
         }
+
         return $this->render(
             '@Volontariat/backend/temoignage/new.html.twig',
             [
@@ -72,13 +69,13 @@ class TemoignageController extends AbstractController
             ]
         );
     }
-    /**
-     * Displays a form to edit an existing Temoignage entity.
-     *
-     */
-    #[Route(path: '/{id}/edit', requirements: ['id' => '\d+'], name: 'volontariat_backend_temoignage_edit', methods: ['GET', 'POST'])]
+
+    #[Route(path: '/{id}/edit', requirements: ['id' => '\d+'], name: 'volontariat_backend_temoignage_edit', methods: [
+        'GET',
+        'POST',
+    ])]
     #[IsGranted('edit', subject: 'temoignage')]
-    public function edit(Request $request, Temoignage $temoignage) : Response
+    public function edit(Request $request, Temoignage $temoignage): Response
     {
         $form = $this->createForm(TemoignageType::class, $temoignage)
             ->add('submit', SubmitType::class, array('label' => 'Update'));
@@ -90,6 +87,7 @@ class TemoignageController extends AbstractController
 
             return $this->redirectToRoute('volontariat_backend_temoignage');
         }
+
         return $this->render(
             '@Volontariat/backend/temoignage/edit.html.twig',
             [
@@ -98,12 +96,9 @@ class TemoignageController extends AbstractController
             ]
         );
     }
-    /**
-     * Deletes a Temoignage entity.
-     *
-     */
+
     #[Route(path: '/delete', name: 'volontariat_backend_temoignage_delete', methods: ['DELETE'])]
-    public function delete(Request $request) : RedirectResponse
+    public function delete(Request $request): RedirectResponse
     {
         $em = $this->managerRegistry->getManager();
         $idtemoignage = $request->request->get('idtemoignage');
@@ -125,8 +120,10 @@ class TemoignageController extends AbstractController
 
             $this->addFlash('success', 'Le témoignage a bien été supprimé');
         }
+
         return $this->redirectToRoute('volontariat_dashboard');
     }
+
     private function createDeleteForm(): FormInterface
     {
         return $this->createFormBuilder()

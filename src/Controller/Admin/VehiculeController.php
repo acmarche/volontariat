@@ -16,9 +16,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
-/**
- * Vehicule controller.
- */
 #[Route(path: '/admin/vehicule')]
 #[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class VehiculeController extends AbstractController
@@ -26,11 +23,7 @@ class VehiculeController extends AbstractController
     public function __construct(private ManagerRegistry $managerRegistry)
     {
     }
-    /**
-     * Lists all Vehicule entities.
-     *
-     *
-     */
+
     #[Route(path: '/', name: 'volontariat_admin_vehicule', methods: ['GET'])]
     public function indexAction() : Response
     {
@@ -43,11 +36,7 @@ class VehiculeController extends AbstractController
         )
         );
     }
-    /**
-     * Displays a form to create a new Vehicule vehicule.
-     *
-     *
-     */
+
     #[Route(path: '/new', name: 'volontariat_admin_vehicule_new', methods: ['GET', 'POST'])]
     public function newAction(Request $request) : Response
     {
@@ -71,11 +60,7 @@ class VehiculeController extends AbstractController
         )
         );
     }
-    /**
-     * Finds and displays a Vehicule vehicule.
-     *
-     *
-     */
+
     #[Route(path: '/{id}', name: 'volontariat_admin_vehicule_show', methods: ['GET'])]
     public function showAction(Vehicule $vehicule) : Response
     {
@@ -88,11 +73,7 @@ class VehiculeController extends AbstractController
         )
         );
     }
-    /**
-     * Displays a form to edit an existing Vehicule vehicule.
-     *
-     *
-     */
+
     #[Route(path: '/{id}/edit', name: 'volontariat_admin_vehicule_edit', methods: ['GET', 'POST'])]
     public function editAction(Request $request, Vehicule $vehicule) : Response
     {
@@ -114,9 +95,7 @@ class VehiculeController extends AbstractController
         )
         );
     }
-    /**
-     * Deletes a Vehicule vehicule.
-     */
+
     #[Route(path: '/{id}', name: 'volontariat_admin_vehicule_delete', methods: ['DELETE'])]
     public function deleteAction(Request $request, Vehicule $vehicule) : RedirectResponse
     {
@@ -131,13 +110,7 @@ class VehiculeController extends AbstractController
         }
         return $this->redirectToRoute('volontariat_admin_vehicule');
     }
-    /**
-     * Creates a form to delete a Vehicule vehicule by id.
-     *
-     * @param mixed $id The vehicule id
-     *
-     * @return FormInterface The form
-     */
+
     private function createDeleteForm(Vehicule $vehicule): FormInterface
     {
         return $this->createFormBuilder()

@@ -14,9 +14,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Secteur controller.
- */
 #[Route(path: '/admin/secteur')]
 #[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class SecteurController extends AbstractController
@@ -24,11 +21,7 @@ class SecteurController extends AbstractController
     public function __construct(private ManagerRegistry $managerRegistry)
     {
     }
-    /**
-     * Lists all Secteur entities.
-     *
-     *
-     */
+
     #[Route(path: '/', name: 'volontariat_admin_secteur', methods: ['GET'])]
     public function indexAction() : Response
     {
@@ -41,11 +34,7 @@ class SecteurController extends AbstractController
         )
         );
     }
-    /**
-     * Displays a form to create a new Secteur secteur.
-     *
-     *
-     */
+
     #[Route(path: '/new', name: 'volontariat_admin_secteur_new', methods: ['GET', 'POST'])]
     public function newAction(Request $request) : Response
     {
@@ -69,11 +58,7 @@ class SecteurController extends AbstractController
         )
         );
     }
-    /**
-     * Finds and displays a Secteur secteur.
-     *
-     *
-     */
+
     #[Route(path: '/{id}', name: 'volontariat_admin_secteur_show', methods: ['GET'])]
     public function showAction(Secteur $secteur) : Response
     {
@@ -86,11 +71,7 @@ class SecteurController extends AbstractController
         )
         );
     }
-    /**
-     * Displays a form to edit an existing Secteur secteur.
-     *
-     *
-     */
+
     #[Route(path: '/{id}/edit', name: 'volontariat_admin_secteur_edit', methods: ['GET', 'POST'])]
     public function editAction(Request $request, Secteur $secteur) : Response
     {
@@ -112,9 +93,7 @@ class SecteurController extends AbstractController
         )
         );
     }
-    /**
-     * Deletes a Secteur secteur.
-     */
+
     #[Route(path: '/{id}', name: 'volontariat_admin_secteur_delete', methods: ['DELETE'])]
     public function deleteAction(Request $request, Secteur $secteur) : RedirectResponse
     {
@@ -129,13 +108,7 @@ class SecteurController extends AbstractController
         }
         return $this->redirectToRoute('volontariat_admin_secteur');
     }
-    /**
-     * Creates a form to delete a Secteur secteur by id.
-     *
-     * @param mixed $id The secteur id
-     *
-     * @return FormInterface The form
-     */
+
     private function createDeleteForm(Secteur $secteur): FormInterface
     {
         return $this->createFormBuilder()

@@ -3,29 +3,27 @@
 declare(strict_types=1);
 
 use AcMarche\Volontariat\Doctrine\RandFunction;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Config\DoctrineConfig;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\Env;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $parameters = $containerConfigurator->parameters();
+return static function (DoctrineConfig $doctrine) {
 
-    $containerConfigurator->extension(
-        'doctrine',
-        [
-            'orm' => [
-                'mappings' => [
-                    'AcMarche\Volontariat' => [
-                        'is_bundle' => false,
-                        'dir' => '%kernel.project_dir%/src/AcMarche/Volontariat/src/Entity',
-                        'prefix' => 'AcMarche\Volontariat',
-                        'alias' => 'AcMarcheVolontariat',
-                    ],
-                ],
-                'dql' => [
-                    'numeric_functions' => [
-                        'Rand' => RandFunction::class,
-                    ],
-                ],
-            ],
-        ]
-    );
+    $doctrine->dbal()
+        ->connection('default')
+        ->url(env('DATABASE_URL')->resolve())
+        ->charset('utf8mb4');
+
+    $emMda = $doctrine->orm()->entityManager('default');
+    $emMda->connection('default');
+    $emMda->mapping('AcMarcheVolontariat')
+        ->isBundle(false)
+        ->type('attribute')
+        ->dir('%kernel.project_dir%/src/AcMarche/Volontariat/src/Entity')
+        ->prefix('AcMarche\Volontariat')
+        ->alias('AcMarcheVolontariat');
+    $emMda->dql([
+        'numeric_functions' => [
+            'Rand' => RandFunction::class,
+        ],
+    ]);
 };

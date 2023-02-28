@@ -11,7 +11,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             'db_driver' => 'orm',
         ]
     );
-
     $containerConfigurator->extension(
         'vich_uploader',
         [

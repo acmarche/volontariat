@@ -23,10 +23,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
-/**
- * Association
- * @Vich\Uploadable
- */
+#[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: AssociationRepository::class)]
 #[ORM\Table(name: 'association')]
 class Association implements Uploadable, TimestampableInterface, SluggableInterface, Stringable
@@ -112,7 +109,7 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
     protected Collection $activites;
 
     #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'])]
-    protected User $user;
+    protected ?User $user = null;
     #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => 0])]
     private bool $valider = false;
     #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => 1])]
@@ -145,10 +142,9 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
         return 'association';
     }
 
-    /**
-     * @Vich\UploadableField(mapping="association_file", fileNameProperty="fileName", size="fileSize")
-     */
-    private ?File $fileFile = null;
+    #[Vich\UploadableField(mapping: 'association_file', fileNameProperty: 'fileName', size: 'fileSize', mimeType: 'mimeType')]
+    #[Assert\File(maxSize: '20M')]
+    public ?File $file = null;
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $fileName = null;
     #[ORM\Column(type: 'string', length: 255, nullable: true)]

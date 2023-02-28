@@ -15,9 +15,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * Image controller.
- */
 #[Route(path: '/backend/activite/images')]
 #[IsGranted('ROLE_VOLONTARIAT')]
 class ImageActiviteController extends AbstractController
@@ -25,14 +22,10 @@ class ImageActiviteController extends AbstractController
     public function __construct(private FileHelper $fileHelper)
     {
     }
-    /**
-     * Displays a form to create a new Image entity.
-     *
-     *
-     */
+
     #[Route(path: '/new/{id}', name: 'volontariat_backend_image_activite', methods: ['GET'])]
     #[IsGranted('edit', subject: 'activite')]
-    public function editAction(Activite $activite) : Response
+    public function editAction(Activite $activite): Response
     {
         $form = $this->createFormBuilder()
             ->setAction(
@@ -43,20 +36,22 @@ class ImageActiviteController extends AbstractController
         $images = $this->fileHelper->getImages($activite);
         $deleteForm = $this->createDeleteForm($activite->getId());
         $association = $activite->getAssociation();
+
         return $this->render(
             '@Volontariat/backend/image_activite/edit.html.twig',
             array(
                 'images' => $images,
                 'form_delete' => $deleteForm->createView(),
                 'activite' => $activite,
-                'association'=>$association,
+                'association' => $association,
                 'form' => $form->createView(),
             )
         );
     }
+
     #[Route(path: '/upload/{id}', name: 'volontariat_backend_image_activite_upload', methods: ['POST'])]
     #[IsGranted('edit', subject: 'activite')]
-    public function uploadAction(Request $request, Activite $activite) : Response
+    public function uploadAction(Request $request, Activite $activite): Response
     {
         if ($request->isXmlHttpRequest()) {
             $file = $request->files->get('file');
@@ -73,13 +68,13 @@ class ImageActiviteController extends AbstractController
 
             return new Response('okid');
         }
+
+        return new Response('ko');
     }
-    /**
-     * Deletes a Image entity.
-     */
+
     #[Route(path: '/delete/{id}', name: 'volontariat_backend_image_activite_delete', methods: ['DELETE'])]
     #[IsGranted('edit', subject: 'activite')]
-    public function deleteAction(Request $request, Activite $activite) : RedirectResponse
+    public function deleteAction(Request $request, Activite $activite): RedirectResponse
     {
         $form = $this->createDeleteForm($activite->getId());
         $form->handleRequest($request);
@@ -101,15 +96,10 @@ class ImageActiviteController extends AbstractController
                 }
             }
         }
+
         return $this->redirectToRoute('volontariat_backend_image_activite', array('id' => $activite->getId()));
     }
-    /**
-     * Creates a form to delete a Image entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return FormInterface The form
-     */
+
     private function createDeleteForm($id): FormInterface
     {
         return $this->createFormBuilder()

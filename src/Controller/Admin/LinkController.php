@@ -24,11 +24,7 @@ class LinkController extends AbstractController
     public function __construct(private AssociationRepository $associationRepository, private VolontaireRepository $volontaireRepository, private FormBuilderVolontariat $formBuilder)
     {
     }
-    /**
-     * Displays a form to create a new Compte entity.
-     *
-     *
-     */
+
     #[Route(path: '/volontaire/{id}', name: 'volontariat_admin_associer_volontaire', methods: ['GET', 'POST'])]
     public function associerVolontaireAction(Request $request, Volontaire $volontaire) : Response
     {
@@ -55,11 +51,7 @@ class LinkController extends AbstractController
             )
         );
     }
-    /**
-     * Displays a form to create a new Compte entity.
-     *
-     *
-     */
+
     #[Route(path: '/association/{id}', name: 'volontariat_admin_associer_association', methods: ['GET', 'POST'])]
     public function associerAssociationAction(Request $request, Association $association) : Response
     {
@@ -99,9 +91,7 @@ class LinkController extends AbstractController
         }
         return $this->redirectToRoute('volontariat_admin_volontaire_show', array('id' => $volontaire->getId()));
     }
-    /**
-     * Deletes a  entity.
-     */
+
     #[Route(path: '/association/dissocier/{id}', name: 'volontariat_admin_dissocier_association', methods: ['DELETE'])]
     public function dissocierAssociationAction(Request $request, Association $association) : RedirectResponse
     {

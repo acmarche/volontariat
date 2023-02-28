@@ -2,22 +2,19 @@
 
 namespace AcMarche\Volontariat\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Form\FormInterface;
 use AcMarche\Volontariat\Entity\Activite;
 use AcMarche\Volontariat\Service\FileHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Image controller.
- */
 #[Route(path: '/admin/activite/images')]
 #[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class ImageActiviteController extends AbstractController
@@ -25,13 +22,9 @@ class ImageActiviteController extends AbstractController
     public function __construct(private FileHelper $fileHelper)
     {
     }
-    /**
-     * Displays a form to create a new Image entity.
-     *
-     *
-     */
+
     #[Route(path: '/new/{id}', name: 'volontariat_admin_activite_image_edit', methods: ['GET'])]
-    public function editAction(Activite $activite) : Response
+    public function editAction(Activite $activite): Response
     {
         $form = $this->createFormBuilder()
             ->setAction(
@@ -40,6 +33,7 @@ class ImageActiviteController extends AbstractController
             ->getForm();
         $images = $this->fileHelper->getImages($activite);
         $deleteForm = $this->createDeleteForm($activite->getId());
+
         return $this->render(
             '@Volontariat/admin/imageActivite/edit.html.twig',
             [
@@ -50,8 +44,9 @@ class ImageActiviteController extends AbstractController
             ]
         );
     }
+
     #[Route(path: '/upload/{id}', name: 'volontariat_admin_activite_image_upload', methods: ['POST'])]
-    public function uploadAction(Request $request, Activite $activite) : Response
+    public function uploadAction(Request $request, Activite $activite): Response
     {
         if ($request->isXmlHttpRequest()) {
             $file = $request->files->get('file');
@@ -68,14 +63,12 @@ class ImageActiviteController extends AbstractController
 
             return new Response('okid');
         }
+
+        return new Response('ko');
     }
-    /**
-     * Deletes a Image entity.
-     *
-     *
-     */
+
     #[Route(path: '/delete/{id}', name: 'volontariat_admin_activite_image_delete', methods: ['DELETE'])]
-    public function deleteAction(Request $request, Activite $activite) : RedirectResponse
+    public function deleteAction(Request $request, Activite $activite): RedirectResponse
     {
         $form = $this->createDeleteForm($activite->getId());
         $form->handleRequest($request);
@@ -97,15 +90,10 @@ class ImageActiviteController extends AbstractController
                 }
             }
         }
+
         return $this->redirectToRoute('volontariat_admin_activite_image_edit', array('id' => $activite->getId()));
     }
-    /**
-     * Creates a form to delete a Image entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return FormInterface The form
-     */
+
     private function createDeleteForm($id): FormInterface
     {
         return $this->createFormBuilder()

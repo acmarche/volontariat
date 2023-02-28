@@ -23,21 +23,14 @@ class TemoignageController extends AbstractController
     public function __construct(private ManagerRegistry $managerRegistry)
     {
     }
-    /**
-     * Lists all Temoignage entities.
-     *
-     */
+
     #[Route(path: '/', name: 'volontariat_admin_temoignage', methods: ['GET'])]
     public function index(TemoignageRepository $temoignageRepository) : Response
     {
         $temoignages = $temoignageRepository->findAll();
         return $this->render('@Volontariat/admin/temoignage/index.html.twig', ['temoignages' => $temoignages]);
     }
-    /**
-     * Creates a new Temoignage entity.
-     *
-     *
-     */
+
     #[Route(path: '/new', name: 'volontariat_admin_temoignage_new', methods: ['GET', 'POST'])]
     public function new(Request $request) : Response
     {
@@ -62,11 +55,7 @@ class TemoignageController extends AbstractController
             ]
         );
     }
-    /**
-     * Finds and displays a Temoignage entity.
-     *
-     *
-     */
+
     #[Route(path: '/{id}', requirements: ['id' => '\d+'], name: 'volontariat_admin_temoignage_show', methods: ['GET'])]
     public function show(Temoignage $temoignage) : Response
     {
@@ -79,11 +68,7 @@ class TemoignageController extends AbstractController
             ]
         );
     }
-    /**
-     * Displays a form to edit an existing Temoignage entity.
-     *
-     *
-     */
+
     #[Route(path: '/{id}/edit', requirements: ['id' => '\d+'], name: 'volontariat_admin_temoignage_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Temoignage $temoignage) : Response
     {
@@ -105,9 +90,7 @@ class TemoignageController extends AbstractController
             ]
         );
     }
-    /**
-     * Deletes a Temoignage entity.
-     */
+
     #[Route(path: '/{id}/delete', name: 'volontariat_admin_temoignage_delete', methods: ['DELETE'])]
     public function deleteAction(Temoignage $temoignage, Request $request) : RedirectResponse
     {

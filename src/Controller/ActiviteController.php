@@ -11,11 +11,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- *
- * @package AppBundle\Controller
- *
- */
 #[Route(path: '/activite')]
 class ActiviteController extends AbstractController
 {

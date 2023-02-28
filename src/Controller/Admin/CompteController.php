@@ -19,9 +19,7 @@ class CompteController extends AbstractController
     public function __construct(private UserRepository $userRepository)
     {
     }
-    /**
-     * Deletes a Compte entity.
-     */
+
     #[Route(path: '/{id}', name: 'volontariat_admin_compte_delete', methods: ['DELETE'])]
     public function deleteAction(Request $request, $id) : RedirectResponse
     {
@@ -40,13 +38,7 @@ class CompteController extends AbstractController
         }
         return $this->redirectToRoute('volontariat_admin_utilisateur');
     }
-    /**
-     * Creates a form to delete a Compte entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return FormInterface The form
-     */
+
     private function createDeleteForm($id): FormInterface
     {
         return $this->createFormBuilder()

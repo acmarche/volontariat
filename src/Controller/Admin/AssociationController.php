@@ -20,9 +20,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 
-/**
- * Association controller.
- */
 #[Route(path: '/admin/association')]
 #[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class AssociationController extends AbstractController
@@ -30,11 +27,7 @@ class AssociationController extends AbstractController
     public function __construct(private AssociationRepository $associationRepository, private FileHelper $fileHelper, private FormBuilderVolontariat $formBuilderVolontariat, private ManagerRegistry $managerRegistry)
     {
     }
-    /**
-     * Lists all Association entities.
-     *
-     *
-     */
+
     #[Route(path: '/', name: 'volontariat_admin_association', methods: ['GET', 'POST'])]
     public function indexAction(Request $request) : Response
     {
@@ -63,11 +56,7 @@ class AssociationController extends AbstractController
             )
         );
     }
-    /**
-     * Displays a form to create a new Association association.
-     *
-     *
-     */
+
     #[Route(path: '/new', name: 'volontariat_admin_association_new', methods: ['GET', 'POST'])]
     public function newAction(Request $request) : Response
     {
@@ -94,11 +83,7 @@ class AssociationController extends AbstractController
             )
         );
     }
-    /**
-     * Finds and displays a Association association.
-     *
-     *
-     */
+
     #[Route(path: '/{id}/show', name: 'volontariat_admin_association_show')]
     public function showAction(Association $association) : Response
     {
@@ -115,11 +100,7 @@ class AssociationController extends AbstractController
             )
         );
     }
-    /**
-     * Displays a form to edit an existing Association association.
-     *
-     *
-     */
+
     #[Route(path: '/{id}/edit', name: 'volontariat_admin_association_edit')]
     public function editAction(Request $request, Association $association) : Response
     {
@@ -143,9 +124,7 @@ class AssociationController extends AbstractController
             )
         );
     }
-    /**
-     * Deletes a Association association.
-     */
+
     #[Route(path: '/{id}/delete', name: 'volontariat_admin_association_delete', methods: ['DELETE'])]
     public function deleteAction(Association $association, Request $request) : RedirectResponse
     {

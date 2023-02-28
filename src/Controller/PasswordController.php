@@ -3,7 +3,6 @@
 namespace AcMarche\Volontariat\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
-use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Form\User\UtilisateurPasswordType;
 use AcMarche\Volontariat\Manager\PasswordManager;
 use AcMarche\Volontariat\Repository\UserRepository;
@@ -13,9 +12,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Password controller.
- */
 #[Route(path: '/security/password')]
 #[IsGranted('ROLE_VOLONTARIAT')]
 class PasswordController extends AbstractController
@@ -23,11 +19,7 @@ class PasswordController extends AbstractController
     public function __construct(private PasswordManager $passwordManager, private UserRepository $userRepository)
     {
     }
-    /**
-     * Displays a form to edit an existing Abonnement entity.
-     *
-     *
-     */
+
     #[Route(path: '/', name: 'volontariat_user_change_password', methods: ['GET', 'POST'])]
     public function edit(Request $request) : Response
     {

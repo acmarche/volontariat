@@ -16,9 +16,6 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Activite controller.
- */
 #[Route(path: '/admin/activite')]
 #[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class ActiviteController extends AbstractController
@@ -26,12 +23,7 @@ class ActiviteController extends AbstractController
     public function __construct(private FileHelper $fileHelper, private ManagerRegistry $managerRegistry)
     {
     }
-    /**
-     * Lists all Activite entities.
-     *
-     *
-     *
-     */
+
     #[Route(path: '/', name: 'volontariat_admin_activite')]
     public function indexAction() : Response
     {
@@ -44,11 +36,7 @@ class ActiviteController extends AbstractController
             )
         );
     }
-    /**
-     * Displays a form to create a new Activite activite.
-     *
-     *
-     */
+
     #[Route(path: '/new/{id}', name: 'volontariat_admin_activite_new', methods: ['GET', 'POST'])]
     public function newAction(Request $request, Association $association) : Response
     {
@@ -76,11 +64,7 @@ class ActiviteController extends AbstractController
             )
         );
     }
-    /**
-     * Finds and displays a Activite activite.
-     *
-     *
-     */
+
     #[Route(path: '/{id}/show', name: 'volontariat_admin_activite_show')]
     public function showAction(Activite $activite) : Response
     {
@@ -95,11 +79,7 @@ class ActiviteController extends AbstractController
             )
         );
     }
-    /**
-     * Displays a form to edit an existing Activite activite.
-     *
-     *
-     */
+
     #[Route(path: '/{id}/edit', name: 'volontariat_admin_activite_edit')]
     public function editAction(Request $request, Activite $activite) : Response
     {
@@ -122,9 +102,7 @@ class ActiviteController extends AbstractController
             )
         );
     }
-    /**
-     * Deletes a Activite activite.
-     */
+
     #[Route(path: '/{id}/delete', name: 'volontariat_admin_activite_delete', methods: ['DELETE'])]
     public function deleteAction(Activite $activite, Request $request) : RedirectResponse
     {

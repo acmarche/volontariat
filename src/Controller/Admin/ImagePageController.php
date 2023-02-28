@@ -18,9 +18,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * Image controller.
- */
 #[Route(path: '/admin/page/images')]
 #[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class ImagePageController extends AbstractController
@@ -28,12 +25,7 @@ class ImagePageController extends AbstractController
     public function __construct(private FileHelper $fileHelper)
     {
     }
-    /**
-     * Displays a form to create a new Image entity.
-     *
-     *
-     *
-     */
+
     #[Route(path: '/new/{id}', name: 'volontariat_admin_page_image_edit', methods: ['GET'])]
     public function editAction(Page $page) : Response
     {
@@ -73,11 +65,7 @@ class ImagePageController extends AbstractController
         }
         return new Response('ko');
     }
-    /**
-     * Deletes a Image entity.
-     *
-     *
-     */
+
     #[Route(path: '/delete/{id}', name: 'volontariat_admin_page_image_delete', methods: ['DELETE'])]
     public function deleteAction(Request $request, Page $page) : RedirectResponse
     {
@@ -103,13 +91,7 @@ class ImagePageController extends AbstractController
         }
         return $this->redirectToRoute('volontariat_admin_page_image_edit', array('id' => $page->getId()));
     }
-    /**
-     * Creates a form to delete a Image entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return FormInterface The form
-     */
+
     private function createDeleteForm($id): FormInterface
     {
         return $this->createFormBuilder()

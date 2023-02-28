@@ -18,11 +18,6 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Volontaire controller.
- *
- *
- */
 #[Route(path: '/backend/volontaire')]
 #[IsGranted('ROLE_VOLONTARIAT')]
 class VolontaireController extends AbstractController
@@ -43,9 +38,7 @@ class VolontaireController extends AbstractController
             )
         );
     }
-    /**
-     * Displays a form to create a new Volontaire volontaire.
-     */
+
     #[Route(path: '/new', name: 'volontariat_backend_volontaire_new', methods: ['GET', 'POST'])]
     public function newAction(Request $request) : Response
     {
@@ -81,11 +74,7 @@ class VolontaireController extends AbstractController
             )
         );
     }
-    /**
-     * Displays a form to edit an existing Volontaire volontaire.
-     *
-     *
-     */
+
     #[Route(path: '/{id}/edit', name: 'volontariat_backend_volontaire_edit')]
     #[IsGranted('edit', subject: 'volontaire')]
     public function editAction(Request $request, Volontaire $volontaire) : Response
@@ -110,9 +99,7 @@ class VolontaireController extends AbstractController
             )
         );
     }
-    /**
-     * Deletes a Volontaire volontaire.
-     */
+
     #[Route(path: '/delete', name: 'volontariat_backend_volontaire_delete', methods: ['DELETE'])]
     public function deleteAction(Request $request) : RedirectResponse
     {

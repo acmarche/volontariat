@@ -9,10 +9,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class DashboardController
- * @package AppBundle\Controller
- */
 #[Route(path: '/dashboard')]
 #[IsGranted('ROLE_VOLONTARIAT')]
 class DashboardController extends AbstractController

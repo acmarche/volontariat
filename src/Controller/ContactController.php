@@ -20,10 +20,6 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class ContactController
- * @package AcMarche\Volontariat\Controller
- */
 #[Route(path: '/contact')]
 class ContactController extends AbstractController
 {

@@ -8,11 +8,6 @@ use AcMarche\Volontariat\Entity\Secteur;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- *
- * @package AppBundle\Controller
- *
- */
 #[Route(path: '/secteur')]
 class SecteurController extends AbstractController
 {
@@ -28,11 +23,7 @@ class SecteurController extends AbstractController
             'secteurs' => $secteurs,
         ]);
     }
-    /**
-     * Displays a form to edit an existing Volontaire entity.
-     *
-     *
-     */
+
     #[Route(path: '/{id}', name: 'volontariat_secteur_show', methods: ['GET'])]
     public function showAction(Secteur $secteur) : Response
     {

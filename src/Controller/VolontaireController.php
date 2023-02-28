@@ -2,7 +2,6 @@
 
 namespace AcMarche\Volontariat\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Form\Search\SearchVolontaireType;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
@@ -10,22 +9,22 @@ use AcMarche\Volontariat\Service\VolontaireService;
 use AcMarche\Volontariat\Service\VolontariatConstante;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-/**
- * Class VolontaireController
- */
 #[Route(path: '/volontaire')]
 class VolontaireController extends AbstractController
 {
-    private Session $session;
-    public function __construct(private VolontaireRepository $volontaireRepository, private VolontaireService $volontaireService, private AuthorizationCheckerInterface $authorizationChecker)
-    {
+    public function __construct(
+        private VolontaireRepository $volontaireRepository,
+        private VolontaireService $volontaireService,
+        private AuthorizationCheckerInterface $authorizationChecker
+    ) {
     }
+
     #[Route(path: '/', name: 'volontariat_volontaire')]
-    public function indexAction(Request $request) : Response
+    public function indexAction(Request $request): Response
     {
         $data = array();
         $session = $request->getSession();
@@ -52,6 +51,7 @@ class VolontaireController extends AbstractController
                 )
             );
         }
+
         return $this->render(
             '@Volontariat/volontaire/index.html.twig',
             array(
@@ -61,13 +61,9 @@ class VolontaireController extends AbstractController
             )
         );
     }
-    /**
-     * Finds and displays a Volontaire entity.
-     *
-     *
-     */
+
     #[Route(path: '/{id}', name: 'volontariat_volontaire_show')]
-    public function showAction(Volontaire $volontaire) : Response
+    public function showAction(Volontaire $volontaire): Response
     {
         $associations = $this->volontaireService->getAssociationsWithSameSecteur($volontaire);
         if (!$this->authorizationChecker->isGranted('show', $volontaire)) {
@@ -79,6 +75,7 @@ class VolontaireController extends AbstractController
                 )
             );
         }
+
         return $this->render(
             '@Volontariat/volontaire/show.html.twig',
             array(

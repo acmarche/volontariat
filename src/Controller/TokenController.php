@@ -11,10 +11,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
-/**
- * Class TokenController
- * @package AcMarche\Volontariat\Controller
- */
 #[Route(path: '/token')]
 class TokenController extends AbstractController
 {

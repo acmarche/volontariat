@@ -16,11 +16,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 
-/**
- *
- * @package AppBundle\Controller
- *
- */
 #[Route(path: '/besoin')]
 class BesoinController extends AbstractController
 {

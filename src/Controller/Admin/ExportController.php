@@ -18,9 +18,6 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-/**
- * Export controller.
- */
 #[Route(path: '/admin/export')]
 #[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class ExportController extends AbstractController
@@ -47,10 +44,7 @@ class ExportController extends AbstractController
         $response->headers->set('Cache-Control', 'maxage=1');
         return $response;
     }
-    /**
-     * @throws Exception
-     * @throws NonUniqueResultException
-     */
+
     private function volontaireXSLObject(Request $request, Spreadsheet $spreadsheet): Worksheet
     {
         $session = $request->getSession();

@@ -17,9 +17,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 
-/**
- * Besoin controller.
- */
 #[Route(path: '/admin/besoin')]
 #[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class BesoinController extends AbstractController
@@ -27,12 +24,7 @@ class BesoinController extends AbstractController
     public function __construct(private ManagerRegistry $managerRegistry)
     {
     }
-    /**
-     * Lists all Besoin entities.
-     *
-     *
-     *
-     */
+
     #[Route(path: '/', name: 'volontariat_admin_besoin')]
     public function indexAction() : Response
     {
@@ -43,11 +35,7 @@ class BesoinController extends AbstractController
             'entities' => $entities,
         ));
     }
-    /**
-     * Displays a form to create a new Besoin besoin.
-     *
-     *
-     */
+
     #[Route(path: '/new/{id}', name: 'volontariat_admin_besoin_new', methods: ['GET', 'POST'])]
     public function newAction(Request $request, Association $association) : Response
     {
@@ -69,11 +57,7 @@ class BesoinController extends AbstractController
             'form' => $form->createView(),
         ));
     }
-    /**
-     * Finds and displays a Besoin besoin.
-     *
-     *
-     */
+
     #[Route(path: '/{id}/show', name: 'volontariat_admin_besoin_show')]
     public function showAction(Besoin $besoin) : Response
     {
@@ -83,11 +67,7 @@ class BesoinController extends AbstractController
             'delete_form' => $deleteForm->createView(),
         ));
     }
-    /**
-     * Displays a form to edit an existing Besoin besoin.
-     *
-     *
-     */
+
     #[Route(path: '/{id}/edit', name: 'volontariat_admin_besoin_edit')]
     public function editAction(Request $request, Besoin $besoin) : Response
     {
@@ -107,9 +87,7 @@ class BesoinController extends AbstractController
             'form' => $form->createView(),
         ));
     }
-    /**
-     * Deletes a Besoin besoin.
-     */
+
     #[Route(path: '/{id}/delete', name: 'volontariat_admin_besoin_delete', methods: ['DELETE'])]
     public function deleteAction(Besoin $besoin, Request $request) : RedirectResponse
     {

@@ -21,10 +21,6 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * Volontaire
- *
- */
 #[ORM\Table(name: 'volontaire')]
 #[ORM\Entity(repositoryClass: VolontaireRepository::class)]
 class Volontaire implements Uploadable, TimestampableInterface, SluggableInterface, Stringable

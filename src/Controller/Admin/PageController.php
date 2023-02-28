@@ -16,9 +16,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Page controller.
- */
 #[Route(path: '/admin/page')]
 #[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class PageController extends AbstractController
@@ -26,12 +23,7 @@ class PageController extends AbstractController
     public function __construct(private FileHelper $fileHelper, private ManagerRegistry $managerRegistry)
     {
     }
-    /**
-     * Lists all Page entities.
-     *
-     *
-     *
-     */
+
     #[Route(path: '/', name: 'volontariat_admin_page', methods: ['GET'])]
     public function indexAction() : Response
     {
@@ -44,11 +36,7 @@ class PageController extends AbstractController
             )
         );
     }
-    /**
-     * Displays a form to create a new Page page.
-     *
-     *
-     */
+
     #[Route(path: '/new', name: 'volontariat_admin_page_new', methods: ['GET', 'POST'])]
     public function newAction(Request $request) : Response
     {
@@ -72,11 +60,7 @@ class PageController extends AbstractController
             )
         );
     }
-    /**
-     * Finds and displays a Page page.
-     *
-     *
-     */
+
     #[Route(path: '/{id}', name: 'volontariat_admin_page_show', methods: ['GET'])]
     public function showAction(Page $page) : Response
     {
@@ -93,11 +77,7 @@ class PageController extends AbstractController
             )
         );
     }
-    /**
-     * Displays a form to edit an existing Page page.
-     *
-     *
-     */
+
     #[Route(path: '/{id}/edit', name: 'volontariat_admin_page_edit', methods: ['GET', 'POST'])]
     public function editAction(Request $request, Page $page) : Response
     {
@@ -119,9 +99,7 @@ class PageController extends AbstractController
             )
         );
     }
-    /**
-     * Deletes a Page page.
-     */
+
     #[Route(path: '/{id}', name: 'volontariat_admin_page_delete', methods: ['DELETE'])]
     public function deleteAction(Request $request, Page $page) : RedirectResponse
     {
@@ -135,13 +113,7 @@ class PageController extends AbstractController
         }
         return $this->redirectToRoute('volontariat_admin_page');
     }
-    /**
-     * Creates a form to delete a Page page by id.
-     *
-     * @param mixed $id The page id
-     *
-     * @return FormInterface The form
-     */
+
     private function createDeleteForm(Page $page): FormInterface
     {
         return $this->createFormBuilder()

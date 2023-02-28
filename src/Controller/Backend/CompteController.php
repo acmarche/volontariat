@@ -18,15 +18,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
-/**
- * Class CompteController
- * @package AcMarche\Volontariat\Controller
- */
+
 #[Route(path: '/compte')]
 #[IsGranted('ROLE_VOLONTARIAT')]
 class CompteController extends AbstractController
 {
-    public function __construct(private EventDispatcherInterface $eventDispatcher, private UserManager $userManager, private TokenStorageInterface $tokenStorage, private ManagerRegistry $managerRegistry)
+    public function __construct(private UserManager $userManager, private TokenStorageInterface $tokenStorage, private ManagerRegistry $managerRegistry)
     {
     }
     #[Route(path: '/', name: 'volontariat_compte_home')]
@@ -50,9 +47,7 @@ class CompteController extends AbstractController
             ]
         );
     }
-    /**
-     * Deletes a Utilisateur utilisateur.
-     */
+
     #[Route(path: '/delete', name: 'volontariat_backend_utilisateur_delete', methods: ['GET', 'DELETE'])]
     public function deleteAction(Request $request) : Response
     {
@@ -88,13 +83,7 @@ class CompteController extends AbstractController
             ]
         );
     }
-    /**
-     * Creates a form to delete a Utilisateur utilisateur by id.
-     *
-     * @param mixed $id The utilisateur id
-     *
-     * @return FormInterface The form
-     */
+
     private function createDeleteForm(User $user): FormInterface
     {
         return $this->createFormBuilder()

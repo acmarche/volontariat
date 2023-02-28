@@ -2,42 +2,38 @@
 
 namespace AcMarche\Volontariat\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Form\FormInterface;
 use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Form\Admin\VolontaireNoteType;
-use AcMarche\Volontariat\Form\Search\SearchVolontaireType;
 use AcMarche\Volontariat\Form\Admin\VolontaireType;
+use AcMarche\Volontariat\Form\Search\SearchVolontaireType;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
 use AcMarche\Volontariat\Service\FileHelper;
 use AcMarche\Volontariat\Service\FormBuilderVolontariat;
 use AcMarche\Volontariat\Service\VolontariatConstante;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Volontaire controller.
- */
 #[Route(path: '/admin/volontaire')]
 #[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class VolontaireController extends AbstractController
 {
-    public function __construct(private VolontaireRepository $volontaireRepository, private FileHelper $fileHelper, private FormBuilderVolontariat $formBuilderVolontariat, private ManagerRegistry $managerRegistry)
-    {
+    public function __construct(
+        private VolontaireRepository $volontaireRepository,
+        private FileHelper $fileHelper,
+        private FormBuilderVolontariat $formBuilderVolontariat,
+        private ManagerRegistry $managerRegistry
+    ) {
     }
-    /**
-     * Lists all Volontaire entities.
-     *
-     *
-     *
-     */
+
     #[Route(path: '/', name: 'volontariat_admin_volontaire')]
-    public function indexAction(Request $request) : Response
+    public function indexAction(Request $request): Response
     {
         $session = $request->getSession();
         $data = array();
@@ -53,6 +49,7 @@ class VolontaireController extends AbstractController
         }
         $session->set($key, serialize($data));
         $volontaires = $this->volontaireRepository->search($data);
+
         return $this->render(
             '@Volontariat/admin/volontaire/index.html.twig',
             array(
@@ -61,11 +58,9 @@ class VolontaireController extends AbstractController
             )
         );
     }
-    /**
-     * Displays a form to create a new Volontaire volontaire.
-     */
+
     #[Route(path: '/new', name: 'volontariat_admin_volontaire_new', methods: ['GET', 'POST'])]
-    public function newAction(Request $request) : Response
+    public function newAction(Request $request): Response
     {
         $volontaire = new Volontaire();
         $form = $this->createForm(VolontaireType::class, $volontaire)
@@ -81,6 +76,7 @@ class VolontaireController extends AbstractController
 
             return $this->redirectToRoute('volontariat_admin_volontaire_show', ['id' => $volontaire->getId()]);
         }
+
         return $this->render(
             '@Volontariat/admin/volontaire/new.html.twig',
             array(
@@ -89,16 +85,13 @@ class VolontaireController extends AbstractController
             )
         );
     }
-    /**
-     * Finds and displays a Volontaire volontaire.
-     *
-     *
-     */
+
     #[Route(path: '/{id}/show', name: 'volontariat_admin_volontaire_show')]
-    public function showAction(Volontaire $volontaire) : Response
+    public function showAction(Volontaire $volontaire): Response
     {
         $deleteForm = $this->createDeleteForm($volontaire);
         $dissocierForm = $this->formBuilderVolontariat->createDissocierForm($volontaire);
+
         return $this->render(
             '@Volontariat/admin/volontaire/show.html.twig',
             array(
@@ -108,13 +101,9 @@ class VolontaireController extends AbstractController
             )
         );
     }
-    /**
-     * Displays a form to edit an existing Volontaire volontaire.
-     *
-     *
-     */
+
     #[Route(path: '/{id}/edit', name: 'volontariat_admin_volontaire_edit')]
-    public function editAction(Request $request, Volontaire $volontaire) : Response
+    public function editAction(Request $request, Volontaire $volontaire): Response
     {
         $form = $this->createForm(VolontaireType::class, $volontaire)
             ->add('submit', SubmitType::class, array('label' => 'Update'));
@@ -127,6 +116,7 @@ class VolontaireController extends AbstractController
 
             return $this->redirectToRoute('volontariat_admin_volontaire_show', ['id' => $volontaire->getId()]);
         }
+
         return $this->render(
             '@Volontariat/admin/volontaire/edit.html.twig',
             array(
@@ -135,13 +125,9 @@ class VolontaireController extends AbstractController
             )
         );
     }
-    /**
-     * Deletes a Volontaire volontaire.
-     *
-     *
-     */
+
     #[Route(path: '/{id}/delete', name: 'volontariat_admin_volontaire_delete', methods: ['DELETE'])]
-    public function deleteAction(Volontaire $volontaire, Request $request) : RedirectResponse
+    public function deleteAction(Volontaire $volontaire, Request $request): RedirectResponse
     {
         $form = $this->createDeleteForm($volontaire);
         $form->handleRequest($request);
@@ -151,8 +137,10 @@ class VolontaireController extends AbstractController
 
             $this->addFlash('success', 'Le volontaire a bien été supprimé');
         }
+
         return $this->redirectToRoute('volontariat_admin_volontaire');
     }
+
     private function createDeleteForm(Volontaire $volontaire): FormInterface
     {
         return $this->createFormBuilder()
@@ -161,13 +149,9 @@ class VolontaireController extends AbstractController
             ->add('submit', SubmitType::class, array('label' => 'Delete', 'attr' => array('class' => 'btn-danger')))
             ->getForm();
     }
-    /**
-     * Displays a form to edit an existing Applicant applicant.
-     *
-     *
-     */
+
     #[Route(path: '/{id}/note', name: 'volontariat_admin_volontaire_note')]
-    public function notes(Request $request, Volontaire $volontaire) : Response
+    public function notes(Request $request, Volontaire $volontaire): Response
     {
         $em = $this->managerRegistry->getManager();
         $form = $this->createForm(VolontaireNoteType::class, $volontaire)
@@ -180,6 +164,7 @@ class VolontaireController extends AbstractController
 
             return $this->redirectToRoute('volontariat_admin_volontaire_show', ['id' => $volontaire->getId()]);
         }
+
         return $this->render(
             '@Volontariat/admin/volontaire/note.html.twig',
             array(

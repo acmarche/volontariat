@@ -2,7 +2,6 @@
 
 namespace AcMarche\Volontariat\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Message;
 use AcMarche\Volontariat\Entity\Volontaire;
@@ -17,21 +16,24 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class ContactController
- * @package AcMarche\Volontariat\Controller
- */
 #[Route(path: '/recommander')]
 class RecommanderController extends AbstractController
 {
-    public function __construct(private ContactManager $contactManager, private MailerContact $mailerContact, private Mailer $mailer, private CaptchaService $captchaService, private AssociationService $associationService, private MessageService $messageService)
-    {
+    public function __construct(
+        private ContactManager $contactManager,
+        private Mailer $mailer,
+        private CaptchaService $captchaService,
+        private AssociationService $associationService,
+        private MessageService $messageService
+    ) {
     }
+
     #[Route(path: '/volontaire/{id}', name: 'volontariat_recommander_volontaire')]
     #[IsGranted('ROLE_VOLONTARIAT')]
-    public function recommanderVolontaure(Request $request, Volontaire $volontaire) : Response
+    public function recommanderVolontaure(Request $request, Volontaire $volontaire): Response
     {
         if (($user = $this->getUser()) !== null) {
             $this->contactManager->populateFromUser($user);
@@ -58,6 +60,7 @@ class RecommanderController extends AbstractController
             return $this->redirectToRoute('volontariat_volontaire_show', ['id' => $volontaire->getId()]);
         }
         $keySite = $this->getParameter('acmarche_volontariat_captcha_site_key');
+
         return $this->render(
             '@Volontariat/contact/recommander_volontaire.html.twig',
             [
@@ -67,9 +70,10 @@ class RecommanderController extends AbstractController
             ]
         );
     }
+
     #[Route(path: '/association/{id}', name: 'volontariat_recommander_association')]
     #[isGranted('ROLE_VOLONTARIAT')]
-    public function recommanderAssociation(Request $request, Association $association) : Response
+    public function recommanderAssociation(Request $request, Association $association): Response
     {
         if (($user = $this->getUser()) !== null) {
             $this->contactManager->populateFromUser($user);
@@ -96,6 +100,7 @@ class RecommanderController extends AbstractController
             return $this->redirectToRoute('volontariat_association_show', ['id' => $association->getId()]);
         }
         $keySite = $this->getParameter('acmarche_volontariat_captcha_site_key');
+
         return $this->render(
             '@Volontariat/contact/recommander_associationhtml.twig',
             [

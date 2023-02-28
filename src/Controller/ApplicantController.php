@@ -15,10 +15,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-/**
- * Class RegisterController
- * @package AcMarche\Admin\Security\Controller
- */
 #[Route(path: '/demandeur')]
 class ApplicantController extends AbstractController
 {

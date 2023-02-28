@@ -19,12 +19,15 @@ class FileDownload extends AbstractExtension
     public function getFilters(): array
     {
         return array(
-            new TwigFilter('acmarche_volontariat_download_image', fn($fileName, Uploadable $uploadable) => $this->download($fileName, $uploadable)),
+            new TwigFilter(
+                'acmarche_volontariat_download_image',
+                fn($fileName, Uploadable $uploadable) => $this->download($fileName, $uploadable)
+            ),
         );
     }
 
     public function download($fileName, Uploadable $uploadable): string
     {
-        return $this->fileHelper->getDownloadPath($uploadable) . $fileName;
+        return $this->fileHelper->getDownloadPath($uploadable).$fileName;
     }
 }

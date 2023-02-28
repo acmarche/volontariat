@@ -2,8 +2,6 @@
 
 namespace AcMarche\Volontariat\Controller\Backend;
 
-use Doctrine\ORM\NonUniqueResultException;
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Volontariat\Entity\Message;
 use AcMarche\Volontariat\Form\MessagePublicType;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
@@ -11,34 +9,27 @@ use AcMarche\Volontariat\Service\AssociationService;
 use AcMarche\Volontariat\Service\Mailer;
 use AcMarche\Volontariat\Service\MessageService;
 use AcMarche\Volontariat\Service\VolontariatConstante;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
-/**
- * Besoin controller.
- *
- *
- */
 #[Route(path: '/backend/message')]
 #[IsGranted('ROLE_VOLONTARIAT')]
 class MessageController extends AbstractController
 {
-    public function __construct(private AssociationService $associationService, private VolontaireRepository $volontaireRepository, private MessageService $messageService, private Mailer $mailer)
-    {
+    public function __construct(
+        private AssociationService $associationService,
+        private VolontaireRepository $volontaireRepository,
+        private MessageService $messageService,
+        private Mailer $mailer
+    ) {
     }
-    /**
-     * Displays a form to create a new message.
-     *
-     *
-     * @throws NonUniqueResultException
-     */
+
     #[Route(path: '/new', name: 'volontariat_backend_message_new')]
-    public function newAction(Request $request) : Response
+    public function newAction(Request $request): Response
     {
         if (!$this->canAccess()) {
             $this->addFlash('warning', 'Vous ne pouvez pas accéder à cette page');
@@ -71,7 +62,9 @@ class MessageController extends AbstractController
 
             $this->addFlash(
                 'success',
-                'Votre message a bien été envoyé à '.(is_countable($destinataires) ? count($destinataires) : 0).' destinataires : '.
+                'Votre message a bien été envoyé à '.(is_countable($destinataires) ? count(
+                    $destinataires
+                ) : 0).' destinataires : '.
                 implode(
                     ', ',
                     $destinataires
@@ -80,6 +73,7 @@ class MessageController extends AbstractController
 
             return $this->redirectToRoute('volontariat_volontaire');
         }
+
         return $this->render(
             '@Volontariat/message/new.html.twig',
             [
@@ -89,6 +83,7 @@ class MessageController extends AbstractController
             ]
         );
     }
+
     protected function canAccess(): bool
     {
         $user = $this->getUser();

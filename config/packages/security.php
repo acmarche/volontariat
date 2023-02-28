@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 return static function (ContainerConfigurator $containerConfigurator): void {
 
     $main = [
-        'provider' => 'merite_user_provider',
+        'provider' => 'user_provider',
         'logout' => [
             'path' => 'app_logout',
         ],
@@ -18,7 +18,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         'custom_authenticator' => VolontariatAuthenticator::class,
     ];
 
-    //en focant en fin de /var/www/volontariat/vendor/symfony/password-hasher/Hasher/PasswordHasherFactory.php
+    // focant en fin de
+    /** @see PasswordHasherFactory.php */
     // $config['encode_as_base64'] = false;
     // $config['iterations'] = 1;
     $containerConfigurator->extension('security', [
@@ -36,7 +37,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ],
         ],
         'providers' => [
-            'merite_user_provider' => [
+            'user_provider' => [
                 'entity' => [
                     'class' => User::class,
                     'property' => 'email',

@@ -15,9 +15,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 
-/**
- * Besoin controller.
- */
 #[Route(path: '/backend/besoin')]
 #[IsGranted('ROLE_VOLONTARIAT')]
 class BesoinController extends AbstractController
@@ -39,9 +36,7 @@ class BesoinController extends AbstractController
             ]
         );
     }
-    /**
-     * Displays a form to create a new Besoin besoin.
-     */
+
     #[Route(path: '/new/{id}', name: 'volontariat_backend_besoin_new', methods: ['GET', 'POST'])]
     #[IsGranted('edit', subject: 'association')]
     public function newAction(Request $request, Association $association) : Response
@@ -72,11 +67,7 @@ class BesoinController extends AbstractController
             )
         );
     }
-    /**
-     * Displays a form to edit an existing Besoin besoin.
-     *
-     *
-     */
+
     #[Route(path: '/{id}/edit', name: 'volontariat_backend_besoin_edit')]
     #[IsGranted('edit', subject: 'besoin')]
     public function editAction(Request $request, Besoin $besoin) : Response
@@ -101,9 +92,7 @@ class BesoinController extends AbstractController
             )
         );
     }
-    /**
-     * Deletes a Besoin besoin.
-     */
+
     #[Route(path: '/delete', name: 'volontariat_backend_besoin_delete', methods: ['DELETE'])]
     public function deleteAction(Request $request) : RedirectResponse
     {

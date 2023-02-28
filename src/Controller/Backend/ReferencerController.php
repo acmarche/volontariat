@@ -2,34 +2,35 @@
 
 namespace AcMarche\Volontariat\Controller\Backend;
 
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Volontariat\Entity\Message;
 use AcMarche\Volontariat\Form\Contact\ReferencerType;
 use AcMarche\Volontariat\Manager\ContactManager;
 use AcMarche\Volontariat\Service\AssociationService;
 use AcMarche\Volontariat\Service\CaptchaService;
 use AcMarche\Volontariat\Service\Mailer;
-use AcMarche\Volontariat\Service\MailerContact;
 use AcMarche\Volontariat\Service\MessageService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * Class ContactController
- * @package AcMarche\Volontariat\Controller
- */
 #[Route(path: '/backend/referencer')]
 class ReferencerController extends AbstractController
 {
-    public function __construct(private ContactManager $contactManager, private MailerContact $mailerContact, private Mailer $mailer, private CaptchaService $captchaService, private AssociationService $associationService, private MessageService $messageService)
-    {
+    public function __construct(
+        private ContactManager $contactManager,
+        private Mailer $mailer,
+        private CaptchaService $captchaService,
+        private AssociationService $associationService,
+        private MessageService $messageService
+    ) {
     }
+
     #[Route(path: '/', name: 'volontariat_backend_referencer')]
     #[IsGranted('ROLE_VOLONTARIAT')]
-    public function index(Request $request) : Response
+    public function index(Request $request): Response
     {
         if (($user = $this->getUser()) !== null) {
             $this->contactManager->populateFromUser($user);
@@ -55,6 +56,7 @@ class ReferencerController extends AbstractController
             return $this->redirectToRoute('volontariat_dashboard');
         }
         $keySite = $this->getParameter('acmarche_volontariat_captcha_site_key');
+
         return $this->render(
             '@Volontariat/contact/referencer.html.twig',
             [

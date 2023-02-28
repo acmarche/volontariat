@@ -18,9 +18,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 
-/**
- * Association controller.
- */
 #[Route(path: '/backend/association')]
 #[IsGranted('ROLE_VOLONTARIAT')]
 class AssociationController extends AbstractController
@@ -28,11 +25,7 @@ class AssociationController extends AbstractController
     public function __construct(private AssociationRepository $associationRepository, private FileHelper $fileHelper, private EventDispatcherInterface $eventDispatcher, private ManagerRegistry $managerRegistry)
     {
     }
-    /**
-     * Lists all Association entities.
-     *
-     *
-     */
+
     #[Route(path: '/', name: 'volontariat_backend_association_index', methods: ['GET'])]
     public function indexAction() : Response
     {
@@ -46,11 +39,7 @@ class AssociationController extends AbstractController
             )
         );
     }
-    /**
-     * Displays a form to create a new Association association.
-     *
-     *
-     */
+
     #[Route(path: '/new', name: 'volontariat_backend_association_new', methods: ['GET', 'POST'])]
     public function newAction(Request $request) : Response
     {
@@ -87,11 +76,7 @@ class AssociationController extends AbstractController
             )
         );
     }
-    /**
-     * Displays a form to edit an existing Association association.
-     *
-     *
-     */
+
     #[Route(path: '/{id}/edit', name: 'volontariat_backend_association_edit')]
     public function editAction(Request $request, Association $association) : Response
     {
@@ -115,9 +100,7 @@ class AssociationController extends AbstractController
             )
         );
     }
-    /**
-     * Deletes a Association association.
-     */
+
     #[Route(path: '/delete', name: 'volontariat_backend_association_delete', methods: ['DELETE'])]
     public function deleteAction(Request $request) : RedirectResponse
     {

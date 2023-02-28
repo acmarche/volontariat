@@ -12,10 +12,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
-/**
- * Class AssociationController
- * @package AppBundle\Controller
- */
 #[Route(path: '/association')]
 class AssociationController extends AbstractController
 {

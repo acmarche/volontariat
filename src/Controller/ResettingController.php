@@ -2,17 +2,13 @@
 
 namespace AcMarche\Volontariat\Controller;
 
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Exception;
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Form\User\LostPasswordType;
 use AcMarche\Volontariat\Form\User\ResettingFormType;
-use AcMarche\Volontariat\Manager\PasswordManager;
 use AcMarche\Volontariat\Manager\TokenManager;
-use AcMarche\Volontariat\Manager\UserManager;
 use AcMarche\Volontariat\Repository\UserRepository;
-use AcMarche\Volontariat\Service\Mailer;
 use AcMarche\Volontariat\Service\MailerSecurity;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,16 +18,18 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route(path: 'password/lost')]
 class ResettingController extends AbstractController
 {
-    private UserPasswordHasherInterface $userPasswordEncoder;
-    private UserManager $userManager;
-    public function __construct(private UserRepository $userRepository, private PasswordManager $passwordManager, private TokenManager $tokenManager, private MailerSecurity $mailer)
-    {
+    public function __construct(
+        private UserRepository $userRepository,
+        private TokenManager $tokenManager,
+        private MailerSecurity $mailer
+    ) {
     }
+
     /**
      * @throws Exception
      */
     #[Route(path: '/', name: 'volontariat_password_lost', methods: ['GET', 'POST'])]
-    public function request(Request $request) : Response
+    public function request(Request $request): Response
     {
         $form = $this->createForm(LostPasswordType::class)
             ->add('submit', SubmitType::class, ['label' => 'Demander un nouveau mot de passe']);
@@ -51,6 +49,7 @@ class ResettingController extends AbstractController
 
             return $this->redirectToRoute('volontariat_password_confirmation');
         }
+
         return $this->render(
             '@Volontariat/security/resetting/request.html.twig',
             [
@@ -58,20 +57,22 @@ class ResettingController extends AbstractController
             ]
         );
     }
+
     #[Route(path: '/confirmation', name: 'volontariat_password_confirmation', methods: ['GET'])]
-    public function requestConfirmed() : Response
+    public function requestConfirmed(): Response
     {
         return $this->render(
             '@Volontariat/security/resetting/confirmed.html.twig'
         );
     }
+
     /**
      * Reset user password.
      * @param string $token
      *
      */
     #[Route(path: '/reset/{token}', name: 'volontariat_password_reset', methods: ['GET', 'POST'])]
-    public function reset(Request $request, $token) : Response
+    public function reset(Request $request, $token): Response
     {
         $user = $this->userRepository->findOneBy(['confirmationToken' => $token]);
         if (!$user instanceof User) {
@@ -96,6 +97,7 @@ class ResettingController extends AbstractController
 
             return $this->redirectToRoute('volontariat_dashboard');
         }
+
         return $this->render(
             '@Volontariat/security/resetting/reset.html.twig',
             array(
@@ -104,6 +106,7 @@ class ResettingController extends AbstractController
             )
         );
     }
+
     /**
      * @throws Exception
      */

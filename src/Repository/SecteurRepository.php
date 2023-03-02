@@ -2,6 +2,7 @@
 
 namespace AcMarche\Volontariat\Repository;
 
+use AcMarche\Volontariat\Doctrine\OrmCrudTrait;
 use Doctrine\ORM\QueryBuilder;
 use AcMarche\Volontariat\Entity\Secteur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -14,6 +15,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class SecteurRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Secteur::class);

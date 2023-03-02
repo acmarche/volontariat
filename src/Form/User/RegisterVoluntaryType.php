@@ -10,7 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UtilisateurType extends AbstractType
+class RegisterVoluntaryType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -43,7 +43,7 @@ class UtilisateurType extends AbstractType
                 'accord',
                 CheckboxType::class,
                 [
-                    'label' => "J'ai pris connaissance du réglement de la vie privée",
+                    'label' => "J'ai pris connaissance du règlement de la vie privée",
                 ]
             );
     }

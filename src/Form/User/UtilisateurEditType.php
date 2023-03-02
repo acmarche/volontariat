@@ -37,7 +37,7 @@ class UtilisateurEditType extends AbstractType
 
     public function getParent(): ?string
     {
-        return UtilisateurType::class;
+        return RegisterVoluntaryType::class;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

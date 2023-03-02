@@ -2,7 +2,6 @@
 
 namespace AcMarche\Volontariat\Form;
 
-use FOS\UserBundle\Form\Type\RegistrationFormType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -37,10 +36,5 @@ class RegistrationType extends AbstractType
                 ]
             );
         $builder->remove('username');
-    }
-
-    public function getParent(): string
-    {
-        return RegistrationFormType::class;
     }
 }

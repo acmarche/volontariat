@@ -18,15 +18,6 @@ class RegisterType extends AbstractType
     {
         $builder
             ->add(
-                'plainPassword',
-                RepeatedType::class,
-                array(
-                    'type' => PasswordType::class,
-                    'first_options' => array('label' => 'form.password'),
-                    'second_options' => array('label' => 'form.password_confirmation'),
-                )
-            )
-            ->add(
                 'accord',
                 CheckboxType::class,
                 [
@@ -48,7 +39,7 @@ class RegisterType extends AbstractType
 
     public function getParent(): ?string
     {
-        return UtilisateurType::class;
+        return RegisterVoluntaryType::class;
     }
 
 

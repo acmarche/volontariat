@@ -2,6 +2,7 @@
 
 namespace AcMarche\Volontariat\Repository;
 
+use AcMarche\Volontariat\Doctrine\OrmCrudTrait;
 use AcMarche\Volontariat\Entity\Activite;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -13,6 +14,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ActiviteRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Activite::class);

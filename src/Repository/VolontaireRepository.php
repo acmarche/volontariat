@@ -2,6 +2,7 @@
 
 namespace AcMarche\Volontariat\Repository;
 
+use AcMarche\Volontariat\Doctrine\OrmCrudTrait;
 use Doctrine\ORM\NonUniqueResultException;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Secteur;
@@ -17,27 +18,11 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class VolontaireRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Volontaire::class);
-    }
-
-
-    public function insert(Volontaire $volontaire): void
-    {
-        $this->_em->persist($volontaire);
-        $this->save();
-    }
-
-    public function save(): void
-    {
-        $this->_em->flush();
-    }
-
-    public function remove(Volontaire $volontaire): void
-    {
-        $this->_em->remove($volontaire);
-        $this->save();
     }
 
     /**

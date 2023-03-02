@@ -5,8 +5,7 @@ namespace AcMarche\Volontariat\Controller\Admin;
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Form\User\ChangePasswordType;
 use AcMarche\Volontariat\Form\User\UtilisateurEditType;
-use AcMarche\Volontariat\Form\User\UtilisateurType;
-use AcMarche\Volontariat\Manager\PasswordManager;
+use AcMarche\Volontariat\Form\User\RegisterVoluntaryType;
 use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Repository\UserRepository;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
@@ -27,7 +26,6 @@ class UtilisateurController extends AbstractController
         private UserRepository $userRepository,
         private AssociationRepository $associationRepository,
         private VolontaireRepository $volontaireRepository,
-        private PasswordManager $passwordManager
     ) {
     }
 
@@ -52,7 +50,7 @@ class UtilisateurController extends AbstractController
     public function newAction(Request $request): Response
     {
         $utilisateur = new User();
-        $form = $this->createForm(UtilisateurType::class, $utilisateur)
+        $form = $this->createForm(RegisterVoluntaryType::class, $utilisateur)
             ->add('submit', SubmitType::class, array('label' => 'Create'));
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

@@ -2,6 +2,7 @@
 
 namespace AcMarche\Volontariat\Repository;
 
+use AcMarche\Volontariat\Doctrine\OrmCrudTrait;
 use Doctrine\ORM\NonUniqueResultException;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Secteur;
@@ -17,6 +18,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class AssociationRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Association::class);

@@ -4,7 +4,6 @@ namespace AcMarche\Volontariat\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Volontariat\Form\User\UtilisateurPasswordType;
-use AcMarche\Volontariat\Manager\PasswordManager;
 use AcMarche\Volontariat\Repository\UserRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -16,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[IsGranted('ROLE_VOLONTARIAT')]
 class PasswordController extends AbstractController
 {
-    public function __construct(private PasswordManager $passwordManager, private UserRepository $userRepository)
+    public function __construct(private UserRepository $userRepository)
     {
     }
 

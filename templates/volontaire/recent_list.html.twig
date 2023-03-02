@@ -1,7 +1,0 @@
-{% for volontaire in volontaires %}
-    <li>
-        <a href="{{ path('volontariat_volontaire_show', {'id':volontaire.id}) }}">
-            {{ volontaire.surname }} de {{ volontaire.city | title }}
-        </a>
-    </li>
-{% endfor %}

@@ -9,52 +9,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <link rel="icon" type="image/x-icon" href="{{ asset('bundles/volontariat/favicon.ico') }}"/>
-
-    {% include('@Volontariat/base/css.html.twig') %}
-
-    {% block stylesheets %}{% endblock %}
-    {% block scriptshead %}{% endblock %}
-
-    {% include '@Volontariat/_analytics.html.twig' %}
-</head>
-
-<body>
-<main>
-    {% set action = app.request.attributes.get("_route") %}
-    {% include '@Volontariat/base/header.html.twig' %}
-
-    {% block breadcrumbs %}
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
     {% endblock %}
-
-    {% include '@Volontariat/_flash_messages.html.twig' %}
-
+</head>
+<body>
+{% include '@Volontariat/header/_header.html.twig' %}
+<main class="container mx-auto sm:px-6 lg:px-8">
     {% block body %}
 
     {% endblock %}
-
-    {% block footer %}
-        {% include '@Volontariat/base/footer.html.twig' %}
-    {% endblock %}
-
-    <a class="js-go-to u-go-to-v1" href="#!" data-type="fixed" data-position='{
-     "bottom": 15,
-     "right": 15
-   }' data-offset-top="400" data-compensation="#js-header" data-show-effect="zoomIn">
-        <i class="hs-icon hs-icon-arrow-top"></i>
-    </a>
 </main>
-
-<div class="u-outer-spaces-helper"></div>
-
-{% block basejs %}
-    {% include '@Volontariat/base/javascripts.html.twig' %}
-{% endblock %}
-
-{% block scripts %}
-
-{% endblock %}
-
-<script src="//cdn1.readspeaker.com/script/3/webReader/webReader.js?pids=wr" type="text/javascript"></script>
 </body>
 </html>

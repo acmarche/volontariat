@@ -8,12 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>{% block title %}Volontariat{% endblock %}</title>
     {% block stylesheets %}{% endblock %}
-    <link href="{{ asset('bundles/volontariat/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('bundles/volontariat/css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('bundles/volontariat/css/datepicker.css') }}" rel="stylesheet">
-    <link href="{{ asset('bundles/volontariat/css/print.css') }}" rel="stylesheet" media="print">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/all.css" integrity="sha384-/rXc/GQVaYpyDdyxK+ecHPVYJSN9bmVFBvjA/9eOB+pb3F2w2N6fc5qB9Ew5yIns" crossorigin="anonymous">
-    <link href="{{ asset('bundles/volontariat/lightGallery/dist/css/lightgallery.css') }}" rel="stylesheet">
 </head>
 <body>
 {% set action = app.request.attributes.get("_route") %}
@@ -46,21 +40,6 @@
 <footer class="mb-5">
 
 </footer>
-{% block javascripts %}{% endblock %}
-<script src="{{ asset('bundles/volontariat/jquery/jquery.min.js') }}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-        crossorigin="anonymous"></script>
-<script src="{{ asset('bundles/volontariat/bootstrap/js/bootstrap.min.js') }}"></script>
-
-<script src="{{ asset('bundles/volontariat/lightGallery/dist/js/lightgallery.min.js') }}"
-        crossorigin="anonymous"></script>
-
-<!-- A jQuery plugin that adds cross-browser mouse wheel support. (Optional) -->
-<script src="{{ asset('bundles/volontariat/lightGallery/lib/jquery.mousewheel.min.js') }}"></script>
-<!-- lightgallery plugins -->
-<script src="{{ asset('bundles/volontariat/lightGallery/modules/lg-fullscreen.min.js') }}"></script>
-<script src="{{ asset('bundles/volontariat/lightGallery/modules/lg-zoom.min.js') }}"></script>
 {% block scripts %}
 
 {% endblock %}

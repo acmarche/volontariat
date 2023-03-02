@@ -4,11 +4,10 @@ namespace AcMarche\Volontariat\Controller\Backend;
 
 use AcMarche\Volontariat\Entity\Message;
 use AcMarche\Volontariat\Form\MessagePublicType;
+use AcMarche\Volontariat\Mailer\Mailer;
+use AcMarche\Volontariat\Mailer\MessageService;
+use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
-use AcMarche\Volontariat\Service\AssociationService;
-use AcMarche\Volontariat\Service\Mailer;
-use AcMarche\Volontariat\Service\MessageService;
-use AcMarche\Volontariat\Service\VolontariatConstante;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -21,7 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class MessageController extends AbstractController
 {
     public function __construct(
-        private AssociationService $associationService,
+        private AssociationRepository $associationRepository,
         private VolontaireRepository $volontaireRepository,
         private MessageService $messageService,
         private Mailer $mailer
@@ -29,6 +28,7 @@ class MessageController extends AbstractController
     }
 
     #[Route(path: '/new', name: 'volontariat_backend_message_new')]
+
     public function newAction(Request $request): Response
     {
         if (!$this->canAccess()) {
@@ -37,7 +37,7 @@ class MessageController extends AbstractController
         }
         $session = $request->getSession();
         $user = $this->getUser();
-        $associations = $this->associationService->getAssociationsByUser($user, true);
+        $associations = $this->associationRepository->getAssociationsByUser($user, true);
         $froms = $this->messageService->getFroms($user, $associations);
         $message = new Message();
         // $message->setFroms($froms);
@@ -82,15 +82,5 @@ class MessageController extends AbstractController
                 'form' => $form->createView(),
             ]
         );
-    }
-
-    protected function canAccess(): bool
-    {
-        $user = $this->getUser();
-        if ($user->hasRole('ROLE_VOLONTARIAT_ADMIN')) {
-            return true;
-        }
-
-        return $this->associationService->hasValidAssociation($user);
     }
 }

@@ -1,9 +1,9 @@
 <?php
 
-namespace AcMarche\Volontariat\Security;
+namespace AcMarche\Volontariat\Security\Voter;
 
 use AcMarche\Volontariat\Entity\Security\User;
-use AcMarche\Volontariat\Entity\Page;
+use AcMarche\Volontariat\Entity\Temoignage;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  *
  * @author Yonel Ceruto <yonelceruto@gmail.com>
  */
-class PageVoter extends Voter
+class TemoignageVoter extends Voter
 {
     // Defining these constants is overkill for this simple application, but for real
     // applications, it's a recommended practice to avoid relying on "magic strings"
@@ -34,13 +34,13 @@ class PageVoter extends Voter
     protected function supports($attribute, $subject):bool
     {
         // this voter is only executed for three specific permissions on Post objects
-        return $subject instanceof Page && in_array($attribute, [self::SHOW, self::EDIT, self::DELETE]);
+        return $subject instanceof Temoignage && in_array($attribute, [self::SHOW, self::EDIT, self::DELETE]);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function voteOnAttribute($attribute, $page, TokenInterface $token):bool
+    protected function voteOnAttribute($attribute, $temoignage, TokenInterface $token):bool
     {
         $user = $token->getUser();
 
@@ -52,9 +52,9 @@ class PageVoter extends Voter
             return true;
         }
         return match ($attribute) {
-            self::SHOW => $this->canView($page, $token),
-            self::EDIT => $this->canEdit($page, $token),
-            self::DELETE => $this->canDelete($page, $token),
+            self::SHOW => $this->canView($temoignage, $token),
+            self::EDIT => $this->canEdit($temoignage, $token),
+            self::DELETE => $this->canDelete($temoignage, $token),
             default => false,
         };
     }
@@ -62,18 +62,21 @@ class PageVoter extends Voter
     /**
      * Voir dans l'admin
      */
-    private function canView(Page $page, TokenInterface $token): bool
+    private function canView(Temoignage $temoignage, TokenInterface $token): bool
     {
-        return true;
+        return (bool) $this->canEdit($temoignage, $token);
     }
 
-    private function canEdit(Page $page, TokenInterface $token): bool
+    private function canEdit(Temoignage $temoignage, TokenInterface $token): bool
     {
-        return false;
+        $user = $token->getUser();
+        $associationUser = $temoignage->getUser();
+
+        return $user === $associationUser;
     }
 
-    private function canDelete(Page $page, TokenInterface $token): bool
+    private function canDelete(Temoignage $temoignage, TokenInterface $token): bool
     {
-        return (bool) $this->canEdit($page, $token);
+        return (bool) $this->canEdit($temoignage, $token);
     }
 }

@@ -1,10 +1,9 @@
 <?php
 
-namespace AcMarche\Volontariat\Security;
+namespace AcMarche\Volontariat\Security\Voter;
 
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Entity\Volontaire;
-use AcMarche\Volontariat\Service\AssociationService;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -28,14 +27,15 @@ class VolontaireVoter extends Voter
 
     private ?User $user = null;
 
-    public function __construct(private AccessDecisionManagerInterface $decisionManager, private AssociationService $associationService)
-    {
+    public function __construct(
+        private AccessDecisionManagerInterface $decisionManager,
+    ) {
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function supports($attribute, $subject):bool
+    protected function supports($attribute, $subject): bool
     {
         if ($subject && !$subject instanceof Volontaire) {
             return false;
@@ -50,7 +50,7 @@ class VolontaireVoter extends Voter
     /**
      * {@inheritdoc}
      */
-    protected function voteOnAttribute($attribute, $volontaire, TokenInterface $token):bool
+    protected function voteOnAttribute($attribute, $volontaire, TokenInterface $token): bool
     {
         $user = $token->getUser();
 
@@ -63,6 +63,7 @@ class VolontaireVoter extends Voter
         if ($this->decisionManager->decide($token, ['ROLE_VOLONTARIAT_ADMIN'])) {
             return true;
         }
+
         return match ($attribute) {
             self::INDEX => $this->canIndex(),
             self::SHOW => $this->canView($volontaire, $token),
@@ -98,6 +99,22 @@ class VolontaireVoter extends Voter
 
     private function canDelete(Volontaire $volontaire, TokenInterface $token): bool
     {
-        return (bool) $this->canEdit($volontaire, $token);
+        return (bool)$this->canEdit($volontaire, $token);
     }
+
+
+    public function hasValidVolontaire(User $user): bool
+    {
+        return (is_countable($this->volontaireRepository->getVolontairesByUser($user, true)) ? count($this->volontaireRepository->getVolontairesByUser($user, true)) : 0) > 0;
+    }
+
+    public function getAssociationsWithSameSecteur(Volontaire $volontaire)
+    {
+        $secteurs = $volontaire->getSecteurs();
+
+        return $this->associationRepository->findAssociationBySecteur(
+            $secteurs
+        );
+    }
+
 }

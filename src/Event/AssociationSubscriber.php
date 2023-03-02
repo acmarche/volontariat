@@ -8,15 +8,14 @@
 
 namespace AcMarche\Volontariat\Event;
 
-use Symfony\Component\Security\Core\User\UserInterface;
-use AcMarche\Volontariat\Service\Mailer;
-use Doctrine\ORM\EntityManagerInterface;
+use AcMarche\Volontariat\Mailer\Mailer;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class AssociationSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private EntityManagerInterface $em, private Mailer $mailer, private TokenStorageInterface $token)
+    public function __construct(private Mailer $mailer, private TokenStorageInterface $token)
     {
     }
 
@@ -41,9 +40,9 @@ class AssociationSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            AssociationEvent::ASSOCIATION_VALIDER_REQUEST => 'associationRequest',
-            AssociationEvent::ASSOCIATION_VALIDER_FINISH => 'associationValideeFinish',
-            AssociationEvent::ASSOCIATION_NEW => 'associationNew',
+            AssociationEvent::ASSOCIATION_VALIDER_REQUEST->value => 'associationRequest',
+            AssociationEvent::ASSOCIATION_VALIDER_FINISH->value => 'associationValideeFinish',
+            AssociationEvent::ASSOCIATION_NEW->value => 'associationNew',
         ];
     }
 

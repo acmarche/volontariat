@@ -3,12 +3,10 @@
 namespace AcMarche\Volontariat\Repository;
 
 use AcMarche\Volontariat\Doctrine\OrmCrudTrait;
-use Doctrine\ORM\NonUniqueResultException;
 use AcMarche\Volontariat\Entity\Association;
-use AcMarche\Volontariat\Entity\Secteur;
-use AcMarche\Volontariat\Entity\Volontaire;
+use AcMarche\Volontariat\Entity\Security\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -25,23 +23,6 @@ class AssociationRepository extends ServiceEntityRepository
         parent::__construct($registry, Association::class);
     }
 
-    public function insert(Association $association): void
-    {
-        $this->_em->persist($association);
-        $this->save();
-    }
-
-    public function save(): void
-    {
-        $this->_em->flush();
-    }
-
-    public function remove(Association $association): void
-    {
-        $this->_em->remove($association);
-        $this->save();
-    }
-
     /**
      * @return Association[]
      */
@@ -51,30 +32,23 @@ class AssociationRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param $args
      * @return Association[]
-     * @throws NonUniqueResultException
      */
-    public function search($args)
+    public function search(array $args): array
     {
         $nom = $args['nom'] ?? null;
         $secteur = $args['secteur'] ?? null;
         $secteurs = $args['secteurs'] ?? null;
         $user = $args['user'] ?? null;
-        $one = $args['one'] ?? null;
         $valider = $args['valider'] ?? true;
 
-        $qb = $this->createQueryBuilder('association');
-        $qb->leftJoin('association.secteurs', 'secteurs', 'WITH');
-        $qb->leftJoin('association.besoins', 'besoins', 'WITH');
-        $qb->leftJoin('association.user', 'user', 'WITH');
-        $qb->addSelect('secteurs', 'besoins', 'user');
+        $qb = $this->createQBl();
 
         if ($nom) {
             $qb->andwhere(
                 'association.email LIKE :mot OR association.nom LIKE :mot OR association.description LIKE :mot '
             )
-                ->setParameter('mot', '%' . $nom . '%');
+                ->setParameter('mot', '%'.$nom.'%');
         }
 
         if ($secteur) {
@@ -83,9 +57,8 @@ class AssociationRepository extends ServiceEntityRepository
         }
 
         if (is_array($secteurs)) {
-            $secteursIds = implode(",", $secteurs);
-            $qb->andwhere('secteurs = :secteurs ')
-                ->setParameter('secteurs', '(' . $secteursIds . ')');
+            $qb->andwhere('secteurs IN ARRAY :secteurs ')
+                ->setParameter('secteurs', $secteurs);
         }
 
         if ($user) {
@@ -101,64 +74,27 @@ class AssociationRepository extends ServiceEntityRepository
                 ->setParameter('valider', true);
         }
 
-        $qb->addOrderBy('association.nom', 'ASC');
-
-        $query = $qb->getQuery();
-
-        if ($one) {
-            return $query->getOneOrNullResult();
-        }
-
-        return $query->getResult();
+        return $qb->addOrderBy('association.nom', 'ASC')->getQuery()->getResult();
     }
 
     /**
      * @return Association[]
      */
-    public function getForAssociation(): array
+    public function getRecent(int $limit = 8): array
     {
-        $qb = $this->createQueryBuilder('association');
-
-        $qb->andwhere('association.user IS NULL');
-
-        $qb->orderBy('association.nom');
-        $query = $qb->getQuery();
-
-        $results = $query->getResult();
-        $types = array();
-
-        foreach ($results as $type) {
-            $types[$type->getNom()] = $type->getId();
-        }
-
-        return $types;
-    }
-
-    /**
-     * @param int $limit
-     * @return Association[]
-     */
-    public function getRecent($limit = 8): array
-    {
-        $qb = $this->createQueryBuilder('association');
-        // $qb->leftJoin('a.secteurs', 'secteurs', 'WITH');
-        // $qb->addSelect('secteurs');
-
-        $qb->setMaxResults($limit);
-        $qb->addOrderBy('RAND()');
-
-        $query = $qb->getQuery();
-
-        return $query->getResult();
+        return $this->createQBl()
+            ->setMaxResults($limit)
+            ->addOrderBy('RAND()')
+            ->getQuery()
+            ->getResult();
     }
 
     public function getAllEmail(): array
     {
-        $qb = $this->createQueryBuilder('a');
-        $qb->andWhere("a.mailing = 0");
-
-        $query = $qb->getQuery();
-        $results = $query->getResult();
+        $results = $this->createQBl()
+            ->andWhere("association.mailing = 0")
+            ->getQuery()
+            ->getResult();
 
         $npo_emails = array();
         foreach ($results as $association) {
@@ -170,13 +106,39 @@ class AssociationRepository extends ServiceEntityRepository
         return $npo_emails;
     }
 
-
-    public function findAssociationBySecteur($secteurs)
+    /**
+     * @return Association[]
+     */
+    public function findAssociationBySecteur($secteurs): array
     {
-        $qb = $this->createQueryBuilder("association")
+        $qb = $this->createQBl()
             ->where(':platform MEMBER OF association.secteurs')
             ->setParameters(array('platform' => $secteurs));
 
         return $qb->getQuery()->getResult();
     }
+
+    /**
+     * @return Association[]
+     */
+    public function getAssociationsByUser(User $user, bool $valider = false): array
+    {
+        $qb = $this->createQBl()
+            ->where('association.user = :user')
+            ->setParameter('user', $user)
+            ->where('association.valider = :valider')
+            ->setParameter('valider', $valider);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    private function createQBl(): QueryBuilder
+    {
+        return $this->createQueryBuilder('association')
+            ->leftJoin('association.secteurs', 'secteurs', 'WITH')
+            ->leftJoin('association.besoins', 'besoins', 'WITH')
+            ->leftJoin('association.user', 'user', 'WITH')
+            ->addSelect('secteurs', 'besoins', 'user');
+    }
+
 }

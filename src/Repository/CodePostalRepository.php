@@ -20,22 +20,4 @@ class CodePostalRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, CodePostal::class);
     }
-
-
-    public function insert(CodePostal $codePostal): void
-    {
-        $this->_em->persist($codePostal);
-        $this->save();
-    }
-
-    public function save(): void
-    {
-        $this->_em->flush();
-    }
-
-    public function remove(CodePostal $codePostal): void
-    {
-        $this->_em->remove($codePostal);
-        $this->save();
-    }
 }

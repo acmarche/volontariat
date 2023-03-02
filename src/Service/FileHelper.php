@@ -2,17 +2,18 @@
 
 namespace AcMarche\Volontariat\Service;
 
-use Symfony\Component\HttpFoundation\File\File;
 use AcMarche\Volontariat\InterfaceDef\Uploadable;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Mime\MimeTypes;
 
 class FileHelper
 {
     public string $directorySeparator;
+
     public function __construct(private string $rootUploadPath, private string $rootDownloadPath)
     {
         $this->directorySeparator = DIRECTORY_SEPARATOR;
@@ -95,6 +96,7 @@ class FileHelper
                 unset($files[$i]);
             }
         }
+
         return $files;
     }
 

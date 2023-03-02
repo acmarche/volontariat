@@ -5,12 +5,11 @@ namespace AcMarche\Volontariat\Controller\Admin;
 use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Form\Admin\VolontaireNoteType;
 use AcMarche\Volontariat\Form\Admin\VolontaireType;
+use AcMarche\Volontariat\Form\FormBuilderVolontariat;
 use AcMarche\Volontariat\Form\Search\SearchVolontaireType;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
 use AcMarche\Volontariat\Service\FileHelper;
-use AcMarche\Volontariat\Service\FormBuilderVolontariat;
 use AcMarche\Volontariat\Service\VolontariatConstante;
-use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -28,7 +27,6 @@ class VolontaireController extends AbstractController
         private VolontaireRepository $volontaireRepository,
         private FileHelper $fileHelper,
         private FormBuilderVolontariat $formBuilderVolontariat,
-        private ManagerRegistry $managerRegistry
     ) {
     }
 

@@ -1,9 +1,8 @@
 <?php
 
-namespace AcMarche\Volontariat\Service;
+namespace AcMarche\Volontariat\Mailer;
 
 use AcMarche\Volontariat\Entity\Security\User;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;

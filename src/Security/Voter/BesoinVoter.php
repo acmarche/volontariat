@@ -1,9 +1,9 @@
 <?php
 
-namespace AcMarche\Volontariat\Security;
+namespace AcMarche\Volontariat\Security\Voter;
 
-use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Entity\Besoin;
+use AcMarche\Volontariat\Entity\Security\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;

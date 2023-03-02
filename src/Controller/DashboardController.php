@@ -3,8 +3,6 @@
 namespace AcMarche\Volontariat\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
-use AcMarche\Volontariat\Service\AssociationService;
-use AcMarche\Volontariat\Service\VolontaireService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -13,9 +11,10 @@ use Symfony\Component\Routing\Annotation\Route;
 #[IsGranted('ROLE_VOLONTARIAT')]
 class DashboardController extends AbstractController
 {
-    public function __construct(private AssociationService $associationService, private VolontaireService $volontaireService)
+    public function __construct()
     {
     }
+
     #[Route(path: '/', name: 'volontariat_dashboard')]
     public function indexAction() : Response
     {

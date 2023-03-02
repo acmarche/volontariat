@@ -1,10 +1,7 @@
 <?php
 
-namespace AcMarche\Volontariat\Service;
+namespace AcMarche\Volontariat\Mailer;
 
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Message;
 use AcMarche\Volontariat\Entity\Security\User;
@@ -20,6 +17,9 @@ use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class Mailer
 {

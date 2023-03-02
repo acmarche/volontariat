@@ -14,6 +14,7 @@ class CaptchaService
 {
     public function __construct(private ParameterBagInterface $parameterBag)
     {
+
     }
 
     /**

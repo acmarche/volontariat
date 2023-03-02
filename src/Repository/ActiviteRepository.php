@@ -20,21 +20,4 @@ class ActiviteRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Activite::class);
     }
-
-    public function insert(Activite $activite): void
-    {
-        $this->_em->persist($activite);
-        $this->save();
-    }
-
-    public function save(): void
-    {
-        $this->_em->flush();
-    }
-
-    public function remove(Activite $activite): void
-    {
-        $this->_em->remove($activite);
-        $this->save();
-    }
 }

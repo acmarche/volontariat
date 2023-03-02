@@ -2,34 +2,40 @@
 
 namespace AcMarche\Volontariat\Controller\Backend;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Form\FormInterface;
 use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Event\VolontaireEvent;
 use AcMarche\Volontariat\Form\VolontairePublicType;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
 use AcMarche\Volontariat\Service\FileHelper;
+use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(path: '/backend/volontaire')]
 #[IsGranted('ROLE_VOLONTARIAT')]
 class VolontaireController extends AbstractController
 {
-    public function __construct(private VolontaireRepository $volontaireRepository, private FileHelper $fileHelper, private EventDispatcherInterface $eventDispatcher, private ManagerRegistry $managerRegistry)
-    {
+    public function __construct(
+        private VolontaireRepository $volontaireRepository,
+        private FileHelper $fileHelper,
+        private EventDispatcherInterface $eventDispatcher,
+        private ManagerRegistry $managerRegistry
+    ) {
     }
+
     #[Route(path: '/', name: 'volontariat_backend_volontaire_index', methods: ['GET'])]
-    public function indexAction() : Response
+    public function indexAction(): Response
     {
         $volontaires = $this->volontaireRepository->findBy(['user' => $this->getUser()]);
         $formDeleteVolontaire = $this->createDeleteForm();
+
         return $this->render(
             '@Volontariat/backend/volontaire/index.html.twig',
             array(
@@ -40,7 +46,7 @@ class VolontaireController extends AbstractController
     }
 
     #[Route(path: '/new', name: 'volontariat_backend_volontaire_new', methods: ['GET', 'POST'])]
-    public function newAction(Request $request) : Response
+    public function newAction(Request $request): Response
     {
         $user = $this->getUser();
         $volontaire = new Volontaire();
@@ -62,10 +68,11 @@ class VolontaireController extends AbstractController
             $this->addFlash("success", "Le volontaire a bien été ajouté");
 
             $event = new VolontaireEvent($volontaire);
-            $this->eventDispatcher->dispatch($event, VolontaireEvent::VOLONTAIRE_NEW);
+            $this->eventDispatcher->dispatch($event, VolontaireEvent::VOLONTAIRE_NEW->value);
 
             return $this->redirectToRoute('volontariat_backend_volontaire_index');
         }
+
         return $this->render(
             '@Volontariat/backend/volontaire/new.html.twig',
             array(
@@ -77,7 +84,7 @@ class VolontaireController extends AbstractController
 
     #[Route(path: '/{id}/edit', name: 'volontariat_backend_volontaire_edit')]
     #[IsGranted('edit', subject: 'volontaire')]
-    public function editAction(Request $request, Volontaire $volontaire) : Response
+    public function editAction(Request $request, Volontaire $volontaire): Response
     {
         $em = $this->managerRegistry->getManager();
         $form = $this->createForm(VolontairePublicType::class, $volontaire)
@@ -91,6 +98,7 @@ class VolontaireController extends AbstractController
 
             return $this->redirectToRoute('volontariat_backend_volontaire_index');
         }
+
         return $this->render(
             '@Volontariat/backend/volontaire/edit.html.twig',
             array(
@@ -101,9 +109,9 @@ class VolontaireController extends AbstractController
     }
 
     #[Route(path: '/delete', name: 'volontariat_backend_volontaire_delete', methods: ['DELETE'])]
-    public function deleteAction(Request $request) : RedirectResponse
+    public function deleteAction(Request $request): RedirectResponse
     {
-        $id = (int) $request->request->get('id');
+        $id = (int)$request->request->get('id');
         $volontaire = $this->volontaireRepository->find($id);
         $this->denyAccessUnlessGranted('delete', $volontaire, "Vous n'avez pas accès.");
         $form = $this->createDeleteForm();
@@ -116,8 +124,10 @@ class VolontaireController extends AbstractController
 
             $this->addFlash('success', 'Le volontaire a bien été supprimé');
         }
+
         return $this->redirectToRoute('volontariat_backend_volontaire_index');
     }
+
     private function createDeleteForm(): FormInterface
     {
         return $this->createFormBuilder()

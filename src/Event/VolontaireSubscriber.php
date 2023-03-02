@@ -8,18 +8,19 @@
 
 namespace AcMarche\Volontariat\Event;
 
-use AcMarche\Volontariat\Service\Mailer;
-use Doctrine\ORM\EntityManagerInterface;
+use AcMarche\Volontariat\Mailer\Mailer;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Csrf\TokenStorage\TokenStorageInterface;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class VolontaireSubscriber implements EventSubscriberInterface
 {
     private $session;
 
     public function __construct(
-        private EntityManagerInterface $em,
         private Mailer $mailer,
         private TokenStorageInterface $token,
         RequestStack $requestStack
@@ -48,15 +49,16 @@ class VolontaireSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            VolontaireEvent::VOLONTAIRE_NEW => 'volontaireNew',
+            VolontaireEvent::VOLONTAIRE_NEW->value => 'volontaireNew',
         ];
     }
 
+
     /**
      * Mail envoyé aux associations
-     * @throws \Twig_Error_Loader
-     * @throws \Twig_Error_Runtime
-     * @throws \Twig_Error_Syntax
+     * @throws SyntaxError
+     * @throws RuntimeError
+     * @throws LoaderError
      */
     public function volontaireNew(VolontaireEvent $event): void
     {

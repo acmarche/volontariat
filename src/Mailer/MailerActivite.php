@@ -1,10 +1,7 @@
 <?php
 
-namespace AcMarche\Volontariat\Service;
+namespace AcMarche\Volontariat\Mailer;
 
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
 use AcMarche\Volontariat\Entity\Activite;
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Repository\AssociationRepository;
@@ -15,6 +12,9 @@ use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class MailerActivite
 {

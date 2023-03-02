@@ -4,11 +4,10 @@ namespace AcMarche\Volontariat\Controller\Backend;
 
 use AcMarche\Volontariat\Entity\Message;
 use AcMarche\Volontariat\Form\Contact\ReferencerType;
+use AcMarche\Volontariat\Mailer\Mailer;
+use AcMarche\Volontariat\Mailer\MessageService;
 use AcMarche\Volontariat\Manager\ContactManager;
-use AcMarche\Volontariat\Service\AssociationService;
 use AcMarche\Volontariat\Service\CaptchaService;
-use AcMarche\Volontariat\Service\Mailer;
-use AcMarche\Volontariat\Service\MessageService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -23,7 +22,6 @@ class ReferencerController extends AbstractController
         private ContactManager $contactManager,
         private Mailer $mailer,
         private CaptchaService $captchaService,
-        private AssociationService $associationService,
         private MessageService $messageService
     ) {
     }

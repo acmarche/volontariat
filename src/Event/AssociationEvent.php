@@ -9,16 +9,13 @@
 namespace AcMarche\Volontariat\Event;
 
 use AcMarche\Volontariat\Entity\Association;
-use AcMarche\Volontariat\Service\VolontariatConstante;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class AssociationEvent extends Event
 {
-    public const ASSOCIATION_NEW = VolontariatConstante::ASSOCIATION_NEW;
-    public const ASSOCIATION_EDIT = VolontariatConstante::ASSOCIATION_EDIT;
-    public const ASSOCIATION_DELETE = VolontariatConstante::ASSOCIATION_DELETE;
-    public const ASSOCIATION_VALIDER_REQUEST = VolontariatConstante::ASSOCIATION_VALIDER_REQUEST;
-    public const ASSOCIATION_VALIDER_FINISH = VolontariatConstante::ASSOCIATION_VALIDER_FINISH;
+    public const ASSOCIATION_NEW = VolontariatEnum::ASSOCIATION_NEW;
+    public const ASSOCIATION_VALIDER_REQUEST = VolontariatEnum::ASSOCIATION_VALIDER_REQUEST;
+    public const ASSOCIATION_VALIDER_FINISH = VolontariatEnum::ASSOCIATION_VALIDER_FINISH;
 
     public function __construct(protected Association $association)
     {

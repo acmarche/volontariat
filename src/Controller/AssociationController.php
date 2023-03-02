@@ -2,26 +2,26 @@
 
 namespace AcMarche\Volontariat\Controller;
 
-use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Form\Search\SearchAssociationType;
+use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Service\FileHelper;
 use AcMarche\Volontariat\Service\VolontariatConstante;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(path: '/association')]
 class AssociationController extends AbstractController
 {
-    public function __construct(private FileHelper $fileHelper, private ManagerRegistry $managerRegistry)
+    public function __construct(private AssociationRepository $associationRepository, private FileHelper $fileHelper)
     {
     }
+
     #[Route(path: '/', name: 'volontariat_association')]
-    public function indexAction(Request $request) : Response
+    public function indexAction(Request $request): Response
     {
-        $em = $this->managerRegistry->getManager();
         $session = $request->getSession();
         $data = array();
         $key = VolontariatConstante::ASSOCIATION_SEARCH;
@@ -41,10 +41,11 @@ class AssociationController extends AbstractController
             $data = $search_form->getData();
         }
         $session->set($key, serialize($data));
-        $associations = $em->getRepository(Association::class)->search($data);
+        $associations = $this->associationRepository->search($data);
         foreach ($associations as $association) {
             $association->setImages($this->fileHelper->getImages($association));
         }
+
         return $this->render(
             '@Volontariat/association/index.html.twig',
             array(
@@ -53,15 +54,12 @@ class AssociationController extends AbstractController
             )
         );
     }
-    /**
-     * Finds and displays a Association entity.
-     *
-     *
-     */
+
     #[Route(path: '/{id}', name: 'volontariat_association_show')]
-    public function showAction(Association $association) : Response
+    public function showAction(Association $association): Response
     {
         $images = $this->fileHelper->getImages($association);
+
         return $this->render('@Volontariat/association/show.html.twig', array(
             'association' => $association,
             'blog' => true,

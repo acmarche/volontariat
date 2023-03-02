@@ -6,26 +6,21 @@
  * Time: 10:32
  */
 
-namespace AcMarche\Volontariat\Service;
+namespace AcMarche\Volontariat\Mailer;
 
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Entity\Volontaire;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use AcMarche\Volontariat\Event\VolontariatEnum;
+use AcMarche\Volontariat\Repository\AssociationRepository;
+use AcMarche\Volontariat\Repository\VolontaireRepository;
 
 class MessageService
 {
-    private SessionInterface $session;
-
     public function __construct(
-        private EntityManagerInterface $em,
-        RequestStack $requestStack,
-        private VolontaireService $volontaireService,
-        private AssociationService $associationService
+        private VolontaireRepository $volontaireRepository,
+        private AssociationRepository $associationRepository
     ) {
-        $this->session = $requestStack->getSession();
     }
 
     public function getDestinataires($query, $isSelect = false)
@@ -35,11 +30,11 @@ class MessageService
 
         switch ($query) {
             case 'association':
-                $key = VolontariatConstante::ASSOCIATION_ADMIN_SEARCH;
+                $key = VolontariatEnum::ASSOCIATION_ADMIN_SEARCH;
                 $repository = $this->em->getRepository(Association::class);
                 break;
             case 'volontaire':
-                $key = VolontariatConstante::VOLONTAIRE_ADMIN_SEARCH;
+                $key = VolontariatEnum::VOLONTAIRE_ADMIN_SEARCH;
                 $repository = $this->em->getRepository(Volontaire::class);
                 break;
             default:

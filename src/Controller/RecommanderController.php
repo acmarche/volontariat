@@ -6,12 +6,10 @@ use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Message;
 use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Form\Contact\RecommanderType;
+use AcMarche\Volontariat\Mailer\Mailer;
+use AcMarche\Volontariat\Mailer\MessageService;
 use AcMarche\Volontariat\Manager\ContactManager;
-use AcMarche\Volontariat\Service\AssociationService;
 use AcMarche\Volontariat\Service\CaptchaService;
-use AcMarche\Volontariat\Service\Mailer;
-use AcMarche\Volontariat\Service\MailerContact;
-use AcMarche\Volontariat\Service\MessageService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -26,7 +24,6 @@ class RecommanderController extends AbstractController
         private ContactManager $contactManager,
         private Mailer $mailer,
         private CaptchaService $captchaService,
-        private AssociationService $associationService,
         private MessageService $messageService
     ) {
     }

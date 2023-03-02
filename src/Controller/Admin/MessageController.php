@@ -2,17 +2,16 @@
 
 namespace AcMarche\Volontariat\Controller\Admin;
 
-use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\Response;
-use Doctrine\ORM\NonUniqueResultException;
 use AcMarche\Volontariat\Entity\Message;
 use AcMarche\Volontariat\Form\Admin\MessageType;
-use AcMarche\Volontariat\Service\Mailer;
-use AcMarche\Volontariat\Service\MessageService;
+use AcMarche\Volontariat\Mailer\Mailer;
+use AcMarche\Volontariat\Mailer\MessageService;
+use Doctrine\Persistence\ManagerRegistry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(path: '/admin/message')]

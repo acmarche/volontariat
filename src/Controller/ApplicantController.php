@@ -2,16 +2,15 @@
 
 namespace AcMarche\Volontariat\Controller;
 
-use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Volontariat\Entity\Applicant;
-use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Form\ApplicantType;
+use AcMarche\Volontariat\Mailer\Mailer;
 use AcMarche\Volontariat\Repository\ApplicantRepository;
-use AcMarche\Volontariat\Service\Mailer;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 

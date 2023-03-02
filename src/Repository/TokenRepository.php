@@ -20,26 +20,4 @@ class TokenRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Token::class);
     }
-
-    public function insert(Token $token): void
-    {
-        $this->persist($token);
-        $this->save();
-    }
-
-    public function save(): void
-    {
-        $this->_em->flush();
-    }
-
-    public function remove(Token $token): void
-    {
-        $this->_em->remove($token);
-        $this->save();
-    }
-
-    public function persist(Token $token): void
-    {
-        $this->_em->persist($token);
-    }
 }

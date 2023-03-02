@@ -3,11 +3,10 @@
 namespace AcMarche\Volontariat\Repository;
 
 use AcMarche\Volontariat\Doctrine\OrmCrudTrait;
-use Doctrine\ORM\NonUniqueResultException;
-use AcMarche\Volontariat\Entity\Association;
-use AcMarche\Volontariat\Entity\Secteur;
+use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Entity\Volontaire;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -26,11 +25,9 @@ class VolontaireRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param $args
-     * @return Volontaire[]|Volontaire
-     * @throws NonUniqueResultException
+     * @return Volontaire[]
      */
-    public function search($args): array|Volontaire
+    public function search(array $args): array
     {
         $nom = $args['nom'] ?? null;
         $secteur = $args['secteur'] ?? null;
@@ -38,16 +35,10 @@ class VolontaireRepository extends ServiceEntityRepository
         $vehicule = $args['vehicule'] ?? null;
         $user = $args['user'] ?? null;
         $localite = $args['city'] ?? null;
-        $one = $args['one'] ?? null;
         $valider = $args['valider'] ?? null;
         $createdAt = $args['createdAt'] ?? null;
 
-        $qb = $this->createQueryBuilder('volontaire');
-        $qb->leftJoin('volontaire.association', 'association', 'WITH');
-        $qb->leftJoin('volontaire.secteurs', 'secteurs', 'WITH');
-        $qb->leftJoin('volontaire.user', 'user', 'WITH');
-        $qb->leftJoin('volontaire.vehicules', 'vehicules', 'WITH');
-        $qb->addSelect('secteurs', 'vehicules', 'user', 'association');
+        $qb = $this->createQbl();
 
         if ($nom) {
             $qb->andwhere('volontaire.email LIKE :mot OR volontaire.name LIKE :mot OR volontaire.surname LIKE :mot ')
@@ -59,7 +50,7 @@ class VolontaireRepository extends ServiceEntityRepository
                 ->setParameter('loca', '%'.$localite.'%');
         }
 
-         if ($createdAt) {
+        if ($createdAt) {
             $qb->andwhere('volontaire.createdAt >= :date ')
                 ->setParameter('date', $createdAt);
         }
@@ -70,9 +61,8 @@ class VolontaireRepository extends ServiceEntityRepository
         }
 
         if (is_array($secteurs) && $secteurs !== []) {
-            $secteursIds = implode(",", $secteurs);
-
-            $qb->andwhere("secteurs IN ($secteursIds) ");
+            $qb->andwhere("secteurs IN :secteurs")
+                ->setParameter('secteurs', $secteur);
         }
 
         if ($vehicule) {
@@ -95,60 +85,30 @@ class VolontaireRepository extends ServiceEntityRepository
 
         $qb->addOrderBy('volontaire.name', 'ASC');
 
-        $query = $qb->getQuery();
-
-        if ($one) {
-            return $query->getOneOrNullResult();
-        }
-
-        return $query->getResult();
+        return $qb->getQuery()->getResult();
     }
 
     /**
      * @return Volontaire[]
      */
-    public function getForAssociation(): array
+    public function getRecent(int $max = 8): array
     {
-        $qb = $this->createQueryBuilder('volontaire');
-        $qb->andwhere('volontaire.user IS NULL');
-
-        $qb->orderBy('volontaire.name');
-        $query = $qb->getQuery();
-
-        $results = $query->getResult();
-        $types = array();
-
-        foreach ($results as $type) {
-            $types[$type->getName()] = $type->getId();
-        }
-
-        return $types;
+        return $this->createQbl()
+            ->setMaxResults($max)
+            ->addOrderBy('RAND()')
+            ->getQuery()
+            ->getResult();
     }
 
     /**
-     * @param int $max
-     * @return Volontaire[]
+     * @return string[]
      */
-    public function getRecent($max = 8): array
-    {
-        $qb = $this->createQueryBuilder('volontaire');
-
-        $qb->setMaxResults($max);
-        $qb->addOrderBy('RAND()');
-
-        $query = $qb->getQuery();
-
-        return $query->getResult();
-    }
-
     public function getLocalitesForSearch(): array
     {
-        $qb = $this->createQueryBuilder('volontaire');
+        $results = $this->createQbl()
+            ->orderBy('volontaire.city')
+            ->getQuery()->getResult();
 
-        $qb->orderBy('volontaire.city');
-        $query = $qb->getQuery();
-
-        $results = $query->getResult();
         $cities = array();
 
         foreach ($results as $type) {
@@ -161,12 +121,28 @@ class VolontaireRepository extends ServiceEntityRepository
         return $cities;
     }
 
-    public function findVolontaireBySecteur($secteurs)
+    /**
+     * @return Volontaire[]
+     */
+    public function getVolontairesByUser(User $user, bool $valider): array
     {
-        $qb = $this->createQueryBuilder("volontaire")
-            ->where(':platform MEMBER OF volontaire.secteurs')
-            ->setParameters(array('platform' => $secteurs));
-
-        return $qb->getQuery()->getResult();
+        return $this->createQbl()
+            ->where('volontaire.user = :user')
+            ->setParameter('user', $user)
+            ->where('volontaire.valider = :valider')
+            ->setParameter('valider', $valider)
+            ->orderBy('volontaire.city')
+            ->getQuery()->getResult();
     }
+
+    public function createQbl(): QueryBuilder
+    {
+        return $this->createQueryBuilder('volontaire')
+            ->leftJoin('volontaire.association', 'association', 'WITH')
+            ->leftJoin('volontaire.secteurs', 'secteurs', 'WITH')
+            ->leftJoin('volontaire.user', 'user', 'WITH')
+            ->leftJoin('volontaire.vehicules', 'vehicules', 'WITH')
+            ->addSelect('secteurs', 'vehicules', 'user', 'association');
+    }
+
 }

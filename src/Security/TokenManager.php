@@ -6,14 +6,14 @@
  * Time: 13:03
  */
 
-namespace AcMarche\Volontariat\Manager;
+namespace AcMarche\Volontariat\Security;
 
-use Exception;
-use DateTime;
 use AcMarche\Volontariat\Entity\Security\Token;
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Repository\TokenRepository;
 use AcMarche\Volontariat\Repository\UserRepository;
+use DateTime;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator;

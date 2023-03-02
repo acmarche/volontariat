@@ -2,11 +2,10 @@
 
 namespace AcMarche\Volontariat\Controller;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Volontariat\Entity\Security\Token;
-use AcMarche\Volontariat\Manager\TokenManager;
+use AcMarche\Volontariat\Security\TokenManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;

@@ -2,33 +2,37 @@
 
 namespace AcMarche\Volontariat\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Form\Contact\ContactBaseType;
 use AcMarche\Volontariat\Form\Contact\ContactVolontaireType;
+use AcMarche\Volontariat\Mailer\Mailer;
+use AcMarche\Volontariat\Mailer\MailerContact;
+use AcMarche\Volontariat\Mailer\MessageService;
 use AcMarche\Volontariat\Manager\ContactManager;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
-use AcMarche\Volontariat\Service\AssociationService;
 use AcMarche\Volontariat\Service\CaptchaService;
-use AcMarche\Volontariat\Service\Mailer;
-use AcMarche\Volontariat\Service\MailerContact;
-use AcMarche\Volontariat\Service\MessageService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route(path: '/contact')]
 class ContactController extends AbstractController
 {
-    public function __construct(private VolontaireRepository $volontaireRepository, private ContactManager $contactManager, private MailerContact $mailerContact, private Mailer $mailer, private CaptchaService $captchaService, private AssociationService $associationService, private MessageService $messageService)
-    {
+    public function __construct(
+        private ContactManager $contactManager,
+        private MailerContact $mailerContact,
+        private Mailer $mailer,
+        private CaptchaService $captchaService,
+    ) {
     }
+
     #[Route(path: '/volontaire/{id}', name: 'volontariat_contact_volontaire')]
     #[IsGranted('show', subject: 'volontaire')]
-    public function volontaire(Request $request, Volontaire $volontaire) : Response
+    public function volontaire(Request $request, Volontaire $volontaire): Response
     {
         if (($user = $this->getUser()) !== null) {
             $this->contactManager->populateFromUser($user);
@@ -49,6 +53,7 @@ class ContactController extends AbstractController
             return $this->redirectToRoute('volontariat_volontaire_show', ['id' => $volontaire->getId()]);
         }
         $keySite = $this->getParameter('acmarche_volontariat_captcha_site_key');
+
         return $this->render(
             '@Volontariat/contact/volontaire.html.twig',
             [
@@ -58,8 +63,9 @@ class ContactController extends AbstractController
             ]
         );
     }
+
     #[Route(path: '/association/{id}', name: 'volontariat_contact_association')]
-    public function association(Request $request, Association $association) : Response
+    public function association(Request $request, Association $association): Response
     {
         if (($user = $this->getUser()) !== null) {
             $this->contactManager->populateFromUser($user);
@@ -81,6 +87,7 @@ class ContactController extends AbstractController
             return $this->redirectToRoute('volontariat_association_show', ['id' => $association->getId()]);
         }
         $keySite = $this->getParameter('acmarche_volontariat_captcha_site_key');
+
         return $this->render(
             '@Volontariat/contact/association.html.twig',
             [
@@ -90,8 +97,9 @@ class ContactController extends AbstractController
             ]
         );
     }
+
     #[Route(path: '/captcha', name: 'volontariat_captcha')]
-    public function captcha(Request $request) : void
+    public function captcha(Request $request): void
     {
     }
 }

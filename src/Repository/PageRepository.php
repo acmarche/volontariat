@@ -30,21 +30,4 @@ class PageRepository extends ServiceEntityRepository
             ->andWhere('page.actualite = 1')
             ->orderBy('page.id', 'DESC')->getQuery()->getResult();
     }
-
-    public function insert(Page $page): void
-    {
-        $this->_em->persist($page);
-        $this->save();
-    }
-
-    public function save(): void
-    {
-        $this->_em->flush();
-    }
-
-    public function remove(Page $page): void
-    {
-        $this->_em->remove($page);
-        $this->save();
-    }
 }

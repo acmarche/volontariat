@@ -1,9 +1,9 @@
 <?php
 
-namespace AcMarche\Volontariat\Security;
+namespace AcMarche\Volontariat\Security\Voter;
 
-use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Entity\Association;
+use AcMarche\Volontariat\Entity\Security\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -77,5 +77,23 @@ class AssociationVoter extends Voter
     private function canDelete(Association $association, TokenInterface $token): bool
     {
         return (bool) $this->canEdit($association, $token);
+    }
+
+      protected function canAccess(): bool
+    {
+        $user = $this->getUser();
+        if ($user->hasRole('ROLE_VOLONTARIAT_ADMIN')) {
+            return true;
+        }
+
+        return $this->hasValidAssociation($user);
+    }
+
+     public function hasValidAssociation(User $user): bool
+    {
+        return $this->authorizationChecker->isGranted('ROLE_VOLONTARIAT') && $this->associationRepository->getAssociationsByUser($user,true)(
+                $user,
+                true
+            ) !== [];
     }
 }

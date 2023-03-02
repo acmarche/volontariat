@@ -1,6 +1,6 @@
 <?php
 
-namespace AcMarche\Volontariat\Service;
+namespace AcMarche\Volontariat\Mailer;
 
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Volontaire;

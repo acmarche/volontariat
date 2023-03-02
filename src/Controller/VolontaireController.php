@@ -5,8 +5,6 @@ namespace AcMarche\Volontariat\Controller;
 use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Form\Search\SearchVolontaireType;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
-use AcMarche\Volontariat\Service\VolontaireService;
-use AcMarche\Volontariat\Service\VolontariatConstante;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +16,6 @@ class VolontaireController extends AbstractController
 {
     public function __construct(
         private VolontaireRepository $volontaireRepository,
-        private VolontaireService $volontaireService,
         private AuthorizationCheckerInterface $authorizationChecker
     ) {
     }

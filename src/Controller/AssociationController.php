@@ -6,7 +6,6 @@ use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Form\Search\SearchAssociationType;
 use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Service\FileHelper;
-use AcMarche\Volontariat\Service\VolontariatConstante;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,15 +23,11 @@ class AssociationController extends AbstractController
     {
         $session = $request->getSession();
         $data = array();
-        $key = VolontariatConstante::ASSOCIATION_SEARCH;
-        if ($session->has($key)) {
-            $data = unserialize($session->get($key));
-        }
+
         $search_form = $this->createForm(SearchAssociationType::class, $data);
         $search_form->handleRequest($request);
         if ($search_form->isSubmitted() && $search_form->isValid()) {
             if ($search_form->get('raz')->isClicked()) {
-                $session->remove($key);
                 $this->addFlash('info', 'La recherche a bien été réinitialisée.');
 
                 return $this->redirectToRoute('volontariat_association');
@@ -40,7 +35,6 @@ class AssociationController extends AbstractController
 
             $data = $search_form->getData();
         }
-        $session->set($key, serialize($data));
         $associations = $this->associationRepository->search($data);
         foreach ($associations as $association) {
             $association->setImages($this->fileHelper->getImages($association));

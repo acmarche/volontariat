@@ -71,9 +71,6 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
     #[ORM\Column(type: 'string', nullable: true)]
     protected ?string $mobile;
 
-    #[ORM\Column(type: 'string', nullable: true)]
-    protected ?string $fax;
-
     #[ORM\Column(type: 'text', nullable: true)]
     #[Assert\Length(max: 600)]
     protected ?string $description;
@@ -245,6 +242,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
     {
         return true;
     }
+
+
 
     public function __construct()
     {

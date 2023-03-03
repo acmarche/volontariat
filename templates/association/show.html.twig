@@ -1,6 +1,60 @@
 {% extends '@Volontariat/base.html.twig' %}
 
 {% block body %}
+    <div class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow">
+        <div class="px-4 py-5 sm:px-6">
+            <h3 class="mt-6 text-lg font-semibold leading-8 tracking-tight text-gray-900 hover:text-gray-600">
+                {{ association.nom }}
+            </h3>
+        </div>
+        <div class="px-4 py-5 sm:p-6">
+            {{ association.address }} {{ association.number }} <br/>
+            {{ association.postalCode }} {{ association.city }}
+        </div>
+    </div>
+    <div class="overflow-hidden bg-white shadow sm:rounded-lg">
+        <div class="px-4 py-5 sm:px-6">
+            <h3 class="text-base font-semibold leading-6 text-gray-900">Applicant Information</h3>
+            <p class="mt-1 max-w-2xl text-sm text-gray-500">Personal details and application.</p>
+        </div>
+        <div class="border-t border-gray-200 px-4 py-5 sm:p-0">
+            <dl class="sm:divide-y sm:divide-gray-200">
+                <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Téléphone</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                        {{ association.phone }} {{ association.mobile }}
+                    </dd>
+                </div>
+                {% if association.webSite %}
+                    <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">Site web</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                            <a href="{{ association.webSite }}" target="_blank">{{ association.webSite }}</a>
+                        </dd>
+                    </div>
+                {% endif %}
+                {% if association.email %}
+                    <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+                        <dt class="text-sm font-medium text-gray-500">Courriel</dt>
+                        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                            <a href="mailto:{{ association.email }}">{{ association.email }}</a>
+                        </dd>
+                    </div>
+                {% endif %}
+                <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">Salary expectation</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">$120,000</dd>
+                </div>
+                <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+                    <dt class="text-sm font-medium text-gray-500">About</dt>
+                    <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                        {{ association.description|nl2br }}
+                    </dd>
+                </div>
+               {% include '@Volontariat/association/_secteurs_activites.html.twig' %}
+            </dl>
+        </div>
+    </div>
 
 {% endblock %}
 

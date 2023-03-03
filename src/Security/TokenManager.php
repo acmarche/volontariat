@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jfsenechal
- * Date: 31/10/18
- * Time: 13:03
- */
 
 namespace AcMarche\Volontariat\Security;
 

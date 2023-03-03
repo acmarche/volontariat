@@ -16,12 +16,18 @@
                         {% set url = association.firstImage.url | imagine_filter('acmarche_volontariat_400_270') %}
                     {% endif %}
                     <li>
-                        <img class="aspect-[3/2] w-full rounded-2xl object-cover"
-                             src="{{ url }}"
-                             alt="">
-                        <h3 class="mt-6 text-lg font-semibold leading-8 tracking-tight text-gray-900">{{ association.nom }}</h3>
+                        <a href="{{ path('volontariat_association_show', {'slug': association.slug}) }}">
+                            <img class="aspect-[3/2] w-full rounded-2xl object-cover"
+                                 src="{{ url }}"
+                                 alt="">
+                        </a>
+                        <a href="{{ path('volontariat_association_show', {'slug': association.slug}) }}">
+                            <h3 class="mt-6 text-lg font-semibold leading-8 tracking-tight text-gray-900 hover:text-gray-600">
+                                {{ association.nom }}
+                            </h3>
+                        </a>
                         <p class="text-base leading-7 text-gray-600 font-bold">{{ association.city }}</p>
-                        <p class="text-base leading-7 text-gray-600">{{ association.description|u.truncate(450,'...')|nl2br }}</p>
+                        <p class="mt-4 text-base text-base leading-7 text-gray-600">{{ association.description|u.truncate(450,'...')|nl2br }}</p>
                     </li>
                 {% endfor %}
             </ul>

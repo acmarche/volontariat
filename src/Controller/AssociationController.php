@@ -21,8 +21,7 @@ class AssociationController extends AbstractController
     #[Route(path: '/', name: 'volontariat_association')]
     public function indexAction(Request $request): Response
     {
-        $session = $request->getSession();
-        $data = array();
+        $data = [];
 
         $search_form = $this->createForm(SearchAssociationType::class, $data);
         $search_form->handleRequest($request);
@@ -42,22 +41,21 @@ class AssociationController extends AbstractController
 
         return $this->render(
             '@Volontariat/association/index.html.twig',
-            array(
+            [
                 'search_form' => $search_form->createView(),
                 'associations' => $associations,
-            )
+            ]
         );
     }
 
-    #[Route(path: '/{id}', name: 'volontariat_association_show')]
+    #[Route(path: '/{slug}', name: 'volontariat_association_show')]
     public function showAction(Association $association): Response
     {
         $images = $this->fileHelper->getImages($association);
 
-        return $this->render('@Volontariat/association/show.html.twig', array(
+        return $this->render('@Volontariat/association/show.html.twig', [
             'association' => $association,
-            'blog' => true,
             'images' => $images,
-        ));
+        ]);
     }
 }

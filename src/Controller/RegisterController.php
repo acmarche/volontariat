@@ -31,6 +31,16 @@ class RegisterController extends AbstractController
         private PasswordGenerator $passwordGenerator,
     ) {
     }
+#[Route(path: '/', name: 'volontariat_register_index', methods: ['GET'])]
+    public function index(): Response
+    {
+        return $this->render(
+            '@Volontariat/security/registration/index.html.twig',
+            [
+
+            ]
+        );
+    }
 
     #[Route(path: '/voluntary', name: 'volontariat_register_voluntary', methods: ['GET', 'POST'])]
     public function registerVoluntary(Request $request): Response
@@ -44,7 +54,49 @@ class RegisterController extends AbstractController
             if ($this->userRepository->findOneByEmail($email) !== null) {
                 $this->addFlash('danger', 'Un volontaire a déjà cette adresse email');
 
-                return $this->redirectToRoute('volontariat_register');
+                return $this->redirectToRoute('volontariat_register_voluntary');
+            }
+
+            $plainPassword = $this->passwordGenerator->generate();
+            $user->setPassword($this->passwordGenerator->cryptPassword($user, $plainPassword));
+            $this->userRepository->insert($user);
+
+            $voluntary = Volontaire::newFromUser($user);
+            $this->volontaireRepository->insert($voluntary);
+
+            try {
+                $this->mailer->sendWelcomeVoluntary($user, $plainPassword);
+                $this->addFlash("success", 'Vous êtes bien inscrit');
+            } catch (TransportException|LoaderError|RuntimeError|SyntaxError|TransportExceptionInterface $e) {
+                $this->addFlash("error", $e->getMessage());
+            }
+
+            $this->tokenManager->loginUser($request, $user, 'main');
+
+            return $this->redirectToRoute('volontariat_dashboard');
+        }
+
+        return $this->render(
+            '@Volontariat/security/registration/register_voluntary.html.twig',
+            [
+                'form' => $form->createView(),
+            ]
+        );
+    }
+
+    #[Route(path: '/association', name: 'volontariat_register_association', methods: ['GET', 'POST'])]
+    public function registerAssociation(Request $request): Response
+    {
+        $user = new User();
+        $form = $this->createForm(RegisterAssociationType::class, $user);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $email = $form->getData()->getEmail();
+            if ($this->userRepository->findOneByEmail($email) !== null) {
+                $this->addFlash('danger', 'Un volontaire a déjà cette adresse email');
+
+                return $this->redirectToRoute('volontariat_register_association');
             }
 
             $plainPassword = $this->passwordGenerator->generate();

@@ -8,7 +8,6 @@ use AcMarche\Volontariat\Form\FormBuilderVolontariat;
 use AcMarche\Volontariat\Form\Search\SearchAssociationType;
 use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Service\FileHelper;
-use AcMarche\Volontariat\Service\VolontariatConstante;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -32,13 +31,9 @@ class AssociationController extends AbstractController
     #[Route(path: '/', name: 'volontariat_admin_association', methods: ['GET', 'POST'])]
     public function indexAction(Request $request): Response
     {
-        $session = $request->getSession();
         $data = array();
         $data['valider'] = 2;
-        $key = VolontariatConstante::ASSOCIATION_ADMIN_SEARCH;
-        if ($session->has($key)) {
-            $data = unserialize($session->get($key));
-        }
+
         $search_form = $this->createForm(
             SearchAssociationType::class,
             $data
@@ -47,7 +42,7 @@ class AssociationController extends AbstractController
         if ($search_form->isSubmitted() && $search_form->isValid()) {
             $data = $search_form->getData();
         }
-        $session->set($key, serialize($data));
+
         $associations = $this->associationRepository->search($data);
 
         return $this->render(

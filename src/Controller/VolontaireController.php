@@ -24,20 +24,10 @@ class VolontaireController extends AbstractController
     public function indexAction(Request $request): Response
     {
         $data = array();
-        $session = $request->getSession();
-        $key = VolontariatConstante::VOLONTAIRE_SEARCH;
-        $search = false;
-        if ($session->has($key)) {
-            $data = unserialize($session->get($key));
-            $search = true;
-        }
-        $session = $request->getSession();
         $search_form = $this->createForm(SearchVolontaireType::class, $data);
         $search_form->handleRequest($request);
         if ($search_form->isSubmitted() && $search_form->isValid()) {
             $data = $search_form->getData();
-            $search = true;
-            $session->set($key, serialize($data));
         }
         $volontaires = $this->volontaireRepository->search($data);
         if (!$this->authorizationChecker->isGranted('index')) {
@@ -54,7 +44,7 @@ class VolontaireController extends AbstractController
             array(
                 'search_form' => $search_form->createView(),
                 'volontaires' => $volontaires,
-                'search' => $search,
+                'search' => $search_form->isSubmitted(),
             )
         );
     }

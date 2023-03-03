@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use AcMarche\Volontariat\Manager\TokenManager;
+use AcMarche\Volontariat\Security\TokenManager;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 

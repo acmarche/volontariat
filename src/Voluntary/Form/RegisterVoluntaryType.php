@@ -1,10 +1,9 @@
 <?php
 
-namespace AcMarche\Volontariat\Form\User;
+namespace AcMarche\Volontariat\Voluntary\Form;
 
-use AcMarche\Volontariat\Entity\Security\User;
+use AcMarche\Volontariat\Entity\Volontaire;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -20,31 +19,31 @@ class RegisterVoluntaryType extends AbstractType
                 EmailType::class,
                 array(
                     'required' => true,
-                    'attr'=>['placeholder'=>'Email']
                 )
             )
             ->add(
-                'nom',
+                'name',
                 TextType::class,
                 array(
                     'required' => true,
-                    'attr'=>['placeholder'=>'Nom']
+                    'attr' => ['autocomplete' => 'family-name'],
                 )
             )
             ->add(
-                'prenom',
+                'surname',
                 TextType::class,
                 array(
                     'required' => true,
-                    'attr'=>['placeholder'=>'Prénom']
+                    'label' => 'Prénom',
                 )
             )
             ->add(
-                'accord',
-                CheckboxType::class,
-                [
-                    'label' => "J'ai pris connaissance du règlement de la vie privée",
-                ]
+                'city',
+                TextType::class,
+                array(
+                    'required' => true,
+                    'attr' => ['autocomplete' => 'city'],
+                )
             );
     }
 
@@ -52,7 +51,7 @@ class RegisterVoluntaryType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => User::class,
+                'data_class' => Volontaire::class,
             )
         );
     }

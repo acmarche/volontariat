@@ -4,6 +4,7 @@ namespace AcMarche\Volontariat\Form\User;
 
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Security\SecurityData;
+use AcMarche\Volontariat\Voluntary\Form\RegisterVoluntaryType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;

@@ -8,15 +8,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <link rel="icon" type="image/x-icon" href="{{ asset('bundles/volontariat/favicon.ico') }}"/>
+    <link rel="icon" type="image/x-icon" href="{{ asset('bundles/acmarchevolontariat/favicon.ico') }}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="//unpkg.com/alpinejs" defer></script>
     {% block stylesheets %}
         {{ encore_entry_link_tags('app') }}
     {% endblock %}
 </head>
 <body>
 {% include '@Volontariat/header/_header.html.twig' %}
-<main class="container mx-auto sm:px-6 lg:px-8" id="app">
+<main class="container mt-12 mx-auto sm:px-6 lg:px-8" id="app">
     {% block body %}
 
     {% endblock %}

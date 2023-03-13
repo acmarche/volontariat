@@ -3,6 +3,7 @@
 namespace AcMarche\Volontariat\Controller;
 
 use AcMarche\Volontariat\Association\Form\RegisterAssociationType;
+use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Mailer\MailerSecurity;
@@ -36,7 +37,7 @@ class RegisterController extends AbstractController
     public function index(): Response
     {
         return $this->render(
-            '@Volontariat/security/registration/index.html.twig',
+            '@Volontariat/registration/index.html.twig',
             [
 
             ]
@@ -88,7 +89,7 @@ class RegisterController extends AbstractController
     #[Route(path: '/association', name: 'volontariat_register_association', methods: ['GET', 'POST'])]
     public function registerAssociation(Request $request): Response
     {
-        $user = new User();
+        $user = new Association();
         $form = $this->createForm(RegisterAssociationType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

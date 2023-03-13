@@ -2,10 +2,10 @@
 
 namespace AcMarche\Volontariat\Association\Form;
 
-use AcMarche\Volontariat\Entity\Security\User;
+use AcMarche\Volontariat\Entity\Association;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -15,14 +15,52 @@ class RegisterAssociationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('name', TextType::class, [
+                'label' => 'Nom de l\'association',
+            ])
+            ->add('address', TextType::class, [
+                'label' => 'Rue',
+            ])
+            ->add('phone', TextType::class, [
+                'label' => 'Numéro de téléphone',
+            ])
             ->add(
-                'email',
-                EmailType::class,
+                'postalCode',
+                TextType::class,
+                [
+                    'label' => 'Code postal',
+                ]
+            )
+            ->add(
+                'city',
+                TextType::class,
                 array(
                     'required' => true,
-                    'attr' => ['placeholder' => 'Email'],
+                    'label' => 'Localité',
+                    'attr' => ['autocomplete' => 'city'],
                 )
+            )
+            ->add('email', EmailType::class, [
+                'label' => 'Courriel',
+            ])
+            ->add(
+                'description',
+                TextareaType::class,
+                [
+                    'label' => 'Description de l\'association',
+                    'attr' => [
+                        'rows' => 8,
+                    ],
+                ]
             );
+    }
 
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults(
+            array(
+                'data_class' => Association::class,
+            )
+        );
     }
 }

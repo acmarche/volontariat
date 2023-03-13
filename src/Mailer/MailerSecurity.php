@@ -2,12 +2,15 @@
 
 namespace AcMarche\Volontariat\Mailer;
 
+use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Security\User;
+use AcMarche\Volontariat\Entity\Volontaire;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
-use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -15,7 +18,6 @@ use Twig\Error\SyntaxError;
 class MailerSecurity
 {
     public function __construct(
-        private Environment $twig,
         private MailerInterface $mailer,
         private string $from
     ) {
@@ -49,15 +51,40 @@ class MailerSecurity
      * @throws RuntimeError
      * @throws SyntaxError|TransportExceptionInterface
      */
-    public function sendWelcomeVoluntary(User $user, string $password): void
+    public function sendWelcomeVoluntary(Volontaire $voluntary, string $password): void
     {
+        $email = (new TemplatedEmail())
+            ->from($this->from)
+            ->to(new Address($voluntary->email))
+            ->subject('Bienvenue sur la plate-forme du volontariat')
+            ->htmlTemplate('@Volontariat/emails/_welcome_voluntary.html.twig')
+            ->context([
+                'voluntary' => $voluntary,
+                'password' => $password,
+            ]);
+
+        $this->mailer->send($email);
+    }
+
+    /**
+     * Lors de la création du compte
+     * @param Association $association
+     * @param string $plainPassword
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws TransportExceptionInterface
+     */
+    public function sendWelcomeAssociation(Association $association, string $password)
+    {
+
         $sujet = 'Bienvenue sur la plate-forme du volontariat';
         $body = $this->twig->render(
             '@Volontariat/security/registration/email.welcome.txt.twig',
-            ['user' => $user, 'password' => $password]
+            ['user' => $association, 'password' => $password]
         );
 
-        $this->send($this->from, $user->getEmail(), $sujet, $body, $this->from);
+        $this->send($this->from, $association->email, $sujet, $body, $this->from);
     }
 
     public function sendRequestNewPassword(User $user): void
@@ -71,7 +98,7 @@ class MailerSecurity
 
         $sujet = "Volontariat, demande d'un nouveau mot de passe";
 
-        $this->send($this->from, $user->getEmail(), $sujet, $body);
+        $this->send($this->from, $user->email, $sujet, $body);
     }
 
     public function sendError(string $sujet, string $body): void

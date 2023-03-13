@@ -58,10 +58,12 @@ class MailerSecurity
             ->to(new Address($voluntary->email))
             ->subject('Bienvenue sur la plate-forme du volontariat')
             ->htmlTemplate('@Volontariat/emails/_welcome_voluntary.html.twig')
-            ->context([
-                'voluntary' => $voluntary,
-                'password' => $password,
-            ]);
+            ->context(
+                array_merge($this->defaultParams(), [
+                    'voluntary' => $voluntary,
+                    'password' => $password,
+                ])
+            );
 
         $this->mailer->send($email);
     }
@@ -110,5 +112,19 @@ class MailerSecurity
         } catch (TransportException $e) {
 
         }
+    }
+
+    private function defaultParams(): array
+    {
+        return [
+            'importance' => 'high',
+            'content' => '',
+            'action_url' => '',
+            'action_text' => '',
+            'footer_text' => '',
+            'markdown' => false,
+            'raw' => false,
+            'exception' => false,
+        ];
     }
 }

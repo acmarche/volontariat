@@ -108,7 +108,7 @@ class VolontaireController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->fileHelper->traitementFiles($volontaire);
-            $this->volontaireRepository->save();
+            $this->volontaireRepository->flush();
 
             $this->addFlash('success', 'Le volontaire a bien été modifié');
 

@@ -23,10 +23,10 @@ class VehiculeRepository extends ServiceEntityRepository
     public function insert(Vehicule $vehicule): void
     {
         $this->_em->persist($vehicule);
-        $this->save();
+        $this->flush();
     }
 
-    public function save(): void
+    public function flush(): void
     {
         $this->_em->flush();
     }
@@ -34,7 +34,7 @@ class VehiculeRepository extends ServiceEntityRepository
     public function remove(Vehicule $vehicule): void
     {
         $this->_em->remove($vehicule);
-        $this->save();
+        $this->flush();
     }
 
     public function findAll(): array

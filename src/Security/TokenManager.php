@@ -34,18 +34,19 @@ class TokenManager
         return $token;
     }
 
-    public function generate(User $user)
+    public function generate(User $user, DateTime $expireAt = null)
     {
         $token = $this->getInstance($user);
         try {
             $token->setValue(bin2hex(random_bytes(20)));
         } catch (Exception) {
         }
+        if (!$expireAt) {
+            $expireAt = new DateTime('+90 day');
+        }
+        $token->setExpireAt($expireAt);
 
-        $expireTime = new DateTime('+90 day');
-        $token->setExpireAt($expireTime);
-
-        $this->tokenRepository->save();
+        $this->tokenRepository->flush();
 
         return $token;
     }

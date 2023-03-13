@@ -26,10 +26,10 @@ class SecteurRepository extends ServiceEntityRepository
     public function insert(Secteur $secteur): void
     {
         $this->_em->persist($secteur);
-        $this->save();
+        $this->flush();
     }
 
-    public function save(): void
+    public function flush(): void
     {
         $this->_em->flush();
     }
@@ -37,7 +37,7 @@ class SecteurRepository extends ServiceEntityRepository
     public function remove(Secteur $secteur): void
     {
         $this->_em->remove($secteur);
-        $this->save();
+        $this->flush();
     }
 
     public function findAll(): array

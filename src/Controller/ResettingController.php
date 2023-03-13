@@ -44,7 +44,7 @@ class ResettingController extends AbstractController
             }
             $token = $this->generateToken();
             $user->setConfirmationToken($token);
-            $this->userRepository->save();
+            $this->userRepository->flush();
             $this->mailer->sendRequestNewPassword($user);
 
             return $this->redirectToRoute('volontariat_password_confirmation');
@@ -89,7 +89,7 @@ class ResettingController extends AbstractController
 
             $user->setConfirmationToken(null);
 
-            $this->userRepository->save();
+            $this->userRepository->flush();
 
             $this->addFlash('success', 'Votre mot de passe a bien été changé');
 

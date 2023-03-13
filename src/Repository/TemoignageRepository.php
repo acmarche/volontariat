@@ -23,10 +23,10 @@ class TemoignageRepository extends ServiceEntityRepository
     public function insert(Temoignage $temoignage): void
     {
         $this->_em->persist($temoignage);
-        $this->save();
+        $this->flush();
     }
 
-    public function save(): void
+    public function flush(): void
     {
         $this->_em->flush();
     }
@@ -34,6 +34,6 @@ class TemoignageRepository extends ServiceEntityRepository
     public function remove(Temoignage $temoignage): void
     {
         $this->_em->remove($temoignage);
-        $this->save();
+        $this->flush();
     }
 }

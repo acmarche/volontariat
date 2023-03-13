@@ -95,7 +95,7 @@ class UtilisateurController extends AbstractController
             ->add('submit', SubmitType::class, array('label' => 'Update'));
         $editForm->handleRequest($request);
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->userRepository->save();
+            $this->userRepository->flush();
             $this->addFlash("success", "L'utilisateur a bien été modifié");
 
             return $this->redirectToRoute('volontariat_admin_utilisateur');
@@ -143,7 +143,7 @@ class UtilisateurController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->passwordManager->changePassword($user, $form->getData()->getPlainPassword());
-            $this->userRepository->save();
+            $this->userRepository->flush();
 
             $this->addFlash('success', 'Mot de passe changé');
 

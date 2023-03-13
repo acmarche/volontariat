@@ -32,7 +32,7 @@ class PasswordController extends AbstractController
 
             $this->passwordManager->changePassword($user, $plainPassword);
 
-            $this->userRepository->save();
+            $this->userRepository->flush();
 
             $this->addFlash('success', 'Le mot de passe a bien été modifié.');
 

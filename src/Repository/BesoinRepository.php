@@ -23,10 +23,10 @@ class BesoinRepository extends ServiceEntityRepository
     public function insert(Besoin $besoin): void
     {
         $this->_em->persist($besoin);
-        $this->save();
+        $this->flush();
     }
 
-    public function save(): void
+    public function flush(): void
     {
         $this->_em->flush();
     }
@@ -34,7 +34,7 @@ class BesoinRepository extends ServiceEntityRepository
     public function remove(Besoin $besoin): void
     {
         $this->_em->remove($besoin);
-        $this->save();
+        $this->flush();
     }
 
     /**

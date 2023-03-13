@@ -37,7 +37,7 @@ class LinkController extends AbstractController
 
             $volontaire->setUser($user);
 
-            $this->volontaireRepository->save();
+            $this->volontaireRepository->flush();
 
             $this->addFlash("success", "Le volontaire à bien été associé au compte");
 
@@ -64,7 +64,7 @@ class LinkController extends AbstractController
 
             $association->setUser($user);
 
-            $this->associationRepository->save();
+            $this->associationRepository->flush();
 
             $this->addFlash("success", "L' association à bien été associée au compte");
 
@@ -86,7 +86,7 @@ class LinkController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $volontaire->setUser(null);
 
-            $this->volontaireRepository->save();
+            $this->volontaireRepository->flush();
             $this->addFlash('success', 'Le compte ont bien été dissocié');
         }
         return $this->redirectToRoute('volontariat_admin_volontaire_show', array('id' => $volontaire->getId()));
@@ -99,7 +99,7 @@ class LinkController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $association->setUser(null);
-            $this->associationRepository->save();
+            $this->associationRepository->flush();
 
             $this->addFlash('success', 'Le compte ont bien été dissociée');
         }

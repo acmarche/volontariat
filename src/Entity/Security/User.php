@@ -50,6 +50,11 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface, S
     private int $countAssociations = 0;
     private int $countVolontaires = 0;
 
+    //register voluntary
+    public ?string $city = null;
+    public ?string $name = null;
+    public ?string $surname = null;
+
     public function setCountVolontaires(int $count): void
     {
         $this->countVolontaires = $count;

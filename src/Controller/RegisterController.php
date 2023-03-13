@@ -2,14 +2,15 @@
 
 namespace AcMarche\Volontariat\Controller;
 
+use AcMarche\Volontariat\Association\Form\RegisterAssociationType;
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Entity\Volontaire;
-use AcMarche\Volontariat\Form\User\RegisterVoluntaryType;
 use AcMarche\Volontariat\Mailer\MailerSecurity;
 use AcMarche\Volontariat\Repository\UserRepository;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
 use AcMarche\Volontariat\Security\PasswordGenerator;
 use AcMarche\Volontariat\Security\TokenManager;
+use AcMarche\Volontariat\Voluntary\Form\RegisterVoluntaryType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -77,7 +78,7 @@ class RegisterController extends AbstractController
         }
 
         return $this->render(
-            '@Volontariat/security/registration/register_voluntary.html.twig',
+            '@Volontariat/registration/register_voluntary.html.twig',
             [
                 'form' => $form->createView(),
             ]
@@ -119,7 +120,7 @@ class RegisterController extends AbstractController
         }
 
         return $this->render(
-            '@Volontariat/security/registration/register_voluntary.html.twig',
+            '@Volontariat/registration/register_association.html.twig',
             [
                 'form' => $form->createView(),
             ]

@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <!-- Title -->
-    <title>{% block title %}Volontariat{% endblock %}</title>
-
-    <!-- Required Meta Tags Always Come First -->
+    <title>{% block title %}{% endblock %} - Plate-forme du volontariat - Marche-en-Famenne</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -18,6 +15,7 @@
 <body>
 {% include '@Volontariat/header/_header.html.twig' %}
 <main class="container mt-12 mx-auto sm:px-6 lg:px-8" id="app">
+    {% include '@Volontariat/_flash_messages.html.twig' %}
     {% block body %}
 
     {% endblock %}

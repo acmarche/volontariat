@@ -42,7 +42,6 @@ class RegisterController extends AbstractController
         return $this->render(
             '@Volontariat/registration/index.html.twig',
             [
-
             ]
         );
     }
@@ -54,9 +53,8 @@ class RegisterController extends AbstractController
         $form = $this->createForm(RegisterVoluntaryType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
             $email = $form->getData()->getEmail();
-            if ($this->userRepository->findOneByEmail($email) !== null) {
+            if (null !== $this->userRepository->findOneByEmail($email)) {
                 $this->addFlash('danger', 'Un volontaire est déjà inscrit avec cette adresse email');
 
                 return $this->redirectToRoute('volontariat_register_voluntary');
@@ -69,14 +67,14 @@ class RegisterController extends AbstractController
             $voluntary = Volontaire::newFromUser($user);
             $this->volontaireRepository->insert($voluntary);
 
-            try {
-                $this->mailer->sendWelcomeVoluntary($user, $plainPassword);
-                $this->addFlash("success", 'Vous êtes bien inscrit');
-            } catch (TransportException|LoaderError|RuntimeError|SyntaxError|TransportExceptionInterface $e) {
-                $this->addFlash("error", $e->getMessage());
-            }
+            $token = $this->tokenManager->generate($user);
 
-            //$this->tokenManager->loginUser($request, $user, 'main');
+            try {
+                $this->mailer->sendWelcomeVoluntary($user, $plainPassword, $token);
+                $this->addFlash('success', 'Vous êtes bien inscrit');
+            } catch (TransportException|LoaderError|RuntimeError|SyntaxError|TransportExceptionInterface $e) {
+                $this->addFlash('error', $e->getMessage());
+            }
 
             return $this->redirectToRoute('volontariat_dashboard');
         }
@@ -85,9 +83,9 @@ class RegisterController extends AbstractController
         $voluntary->email = 'jf@marche.be';
         try {
             $this->mailer->sendWelcomeVoluntary($voluntary, 'homer');
-            $this->addFlash("success", 'Vous êtes bien inscrit');
+            $this->addFlash('success', 'Vous êtes bien inscrit');
         } catch (TransportException|LoaderError|RuntimeError|SyntaxError|TransportExceptionInterface $e) {
-            $this->addFlash("error", $e->getMessage());
+            $this->addFlash('error', $e->getMessage());
         }
 
         return $this->render(
@@ -105,9 +103,8 @@ class RegisterController extends AbstractController
         $form = $this->createForm(RegisterAssociationType::class, $association);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
             $email = $form->getData()->getEmail();
-            if ($this->userRepository->findOneByEmail($email) !== null) {
+            if (null !== $this->userRepository->findOneByEmail($email)) {
                 $this->addFlash('danger', 'Une association est déjà inscrite avec cette adresse email');
 
                 return $this->redirectToRoute('volontariat_register_association');
@@ -120,18 +117,19 @@ class RegisterController extends AbstractController
 
             $this->associationRepository->insert($association);
 
+            $token = $this->tokenManager->generate($user);
+
             try {
-                $this->mailer->sendWelcomeAssociation($association, $plainPassword);
-                $this->addFlash("success", 'Vous êtes bien inscrit');
+                $this->mailer->sendWelcomeAssociation($association, $plainPassword, $token);
+                $this->addFlash('success', 'Vous êtes bien inscrit');
             } catch (TransportException|LoaderError|RuntimeError|SyntaxError|TransportExceptionInterface $e) {
-                $this->addFlash("error", $e->getMessage());
+                $this->addFlash('error', $e->getMessage());
             }
 
             // $this->tokenManager->loginUser($request, $association, 'main');
 
             return $this->redirectToRoute('volontariat_dashboard');
         }
-
 
         return $this->render(
             '@Volontariat/registration/register_association.html.twig',

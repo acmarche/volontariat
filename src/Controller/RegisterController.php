@@ -78,15 +78,6 @@ class RegisterController extends AbstractController
 
             return $this->redirectToRoute('volontariat_dashboard');
         }
-        $voluntary = new Volontaire();
-        $voluntary->name = 'jf';
-        $voluntary->email = 'jf@marche.be';
-        try {
-            $this->mailer->sendWelcomeVoluntary($voluntary, 'homer');
-            $this->addFlash('success', 'Vous êtes bien inscrit');
-        } catch (TransportException|LoaderError|RuntimeError|SyntaxError|TransportExceptionInterface $e) {
-            $this->addFlash('error', $e->getMessage());
-        }
 
         return $this->render(
             '@Volontariat/registration/register_voluntary.html.twig',

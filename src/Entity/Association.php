@@ -5,10 +5,6 @@ namespace AcMarche\Volontariat\Entity;
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\InterfaceDef\Uploadable;
 use AcMarche\Volontariat\Repository\AssociationRepository;
-use AcMarche\Volontariat\Validator\Constraints as AcMarcheAssert;
-use DateTime;
-use DateTimeImmutable;
-use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -17,7 +13,6 @@ use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
-use Stringable;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -26,11 +21,12 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: AssociationRepository::class)]
 #[ORM\Table(name: 'association')]
-class Association implements Uploadable, TimestampableInterface, SluggableInterface, Stringable
+class Association implements Uploadable, TimestampableInterface, SluggableInterface, \Stringable
 {
-    public DateTimeInterface $updated;
     use TimestampableTrait;
     use SluggableTrait;
+
+    public \DateTimeInterface $updated;
 
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
@@ -49,9 +45,7 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
 
     #[ORM\Column(type: 'string', nullable: true)]
     public ?string $number;
-    /**
-     * @AcMarcheAssert\CodePostalIsBelgium
-     */
+
     #[ORM\Column(type: 'integer', nullable: true)]
     public ?int $postalCode;
 
@@ -75,17 +69,17 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
     #[Assert\Length(max: 600)]
     public ?string $description;
     /**
-     * Description des besoins permanent
+     * Description des besoins permanent.
      */
     #[ORM\Column(type: 'text', nullable: true)]
     public ?string $requirement;
     /**
-     * lieu besoins permanents
+     * lieu besoins permanents.
      */
     #[ORM\Column(type: 'text', nullable: true)]
     public ?string $place;
     /**
-     * contact besoins permanents
+     * contact besoins permanents.
      */
     #[ORM\Column(type: 'text', nullable: true)]
     public ?string $contact;
@@ -122,10 +116,10 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
     {
         $this->image = $file;
 
-        if ($file !== null) {
+        if (null !== $file) {
             // It is required that at least one field changes if you are using doctrine
             // otherwise the event listeners won't be called and the file is lost
-            $this->updated = new DateTime('now');
+            $this->updated = new \DateTime('now');
         }
     }
 
@@ -162,7 +156,7 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
             // It is required that at least one field changes if you are using doctrine
             // otherwise the event listeners won't be called and the file is lost
             try {
-                $this->updatedAt = new DateTimeImmutable();
+                $this->updatedAt = new \DateTimeImmutable();
             } catch (Exception) {
             }
         }
@@ -203,25 +197,24 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
         $this->fileDescriptif = $fileDescriptif;
     }
 
-    public array $images;
+    public array $images = [];
 
     public function getImages(): array
     {
         return $this->images;
     }
 
-    /**
-     * @param array $images
-     */
     public function setImages(array $images): void
     {
         $this->images = $images;
     }
 
-    public function getFirstImage(): ?string
+    public function getFirstImage(): ?array
     {
-        if ($this->images !== []) {
-            return $this->images[0];
+        if ([] !== $this->images) {
+            $first = $this->images[0];
+
+            return $first;
         }
 
         return null;
@@ -249,5 +242,4 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
         $this->activites = new ArrayCollection();
         $this->images = [];
     }
-
 }

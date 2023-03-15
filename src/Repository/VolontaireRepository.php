@@ -60,8 +60,8 @@ class VolontaireRepository extends ServiceEntityRepository
                 ->setParameter('secteur', $secteur);
         }
 
-        if (is_array($secteurs) && $secteurs !== []) {
-            $qb->andwhere("secteurs IN :secteurs")
+        if (is_array($secteurs) && [] !== $secteurs) {
+            $qb->andwhere('secteurs IN :secteurs')
                 ->setParameter('secteurs', $secteur);
         }
 
@@ -70,10 +70,10 @@ class VolontaireRepository extends ServiceEntityRepository
                 ->setParameter('vehicule', $vehicule);
         }
 
-        if ($valider === false) {
+        if (false === $valider) {
             $qb->andwhere('volontaire.valider = :valider')
                 ->setParameter('valider', false);
-        } elseif ($valider != 2) {
+        } elseif (2 != $valider) {
             $qb->andwhere('volontaire.valider = :valider')
                 ->setParameter('valider', true);
         }
@@ -109,10 +109,10 @@ class VolontaireRepository extends ServiceEntityRepository
             ->orderBy('volontaire.city')
             ->getQuery()->getResult();
 
-        $cities = array();
+        $cities = [];
 
         foreach ($results as $type) {
-            $city = strtoupper($type->getCity());
+            $city = strtoupper($type->city);
             if (!in_array($city, $cities)) {
                 $cities[$city] = $city;
             }
@@ -121,18 +121,15 @@ class VolontaireRepository extends ServiceEntityRepository
         return $cities;
     }
 
-    /**
-     * @return Volontaire[]
-     */
-    public function getVolontairesByUser(User $user, bool $valider): array
+    public function findVolontaireByUser(User $user, bool $valider=true): ?Volontaire
     {
         return $this->createQbl()
-            ->where('volontaire.user = :user')
+            ->andWhere('volontaire.user = :user')
             ->setParameter('user', $user)
-            ->where('volontaire.valider = :valider')
+            ->andWhere('volontaire.valider = :valider')
             ->setParameter('valider', $valider)
             ->orderBy('volontaire.city')
-            ->getQuery()->getResult();
+            ->getQuery()->getOneOrNullResult();
     }
 
     public function createQbl(): QueryBuilder
@@ -144,5 +141,4 @@ class VolontaireRepository extends ServiceEntityRepository
             ->leftJoin('volontaire.vehicules', 'vehicules', 'WITH')
             ->addSelect('secteurs', 'vehicules', 'user', 'association');
     }
-
 }

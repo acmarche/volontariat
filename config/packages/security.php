@@ -1,12 +1,10 @@
 <?php
 
-
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Security\VolontariatAuthenticator;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
-
     $main = [
         'provider' => 'user_provider',
         'logout' => [
@@ -19,7 +17,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ];
 
     // focant en fin de
-    /** @see PasswordHasherFactory.php */
+    /* @see PasswordHasherFactory.php */
     // $config['encode_as_base64'] = false;
     // $config['iterations'] = 1;
     $containerConfigurator->extension('security', [

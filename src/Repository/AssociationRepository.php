@@ -28,7 +28,7 @@ class AssociationRepository extends ServiceEntityRepository
      */
     public function findAll(): array
     {
-        return $this->findBy(array(), array('nom' => 'ASC'));
+        return $this->findBy([], ['nom' => 'ASC']);
     }
 
     /**
@@ -46,7 +46,7 @@ class AssociationRepository extends ServiceEntityRepository
 
         if ($nom) {
             $qb->andwhere(
-                'association.email LIKE :mot OR association.nom LIKE :mot OR association.description LIKE :mot '
+                'association.email LIKE :mot OR association.name LIKE :mot OR association.description LIKE :mot '
             )
                 ->setParameter('mot', '%'.$nom.'%');
         }
@@ -66,15 +66,15 @@ class AssociationRepository extends ServiceEntityRepository
                 ->setParameter('user', $user);
         }
 
-        if ($valider === false) {
+        if (false === $valider) {
             $qb->andwhere('association.valider = :valider')
                 ->setParameter('valider', false);
-        } elseif ($valider != 2) {
+        } elseif (2 != $valider) {
             $qb->andwhere('association.valider = :valider')
                 ->setParameter('valider', true);
         }
 
-        return $qb->addOrderBy('association.nom', 'ASC')->getQuery()->getResult();
+        return $qb->getQuery()->getResult();
     }
 
     /**
@@ -92,44 +92,28 @@ class AssociationRepository extends ServiceEntityRepository
     public function getAllEmail(): array
     {
         $results = $this->createQBl()
-            ->andWhere("association.mailing = 0")
+            ->andWhere('association.mailing = 0')
             ->getQuery()
             ->getResult();
 
-        $npo_emails = array();
+        $npo_emails = [];
         foreach ($results as $association) {
             if ($association->getEmail()) {
-                $npo_emails[] = $association->getEmail();
+                $npo_emails[] = $association->email;
             }
         }
 
         return $npo_emails;
     }
 
-    /**
-     * @return Association[]
-     */
-    public function findAssociationBySecteur($secteurs): array
+    public function findAssociationByUser(User $user, bool $valider = false): ?Association
     {
-        $qb = $this->createQBl()
-            ->where(':platform MEMBER OF association.secteurs')
-            ->setParameters(array('platform' => $secteurs));
-
-        return $qb->getQuery()->getResult();
-    }
-
-    /**
-     * @return Association[]
-     */
-    public function getAssociationsByUser(User $user, bool $valider = false): array
-    {
-        $qb = $this->createQBl()
-            ->where('association.user = :user')
+        return $this->createQBl()
+            ->andWhere('association.user = :user')
             ->setParameter('user', $user)
-            ->where('association.valider = :valider')
-            ->setParameter('valider', $valider);
-
-        return $qb->getQuery()->getResult();
+            ->andWhere('association.valider = :valider')
+            ->setParameter('valider', $valider)
+            ->getQuery()->getOneOrNullResult();
     }
 
     private function createQBl(): QueryBuilder
@@ -138,7 +122,7 @@ class AssociationRepository extends ServiceEntityRepository
             ->leftJoin('association.secteurs', 'secteurs', 'WITH')
             ->leftJoin('association.besoins', 'besoins', 'WITH')
             ->leftJoin('association.user', 'user', 'WITH')
-            ->addSelect('secteurs', 'besoins', 'user');
+            ->addSelect('secteurs', 'besoins', 'user')
+            ->addOrderBy('association.name', 'ASC');
     }
-
 }

@@ -2,29 +2,35 @@
 
 namespace AcMarche\Volontariat\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use AcMarche\Volontariat\Repository\AssociationRepository;
+use AcMarche\Volontariat\Repository\VolontaireRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/dashboard')]
 #[IsGranted('ROLE_VOLONTARIAT')]
 class DashboardController extends AbstractController
 {
-    public function __construct()
-    {
+    public function __construct(
+        private AssociationRepository $associationRepository,
+        private VolontaireRepository $volontaireRepository
+    ) {
     }
 
     #[Route(path: '/', name: 'volontariat_dashboard')]
-    public function indexAction() : Response
+    public function indexAction(): Response
     {
         $user = $this->getUser();
-        $associations = $this->associationService->getAssociationsByUser($user);
-        $volontaires = $this->volontaireService->getVolontairesByUser($user);
+
+        $association = $this->associationRepository->findAssociationByUser($user);
+        $volontaire = $this->volontaireRepository->findVolontaireByUser($user);
+
         return $this->render('@Volontariat/dashboard/index.html.twig', [
-            'volontaires' => $volontaires,
-            'tab_active' => 'profil',
-            'associations' => $associations,
+            'volontaire' => $volontaire,
+            'association' => $association,
+            'user' => $user,
         ]);
     }
 }

@@ -76,7 +76,7 @@ class RegisterController extends AbstractController
                 $this->addFlash('error', $e->getMessage());
             }
 
-            return $this->redirectToRoute('volontariat_dashboard');
+            return $this->redirectToRoute('volontariat_register_complete');
         }
 
         return $this->render(
@@ -119,13 +119,23 @@ class RegisterController extends AbstractController
 
             // $this->tokenManager->loginUser($request, $association, 'main');
 
-            return $this->redirectToRoute('volontariat_dashboard');
+            return $this->redirectToRoute('volontariat_register_complete');
         }
 
         return $this->render(
             '@Volontariat/registration/register_association.html.twig',
             [
                 'form' => $form->createView(),
+            ]
+        );
+    }
+
+    #[Route(path: '/complete', name: 'volontariat_register_complete', methods: ['GET'])]
+    public function complete(): Response
+    {
+        return $this->render(
+            '@Volontariat/registration/complete.html.twig',
+            [
             ]
         );
     }

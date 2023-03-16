@@ -1,12 +1,14 @@
 {% extends "@Volontariat/admin/base.html.twig" %}
-{% block title %}Liste des association{% endblock %}
 
 {% block body %}
-    <h2>Envoie de messages</h2>
-
-    <a href="{{ path('volontariat_admin_message_new') }}" class="btn btn-default">
-        Envoyer un nouveau message
-    </a>
-    <br/>
+    <div class="card">
+        <h3 class="card-header">Nouveau message</h3>
+        <div class="card-body">
+            <a href="{{ path('volontariat_admin_message_new') }}" class="btn btn-default">
+                Envoyer un nouveau message
+            </a>
+            <br/>
+        </div>
+    </div>
 
 {% endblock %}

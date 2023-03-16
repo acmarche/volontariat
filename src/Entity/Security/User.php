@@ -44,7 +44,7 @@ class User implements UserInterface, LegacyPasswordAuthenticatedUserInterface, \
     public ?string $confirmationToken = null;
 
     // register voluntary
-    public ?string $plain_password = null;
+    public ?string $plainPassword = null;
     public ?string $city = null;
 
     public function __toString()

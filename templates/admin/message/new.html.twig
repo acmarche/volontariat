@@ -1,23 +1,25 @@
 {% extends "@Volontariat/admin/base.html.twig" %}
 
-{% block title %}Volontaires{% endblock %}
-
 {% block body %}
 
-    <h3>Nouveau message</h3>
+    <div class="card">
+        <h3 class="card-header">Nouveau message</h3>
+        <div class="card-body">
 
-    <div class="alert alert-info">
-        Insérez {urltoken} si vous voulez mettre l'url permettant de se connecter automatiquement
+            <div class="alert alert-info">
+                Insérez le mot clef {urltoken} si vous voulez insérer l'url permettant de se connecter automatiquement.
+            </div>
+
+            {% if query %}
+                <p class="">{{ destinataires | length }} destinataires {{ query }}</p>
+            {% endif %}
+
+            {{ form(form) }}
+        </div>
+        <div class="card-footer">
+            <a href="{{ path('volontariat_admin_message') }}">
+                <span class="fas fa-list"></span> Annuler et retour à la liste
+            </a>
+        </div>
     </div>
-
-    {% if query %}
-        <p>{{ destinataires | length }} destinataires</p>
-    {% endif %}
-
-    {{ form(form) }}
-
-    <a href="{{ path('volontariat_admin_message') }}">
-        <span class="fas fa-list"></span> Annuler et retour à la liste
-    </a>
-
 {% endblock %}

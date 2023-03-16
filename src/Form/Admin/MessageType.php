@@ -24,9 +24,9 @@ class MessageType extends AbstractType
             ->add(
                 'contenu',
                 TextareaType::class,
-                array(
-                    'attr' => array('rows' => 8),
-                )
+                [
+                    'attr' => ['rows' => 8],
+                ]
             )
             ->add(
                 'file',
@@ -52,12 +52,11 @@ class MessageType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
-            array(
+            [
                 'data_class' => Message::class,
                 'query' => null,
-            )
+            ]
         );
-
 
         $resolver->setAllowedTypes('query', ['string', 'null']);
     }

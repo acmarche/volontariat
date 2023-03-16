@@ -32,7 +32,7 @@ class UtilisateurController extends AbstractController
     #[Route(path: '/', name: 'volontariat_admin_utilisateur', methods: ['GET'])]
     public function indexAction(): Response
     {
-        $users = $this->userRepository->findBy([], ['nom' => 'ASC']);
+        $users = $this->userRepository->findBy([], ['name' => 'ASC']);
 
         return $this->render(
             '@Volontariat/admin/utilisateur/index.html.twig',
@@ -134,9 +134,10 @@ class UtilisateurController extends AbstractController
     #[Route(path: '/password/{id}', name: 'volontariat_admin_utilisateur_password', methods: ['GET', 'POST'])]
     public function password(Request $request, User $user): Response
     {
-        $form = $this->createForm(ChangePasswordType::class, $user)
-            ->add('submit', SubmitType::class, ['label' => 'Valider']);
+        $form = $this->createForm(ChangePasswordType::class, $user);
+
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $this->passwordManager->changePassword($user, $form->getData()->getPlainPassword());
             $this->userRepository->flush();

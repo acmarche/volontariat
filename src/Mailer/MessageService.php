@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: jfsenechal
  * Date: 12/02/18
- * Time: 10:32
+ * Time: 10:32.
  */
 
 namespace AcMarche\Volontariat\Mailer;
@@ -11,7 +11,6 @@ namespace AcMarche\Volontariat\Mailer;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Entity\Volontaire;
-use AcMarche\Volontariat\Event\VolontariatEnum;
 use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
 
@@ -25,69 +24,36 @@ class MessageService
 
     public function getDestinataires($query, $isSelect = false)
     {
-        $key = null;
-        $args = [];
-
         switch ($query) {
             case 'association':
-                $key = VolontariatEnum::ASSOCIATION_ADMIN_SEARCH;
-                $repository = $this->em->getRepository(Association::class);
-                break;
+                return $this->associationRepository->search(['valider' => true]);
+
             case 'volontaire':
-                $key = VolontariatEnum::VOLONTAIRE_ADMIN_SEARCH;
-                $repository = $this->em->getRepository(Volontaire::class);
-                break;
+                return $this->volontaireRepository->search(['valider' => true]);
+
             default:
-                $repository = false;
-                break;
+                return [];
         }
-
-        if (!$repository) {
-            return [];
-        }
-
-        if ($this->session->has($key)) {
-            $args = unserialize($this->session->get($key));
-        }
-
-        //si selection_destinataires
-        if ($isSelect) {
-            return $repository->findBy(['valider' => true]);
-        }
-
-        return $repository->search($args);
     }
 
     /**
      * @param $entity Volontaire|Association
+     *
      * @return string|null
      */
     public function getEmailEntity($entity)
     {
-        if ($entity->getEmail()) {
-            return $entity->getEmail();
+        if ($entity->email) {
+            return $entity->email;
         }
 
-        if ($entity->getUser()) {
-            return $entity->getUser()->getEmail();
+        if ($entity->user) {
+            return $entity->user->email;
         }
 
         return null;
     }
 
-    /**
-     * @param $entities Volontaire[]|Association[]
-     * @return string[]
-     */
-    public function getEmails($entities): array
-    {
-        $emails = [];
-        foreach ($entities as $entity) {
-            $emails[] = $this->getEmailEntity($entity);
-        }
-
-        return $emails;
-    }
 
     /**
      * @param Association[] $associations
@@ -110,18 +76,15 @@ class MessageService
             return $volontaires[0]->getName().' '.$volontaires[0]->getSurname();
         }
         $associations = $this->associationService->getAssociationsByUser($user);
-        if ($associations !== []) {
+        if ([] !== $associations) {
             return $associations[0]->getNom();
         }
 
         return '';
     }
 
-    /**
-     * @param $entity Volontaire|Association
-     */
-    public function getUser($entity): ?User
+    public function getUser(Volontaire|Association $entity): ?User
     {
-        return $entity->getUser();
+        return $entity->user;
     }
 }

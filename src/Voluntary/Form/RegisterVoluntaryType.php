@@ -18,34 +18,34 @@ class RegisterVoluntaryType extends AbstractType
             ->add(
                 'email',
                 EmailType::class,
-                array(
+                [
                     'required' => true,
-                )
+                ]
             )
             ->add(
                 'name',
                 TextType::class,
-                array(
+                [
                     'required' => true,
                     'attr' => ['autocomplete' => 'family-name'],
-                )
+                ]
             )
             ->add(
                 'surname',
                 TextType::class,
-                array(
+                [
                     'required' => true,
                     'label' => 'Prénom',
-                )
+                ]
             )
             ->add(
                 'city',
                 TextType::class,
-                array(
+                [
                     'required' => true,
                     'label' => 'Localité',
                     'attr' => ['autocomplete' => 'city'],
-                )
+                ]
             )
             ->add('accord', CheckboxType::class, [
                 'required' => true,
@@ -58,9 +58,9 @@ class RegisterVoluntaryType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
-            array(
+            [
                 'data_class' => User::class,
-            )
+            ]
         );
     }
 }

@@ -9,7 +9,6 @@ use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Repository\UserRepository;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
 use AcMarche\Volontariat\Voluntary\Form\RegisterVoluntaryType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormInterface;
@@ -17,6 +16,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/admin/utilisateur')]
 #[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
@@ -33,16 +33,12 @@ class UtilisateurController extends AbstractController
     public function indexAction(): Response
     {
         $users = $this->userRepository->findBy([], ['nom' => 'ASC']);
-        foreach ($users as $user) {
-            $user->setCountVolontaires(count($this->volontaireRepository->findBy(['user' => $user])));
-            $user->setCountAssociations(count($this->associationRepository->findBy(['user' => $user])));
-        }
 
         return $this->render(
             '@Volontariat/admin/utilisateur/index.html.twig',
-            array(
+            [
                 'users' => $users,
-            )
+            ]
         );
     }
 
@@ -51,22 +47,22 @@ class UtilisateurController extends AbstractController
     {
         $utilisateur = new User();
         $form = $this->createForm(RegisterVoluntaryType::class, $utilisateur)
-            ->add('submit', SubmitType::class, array('label' => 'Create'));
+            ->add('submit', SubmitType::class, ['label' => 'Create']);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->userRepository->insert($utilisateur);
 
-            $this->addFlash("success", "L'utilisateur a bien été ajouté");
+            $this->addFlash('success', "L'utilisateur a bien été ajouté");
 
             return $this->redirectToRoute('volontariat_admin_utilisateur');
         }
 
         return $this->render(
             '@Volontariat/admin/utilisateur/new.html.twig',
-            array(
+            [
                 'utilisateur' => $utilisateur,
                 'form' => $form->createView(),
-            )
+            ]
         );
     }
 
@@ -79,12 +75,12 @@ class UtilisateurController extends AbstractController
 
         return $this->render(
             '@Volontariat/admin/utilisateur/show.html.twig',
-            array(
+            [
                 'utilisateur' => $utilisateur,
                 'associations' => $associations,
                 'volontaires' => $volontaires,
                 'delete_form' => $deleteForm->createView(),
-            )
+            ]
         );
     }
 
@@ -92,21 +88,21 @@ class UtilisateurController extends AbstractController
     public function editAction(Request $request, User $utilisateur): Response
     {
         $editForm = $this->createForm(UtilisateurEditType::class, $utilisateur)
-            ->add('submit', SubmitType::class, array('label' => 'Update'));
+            ->add('submit', SubmitType::class, ['label' => 'Update']);
         $editForm->handleRequest($request);
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->userRepository->flush();
-            $this->addFlash("success", "L'utilisateur a bien été modifié");
+            $this->addFlash('success', "L'utilisateur a bien été modifié");
 
             return $this->redirectToRoute('volontariat_admin_utilisateur');
         }
 
         return $this->render(
             '@Volontariat/admin/utilisateur/edit.html.twig',
-            array(
+            [
                 'utilisateur' => $utilisateur,
                 'edit_form' => $editForm->createView(),
-            )
+            ]
         );
     }
 
@@ -129,7 +125,7 @@ class UtilisateurController extends AbstractController
 
             $this->userRepository->remove($user);
 
-            $this->addFlash("success", "L'utilisateur a bien été supprimé");
+            $this->addFlash('success', "L'utilisateur a bien été supprimé");
         }
 
         return $this->redirectToRoute('volontariat_admin_utilisateur');
@@ -162,9 +158,9 @@ class UtilisateurController extends AbstractController
     private function createDeleteForm(User $user): FormInterface
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('volontariat_admin_utilisateur_delete', array('id' => $user->getId())))
+            ->setAction($this->generateUrl('volontariat_admin_utilisateur_delete', ['id' => $user->getId()]))
             ->setMethod(Request::METHOD_DELETE)
-            ->add('submit', SubmitType::class, array('label' => 'Delete', 'attr' => array('class' => 'btn-danger')))
+            ->add('submit', SubmitType::class, ['label' => 'Delete', 'attr' => ['class' => 'btn-danger']])
             ->getForm();
     }
 }

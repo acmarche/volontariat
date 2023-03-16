@@ -1,29 +1,28 @@
 <a href="{{ path('volontariat_admin_association_edit', { 'id': association.id }) }}" role="button"
    class="btn btn-primary"><i
-            class="far fa-edit"></i> Editer</a>
+            class="fa fa-edit"></i> Editer</a>
 
 <a href="{{ path('volontariat_admin_besoin_new', { 'id': association.id }) }}" role="button"
    class="btn btn-primary"><i
             class="fa fa-plus"></i> Ajouter un besoin occasionnel</a>
 
 <a href="{{ path('volontariat_admin_image_edit', { 'id': association.id }) }}" role="button"
-   class="btn btn-primary"><i class="far fa-image"></i> Images</a>
+   class="btn btn-primary"><i class="fa fa-picture-o"></i> Images</a>
 
 <a href="{{ path('volontariat_admin_activite_new', { 'id': association.id }) }}" role="button"
    class="btn btn-primary"><i class="fas fa-plus"></i> Ajouter une activité</a>
 
 <a href="{{ path('volontariat_admin_associer_association', { 'id': association.id }) }}" role="button"
    class="btn btn-primary"><i
-            class="fas fa-link"></i> Associer un compte</a>
+            class="fa fa-link"></i> Associer un compte</a>
 
-<a href="{{ path('volontariat_association_show', { 'id': association.id }) }}" role="button"
+<a href="{{ path('volontariat_association_show', { 'slug': association.slug }) }}" role="button"
    class="btn btn-primary" target="apercu"><i class="far fa-eye"></i> Voir sur le site</a>
-
 
 <br/>
 <br/>
 <a href="{{ path('volontariat_admin_association') }}" class="btn btn-primary" role='button'><i
-            class="fas fa-list"></i>
+            class="fa fa-list"></i>
     Retour à la Liste
 </a>
 

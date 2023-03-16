@@ -5,7 +5,7 @@ namespace AcMarche\Volontariat\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Volontariat\Form\User\UtilisateurPasswordType;
 use AcMarche\Volontariat\Repository\UserRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

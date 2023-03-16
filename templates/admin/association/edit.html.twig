@@ -1,15 +1,15 @@
 {% extends "@Volontariat/admin/base.html.twig" %}
 
 {% block body -%}
-
-
-    <h3>{{ association }}</h3>
-
-
-    {{ include('@Volontariat/admin/association/form.html.twig') }}
-
-    <a href="{{ path('volontariat_admin_association_show', {'id':association.id}) }}">
-        <span class="fas fa-list"></span> Annuler
-    </a>
-
+    <div class="card">
+        <h3 class="card-header">{{ association }}</h3>
+        <div class="card-body">
+            {{ include('@Volontariat/admin/association/form.html.twig') }}
+        </div>
+        <div class="card-footer">
+            <a href="{{ path('volontariat_admin_association_show', {'id':association.id}) }}">
+                <span class="fas fa-list"></span> Annuler
+            </a>
+        </div>
+    </div>
 {% endblock %}

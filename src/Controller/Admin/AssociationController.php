@@ -8,7 +8,6 @@ use AcMarche\Volontariat\Form\FormBuilderVolontariat;
 use AcMarche\Volontariat\Form\Search\SearchAssociationType;
 use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Service\FileHelper;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormInterface;
@@ -16,6 +15,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/admin/association')]
 #[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
@@ -31,7 +31,7 @@ class AssociationController extends AbstractController
     #[Route(path: '/', name: 'volontariat_admin_association', methods: ['GET', 'POST'])]
     public function indexAction(Request $request): Response
     {
-        $data = array();
+        $data = [];
         $data['valider'] = 2;
 
         $search_form = $this->createForm(
@@ -47,10 +47,10 @@ class AssociationController extends AbstractController
 
         return $this->render(
             '@Volontariat/admin/association/index.html.twig',
-            array(
+            [
                 'form' => $search_form->createView(),
                 'associations' => $associations,
-            )
+            ]
         );
     }
 
@@ -59,7 +59,7 @@ class AssociationController extends AbstractController
     {
         $association = new Association();
         $form = $this->createForm(AssocationType::class, $association)
-            ->add('submit', SubmitType::class, array('label' => 'Create'));
+            ->add('submit', SubmitType::class, ['label' => 'Create']);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->associationRepository->persist($association);
@@ -67,17 +67,17 @@ class AssociationController extends AbstractController
 
             $this->fileHelper->traitementFiles($association);
 
-            $this->addFlash("success", "Le association a bien été ajouté");
+            $this->addFlash('success', 'Le association a bien été ajouté');
 
             return $this->redirectToRoute('volontariat_admin_association_show', ['id' => $association->getId()]);
         }
 
         return $this->render(
             '@Volontariat/admin/association/new.html.twig',
-            array(
+            [
                 'association' => $association,
                 'form' => $form->createView(),
-            )
+            ]
         );
     }
 
@@ -90,12 +90,12 @@ class AssociationController extends AbstractController
 
         return $this->render(
             '@Volontariat/admin/association/show.html.twig',
-            array(
+            [
                 'association' => $association,
                 'images' => $images,
                 'delete_form' => $deleteForm->createView(),
                 'dissocier_form' => $dissocierForm->createView(),
-            )
+            ]
         );
     }
 
@@ -103,7 +103,7 @@ class AssociationController extends AbstractController
     public function editAction(Request $request, Association $association): Response
     {
         $form = $this->createForm(AssocationType::class, $association)
-            ->add('submit', SubmitType::class, array('label' => 'Update'));
+            ->add('submit', SubmitType::class, ['label' => 'Update']);
 
         $form->handleRequest($request);
 
@@ -118,10 +118,10 @@ class AssociationController extends AbstractController
 
         return $this->render(
             '@Volontariat/admin/association/edit.html.twig',
-            array(
+            [
                 'association' => $association,
                 'form' => $form->createView(),
-            )
+            ]
         );
     }
 
@@ -143,10 +143,10 @@ class AssociationController extends AbstractController
     {
         return $this->createFormBuilder()
             ->setAction(
-                $this->generateUrl('volontariat_admin_association_delete', array('id' => $association->getId()))
+                $this->generateUrl('volontariat_admin_association_delete', ['id' => $association->getId()])
             )
             ->setMethod(Request::METHOD_DELETE)
-            ->add('submit', SubmitType::class, array('label' => 'Delete', 'attr' => array('class' => 'btn-danger')))
+            ->add('submit', SubmitType::class, ['label' => 'Delete', 'attr' => ['class' => 'btn-danger']])
             ->getForm();
     }
 }

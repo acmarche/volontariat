@@ -1,37 +1,22 @@
-{{ form_start(form, { 'attr': {'class': 'form-inline'}}) }}
+{{ form_start(form, { 'attr': {'class': 'row row-cols-lg-auto g-3 align-items-center hidden-print'}}) }}
 {{ form_errors(form) }}
 
-<div class="hidden-print">
+{{ form_row(form.nom, {label_attr: {class: 'sr-only'}, attr:{'class': 'my-1 mr-sm-2'} }) }}
+{{ form_row(form.city, {label_attr: {class: 'sr-only'}, attr:{'class': 'my-1 mr-sm-2'} }) }}
+{{ form_row(form.createdAt, {label_attr: {class: 'sr-only'}, attr:{'class': 'my-1 mr-sm-2'} }) }}
 
-    {{ form_label(form.nom) }}
-    {{ form_widget(form.nom) }}
-
-    {{ form_label(form.vehicule) }}
-    {{ form_widget(form.vehicule) }}
-
-    {{ form_label(form.city) }}
-    {{ form_widget(form.city) }}
-    {{ form_widget(form.createdAt) }}
-
-    <br/><br/>
-    {{ form_label(form.secteurs) }}
-    {{ form_widget(form.secteurs) }}
-
-    <br/><br/>
-
-    {{ form_label(form.submit) }}
-    {{ form_widget(form.submit) }}
-
-    <a href="{{ path('volontariat_admin_message_new', { 'query': 'volontaire' }) }}" role="button"
-       class="btn btn-primary"><i
-                class="far fa-envelope"></i> Envoyer un message</a>
-
-    <a title="Exporter en Excel" href="{{ path('volontariat_admin_volontaire_xls') }}" class="btn btn-outline-warning btn-xs" role="button">
-        <i class="far fa-file-excel"></i>
-    </a>
-
-
+<div class="col-12">
+    <button class="btn btn-primary mr-1" type="submit"><i class="fas fa-search"></i> Rechercher</button>
 </div>
+{{ form_rest(form) }}
 {{ form_end(form) }}
+<br/><br/>
 
-    <br/><br/>
+<a href="{{ path('volontariat_admin_message_new', { 'query': 'volontaire' }) }}" role="button"
+   class="btn btn-primary"><i
+            class="fa fa-envelope"></i> Envoyer un message</a>
+
+<a title="Exporter en Excel" href="{{ path('volontariat_admin_volontaire_xls') }}"
+   class="btn btn-outline-warning btn-xs" role="button">
+    <i class="fa fa-file-excel"></i>
+</a>

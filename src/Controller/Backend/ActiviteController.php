@@ -10,7 +10,7 @@ use AcMarche\Volontariat\Entity\Activite;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Event\ActiviteEvent;
 use AcMarche\Volontariat\Form\ActiviteType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;

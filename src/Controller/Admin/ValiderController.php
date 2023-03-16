@@ -9,7 +9,7 @@ use AcMarche\Volontariat\Event\AssociationEvent;
 use AcMarche\Volontariat\Form\Admin\ValiderType;
 use AcMarche\Volontariat\Repository\AssociationRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;

@@ -2,12 +2,15 @@
 
 {% block body -%}
 
-        <h3>{{ volontaire }}</h3>
-
-    {{  include('@Volontariat/admin/volontaire/form.html.twig')}}
-
-    <a href="{{ path('volontariat_admin_volontaire') }}">
-        <span class="fas fa-list"></span> Annuler et retour à la liste
-    </a>
-
+    <div class="card">
+        <h3 class="card-header">{{ volontaire }}</h3>
+        <div class="card-body">
+            {{ include('@Volontariat/admin/volontaire/form.html.twig') }}
+        </div>
+        <div class="card-footer">
+            <a href="{{ path('volontariat_admin_volontaire') }}">
+                <span class="fas fa-list"></span> Annuler et retour à la liste
+            </a>
+        </div>
+    </div>
 {% endblock %}

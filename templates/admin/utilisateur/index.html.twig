@@ -2,46 +2,46 @@
 
 {% block body -%}
 
-    <h3>Liste des utilisateurs</h3>
+    <div class="card">
+        <h3 class="card-header">Liste des utilisateurs</h3>
+        <div class="card-body">
 
-    <a href="{{ path('volontariat_admin_utilisateur_new') }}" class="btn btn-primary">
-        <i class="fas fa-plus"></i> Ajouter un utilisateur
-    </a> <br/><br/>
+            <a href="{{ path('volontariat_admin_utilisateur_new') }}" class="btn btn-primary">
+                <i class="fa fa-plus"></i> Ajouter un utilisateur
+            </a> <br/><br/>
 
-    <table class="table table-bordered table-hover">
-        <thead>
-        <tr>
-            <th>Nom</th>
-            <th>Email</th>
-            <th>Nb volontaire</th>
-            <th>Nb association</th>
-            <th>Token</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for utilisateur in users %}
-            {% set class="" %}
-            {% if utilisateur.countVolontaires == 0 and utilisateur.countAssociations == 0 %}
-             {% set class="table-warning" %}
-                {% else %} {% set class="" %}
-            {% endif %}
-            <tr class="{{ class }}">
-                <td>
-                    <a href="{{ path('volontariat_admin_utilisateur_show', { 'id': utilisateur.id }) }}">
-                        {{ utilisateur.nom }} {{ utilisateur.prenom }}
-                    </a>
-                </td>
-                <td>{{ utilisateur.email }}</td>
-                <td>{{ utilisateur.countVolontaires }}</td>
-                <td>{{ utilisateur.countAssociations }}</td>
-                <td>
-                    {% if utilisateur.token %}
-                        <a href="{{ path('volontariat_token_show', {'value':  utilisateur.token.value}) }}">Token</a>
-                    {% endif %}
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Nb volontaire</th>
+                    <th>Nb association</th>
+                    <th>Token</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for utilisateur in users %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('volontariat_admin_utilisateur_show', { 'id': utilisateur.id }) }}">
+                                {{ utilisateur.name }} {{ utilisateur.surname }}
+                            </a>
+                        </td>
+                        <td>{{ utilisateur.email }}</td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            {% if utilisateur.token %}
+                                <a href="{{ path('volontariat_token_show', {'value':  utilisateur.token.value}) }}">
+                                    Lien de connection
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock %}

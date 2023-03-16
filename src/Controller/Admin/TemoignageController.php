@@ -9,7 +9,7 @@ use AcMarche\Volontariat\Entity\Temoignage;
 use AcMarche\Volontariat\Form\Admin\TemoignageType;
 use AcMarche\Volontariat\Repository\TemoignageRepository;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;

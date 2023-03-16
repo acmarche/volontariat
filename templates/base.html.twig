@@ -12,9 +12,9 @@
         {{ encore_entry_link_tags('app') }}
     {% endblock %}
 </head>
-<body>
+<body id="app">
 {% include '@Volontariat/header/_header.html.twig' %}
-<main class="container mt-12 mx-auto sm:px-6 lg:px-8" id="app">
+<main class="container mt-12 mx-auto sm:px-6 lg:px-8">
     {% include '@Volontariat/_flash_messages.html.twig' %}
     {% block body %}
 

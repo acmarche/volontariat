@@ -2,16 +2,15 @@
 
 namespace AcMarche\Volontariat\Controller;
 
-use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Volontariat\Entity\Activite;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Besoin;
 use AcMarche\Volontariat\Entity\Page;
 use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Service\FileHelper;
-
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class DefaultController extends AbstractController
@@ -21,7 +20,7 @@ class DefaultController extends AbstractController
     }
 
     #[Route(path: '/', name: 'volontariat_home')]
-    public function index() : Response
+    public function index(): Response
     {
         $em = $this->managerRegistry->getManager();
         $args = ['valider' => true];
@@ -36,6 +35,7 @@ class DefaultController extends AbstractController
         $volontaires = $em->getRepository(Volontaire::class)->getRecent();
         $associations = $em->getRepository(Association::class)->getRecent();
         $besoins = $em->getRepository(Besoin::class)->getRecent();
+
         return $this->render('@Volontariat/default/index.html.twig', [
             'activites' => $activites,
             'pages' => $pages,
@@ -46,7 +46,7 @@ class DefaultController extends AbstractController
     }
 
     #[Route(path: '/contact', name: 'volontariat_contact')]
-    public function contact() : Response
+    public function contact(): Response
     {
         return $this->render('@Volontariat/default/contact.html.twig', []);
     }

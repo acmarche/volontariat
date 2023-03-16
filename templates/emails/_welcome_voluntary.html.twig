@@ -1,4 +1,3 @@
-{# templates/emails/signup.html.twig #}
 {% extends '@Volontariat/emails/basic.html.twig' %}
 {% block content %}
 
@@ -10,7 +9,7 @@
 
             <p class="my-5">
                 <a href="{{ absolute_url(path('volontariat_token_show',{'value':token})) }}" class="text-rose-400 hover:text-red-200">
-                    Nous vous conseillons de compléter votre fiche volontaire
+                    Nous vous conseillons de compléter votre fiche volontaire en suivant ce lien
                 </a>
             </p>
 
@@ -31,9 +30,14 @@
                 </tr>
             </table>
 
+            <p class="my-5">
+                <a href="{{ absolute_url(path('volontariat_token_show',{'value':token})) }}" class="text-rose-400 hover:text-red-200">
+                    Vous pouvez changer votre mot de passe sur notre plate-forme
+                </a>
+            </p>
+
             {% include '@AcMarcheVolontariat/emails/_footer.html.twig' %}
 
         </div>
-
     </div>
 {% endblock %}

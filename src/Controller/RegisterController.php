@@ -11,6 +11,7 @@ use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Repository\UserRepository;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
 use AcMarche\Volontariat\Security\PasswordGenerator;
+use AcMarche\Volontariat\Security\SecurityData;
 use AcMarche\Volontariat\Security\TokenManager;
 use AcMarche\Volontariat\Voluntary\Form\RegisterVoluntaryType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -39,11 +40,7 @@ class RegisterController extends AbstractController
     #[Route(path: '/', name: 'volontariat_register_index', methods: ['GET'])]
     public function index(): Response
     {
-        return $this->render(
-            '@Volontariat/registration/index.html.twig',
-            [
-            ]
-        );
+        return $this->render('@Volontariat/registration/index.html.twig');
     }
 
     #[Route(path: '/voluntary', name: 'volontariat_register_voluntary', methods: ['GET', 'POST'])]
@@ -53,7 +50,7 @@ class RegisterController extends AbstractController
         $form = $this->createForm(RegisterVoluntaryType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $email = $form->getData()->getEmail();
+            $email = $form->getData()->email;
             if (null !== $this->userRepository->findOneByEmail($email)) {
                 $this->addFlash('danger', 'Un volontaire est déjà inscrit avec cette adresse email');
 
@@ -62,6 +59,7 @@ class RegisterController extends AbstractController
 
             $plainPassword = $this->passwordGenerator->generate();
             $user->password = $this->passwordGenerator->cryptPassword($user, $plainPassword);
+            $user->roles = [SecurityData::getRoleVolontariat()];
             $this->userRepository->insert($user);
 
             $voluntary = Volontaire::newFromUser($user);
@@ -70,9 +68,8 @@ class RegisterController extends AbstractController
             $token = $this->tokenManager->generate($user);
 
             try {
-                $this->mailer->sendWelcomeVoluntary($user, $plainPassword, $token);
-                $this->addFlash('success', 'Vous êtes bien inscrit');
-            } catch (TransportException|LoaderError|RuntimeError|SyntaxError|TransportExceptionInterface $e) {
+                $this->mailer->sendWelcomeVoluntary($voluntary, $plainPassword, $token);
+            } catch (TransportException|TransportExceptionInterface $e) {
                 $this->addFlash('error', $e->getMessage());
             }
 
@@ -116,8 +113,6 @@ class RegisterController extends AbstractController
             } catch (TransportException|LoaderError|RuntimeError|SyntaxError|TransportExceptionInterface $e) {
                 $this->addFlash('error', $e->getMessage());
             }
-
-            // $this->tokenManager->loginUser($request, $association, 'main');
 
             return $this->redirectToRoute('volontariat_register_complete');
         }

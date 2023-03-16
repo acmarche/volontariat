@@ -7,7 +7,6 @@ use AcMarche\Volontariat\InterfaceDef\Uploadable;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
 use AcMarche\Volontariat\Validator\Constraints as AcMarcheAssert;
 use DateTime;
-use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,14 +14,13 @@ use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
-use Stringable;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'volontaire')]
 #[ORM\Entity(repositoryClass: VolontaireRepository::class)]
-class Volontaire implements Uploadable, TimestampableInterface, SluggableInterface, Stringable
+class Volontaire implements Uploadable, TimestampableInterface, SluggableInterface, \Stringable
 {
     use TimestampableTrait;
     use SluggableTrait;
@@ -72,25 +70,25 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
     public ?string $fax;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    #[Assert\Type(DateTime::class)]
-    public DateTimeInterface $birthday;
+    #[Assert\Type(\DateTime::class)]
+    public \DateTimeInterface $birthday;
     /**
-     * Métier actuel ou ancien job
+     * Métier actuel ou ancien job.
      */
     #[ORM\Column(type: 'text', nullable: true)]
     public ?string $job;
     /**
-     * Secteur (version libre)
+     * Secteur (version libre).
      */
     #[ORM\Column(type: 'text', nullable: true)]
     public ?string $secteur;
     /**
-     * Disponible quand (we, apres journee)
+     * Disponible quand (we, apres journee).
      */
     #[ORM\Column(type: 'text', nullable: true)]
     public ?string $availability;
     /**
-     * dispose d'un véhicule
+     * dispose d'un véhicule.
      */
     #[ORM\Column(type: 'string', nullable: true)]
     public ?string $car;
@@ -112,7 +110,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
     #[ORM\OrderBy(['name' => 'ASC'])]
     public Collection $secteurs;
     /**
-     * membres des association
+     * membres des association.
+     *
      * @var Association[] $association
      */
     #[ORM\ManyToMany(targetEntity: Association::class)]
@@ -123,6 +122,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
     public bool $valider = true;
     #[ORM\Column(type: 'boolean', nullable: true)]
     public ?bool $inactif = null;
+    #[ORM\Column(type: 'text', nullable: true)]
+    public ?string $notes;
 
     #[Assert\Image(maxSize: '5M')]
     public ?File $image;
@@ -134,10 +135,10 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
     {
         $this->image = $file;
 
-        if ($file !== null) {
+        if (null !== $file) {
             // It is required that at least one field changes if you are using doctrine
             // otherwise the event listeners won't be called and the file is lost
-            $this->updated = new DateTime('now');
+            $this->updated = new \DateTime('now');
         }
     }
 
@@ -155,9 +156,6 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
     {
         return $this->surname.' '.$this->name;
     }
-
-    #[ORM\Column(type: 'text', nullable: true)]
-    public ?string $notes;
 
     public function getSluggableFields(): array
     {
@@ -178,11 +176,14 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
 
     public static function newFromUser(User $user): self
     {
-        $voluntaray = new self();
-        $voluntaray->name = $user->getNom();
-        $voluntaray->surname = $user->getPrenom();
+        $voluntary = new self();
+        $voluntary->name = $user->name;
+        $voluntary->surname = $user->surname;
+        $voluntary->email = $user->email;
+        $voluntary->city = $user->city;
+        $voluntary->user = $user;
 
-        return $voluntaray;
+        return $voluntary;
     }
 
     public function getId()

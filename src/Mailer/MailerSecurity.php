@@ -11,36 +11,15 @@ use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Email;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
 
 class MailerSecurity
 {
+    use MailerTrait;
+
     public function __construct(
         private MailerInterface $mailer,
         private string $from
     ) {
-    }
-
-    /**
-     * @throws TransportExceptionInterface
-     */
-    public function send($from, $destinataires, $sujet, $body, $bcc = null): void
-    {
-        $mail = (new Email())
-            ->subject($sujet)
-            ->from($from)
-            ->to($destinataires);
-
-        if ($bcc) {
-            $mail->bcc($bcc);
-        }
-
-        $mail->text($body);
-
-        $this->mailer->send($mail);
     }
 
     /**
@@ -80,17 +59,17 @@ class MailerSecurity
     public function sendWelcomeAssociation(Association $association, string $password, Token $token)
     {
         $email = (new TemplatedEmail())
-                   ->from($this->from)
-                   ->to(new Address($association->email))
-                   ->subject('Bienvenue sur la plate-forme du volontariat')
-                   ->htmlTemplate('@Volontariat/emails/_welcome_association.html.twig')
-                   ->context(
-                       array_merge($this->defaultParams(), [
-                           'association' => $association,
-                           'password' => $password,
-                           'token' => $token->getValue(),
-                       ])
-                   );
+            ->from($this->from)
+            ->to(new Address($association->email))
+            ->subject('Bienvenue sur la plate-forme du volontariat')
+            ->htmlTemplate('@Volontariat/emails/_welcome_association.html.twig')
+            ->context(
+                array_merge($this->defaultParams(), [
+                    'association' => $association,
+                    'password' => $password,
+                    'token' => $token->getValue(),
+                ])
+            );
 
         $this->mailer->send($email);
     }
@@ -117,19 +96,5 @@ class MailerSecurity
             $this->send($this->from, $to, $sujet, $body);
         } catch (TransportException $e) {
         }
-    }
-
-    private function defaultParams(): array
-    {
-        return [
-            'importance' => 'high',
-            'content' => '',
-            'action_url' => '',
-            'action_text' => '',
-            'footer_text' => '',
-            'markdown' => false,
-            'raw' => false,
-            'exception' => false,
-        ];
     }
 }

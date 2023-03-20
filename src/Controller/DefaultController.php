@@ -36,10 +36,4 @@ class DefaultController extends AbstractController
             'associations' => $associations,
         ]);
     }
-
-    #[Route(path: '/contact', name: 'volontariat_contact')]
-    public function contact(): Response
-    {
-        return $this->render('@Volontariat/default/contact.html.twig', []);
-    }
 }

@@ -2,10 +2,7 @@
 
 namespace AcMarche\Volontariat\Form\Contact;
 
-use AcMarche\Volontariat\Entity\Message;
-use AcMarche\Volontariat\Manager\ContactManager;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -18,7 +15,7 @@ class ContactBaseType extends AbstractType
     {
         $builder
             ->add(
-                'nom',
+                'name',
                 TextType::class,
                 [
                     'required' => true,
@@ -26,33 +23,36 @@ class ContactBaseType extends AbstractType
                 ]
             )
             ->add(
+                'surname',
+                TextType::class,
+                [
+                    'required' => true,
+                    'label' => 'Votre prénom',
+                ]
+            )
+            ->add(
                 'email',
                 EmailType::class,
                 [
                     'required' => true,
-                    'label' => 'Votre email',
+                    'label' => 'Votre courriel',
                 ]
             )
             ->add(
-                'sujet',
-                TextType::class
-            )
-            ->add(
-                'contenu',
+                'content',
                 TextareaType::class,
-                array(
-                    'attr' => array('rows' => 8),
-                )
+                [
+                    'label' => 'Message',
+                    'required' => true,
+                    'attr' => ['rows' => 8],
+                ]
             );
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
-            array(
-                'data_class' => ContactManager::class,
-            )
+            []
         );
-
     }
 }

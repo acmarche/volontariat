@@ -1,0 +1,31 @@
+{% extends '@Volontariat/emails/basic.html.twig' %}
+{% block content %}
+
+    <div class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow prose prose-slate">
+        <div class="px-4 py-5 sm:px-6">
+            <h2 class="text-lg text-green-default font-bold">Son message</h2>
+        </div>
+        <div class="px-4 py-5 sm:p-6">
+
+            <p class="my-5 mb-3">{{ data.content|nl2br }}</p>
+
+            <table class="min-w-full divide-y divide-gray-300">
+                <tr>
+                    <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
+                        Email
+                    </th>
+                    <td class="py-3.5 pl-4 pr-3">{{ data.email }}</td>
+                </tr>
+                <tr>
+                    <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
+                        Nom
+                    </th>
+                    <td class="py-3.5 pl-4 pr-3">{{ data.name }} {{ data.surname }}</td>
+                </tr>
+            </table>
+
+            {% include '@AcMarcheVolontariat/emails/_footer.html.twig' %}
+
+        </div>
+    </div>
+{% endblock %}

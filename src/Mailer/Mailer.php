@@ -9,8 +9,6 @@ use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -23,22 +21,16 @@ use Twig\Error\SyntaxError;
 
 class Mailer
 {
-    private $session;
-
-    private FlashBagInterface $flashBag;
-
     public function __construct(
         private AssociationRepository $associationRepository,
         private VolontaireRepository $volontaireRepository,
         private Environment $twig,
-RequestStack $requestStack,
         private MessageService $messageService,
         private MailerInterface $mailer,
         private RouterInterface $router,
-        private $to,
-        private $from
+        private string $to,
+        private string $from
     ) {
-        $this->flashBag = $requestStack->getSession()->getFlashBag();
     }
 
     public function send($from, $destinataires, $sujet, $body, $bcc = null): void
@@ -58,7 +50,6 @@ RequestStack $requestStack,
     }
 
     /**
-     *
      * @param $entities Volontaire[]|Association[]
      */
     public function sendMessage(Message $data, $entities, $from = null, UploadedFile $uploadedFile = null): void
@@ -74,13 +65,13 @@ RequestStack $requestStack,
             ->subject($sujet)
             ->from($from);
 
-        if ($uploadedFile !== null) {
+        if (null !== $uploadedFile) {
             $message->attachFromPath(
                 $uploadedFile,
                 $uploadedFile->getClientOriginalName(),
                 $uploadedFile->getClientMimeType()
             );
-            //$message->attach($attach);
+            // $message->attach($attach);
         }
 
         foreach ($entities as $entity) {
@@ -98,7 +89,7 @@ RequestStack $requestStack,
                     );
                 }
             }
-            $body = preg_replace("#{urltoken}#", $url, $bodyOriginal);
+            $body = preg_replace('#{urltoken}#', $url, $bodyOriginal);
 
             $message->text($body);
 
@@ -111,7 +102,8 @@ RequestStack $requestStack,
     }
 
     /**
-     * Préviens les asbl
+     * Préviens les asbl.
+     *
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
@@ -123,22 +115,23 @@ RequestStack $requestStack,
         $sujet = 'Un volontaire de plus sur la plate-forme du volontariat';
         $body = $this->twig->render(
             '@Volontariat/mail/volontaire_new.html.twig',
-            array(
-                "volontaire" => $volontaire,
-            )
+            [
+                'volontaire' => $volontaire,
+            ]
         );
 
         foreach ($emails as $email) {
             try {
                 $this->send($this->from, $email, $sujet, $body);
             } catch (TransportException $e) {
-                $this->flashBag->add("error", $e->getMessage());
+                $this->flashBag->add('error', $e->getMessage());
             }
         }
     }
 
     /**
-     * L'admin doit valider une association
+     * L'admin doit valider une association.
+     *
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
@@ -149,21 +142,22 @@ RequestStack $requestStack,
 
         $body = $this->twig->render(
             '@Volontariat/mail/association_to_validate.html.twig',
-            array(
-                "association" => $association,
-                "user" => $user,
-            )
+            [
+                'association' => $association,
+                'user' => $user,
+            ]
         );
 
         try {
             $this->send($this->from, $this->to, $sujet, $body);
         } catch (TransportException $e) {
-            $this->flashBag->add("error", $e->getMessage());
+            $this->flashBag->add('error', $e->getMessage());
         }
     }
 
     /**
-     * Prévient l'asbl qu'elle a été validée
+     * Prévient l'asbl qu'elle a été validée.
+     *
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
@@ -174,20 +168,21 @@ RequestStack $requestStack,
 
         $body = $this->twig->render(
             '@Volontariat/mail/association_validee.html.twig',
-            array(
-                "association" => $association,
-            )
+            [
+                'association' => $association,
+            ]
         );
 
         try {
             $this->send($this->from, $association->getEmail(), $sujet, $body);
         } catch (TransportException $e) {
-            $this->flashBag->add("error", $e->getMessage());
+            $this->flashBag->add('error', $e->getMessage());
         }
     }
 
     /**
-     * Les volontaires sont prévenus de l'arrivée d'une nouvelle Asbl
+     * Les volontaires sont prévenus de l'arrivée d'une nouvelle Asbl.
+     *
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
@@ -200,10 +195,10 @@ RequestStack $requestStack,
         foreach ($volontaires as $volontaire) {
             $body = $this->twig->render(
                 '@Volontariat/mail/association_new.html.twig',
-                array(
-                    "association" => $association,
-                    "volontaire" => $volontaire,
-                )
+                [
+                    'association' => $association,
+                    'volontaire' => $volontaire,
+                ]
             );
 
             try {
@@ -228,12 +223,12 @@ RequestStack $requestStack,
 
         $body = $this->twig->render(
             '@Volontariat/mail/_recommander_volontaire.html.twig',
-            array(
+            [
                 'volontaire' => $volontaire,
                 'user' => $user,
                 'contenu' => $contenu,
                 'nom' => $nom,
-            )
+            ]
         );
 
         $mail->text($body);
@@ -256,12 +251,12 @@ RequestStack $requestStack,
 
         $body = $this->twig->render(
             '@Volontariat/mail/_recommander_association.html.twig',
-            array(
+            [
                 'association' => $association,
                 'user' => $user,
                 'contenu' => $contenu,
                 'nom' => $nom,
-            )
+            ]
         );
 
         $mail->text($body);
@@ -271,7 +266,7 @@ RequestStack $requestStack,
 
     /**
      * @param Message $data
-     * @param User $user
+     * @param User    $user
      */
     public function sendReferencer($data, $user): void
     {
@@ -289,12 +284,12 @@ RequestStack $requestStack,
 
         $body = $this->twig->render(
             '@Volontariat/mail/_referencer.html.twig',
-            array(
+            [
                 'nomDestinataire' => $nomDestinataire,
                 'user' => $user,
                 'contenu' => $contenu,
                 'nom' => $nom,
-            )
+            ]
         );
 
         $mail->text($body);

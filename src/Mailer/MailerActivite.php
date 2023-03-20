@@ -18,18 +18,14 @@ use Twig\Error\SyntaxError;
 
 class MailerActivite
 {
-    private FlashBagInterface $flashBag;
-
     public function __construct(
         private AssociationRepository $associationRepository,
         private VolontaireRepository $volontaireRepository,
         private Environment $twig,
-        RequestStack $requestStack,
         private MailerInterface $mailer,
         private string $to,
         private string $from
     ) {
-        $this->flashBag = $requestStack->getSession()->getFlashBag();
     }
 
     public function send($from, $destinataires, $sujet, $body, $bcc = null): void

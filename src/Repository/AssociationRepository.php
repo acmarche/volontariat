@@ -80,7 +80,7 @@ class AssociationRepository extends ServiceEntityRepository
     /**
      * @return Association[]
      */
-    public function getRecent(int $limit = 8): array
+    public function getRecent(int $limit = 9): array
     {
         return $this->createQBl()
             ->setMaxResults($limit)

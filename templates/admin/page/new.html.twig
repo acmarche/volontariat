@@ -7,9 +7,11 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-lg-8">
-                    {{ form(form) }}
+                    {% include '@Volontariat/admin/page/_form.html.twig' %}
                 </div>
             </div>
+        </div>
+        <div class="card-footer">
             <a href="{{ path('volontariat_admin_page') }}">
                 <span class="fas fa-list"></span> Annuler et retour à la liste
             </a>

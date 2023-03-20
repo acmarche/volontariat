@@ -23,11 +23,20 @@ class PageType extends AbstractType
                 ]
             )
             ->add(
+                'excerpt',
+                TextType::class,
+                [
+                    'label' => 'Introduction',
+                    'help' => 'Pour la page d\'accueil',
+                    'attr' => ['size' => 60],
+                ]
+            )
+            ->add(
                 'actualite',
                 CheckboxType::class,
                 [
-                    'required'=>false,
-                    'help'=>'Pour afficher dans la partie actualités',
+                    'required' => false,
+                    'help' => 'Pour afficher en page d\'accueil dans la partie actualités',
                 ]
             )
             ->add(
@@ -46,9 +55,9 @@ class PageType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
-            array(
+            [
                 'data_class' => Page::class,
-            )
+            ]
         );
     }
 }

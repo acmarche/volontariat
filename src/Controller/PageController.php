@@ -2,10 +2,10 @@
 
 namespace AcMarche\Volontariat\Controller;
 
-use Symfony\Component\HttpFoundation\Response;
 use AcMarche\Volontariat\Entity\Page;
 use AcMarche\Volontariat\Service\FileHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class PageController extends AbstractController
@@ -15,10 +15,11 @@ class PageController extends AbstractController
     }
 
     #[Route(path: '/page/{slug}', name: 'volontariat_page_show')]
-    public function show(Page $page) : Response
+    public function show(Page $page): Response
     {
         $images = $this->fileHelper->getImages($page);
         $documents = $this->fileHelper->getDocuments($page);
+
         return $this->render(
             '@Volontariat/page/show.html.twig',
             [

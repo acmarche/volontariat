@@ -1,6 +1,7 @@
 {% extends '@Volontariat/base.html.twig' %}
 
 {% block body %}
+    {% include '@Volontariat/association/_image.html.twig' %}
     <div class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow">
         <div class="px-4 py-5 sm:px-6">
             <h3 class="mt-6 text-lg font-semibold leading-8 tracking-tight text-gray-900 hover:text-gray-600">
@@ -41,17 +42,18 @@
                         </dd>
                     </div>
                 {% endif %}
-                <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+              <!--  <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
                     <dt class="text-sm font-medium text-gray-500">Salary expectation</dt>
                     <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">$120,000</dd>
-                </div>
+                </div> -->
                 <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
-                    <dt class="text-sm font-medium text-gray-500">About</dt>
+                    <dt class="text-sm font-medium text-gray-500">Description</dt>
                     <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
                         {{ association.description|nl2br }}
                     </dd>
                 </div>
-               {% include '@Volontariat/association/_secteurs_activites.html.twig' %}
+                {% include '@Volontariat/association/_secteurs_activites.html.twig' %}
+                {% include '@Volontariat/association/_images.html.twig' %}
             </dl>
         </div>
     </div>

@@ -1,0 +1,33 @@
+{% extends '@Volontariat/base.html.twig' %}
+{% block title %}{{ page.title }}{% endblock %}
+{% block body %}
+
+    <div class="md:flex md:items-center md:justify-between">
+        <div class="min-w-0 flex-1">
+            <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+                {{ page.title }}
+            </h2>
+        </div>
+        {% if is_granted('edit', page) %}
+            <div class="mt-4 flex md:mt-0 md:ml-4">
+                <a type="button" href="{{ path('volontariat_admin_page_edit', {'id':page.id}) }}"
+                   class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                    Modifier
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="overflow-hidden rounded-lg bg-white shadow my-5 ">
+        <div class="px-4 py-2 sm:p-6">
+            {{ page.content|raw }}
+        </div>
+    </div>
+
+    {% include '@Volontariat/page/_images.html.twig' %}
+
+    <div class="mt-32 sm:mt-40 xl:mx-auto xl:max-w-7xl xl:px-8">
+        <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=2832&amp;q=80"
+             alt="" class="aspect-[5/2] w-full object-cover xl:rounded-3xl">
+    </div>
+{% endblock %}

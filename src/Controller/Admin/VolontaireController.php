@@ -4,7 +4,6 @@ namespace AcMarche\Volontariat\Controller\Admin;
 
 use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Form\Admin\VolontaireType;
-use AcMarche\Volontariat\Form\FormBuilderVolontariat;
 use AcMarche\Volontariat\Form\Search\SearchVolontaireType;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
 use AcMarche\Volontariat\Service\FileHelper;
@@ -21,8 +20,7 @@ class VolontaireController extends AbstractController
 {
     public function __construct(
         private VolontaireRepository $volontaireRepository,
-        private FileHelper $fileHelper,
-        private FormBuilderVolontariat $formBuilderVolontariat,
+        private FileHelper $fileHelper
     ) {
     }
 
@@ -78,13 +76,10 @@ class VolontaireController extends AbstractController
     #[Route(path: '/{id}/show', name: 'volontariat_admin_volontaire_show')]
     public function showAction(Volontaire $volontaire): Response
     {
-        $dissocierForm = $this->formBuilderVolontariat->createDissocierForm($volontaire);
-
         return $this->render(
             '@Volontariat/admin/volontaire/show.html.twig',
             [
                 'volontaire' => $volontaire,
-                'dissocier_form' => $dissocierForm->createView(),
             ]
         );
     }

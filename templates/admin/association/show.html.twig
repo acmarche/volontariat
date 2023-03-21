@@ -42,10 +42,9 @@
                             <th>Gérer par le compte</th>
                             <td>
                                 {% if association.user %}
-                                    <a href="{{ path('volontariat_admin_utilisateur_show', { 'id': association.user.id }) }}">
+                                    <a href="{{ path('volontariat_admin_user_show', { 'id': association.user.id }) }}">
                                         {{ association.user }}
                                     </a>
-                                    {{ form(dissocier_form) }}
                                 {% endif %}
                             </td>
                         </tr>
@@ -53,7 +52,7 @@
                             <th>Validée</th>
                             <td>
                                 {% if association.valider %}
-                                    <span class="glyphicon glyphicon-check"></span>
+                                    <span class="fa fa-check"></span>
                                 {% else %}
                                     <span class="text-danger">Non</span>
                                 {% endif %}
@@ -96,12 +95,9 @@
 
             {% include '@Volontariat/admin/association/besoins.html.twig' %}
 
-            {% include '@Volontariat/admin/association/activite.html.twig' %}
-
-            {% include'@Volontariat/admin/association/gallery-controls.html.twig' %}
-
             {% include'@Volontariat/admin/association/images.html.twig' %}
-
+        </div>
+        <div class="card-footer">
             <p class="text-muted">
                 {{ 'Created' | trans }} {{ association.createdAt|date('d-m-Y H:i:s') }}
                 . {{ 'Updated' | trans }} {{ association.updatedAt|date('d-m-Y H:i:s') }}
@@ -109,8 +105,5 @@
         </div>
     </div>
     {{ include('@Volontariat/admin/association/delete.html.twig') }}
-
-{% endblock %}
-{% block javascripts %}
 
 {% endblock %}

@@ -7,27 +7,23 @@
             class="fa fa-plus"></i> Ajouter un besoin occasionnel</a>
 
 <a href="{{ path('volontariat_admin_image_edit', { 'id': association.id }) }}" role="button"
-   class="btn btn-primary"><i class="fa fa-picture-o"></i> Images</a>
+   class="btn btn-primary"><i class="fa fa-images"></i> Images</a>
 
-<a href="{{ path('volontariat_admin_activite_new', { 'id': association.id }) }}" role="button"
-   class="btn btn-primary"><i class="fas fa-plus"></i> Ajouter une activité</a>
-
-<a href="{{ path('volontariat_admin_associer_association', { 'id': association.id }) }}" role="button"
+<a href="{{ path('volontariat_admin_link_account_association', { 'id': association.id }) }}" role="button"
    class="btn btn-primary"><i
-            class="fa fa-link"></i> Associer un compte</a>
+            class="fa fa-link"></i> Associer à un utilisateur</a>
 
 <a href="{{ path('volontariat_association_show', { 'slug': association.slug }) }}" role="button"
    class="btn btn-primary" target="apercu"><i class="far fa-eye"></i> Voir sur le site</a>
 
-<br/>
-<br/>
+<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+    <i class="fas fa-trash"></i> Supprimer l'association
+</button>
+
 <a href="{{ path('volontariat_admin_association') }}" class="btn btn-primary" role='button'><i
             class="fa fa-list"></i>
     Retour à la Liste
 </a>
-<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
-    <i class="fas fa-trash"></i> Supprimer l'association
-</button>
 
 <br/>
 <br/>

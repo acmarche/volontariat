@@ -4,7 +4,6 @@ namespace AcMarche\Volontariat\Controller\Admin;
 
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Form\Admin\AssocationType;
-use AcMarche\Volontariat\Form\FormBuilderVolontariat;
 use AcMarche\Volontariat\Form\Search\SearchAssociationType;
 use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Service\FileHelper;
@@ -23,7 +22,6 @@ class AssociationController extends AbstractController
     public function __construct(
         private AssociationRepository $associationRepository,
         private FileHelper $fileHelper,
-        private FormBuilderVolontariat $formBuilderVolontariat
     ) {
     }
 
@@ -84,14 +82,12 @@ class AssociationController extends AbstractController
     public function showAction(Association $association): Response
     {
         $images = $this->fileHelper->getImages($association);
-        $dissocierForm = $this->formBuilderVolontariat->createDissocierForm($association);
 
         return $this->render(
             '@Volontariat/admin/association/show.html.twig',
             [
                 'association' => $association,
                 'images' => $images,
-                'dissocier_form' => $dissocierForm->createView(),
             ]
         );
     }
@@ -99,8 +95,7 @@ class AssociationController extends AbstractController
     #[Route(path: '/{id}/edit', name: 'volontariat_admin_association_edit')]
     public function editAction(Request $request, Association $association): Response
     {
-        $form = $this->createForm(AssocationType::class, $association)
-            ->add('submit', SubmitType::class, ['label' => 'Update']);
+        $form = $this->createForm(AssocationType::class, $association);
 
         $form->handleRequest($request);
 

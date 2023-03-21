@@ -12,7 +12,6 @@ use AcMarche\Volontariat\Security\PasswordGenerator;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,7 +40,11 @@ class UtilisateurController extends AbstractController
             } catch (NonUniqueResultException $e) {
                 dd($user);
             }
-            $user->association = $this->associationRepository->findAssociationByUser($user);
+            try {
+                $user->association = $this->associationRepository->findAssociationByUser($user);
+            } catch (NonUniqueResultException $e) {
+                dd($user);
+            }
         }
 
         return $this->render(
@@ -91,28 +94,6 @@ class UtilisateurController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}/delete', name: 'volontariat_admin_association_delete', methods: ['POST'])]
-    public function delete(Request $request, User $user): RedirectResponse
-    {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
-            $volontaires = $this->volontaireRepository->findBy(['user' => $user]);
-            foreach ($volontaires as $volontaire) {
-                $this->volontaireRepository->remove($volontaire);
-            }
-
-            $associations = $this->associationRepository->findBy(['user' => $user]);
-
-            foreach ($associations as $association) {
-                $this->associationRepository->remove($association);
-            }
-
-            $this->userRepository->remove($user);
-            $this->addFlash('success', 'L\'utilisateur a bien été supprimé');
-        }
-
-        return $this->redirectToRoute('volontariat_admin_user');
-    }
-
     #[Route(path: '/password/{id}', name: 'volontariat_admin_user_password', methods: ['GET', 'POST'])]
     public function password(Request $request, User $user): Response
     {
@@ -136,5 +117,17 @@ class UtilisateurController extends AbstractController
                 'form' => $form->createView(),
             ]
         );
+    }
+
+    #[Route(path: '/{id}/delete', name: 'volontariat_admin_user_delete', methods: ['POST'])]
+    public function delete(Request $request, User $user): RedirectResponse
+    {
+        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+            $this->userRepository->remove($user);
+            $this->userRepository->flush();
+            $this->addFlash('success', 'L\'utilisateur a bien été supprimé');
+        }
+
+        return $this->redirectToRoute('volontariat_admin_user');
     }
 }

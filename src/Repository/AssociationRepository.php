@@ -110,13 +110,11 @@ class AssociationRepository extends ServiceEntityRepository
     /**
      * @throws NonUniqueResultException
      */
-    public function findAssociationByUser(User $user, bool $valider = false): ?Association
+    public function findAssociationByUser(User $user): ?Association
     {
         return $this->createQBl()
             ->andWhere('association.user = :user')
             ->setParameter('user', $user)
-            ->andWhere('association.valider = :valider')
-            ->setParameter('valider', $valider)
             ->getQuery()->getOneOrNullResult();
     }
 

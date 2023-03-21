@@ -22,9 +22,7 @@
                         <tr>
                             <th>Email</th>
                             <td>
-                                {% if volontaire.user %}
-                                    {{ volontaire.user.email }}
-                                {% endif %}
+                                {{ volontaire.email }}
                             </td>
                         </tr>
                         <tr>
@@ -32,12 +30,6 @@
                             <td>
                                 {{ volontaire.phone }}
                                 {{ volontaire.mobile }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Fax</th>
-                            <td>
-                                {{ volontaire.fax }}
                             </td>
                         </tr>
                         <tr>
@@ -73,7 +65,6 @@
                                     <a href="{{ path('volontariat_admin_user_show', { 'id': volontaire.user.id }) }}">
                                         {{ volontaire.user }}
                                     </a>
-                                    {{ form(dissocier_form) }}
                                 {% endif %}
                             </td>
                         </tr>

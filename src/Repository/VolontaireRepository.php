@@ -125,13 +125,11 @@ class VolontaireRepository extends ServiceEntityRepository
     /**
      * @throws NonUniqueResultException
      */
-    public function findVolontaireByUser(User $user, bool $valider = true): ?Volontaire
+    public function findVolontaireByUser(User $user): ?Volontaire
     {
         return $this->createQbl()
             ->andWhere('volontaire.user = :user')
             ->setParameter('user', $user)
-            ->andWhere('volontaire.valider = :valider')
-            ->setParameter('valider', $valider)
             ->orderBy('volontaire.city')
             ->getQuery()->getOneOrNullResult();
     }

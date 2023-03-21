@@ -16,13 +16,13 @@ class VolontairePublicType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(array(
-            'data_class' => Volontaire::class
-        ));
+        $resolver->setDefaults([
+            'data_class' => Volontaire::class,
+        ]);
     }
 
     public function getParent(): ?string
     {
-        return VolontaireType::class ;
+        return VolontaireType::class;
     }
 }

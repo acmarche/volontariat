@@ -5,6 +5,7 @@ namespace AcMarche\Volontariat\Repository;
 use AcMarche\Volontariat\Doctrine\OrmCrudTrait;
 use AcMarche\Volontariat\Entity\Security\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -41,5 +42,10 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function findOneByEmail($email): ?User
     {
         return $this->findOneBy(['email' => $email]);
+    }
+
+    public function qbqForList(): QueryBuilder
+    {
+        return $this->createQueryBuilder('user')->addOrderBy('user.name');
     }
 }

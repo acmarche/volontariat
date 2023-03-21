@@ -14,16 +14,13 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Vich\UploaderBundle\Form\Type\VichFileType;
-use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class AssocationType extends AbstractType
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('nom')
+            ->add('name')
             ->add('address')
             ->add('number')
             ->add(
@@ -45,7 +42,6 @@ class AssocationType extends AbstractType
             )
             ->add('phone')
             ->add('mobile')
-            ->add('fax')
             ->add(
                 'description',
                 TextareaType::class,
@@ -84,37 +80,37 @@ class AssocationType extends AbstractType
             ->add(
                 'secteurs',
                 EntityType::class,
-                array(
+                [
                     'class' => Secteur::class,
                     'required' => false,
                     'multiple' => true,
                     'expanded' => true,
-                )
+                ]
             )
             ->add(
                 'image',
                 FileType::class,
-                array(
-                    'label' => "Photo",
+                [
+                    'label' => 'Photo',
                     'required' => false,
-                )
+                ]
             )
             ->add(
-                'fileFile',
+                'file',
                 FileType::class,
-                array(
-                    'label' => "Fichier",
+                [
+                    'label' => 'Fichier',
                     'required' => false,
-                )
+                ]
             )
             ->add(
                 'fileDescriptif',
                 TextType::class,
-                array(
-                    'label' => "Description du fichier",
+                [
+                    'label' => 'Description du fichier',
                     'required' => false,
                     'help' => 'Si vous ajoutez un fichier',
-                )
+                ]
             )->add(
                 'mailing',
                 CheckboxType::class,
@@ -136,9 +132,9 @@ class AssocationType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
-            array(
+            [
                 'data_class' => Association::class,
-            )
+            ]
         );
     }
 }

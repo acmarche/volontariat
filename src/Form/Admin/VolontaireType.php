@@ -24,7 +24,10 @@ class VolontaireType extends AbstractType
         $builder
             ->add('name')
             ->add('surname')
-            ->add('address')
+            ->add('address', TextType::class, [
+                'required' => false,
+                'label' => 'Rue et numéro',
+            ])
             ->add(
                 'number',
                 TextType::class,
@@ -40,7 +43,10 @@ class VolontaireType extends AbstractType
                     'label' => 'Code postal',
                 ]
             )
-            ->add('city', TextType::class, ['required' => true])
+            ->add('city', TextType::class, [
+                'required' => true,
+                'label' => 'Localité',
+            ])
             ->add('email', EmailType::class)
             ->add('mobile')
             ->add('birthday', BirthdayType::class, ['years' => range(1930, date('Y'))])

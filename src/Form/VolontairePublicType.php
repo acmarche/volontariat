@@ -12,6 +12,7 @@ class VolontairePublicType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $builder->remove('inactif');
     }
 
     public function configureOptions(OptionsResolver $resolver): void

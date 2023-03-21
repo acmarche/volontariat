@@ -83,30 +83,30 @@
             </div>
             <div class="space-y-6 sm:space-y-5">
                 <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                    <label for="first-name" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">First
-                        name</label>
+                    {{ form_label(form.name, null, {'label_attr': {'class': 'block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5'}}) }}
+                    {{ form_errors(form.name) }}
                     <div class="mt-2 sm:col-span-2 sm:mt-0">
-                        <input type="text" name="first-name" id="first-name" autocomplete="given-name"
-                               class="block w-full max-w-lg rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                        {{ form_widget(form.name, {'attr': {'class': 'block w-full max-w-lg rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'}}) }}
                     </div>
+                    {{ form_help(form.name) }}
                 </div>
 
                 <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                    <label for="last-name" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">Last
-                        name</label>
+                    {{ form_label(form.surname, null, {'label_attr': {'class': 'block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5'}}) }}
+                    {{ form_errors(form.surname) }}
                     <div class="mt-2 sm:col-span-2 sm:mt-0">
-                        <input type="text" name="last-name" id="last-name" autocomplete="family-name"
-                               class="block w-full max-w-lg rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                        {{ form_widget(form.surname, {'attr': {'class': 'block w-full max-w-lg rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'}}) }}
                     </div>
+                    {{ form_help(form.surname) }}
                 </div>
 
                 <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                    <label for="email" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">Email
-                        address</label>
+                    {{ form_label(form.email, null, {'label_attr': {'class': 'block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5'}}) }}
+                    {{ form_errors(form.email) }}
                     <div class="mt-2 sm:col-span-2 sm:mt-0">
-                        <input id="email" name="email" type="email" autocomplete="email"
-                               class="block w-full max-w-lg rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        {{ form_widget(form.email, {'attr': {'class': 'block w-full max-w-lg rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'}}) }}
                     </div>
+                    {{ form_help(form.email) }}
                 </div>
 
                 <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
@@ -123,20 +123,21 @@
                 </div>
 
                 <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                    <label for="street-address" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">Street
-                        address</label>
+                   {{ form_label(form.address, null, {'label_attr': {'class': 'block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5'}}) }}
+                    {{ form_errors(form.address) }}
                     <div class="mt-2 sm:col-span-2 sm:mt-0">
-                        <input type="text" name="street-address" id="street-address" autocomplete="street-address"
-                               class="block w-full max-w-lg rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        {{ form_widget(form.address, {'attr': {'class': 'block w-full max-w-lg rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'}}) }}
                     </div>
+                    {{ form_help(form.address) }}
                 </div>
 
                 <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                    <label for="city" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">City</label>
+                    {{ form_label(form.city, null, {'label_attr': {'class': 'block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5'}}) }}
+                    {{ form_errors(form.city) }}
                     <div class="mt-2 sm:col-span-2 sm:mt-0">
-                        <input type="text" name="city" id="city" autocomplete="address-level2"
-                               class="block w-full max-w-lg rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                        {{ form_widget(form.city, {'attr': {'class': 'block w-full max-w-lg rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'}}) }}
                     </div>
+                    {{ form_help(form.city) }}
                 </div>
 
                 <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
@@ -149,12 +150,12 @@
                 </div>
 
                 <div class="sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                    <label for="postal-code" class="block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5">ZIP /
-                        Postal code</label>
+                    {{ form_label(form.postalCode, null, {'label_attr': {'class': 'block text-sm font-medium leading-6 text-gray-900 sm:pt-1.5'}}) }}
+                    {{ form_errors(form.postalCode) }}
                     <div class="mt-2 sm:col-span-2 sm:mt-0">
-                        <input type="text" name="postal-code" id="postal-code" autocomplete="postal-code"
-                               class="block w-full max-w-lg rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                        {{ form_widget(form.postalCode, {'attr': {'class': 'block w-full max-w-lg rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'}}) }}
                     </div>
+                    {{ form_help(form.postalCode) }}
                 </div>
             </div>
         </div>

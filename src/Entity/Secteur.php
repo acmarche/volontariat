@@ -6,12 +6,11 @@ use AcMarche\Volontariat\Repository\SecteurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: SecteurRepository::class)]
 #[ORM\Table(name: 'secteur')]
-class Secteur implements Stringable
+class Secteur implements \Stringable
 {
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
@@ -30,7 +29,7 @@ class Secteur implements Stringable
      * @var Association[]|iterable
      */
     #[ORM\ManyToMany(targetEntity: Association::class, mappedBy: 'secteurs')]
-    #[ORM\OrderBy(['nom' => 'ASC'])]
+    #[ORM\OrderBy(['name' => 'ASC'])]
     protected Collection $associations;
     /**
      * @var Volontaire[]|iterable
@@ -53,11 +52,9 @@ class Secteur implements Stringable
 
         return $txt;
     }
+
     /**
-     * STOP
-     */
-    /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -65,9 +62,6 @@ class Secteur implements Stringable
         $this->volontaires = new ArrayCollection();
     }
 
-    /**
-     * Get id.
-     */
     public function getId(): ?int
     {
         return $this->id;
@@ -115,8 +109,6 @@ class Secteur implements Stringable
 
     /**
      * Add association.
-     *
-     *
      */
     public function addAssociation(Association $association): static
     {
@@ -128,8 +120,7 @@ class Secteur implements Stringable
     /**
      * Remove association.
      *
-     *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     * @return bool TRUE if this collection contained the specified element, FALSE otherwise
      */
     public function removeAssociation(Association $association): bool
     {
@@ -146,8 +137,6 @@ class Secteur implements Stringable
 
     /**
      * Add volontaire.
-     *
-     *
      */
     public function addVolontaire(Volontaire $volontaire): static
     {
@@ -159,8 +148,7 @@ class Secteur implements Stringable
     /**
      * Remove volontaire.
      *
-     *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     * @return bool TRUE if this collection contained the specified element, FALSE otherwise
      */
     public function removeVolontaire(Volontaire $volontaire): bool
     {

@@ -7,7 +7,6 @@ use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Repository\SecteurRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -24,17 +23,6 @@ class VolontaireType extends AbstractType
         $builder
             ->add('name')
             ->add('surname')
-            ->add('address', TextType::class, [
-                'required' => false,
-                'label' => 'Rue et numéro',
-            ])
-            ->add(
-                'number',
-                TextType::class,
-                [
-                    'required' => false,
-                ]
-            )
             ->add(
                 'postalCode',
                 IntegerType::class,
@@ -48,14 +36,20 @@ class VolontaireType extends AbstractType
                 'label' => 'Localité',
             ])
             ->add('email', EmailType::class)
-            ->add('mobile')
-            ->add('birthday', BirthdayType::class, ['years' => range(1930, date('Y'))])
+            ->add('mobile', TextType::class, [
+                'required' => false,
+                'label' => 'Téléphone',
+            ])
+            ->add('birthyear', IntegerType::class, [
+                'required' => false,
+                'label' => 'Année de naissance',
+            ])
             ->add(
                 'description',
                 TextareaType::class,
                 [
                     'label' => 'Décrivez votre motivation',
-                    'attr' => ['rows' => 8],
+                    'attr' => ['rows' => 4],
                 ]
             )
             ->add(

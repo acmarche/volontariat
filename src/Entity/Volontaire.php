@@ -69,9 +69,11 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
     #[ORM\Column(type: 'string', nullable: true)]
     public ?string $fax;
 
-    #[ORM\Column(type: 'datetime', nullable: true)]
-    #[Assert\Type(\DateTime::class)]
-    public \DateTimeInterface $birthday;
+    #[ORM\Column(type: 'date', nullable: true)]
+    public ?\DateTimeInterface $birthday;
+
+    #[ORM\Column(type: 'smallint', nullable: true)]
+    public ?int $birthyear;
     /**
      * Métier actuel ou ancien job.
      */

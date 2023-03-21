@@ -80,6 +80,24 @@ class VolontaireType extends AbstractType
                     'label' => 'Je suis indisponible pour le moment',
                     'required' => false,
                 ]
+            )
+            ->add(
+                'notification_new_association',
+                CheckboxType::class,
+                [
+                    'label' => 'Nouvelle association',
+                    'help' => 'Lorsqu\'une association s\'est inscrite',
+                    'required' => false,
+                ]
+            )
+            ->add(
+                'notification_message_association',
+                CheckboxType::class,
+                [
+                    'label' => 'Soliciation Asbl',
+                    'help' => 'Lorsqu\'une association envoie un message',
+                    'required' => false,
+                ]
             );
     }
 

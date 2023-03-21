@@ -1,49 +1,53 @@
 <?php
 
 use AcMarche\Volontariat\Entity\Security\User;
+use AcMarche\Volontariat\Security\Md5VerySecureHasher;
+use AcMarche\Volontariat\Security\MessageDigestPasswordHasher;
 use AcMarche\Volontariat\Security\VolontariatAuthenticator;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Config\SecurityConfig;
 
-return static function (ContainerConfigurator $containerConfigurator): void {
-    $main = [
-        'provider' => 'user_provider',
-        'logout' => [
-            'path' => 'app_logout',
-        ],
-        'form_login' => [],
-        'entry_point' => VolontariatAuthenticator::class,
-        'switch_user' => true,
-        'custom_authenticator' => VolontariatAuthenticator::class,
+return static function (SecurityConfig $security) {
+    $has512 = [
+        'algorithm' => 'sha512',
+        'encode_as_base64' => false,
+        'iterations' => 1,
     ];
 
-    // focant en fin de
-    /* @see PasswordHasherFactory.php */
-    // $config['encode_as_base64'] = false;
-    // $config['iterations'] = 1;
-    $containerConfigurator->extension('security', [
-        'password_hashers' => [
-            'legacy' => [
-                'algorithm' => 'sha512',
-                'encode_as_base64' => false,
-                'iterations' => 13,
-            ],
-            'AcMarche\Volontariat\Entity\Security\User' => [
-                'algorithm' => 'auto',
-                'migrate_from' => [
-                    'legacy',
-                ],
-            ],
-        ],
-        'providers' => [
-            'user_provider' => [
-                'entity' => [
-                    'class' => User::class,
-                    'property' => 'email',
-                ],
-            ],
-        ],
-        'firewalls' => [
-            'main' => $main,
+    /*  $security->passwordHasher(Md5VerySecureHasher::class, $has512)
+          ->hashAlgorithm('sha512')
+          ->encodeAsBase64(false)
+          ->iterations(1)
+          ->migrateFrom('legacy')
+          ;*/
+
+    //  $security->passwordHasher(MessageDigestPasswordHasher::class, $has512);
+
+    $security->passwordHasher('cap_hasher')
+        ->id(MessageDigestPasswordHasher::class);
+
+    $security->passwordHasher(User::class)
+        ->algorithm('auto')
+        ->migrateFrom(['cap_hasher']);
+
+    /* $security->passwordHasher(User::class, $has512)
+     ->encodeAsBase64(false);*/
+
+    $security->provider('user_provider', [
+        'entity' => [
+            'class' => User::class,
+            'property' => 'email',
         ],
     ]);
+
+    $main = [
+        'provider' => 'user_provider',
+        'logout' => ['path' => 'app_logout'],
+        'form_login' => [],
+        //   'switch_user' => true,
+        'entry_point' => VolontariatAuthenticator::class,
+        'custom_authenticators' => [VolontariatAuthenticator::class],
+    ];
+
+    $security->firewall('main', $main)
+        ->lazy(true);
 };

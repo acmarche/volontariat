@@ -55,7 +55,6 @@ class UtilisateurController extends AbstractController
     #[Route(path: '/{id}', name: 'volontariat_admin_user_show', methods: ['GET'])]
     public function showAction(User $user): Response
     {
-        $deleteForm = $this->createDeleteForm($user);
         $volontaire = $this->volontaireRepository->findVolontaireByUser($user);
         $association = $this->associationRepository->findAssociationByUser($user);
 
@@ -65,7 +64,6 @@ class UtilisateurController extends AbstractController
                 'user' => $user,
                 'association' => $association,
                 'volontaire' => $volontaire,
-                'delete_form' => $deleteForm->createView(),
             ]
         );
     }
@@ -93,12 +91,10 @@ class UtilisateurController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}', name: 'volontariat_admin_user_delete', methods: ['DELETE'])]
-    public function deleteAction(Request $request, User $user): RedirectResponse
+    #[Route(path: '/{id}/delete', name: 'volontariat_admin_association_delete', methods: ['POST'])]
+    public function delete(Request $request, User $user): RedirectResponse
     {
-        $form = $this->createDeleteForm($user);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
             $volontaires = $this->volontaireRepository->findBy(['user' => $user]);
             foreach ($volontaires as $volontaire) {
                 $this->volontaireRepository->remove($volontaire);
@@ -111,8 +107,7 @@ class UtilisateurController extends AbstractController
             }
 
             $this->userRepository->remove($user);
-
-            $this->addFlash('success', "L'user a bien été supprimé");
+            $this->addFlash('success', 'L\'utilisateur a bien été supprimé');
         }
 
         return $this->redirectToRoute('volontariat_admin_user');
@@ -141,14 +136,5 @@ class UtilisateurController extends AbstractController
                 'form' => $form->createView(),
             ]
         );
-    }
-
-    private function createDeleteForm(User $user): FormInterface
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('volontariat_admin_user_delete', ['id' => $user->getId()]))
-            ->setMethod(Request::METHOD_DELETE)
-            ->add('submit', SubmitType::class, ['label' => 'Delete', 'attr' => ['class' => 'btn-danger']])
-            ->getForm();
     }
 }

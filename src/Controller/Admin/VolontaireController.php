@@ -3,15 +3,12 @@
 namespace AcMarche\Volontariat\Controller\Admin;
 
 use AcMarche\Volontariat\Entity\Volontaire;
-use AcMarche\Volontariat\Form\Admin\VolontaireNoteType;
 use AcMarche\Volontariat\Form\Admin\VolontaireType;
 use AcMarche\Volontariat\Form\FormBuilderVolontariat;
 use AcMarche\Volontariat\Form\Search\SearchVolontaireType;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
 use AcMarche\Volontariat\Service\FileHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,6 +34,7 @@ class VolontaireController extends AbstractController
 
         $search_form = $this->createForm(SearchVolontaireType::class, $data);
         $search_form->handleRequest($request);
+
         if ($search_form->isSubmitted() && $search_form->isValid()) {
             $data = $search_form->getData();
         }
@@ -55,8 +53,8 @@ class VolontaireController extends AbstractController
     public function newAction(Request $request): Response
     {
         $volontaire = new Volontaire();
-        $form = $this->createForm(VolontaireType::class, $volontaire)
-            ->add('submit', SubmitType::class, ['label' => 'Create']);
+        $form = $this->createForm(VolontaireType::class, $volontaire);
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->volontaireRepository->insert($volontaire);
@@ -80,14 +78,12 @@ class VolontaireController extends AbstractController
     #[Route(path: '/{id}/show', name: 'volontariat_admin_volontaire_show')]
     public function showAction(Volontaire $volontaire): Response
     {
-        $deleteForm = $this->createDeleteForm($volontaire);
         $dissocierForm = $this->formBuilderVolontariat->createDissocierForm($volontaire);
 
         return $this->render(
             '@Volontariat/admin/volontaire/show.html.twig',
             [
                 'volontaire' => $volontaire,
-                'delete_form' => $deleteForm->createView(),
                 'dissocier_form' => $dissocierForm->createView(),
             ]
         );
@@ -96,8 +92,8 @@ class VolontaireController extends AbstractController
     #[Route(path: '/{id}/edit', name: 'volontariat_admin_volontaire_edit')]
     public function editAction(Request $request, Volontaire $volontaire): Response
     {
-        $form = $this->createForm(VolontaireType::class, $volontaire)
-            ->add('submit', SubmitType::class, ['label' => 'Update']);
+        $form = $this->createForm(VolontaireType::class, $volontaire);
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->fileHelper->traitementFiles($volontaire);
@@ -117,50 +113,15 @@ class VolontaireController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}/delete', name: 'volontariat_admin_volontaire_delete', methods: ['DELETE'])]
-    public function deleteAction(Volontaire $volontaire, Request $request): RedirectResponse
+    #[Route(path: '/{id}/delete', name: 'volontariat_admin_volontaire_delete', methods: ['POST'])]
+    public function delete(Request $request, Volontaire $volontaire): RedirectResponse
     {
-        $form = $this->createDeleteForm($volontaire);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($this->isCsrfTokenValid('delete'.$volontaire->getId(), $request->request->get('_token'))) {
             $this->volontaireRepository->remove($volontaire);
-
+            $this->volontaireRepository->flush();
             $this->addFlash('success', 'Le volontaire a bien été supprimé');
         }
 
         return $this->redirectToRoute('volontariat_admin_volontaire');
-    }
-
-    private function createDeleteForm(Volontaire $volontaire): FormInterface
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('volontariat_admin_volontaire_delete', ['id' => $volontaire->getId()]))
-            ->setMethod(Request::METHOD_DELETE)
-            ->add('submit', SubmitType::class, ['label' => 'Delete', 'attr' => ['class' => 'btn-danger']])
-            ->getForm();
-    }
-
-    #[Route(path: '/{id}/note', name: 'volontariat_admin_volontaire_note')]
-    public function notes(Request $request, Volontaire $volontaire): Response
-    {
-        $em = $this->managerRegistry->getManager();
-        $form = $this->createForm(VolontaireNoteType::class, $volontaire)
-            ->add('submit', SubmitType::class, ['label' => 'Update']);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em->flush();
-
-            $this->addFlash('success', 'Le note a bien été modifié');
-
-            return $this->redirectToRoute('volontariat_admin_volontaire_show', ['id' => $volontaire->getId()]);
-        }
-
-        return $this->render(
-            '@Volontariat/admin/volontaire/note.html.twig',
-            [
-                'volontaire' => $volontaire,
-                'form' => $form->createView(),
-            ]
-        );
     }
 }

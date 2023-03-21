@@ -10,7 +10,6 @@ use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Service\FileHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -86,14 +85,12 @@ class AssociationController extends AbstractController
     {
         $images = $this->fileHelper->getImages($association);
         $dissocierForm = $this->formBuilderVolontariat->createDissocierForm($association);
-        $deleteForm = $this->createDeleteForm($association);
 
         return $this->render(
             '@Volontariat/admin/association/show.html.twig',
             [
                 'association' => $association,
                 'images' => $images,
-                'delete_form' => $deleteForm->createView(),
                 'dissocier_form' => $dissocierForm->createView(),
             ]
         );
@@ -125,28 +122,16 @@ class AssociationController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}/delete', name: 'volontariat_admin_association_delete', methods: ['DELETE'])]
-    public function deleteAction(Association $association, Request $request): RedirectResponse
+    #[Route(path: '/{id}/delete', name: 'volontariat_admin_association_delete', methods: ['POST'])]
+    public function delete(Request $request, Association $association): RedirectResponse
     {
-        $form = $this->createDeleteForm($association);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($this->isCsrfTokenValid('delete'.$association->getId(), $request->request->get('_token'))) {
             $this->associationRepository->remove($association);
             $this->associationRepository->flush();
-            $this->addFlash('success', 'Le association a bien été supprimé');
+            $this->addFlash('success', 'L\'association a bien été supprimée');
         }
 
         return $this->redirectToRoute('volontariat_admin_association');
     }
 
-    private function createDeleteForm(Association $association): FormInterface
-    {
-        return $this->createFormBuilder()
-            ->setAction(
-                $this->generateUrl('volontariat_admin_association_delete', ['id' => $association->getId()])
-            )
-            ->setMethod(Request::METHOD_DELETE)
-            ->add('submit', SubmitType::class, ['label' => 'Delete', 'attr' => ['class' => 'btn-danger']])
-            ->getForm();
-    }
 }

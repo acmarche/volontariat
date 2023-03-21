@@ -1,32 +1,24 @@
-<div class="hidden-print">
-    <br/>
-    <a id="edit_enfant" href="#" class="btn btn-danger btn-sm" role="button" data-toggle="modal"
-       data-target="#myModal">
-        <i class="fas fa-trash"></i> Supprimer l'utilisateur</a>
-</div>
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<!-- Modal candidat -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
      aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Suppression d'un utilisateur</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <h5 class="modal-title" id="deleteModalLabel">Supprimer la fiche</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <p>
-                    Etes vous sûr de vouloir supprimer <br/>
-                    {{ user | upper }} ? <br/> <br/>
-                    <strong> Ses fiches volontaires et associations seront aussi supprimer</strong>
-                </p>
+                Supprimer cet utilisateur {{ user }}?
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
-                {{ form(delete_form) }}
+                <form method="post" action="{{ path('volontariat_admin_user_delete', {'id': user.id}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
+                    <button type="button" class="btn btn-secondary"
+                            data-bs-dismiss="modal">Annuler
+                    </button>
+                    <button type="submit" class="btn btn-danger">Supprimer l'utilisateur</button>
+                </form>
             </div>
         </div>
     </div>
 </div>
-

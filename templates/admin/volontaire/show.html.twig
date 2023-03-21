@@ -8,11 +8,6 @@
 
             {{ include('@Volontariat/admin/volontaire/actions.html.twig') }}
 
-            {% if volontaire.notes %}
-                <h4>Note</h4>
-                <p>{{ volontaire.notes | nl2br }}</p>
-            {% endif %}
-
             <div class="row">
                 <div class="col-6">
                     <table class="table table-bordered table-hover">
@@ -75,7 +70,7 @@
                             <th>Gérer par le compte</th>
                             <td>
                                 {% if volontaire.user %}
-                                    <a href="{{ path('volontariat_admin_utilisateur_show', { 'id': volontaire.user.id }) }}">
+                                    <a href="{{ path('volontariat_admin_user_show', { 'id': volontaire.user.id }) }}">
                                         {{ volontaire.user }}
                                     </a>
                                     {{ form(dissocier_form) }}
@@ -92,16 +87,17 @@
 
             </div>
 
-            {% if volontaire.imageName %}
+            {% if volontaire.photoName %}
                 <img class="thumbnail"
-                     src="{{ volontaire.imageName | acmarche_volontariat_download_image(volontaire) | imagine_filter('acmarche_volontariat_thumb') }}"
-                     alt="{{ volontaire.imageName }}">
+                     src="{{ vich_uploader_asset(volontaire, 'photo') | imagine_filter('acmarche_volontariat_thumb') }}"
+                     alt="{{ volontaire.photoName }}">
             {% endif %}
 
             {% if volontaire.description %}
                 <p>{{ volontaire.description | nl2br }}</p>
             {% endif %}
-
+        </div>
+        <div class="card-footer">
             <p class="text-muted">
                 {{ 'Created' | trans }} {{ volontaire.createdAt|date('d-m-Y H:i:s') }}
                 . {{ 'Updated' | trans }} {{ volontaire.updatedAt|date('d-m-Y H:i:s') }}

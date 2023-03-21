@@ -3,6 +3,7 @@
 namespace AcMarche\Volontariat\Entity\Security;
 
 use AcMarche\Volontariat\Entity\Association;
+use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
@@ -44,6 +45,8 @@ class User implements UserInterface, PasswordHasherAwareInterface, LegacyPasswor
     // register voluntary
     public ?string $plainPassword = null;
     public ?string $city = null;
+    public ?Volontaire $volontaire = null;
+    public ?Association $association = null;
 
     public function __toString()
     {
@@ -66,7 +69,7 @@ class User implements UserInterface, PasswordHasherAwareInterface, LegacyPasswor
 
     public function getSalt(): ?string
     {
-        return (string) $this->salt;
+        return (string)$this->salt;
     }
 
     public function getPassword(): ?string

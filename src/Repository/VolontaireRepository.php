@@ -6,6 +6,7 @@ use AcMarche\Volontariat\Doctrine\OrmCrudTrait;
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Entity\Volontaire;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -121,7 +122,10 @@ class VolontaireRepository extends ServiceEntityRepository
         return $cities;
     }
 
-    public function findVolontaireByUser(User $user, bool $valider=true): ?Volontaire
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function findVolontaireByUser(User $user, bool $valider = true): ?Volontaire
     {
         return $this->createQbl()
             ->andWhere('volontaire.user = :user')

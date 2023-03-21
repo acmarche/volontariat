@@ -3,6 +3,8 @@
 namespace AcMarche\Volontariat\Command;
 
 use AcMarche\Volontariat\Repository\AssociationRepository;
+use AcMarche\Volontariat\Repository\UserRepository;
+use AcMarche\Volontariat\Repository\VolontaireRepository;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -17,8 +19,11 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class VolontariatMigrationCommand extends Command
 {
-    public function __construct(private AssociationRepository $associationRepository)
-    {
+    public function __construct(
+        private AssociationRepository $associationRepository,
+        private VolontaireRepository $volontaireRepository,
+        private UserRepository $userRepository
+    ) {
         parent::__construct();
     }
 
@@ -32,10 +37,21 @@ class VolontariatMigrationCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        $arg1 = $input->getArgument('arg1');
 
         foreach ($this->associationRepository->findAll() as $association) {
-            $association->generateSlug();
+            //    $association->generateSlug();
+        }
+        //  $this->associationRepository->flush();
+
+        foreach ($this->userRepository->findAll() as $user) {
+            $volontaires = $this->volontaireRepository->search(['user' => $user]);
+            foreach ($volontaires as $volontaire) {
+                $volontaire->user = $user;
+            }
+            $associations = $this->associationRepository->search(['user' => $user]);
+            foreach ($associations as $association) {
+                $association->user = $user;
+            }
         }
         $this->associationRepository->flush();
         $io->success('You have a new command! Now make it your own! Pass --help to see your options.');

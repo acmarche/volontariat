@@ -1,0 +1,52 @@
+{% extends '@Volontariat/admin/base.html.twig' %}
+
+{% block body %}
+
+    <div class="card">
+        <h3 class="card-header">{{ user }}</h3>
+        <div class="card-body">
+
+            {% include '@Volontariat/admin/user/actions.html.twig' %}
+
+            <br/>
+            <table class="table table-bordered table-hover">
+                <tbody>
+                <tr>
+                    <th>Nom prénom</th>
+                    <td>
+                        {{ user.name }} {{ user.surname }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>
+                        {{ user.email }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Gère le volontaire</th>
+                    <td>
+                        {% if volontaire %}
+                            <a href="{{ path('volontariat_admin_volontaire_show',{'id':volontaire.id}) }}">
+                                {{ volontaire }}
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Gère l'association</th>
+                    <td>
+                        {% if association %}
+                            <a href="{{ path('volontariat_admin_association_show',{'id':association.id}) }}">
+                                {{ association }}
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% include '@Volontariat/admin/user/delete.html.twig' with {'delete_form': delete_form } %}
+
+{% endblock %}

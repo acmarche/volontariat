@@ -6,7 +6,6 @@ use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\InterfaceDef\Uploadable;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
 use AcMarche\Volontariat\Validator\Constraints as AcMarcheAssert;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -14,16 +13,17 @@ use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Table(name: 'volontaire')]
 #[ORM\Entity(repositoryClass: VolontaireRepository::class)]
+#[Vich\Uploadable]
 class Volontaire implements Uploadable, TimestampableInterface, SluggableInterface, \Stringable
 {
     use TimestampableTrait;
     use SluggableTrait;
+    use ImageTrait;
 
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
@@ -124,28 +124,6 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
     public ?bool $inactif = null;
     #[ORM\Column(type: 'text', nullable: true)]
     public ?string $notes;
-
-    #[Assert\Image(maxSize: '5M')]
-    public ?File $image;
-
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    public ?string $imageName;
-
-    public function setImage(File|UploadedFile $file = null): void
-    {
-        $this->image = $file;
-
-        if (null !== $file) {
-            // It is required that at least one field changes if you are using doctrine
-            // otherwise the event listeners won't be called and the file is lost
-            $this->updated = new \DateTime('now');
-        }
-    }
-
-    public function getImage(): ?File
-    {
-        return $this->image;
-    }
 
     public function getPath(): string
     {

@@ -6,6 +6,7 @@ use AcMarche\Volontariat\Doctrine\OrmCrudTrait;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Security\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -28,7 +29,7 @@ class AssociationRepository extends ServiceEntityRepository
      */
     public function findAll(): array
     {
-        return $this->findBy([], ['nom' => 'ASC']);
+        return $this->findBy([], ['name' => 'ASC']);
     }
 
     /**
@@ -106,6 +107,9 @@ class AssociationRepository extends ServiceEntityRepository
         return $npo_emails;
     }
 
+    /**
+     * @throws NonUniqueResultException
+     */
     public function findAssociationByUser(User $user, bool $valider = false): ?Association
     {
         return $this->createQBl()

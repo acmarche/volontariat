@@ -222,7 +222,7 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
 
     public function getSluggableFields(): array
     {
-        return ['nom'];
+        return ['name'];
     }
 
     public function shouldGenerateUniqueSlugs(): bool

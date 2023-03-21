@@ -1,0 +1,54 @@
+{% extends '@Volontariat/admin/base.html.twig' %}
+
+{% block body -%}
+
+    <div class="card">
+        <h3 class="card-header">Liste des comptes utilisateurs</h3>
+        <div class="card-body">
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Fiche association</th>
+                    <th>Fiche volontaire</th>
+                    <th>Connection automatique</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('volontariat_admin_user_show', { 'id': user.id }) }}">
+                                {{ user.name }} {{ user.surname }}
+                            </a>
+                        </td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            {% if user.association %}
+                                <a href="{{ path('volontariat_admin_association_show',{'id':user.association.id}) }}">
+                                    {{ user.association }}
+                                </a>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if user.volontaire %}
+                                <a href="{{ path('volontariat_admin_volontaire_show',{'id':user.volontaire.id}) }}">
+                                    {{ user.volontaire }}
+                                </a>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if user.token %}
+                                <a href="{{ path('volontariat_token_show', {'value':  user.token.value}) }}">
+                                    Lien de connection
+                                </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

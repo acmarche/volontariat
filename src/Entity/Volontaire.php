@@ -13,6 +13,7 @@ use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
 use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
@@ -127,6 +128,10 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
     public ?bool $inactif = null;
     #[ORM\Column(type: 'text', nullable: true)]
     public ?string $notes;
+
+    #[Vich\UploadableField(mapping: 'volontaire_image', fileNameProperty: 'imageName')]
+    #[Assert\Image(maxSize: '7M')]
+    private ?File $image = null;
 
     public function getPath(): string
     {

@@ -8,21 +8,24 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class AssocationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
-            ->add('address')
-            ->add('number')
+            ->add('name', TextType::class, [
+                'required' => true,
+            ])
+            ->add('address', TextType::class, [
+                'label' => 'Rue et numéro',
+            ])
             ->add(
                 'postalCode',
                 TextType::class,
@@ -30,8 +33,12 @@ class AssocationType extends AbstractType
                     'label' => 'Code postal',
                 ]
             )
-            ->add('city')
-            ->add('email', EmailType::class)
+            ->add('city', TextType::class, [
+                'label' => 'Localité',
+            ])
+            ->add('email', EmailType::class, [
+                'label' => 'Courriel',
+            ])
             ->add(
                 'web_site',
                 UrlType::class,
@@ -40,8 +47,14 @@ class AssocationType extends AbstractType
                     'required' => false,
                 ]
             )
-            ->add('phone')
-            ->add('mobile')
+            ->add('phone', TextType::class, [
+                'label' => 'Téléphone',
+                'required' => false,
+            ])
+            ->add('mobile', TextType::class, [
+                'label' => 'Mobile',
+                'required' => false,
+            ])
             ->add(
                 'description',
                 TextareaType::class,
@@ -57,23 +70,8 @@ class AssocationType extends AbstractType
                 'requirement',
                 TextareaType::class,
                 [
+                    'label' => 'Besoins en volontariat',
                     'help' => 'Besoins permanents',
-                    'required' => false,
-                ]
-            )
-            ->add(
-                'place',
-                TextareaType::class,
-                [
-                    'help' => 'Où se situent les activités',
-                    'required' => false,
-                ]
-            )
-            ->add(
-                'contact',
-                TextareaType::class,
-                [
-                    'help' => 'Autres informations de contact',
                     'required' => false,
                 ]
             )
@@ -89,33 +87,25 @@ class AssocationType extends AbstractType
             )
             ->add(
                 'image',
-                FileType::class,
+                VichImageType::class,
                 [
-                    'label' => 'Photo',
+                    'label' => 'Image',
                     'required' => false,
                 ]
             )
             ->add(
-                'file',
-                FileType::class,
-                [
-                    'label' => 'Fichier',
-                    'required' => false,
-                ]
-            )
-            ->add(
-                'fileDescriptif',
-                TextType::class,
-                [
-                    'label' => 'Description du fichier',
-                    'required' => false,
-                    'help' => 'Si vous ajoutez un fichier',
-                ]
-            )->add(
-                'mailing',
+                'notification_new_voluntary',
                 CheckboxType::class,
                 [
                     'help' => 'Décochez la case pour ne plus recevoir de mail lorsqu\'un volontaire s\'inscris',
+                    'required' => false,
+                ]
+            )
+            ->add(
+                'notification_message_association',
+                CheckboxType::class,
+                [
+                    'help' => 'Décochez la case pour ne plus recevoir de mail de la plate-forme',
                     'required' => false,
                 ]
             )

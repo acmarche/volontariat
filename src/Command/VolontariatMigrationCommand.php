@@ -38,9 +38,17 @@ class VolontariatMigrationCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
+        //imagename
+
         foreach ($this->associationRepository->findAll() as $association) {
-            //    $association->generateSlug();
+            $association->generateSlug();
+            $association->address = $association->address.' '.$association->number;
         }
+
+        foreach ($this->volontaireRepository->findAll() as $volontaire) {
+            $volontaire->address = $volontaire->address.' '.$volontaire->number;
+        }
+
         //  $this->associationRepository->flush();
 
         foreach ($this->userRepository->findAll() as $user) {
@@ -53,7 +61,7 @@ class VolontariatMigrationCommand extends Command
                 $association->user = $user;
             }
         }
-        $this->associationRepository->flush();
+        // $this->associationRepository->flush();
         $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
 
         return Command::SUCCESS;

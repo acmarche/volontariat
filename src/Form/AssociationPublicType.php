@@ -18,13 +18,13 @@ class AssociationPublicType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(array(
-            'data_class' => Association::class
-        ));
+        $resolver->setDefaults([
+            'data_class' => Association::class,
+        ]);
     }
 
     public function getParent(): ?string
     {
-        return AssocationType::class ;
+        return AssocationType::class;
     }
 }

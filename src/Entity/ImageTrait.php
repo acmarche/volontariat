@@ -5,24 +5,20 @@ namespace AcMarche\Volontariat\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Validator\Constraints as Assert;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 trait ImageTrait
 {
-    #[Vich\UploadableField(mapping: 'volontaire_image', fileNameProperty: 'photoName')]
-    #[Assert\Image(maxSize: '7M')]
-    private ?File $photo = null;
+    private ?File $image = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private ?string $photoName = null;
+    private ?string $imageName = null;
 
     #[ORM\Column(type: 'string', nullable: true)]
     private ?string $mime = null;
 
-    public function setPhoto(File|UploadedFile $file = null): void
+    public function setImage(File|UploadedFile $file = null): void
     {
-        $this->photo = $file;
+        $this->image = $file;
 
         if (null !== $file) {
             // It is required that at least one field changes if you are using doctrine
@@ -31,19 +27,19 @@ trait ImageTrait
         }
     }
 
-    public function getPhoto(): ?File
+    public function getImage(): ?File
     {
-        return $this->photo;
+        return $this->image;
     }
 
-    public function getPhotoName(): ?string
+    public function getImageName(): ?string
     {
-        return $this->photoName;
+        return $this->imageName;
     }
 
-    public function setPhotoName(?string $photoName): void
+    public function setImageName(?string $imageName): void
     {
-        $this->photoName = $photoName;
+        $this->imageName = $imageName;
     }
 
     public function getMime(): ?string

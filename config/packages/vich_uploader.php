@@ -25,6 +25,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'namer' => 'vich_uploader.namer_uniqid',
                     'inject_on_load' => false,
                 ],
+                'association_image' => [
+                    'uri_prefix' => '/files/associations',
+                    'upload_destination' => '%kernel.project_dir%/public/files/associations',
+                    'namer' => 'vich_uploader.namer_uniqid',
+                    'inject_on_load' => false,
+                ],
             ],
         ]
     );

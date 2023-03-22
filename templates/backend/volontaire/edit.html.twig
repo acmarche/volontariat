@@ -24,8 +24,8 @@
                 </div>
 
                 <div class="sm:grid sm:grid-cols-3 sm:items-center sm:gap-4 sm:border-t sm:border-gray-200 sm:pt-5">
-                    {{ form_label(form.photo, null, {'label_attr': {'class': 'block text-sm font-medium leading-6 text-gray-900'}}) }}
-                    {{ form_errors(form.photo) }}
+                    {{ form_label(form.image, null, {'label_attr': {'class': 'block text-sm font-medium leading-6 text-gray-900'}}) }}
+                    {{ form_errors(form.image) }}
                     <div class="mt-2 sm:col-span-2 sm:mt-0">
                         <div class="flex items-center">
                             <span class="h-12 w-12 overflow-hidden rounded-full bg-gray-100">
@@ -33,8 +33,8 @@
                                   <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z"/>
                                 </svg>
                             </span>
-                            {{ form_help(form.photo) }}
-                            {{ form_widget(form.photo, {'attr': {'class': 'ml-5 rounded-md bg-white py-1.5 px-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50'}}) }}
+                            {{ form_help(form.image) }}
+                            {{ form_widget(form.image, {'attr': {'class': 'ml-5 rounded-md bg-white py-1.5 px-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50'}}) }}
                         </div>
                     </div>
                 </div>
@@ -111,18 +111,14 @@
         </div>
 
         <div class="space-y-6 divide-y divide-gray-200 pt-8 sm:space-y-5 sm:pt-10">
-            <div>
-                <h3 class="text-base font-semibold leading-6 text-gray-900">Notifications</h3>
-                <p class="mt-1 max-w-2xl text-sm text-gray-500">
-                    Personnaliser
-                </p>
-            </div>
+
             <div class="space-y-6 divide-y divide-gray-200 sm:space-y-5">
                 <div class="pt-6 sm:pt-5">
                     <div role="group" aria-labelledby="label-email">
                         <div class="sm:grid sm:grid-cols-3 sm:gap-4">
                             <div>
-                                <div class="text-sm font-semibold leading-6 text-gray-900" id="label-email">By Email
+                                <div class="text-sm font-semibold leading-6 text-gray-900" id="label-email">
+                                    Notifications par courriel
                                 </div>
                             </div>
                             <div class="mt-4 sm:col-span-2 sm:mt-0">
@@ -160,7 +156,7 @@
                         <div class="sm:grid sm:grid-cols-3 sm:items-baseline sm:gap-4">
                             <div>
                                 <div class="text-sm font-semibold leading-6 text-gray-900" id="label-notifications">
-                                    Secteurs
+                                    Secteurs d'activités
                                 </div>
                             </div>
                             <div class="sm:col-span-2">

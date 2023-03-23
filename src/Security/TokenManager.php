@@ -62,6 +62,7 @@ class TokenManager
         foreach ($users as $user) {
             $this->generate($user);
         }
+        $this->userRepository->flush();
     }
 
     public function loginUser(Request $request, User $user, $firewallName): void

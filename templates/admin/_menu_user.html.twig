@@ -16,11 +16,23 @@
        href="{{ path('volontariat_admin_user') }}">Les utilisateurs</a>
 </li>
 <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="/" id="dropdown10" data-toggle="dropdown"
-       aria-haspopup="true" aria-expanded="false">Ajouter... <b class="caret"></b></a>
-    <ul class="dropdown-menu" aria-labelledby="dropdown02">
-        <li><a class="dropdown-item" href="{{ path('volontariat_admin_volontaire_new') }}">Un volontaire</a></li>
-        <li><a class="dropdown-item" href="{{ path('volontariat_admin_association_new') }}">Une association</a></li>
+    <a class="nav-link dropdown-toggle" href="#" id="dropdown03" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fas fa-cog"></i> Paramètres...</a>
+    <ul class="dropdown-menu" aria-labelledby="dropdown03">
+        <li>
+            <a class="dropdown-item" href="{{ path('volontariat_admin_volontaire_new') }}">
+                Ajouter un volontaire
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="{{ path('volontariat_admin_association_new') }}">
+                ajouter une association
+            </a>
+        </li>
+        <li>
+            <a class="dropdown-item" href="{{ path('volontariat_token_index') }}">
+                Les tokens
+            </a>
+        </li>
     </ul>
 </li>
-

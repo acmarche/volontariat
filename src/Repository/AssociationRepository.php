@@ -4,7 +4,9 @@ namespace AcMarche\Volontariat\Repository;
 
 use AcMarche\Volontariat\Doctrine\OrmCrudTrait;
 use AcMarche\Volontariat\Entity\Association;
+use AcMarche\Volontariat\Entity\Secteur;
 use AcMarche\Volontariat\Entity\Security\User;
+use AcMarche\Volontariat\Entity\Volontaire;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\QueryBuilder;
@@ -46,32 +48,32 @@ class AssociationRepository extends ServiceEntityRepository
         $qb = $this->createQBl();
 
         if ($nom) {
-            $qb->andwhere(
+            $qb->andWhere(
                 'association.email LIKE :mot OR association.name LIKE :mot OR association.description LIKE :mot '
             )
                 ->setParameter('mot', '%'.$nom.'%');
         }
 
         if ($secteur) {
-            $qb->andwhere('secteurs = :secteur ')
+            $qb->andWhere('secteurs = :secteur ')
                 ->setParameter('secteur', $secteur);
         }
 
         if (is_array($secteurs)) {
-            $qb->andwhere('secteurs IN ARRAY :secteurs ')
+            $qb->andWhere('secteurs IN ARRAY :secteurs ')
                 ->setParameter('secteurs', $secteurs);
         }
 
         if ($user) {
-            $qb->andwhere('user = :user')
+            $qb->andWhere('user = :user')
                 ->setParameter('user', $user);
         }
 
         if (false === $valider) {
-            $qb->andwhere('association.valider = :valider')
+            $qb->andWhere('association.valider = :valider')
                 ->setParameter('valider', false);
         } elseif (2 != $valider) {
-            $qb->andwhere('association.valider = :valider')
+            $qb->andWhere('association.valider = :valider')
                 ->setParameter('valider', true);
         }
 
@@ -126,5 +128,38 @@ class AssociationRepository extends ServiceEntityRepository
             ->leftJoin('association.user', 'user', 'WITH')
             ->addSelect('secteurs', 'besoins', 'user')
             ->addOrderBy('association.name', 'ASC');
+    }
+
+    /**
+     * @return array|Association[]
+     */
+    public function findAssociationsBySecteur(Secteur $secteur): array
+    {
+        return $this->createQBl()
+            ->andWhere(':secteurId MEMBER OF association.secteurs')
+            ->setParameter('secteurId', $secteur->getId())
+            ->getQuery()->getResult();
+    }
+
+    /**
+     * @return array|Association[]
+     */
+    public function getAssociationsWithSameSecteur(Volontaire $volontaire): array
+    {
+        $associations = [[]];
+        $secteurs = $volontaire->secteurs;
+        foreach ($secteurs as $secteur) {
+            if (count($this->findAssociationsBySecteur($secteur)) > 0) {
+                $associations[] = $this->findAssociationsBySecteur($secteur);
+            }
+        }
+
+        $t = array_merge(...$associations);
+
+        foreach ($t as $association) {
+            $t[$association->getId()] = $association;
+        }
+
+        return $t;
     }
 }

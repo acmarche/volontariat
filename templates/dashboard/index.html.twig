@@ -11,6 +11,24 @@
             <p>
                 Utilisez le menu de gauche pour vos différentes actions
             </p>
+            <ul role="list" class="divide-y divide-gray-200">
+                {% if volontaire %}
+                    <li class="py-4">
+                        <a href="{{ path('volontariat_volontaire_show', {'uuid': volontaire.uuid}) }}">
+                            Ma fiche volontaire sur le site
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% if association %}
+                    <li class="py-4">
+                        <a href="{{ path('volontariat_association_show', {'slug': association.slug}) }}">
+                            Mon association sur le site
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+
         </div>
     </div>
 

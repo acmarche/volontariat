@@ -42,45 +42,45 @@ class VolontaireRepository extends ServiceEntityRepository
         $qb = $this->createQbl();
 
         if ($nom) {
-            $qb->andwhere('volontaire.email LIKE :mot OR volontaire.name LIKE :mot OR volontaire.surname LIKE :mot ')
+            $qb->andWhere('volontaire.email LIKE :mot OR volontaire.name LIKE :mot OR volontaire.surname LIKE :mot ')
                 ->setParameter('mot', '%'.$nom.'%');
         }
 
         if ($localite) {
-            $qb->andwhere('volontaire.city LIKE :loca ')
+            $qb->andWhere('volontaire.city LIKE :loca ')
                 ->setParameter('loca', '%'.$localite.'%');
         }
 
         if ($createdAt) {
-            $qb->andwhere('volontaire.createdAt >= :date ')
+            $qb->andWhere('volontaire.createdAt >= :date ')
                 ->setParameter('date', $createdAt);
         }
 
         if ($secteur) {
-            $qb->andwhere('secteurs = :secteur ')
+            $qb->andWhere('secteurs = :secteur ')
                 ->setParameter('secteur', $secteur);
         }
 
         if (is_array($secteurs) && [] !== $secteurs) {
-            $qb->andwhere('secteurs IN :secteurs')
+            $qb->andWhere('secteurs IN :secteurs')
                 ->setParameter('secteurs', $secteur);
         }
 
         if ($vehicule) {
-            $qb->andwhere('vehicules = :vehicule')
+            $qb->andWhere('vehicules = :vehicule')
                 ->setParameter('vehicule', $vehicule);
         }
 
         if (false === $valider) {
-            $qb->andwhere('volontaire.valider = :valider')
+            $qb->andWhere('volontaire.valider = :valider')
                 ->setParameter('valider', false);
         } elseif (2 != $valider) {
-            $qb->andwhere('volontaire.valider = :valider')
+            $qb->andWhere('volontaire.valider = :valider')
                 ->setParameter('valider', true);
         }
 
         if ($user) {
-            $qb->andwhere('user = :user')
+            $qb->andWhere('user = :user')
                 ->setParameter('user', $user);
         }
 

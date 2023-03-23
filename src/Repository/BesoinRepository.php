@@ -49,7 +49,7 @@ class BesoinRepository extends ServiceEntityRepository
         $qb->leftJoin('so.association', 'association', 'WITH');
         $qb->addSelect('association');
 
-        $qb->andwhere('so.date_end >= :date ')
+        $qb->andWhere('so.date_end >= :date ')
             ->setParameter('date', $now);
 
         $qb->setMaxResults($max);

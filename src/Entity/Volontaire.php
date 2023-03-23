@@ -26,6 +26,7 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
     use SluggableTrait;
     use ImageTrait;
     use NotificationTrait;
+    use UuidTrait;
 
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]

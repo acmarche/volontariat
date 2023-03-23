@@ -38,7 +38,7 @@ class VolontariatMigrationCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        //imagename
+        // imagename
 
         foreach ($this->associationRepository->findAll() as $association) {
             $association->generateSlug();
@@ -47,9 +47,13 @@ class VolontariatMigrationCommand extends Command
 
         foreach ($this->volontaireRepository->findAll() as $volontaire) {
             $volontaire->address = $volontaire->address.' '.$volontaire->number;
+            if ($volontaire->birthday) {
+                $volontaire->birthyear = $volontaire->birthday->format('Y');
+            }
+            $volontaire->setUuid($volontaire->generateUuid());
         }
 
-        //  $this->associationRepository->flush();
+        $this->associationRepository->flush();
 
         foreach ($this->userRepository->findAll() as $user) {
             $volontaires = $this->volontaireRepository->search(['user' => $user]);

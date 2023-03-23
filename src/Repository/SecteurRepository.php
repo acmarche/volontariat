@@ -3,9 +3,9 @@
 namespace AcMarche\Volontariat\Repository;
 
 use AcMarche\Volontariat\Doctrine\OrmCrudTrait;
-use Doctrine\ORM\QueryBuilder;
 use AcMarche\Volontariat\Entity\Secteur;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -22,27 +22,9 @@ class SecteurRepository extends ServiceEntityRepository
         parent::__construct($registry, Secteur::class);
     }
 
-
-    public function insert(Secteur $secteur): void
-    {
-        $this->_em->persist($secteur);
-        $this->flush();
-    }
-
-    public function flush(): void
-    {
-        $this->_em->flush();
-    }
-
-    public function remove(Secteur $secteur): void
-    {
-        $this->_em->remove($secteur);
-        $this->flush();
-    }
-
     public function findAll(): array
     {
-        return $this->findBy(array(), array('name' => 'ASC'));
+        return $this->findBy([], ['name' => 'ASC']);
     }
 
     /**
@@ -57,7 +39,7 @@ class SecteurRepository extends ServiceEntityRepository
         $query = $qb->getQuery();
 
         $results = $query->getResult();
-        $types = array();
+        $types = [];
 
         foreach ($results as $type) {
             $types[$type->getName()] = $type->getId();
@@ -65,7 +47,6 @@ class SecteurRepository extends ServiceEntityRepository
 
         return $types;
     }
-
 
     public function secteursActifs(): QueryBuilder
     {

@@ -12,7 +12,6 @@
                     <th>Email</th>
                     <th>Fiche association</th>
                     <th>Fiche volontaire</th>
-                    <th>Connection automatique</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -35,13 +34,6 @@
                             {% if user.volontaire %}
                                 <a href="{{ path('volontariat_admin_volontaire_show',{'id':user.volontaire.id}) }}">
                                     {{ user.volontaire }}
-                                </a>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if user.token %}
-                                <a href="{{ path('volontariat_token_show', {'value':  user.token.value}) }}">
-                                    Lien de connection
                                 </a>
                             {% endif %}
                         </td>

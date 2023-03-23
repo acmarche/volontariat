@@ -17,7 +17,6 @@
                     <th>Email</th>
                     <th>Inscrit le</th>
                     <th>Géré par</th>
-                    <th>Note</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -39,11 +38,6 @@
                         </td>
                         <td>
                             {{ volontaire.user }}
-                        </td>
-                        <td>
-                            {% if volontaire.notes| length > 0 %}
-                                <i class="fas fa-check"></i>
-                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}

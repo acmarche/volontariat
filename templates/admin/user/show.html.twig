@@ -43,6 +43,16 @@
                         {% endif %}
                     </td>
                 </tr>
+                <tr>
+                    <th>Url pour connection automatique</th>
+                    <td>
+                        {% if user.token %}
+                            <a href="{{ path('volontariat_token_show', {'value':  user.token.value}) }}">
+                                Lien de connection
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>

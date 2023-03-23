@@ -58,16 +58,6 @@
                                 {% endif %}
                             </td>
                         </tr>
-                        <tr>
-                            <th>Fichier joint</th>
-                            <td>
-                                {% if association.fileName %}
-                                    <a href="{{ vich_uploader_asset(association, 'fileFile') }}">
-                                        {% if association.fileDescriptif %} {{ association.fileDescriptif }} {% else %}Télécharger{% endif %}
-                                    </a>
-                                {% endif %}
-                            </td>
-                        </tr>
                         </tbody>
                     </table>
                 </div>

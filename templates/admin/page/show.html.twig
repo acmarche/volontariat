@@ -1,37 +1,24 @@
 {% extends '@Volontariat/admin/base.html.twig' %}
 
-{% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('bundles/volontariat/blueimp/css/blueimp-gallery.min.css') }}">
-{% endblock %}
-
 {% block body %}
 
-    <h3>{{ page }}</h3>
+    <div class="card">
+        <h3 class="card-header">{{ page }}</h3>
+        <div class="card-body">
 
-    {{ include ('@Volontariat/admin/page/actions.html.twig' ) }}
+            {{ include ('@Volontariat/admin/page/actions.html.twig' ) }}
 
-    <br/><br/>
+            <br/><br/>
 
-    {{ page.content | raw }}
-    <br/><br/>
+            {{ page.content | raw }}
+            <br/><br/>
 
-    {% include'@Volontariat/admin/association/gallery-controls.html.twig' %}
+            {% include'@Volontariat/admin/page/images.html.twig' %}
 
-    {% include'@Volontariat/admin/page/images.html.twig' %}
-
-    {% include'@Volontariat/admin/page/documents.html.twig' %}
+            {% include'@Volontariat/admin/page/documents.html.twig' %}
+        </div>
+    </div>
 
     {{ include ('@Volontariat/admin/page/delete.html.twig') }}
 
-{% endblock %}
-
-{% block scripts %}
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $("#lightgallery").lightGallery({
-
-                }
-            );
-        });
-    </script>
 {% endblock %}

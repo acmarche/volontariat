@@ -8,7 +8,6 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Email;
 
 class MailerContact
 {
@@ -41,70 +40,39 @@ class MailerContact
         $this->mailer->send($email);
     }
 
-    public function sendToVolontaire(Volontaire $volontaire, ContactManager $contactManager): void
+    public function sendToVolontaire(Volontaire $volontaire, array $data): void
     {
-        $message = (new Email())
-            ->subject($contactManager->getSujet())
-            ->from($contactManager->getEmail())
-            ->to($volontaire->getEmail());
+        $email = (new TemplatedEmail())
+            ->from($data['email'])
+            ->to(new Address($volontaire->email))
+            ->bcc(new Address($this->from))
+            ->subject('On vous contact via la plate-forme du volontariat')
+            ->htmlTemplate('@Volontariat/emails/_to_volontaire.html.twig')
+            ->context(
+                array_merge($this->defaultParams(), [
+                    'data' => $data,
+                    'volontaire' => $volontaire,
+                ])
+            );
 
-        $message->cc($contactManager->getEmail());
-
-        $body = $this->twig->render(
-            '@Volontariat/contact/_mail_volontaire.html.twig',
-            [
-                'contactManager' => $contactManager,
-                'volontaire' => $volontaire,
-            ]
-        );
-
-        $message->text($body);
-
-        $this->mailer->send($message);
-
-        $this->sendCopyVolontariat($contactManager);
+        $this->mailer->send($email);
     }
 
-    public function sendToAssociation(Association $association, ContactManager $contactManager): void
+    public function sendToAssociation(Association $association, array $data): void
     {
-        $message = (new Email())
-            ->subject($contactManager->getSujet())
-            ->from($contactManager->getEmail())
-            ->to($association->getEmail());
+        $email = (new TemplatedEmail())
+            ->from($data['email'])
+            ->to(new Address($this->from))
+            ->bcc(new Address($this->from))
+            ->subject('On vous contact via la plate-forme du volontariat')
+            ->htmlTemplate('@Volontariat/emails/_to_association.html.twig')
+            ->context(
+                array_merge($this->defaultParams(), [
+                    'data' => $data,
+                    'association' => $association,
+                ])
+            );
 
-        $message->cc($contactManager->getEmail());
-
-        $body = $this->twig->render(
-            '@Volontariat/contact/_mail_association.html.twig',
-            [
-                'contactManager' => $contactManager,
-                'association' => $association,
-            ]
-        );
-
-        $message->text($body);
-
-        $this->mailer->send($message);
-
-        $this->sendCopyVolontariat($contactManager);
-    }
-
-    protected function sendCopyVolontariat(ContactManager $contactManager): void
-    {
-        $message = (new Email())
-            ->subject($contactManager->getSujet())
-            ->from($this->from)
-            ->to($this->from);
-
-        $body = $this->twig->render(
-            '@Volontariat/contact/_mail_copy.html.twig',
-            [
-                'contactManager' => $contactManager,
-            ]
-        );
-
-        $message->text($body);
-
-        $this->mailer->send($message);
+        $this->mailer->send($email);
     }
 }

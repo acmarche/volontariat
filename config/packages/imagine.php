@@ -21,6 +21,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                     'cache' => 'default',
                     'filters' => ['thumbnail' => ['size' => [400, 270], 'mode' => 'outbound']],
                 ],
+                'acmarche_volontariat_index' => [
+                    'quality' => 100,
+                    'cache' => 'default',
+                    'filters' => ['thumbnail' => ['size' => [150, 150], 'mode' => 'outbound']],
+                ],
                 'acmarche_volontariat_740_380' => [
                     'quality' => 100,
                     'cache' => 'default',

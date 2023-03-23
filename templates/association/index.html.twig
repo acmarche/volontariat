@@ -11,7 +11,7 @@
                 {% for association in associations %}
                     {% set url = asset('bundles/acmarchevolontariat/img/door-784775_1920zz.jpg') %}
                     {% if association.imageName %}
-                        {% set url = association.imageName | acmarche_volontariat_download_image(association) | imagine_filter('acmarche_volontariat_400_270') %}
+                        {% set url = association.imageName | imagine_filter('acmarche_volontariat_400_270') %}
                     {% elseif association.firstImage %}
                         {% set url = association.firstImage.url | imagine_filter('acmarche_volontariat_400_270') %}
                     {% endif %}

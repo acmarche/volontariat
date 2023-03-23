@@ -123,6 +123,12 @@ class UtilisateurController extends AbstractController
     public function delete(Request $request, User $user): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+            if ($association = $this->associationRepository->findAssociationByUser($user)) {
+                $this->associationRepository->remove($association);
+            }
+            if ($volontaire = $this->volontaireRepository->findVolontaireByUser($user)) {
+                $this->volontaireRepository->remove($volontaire);
+            }
             $this->userRepository->remove($user);
             $this->userRepository->flush();
             $this->addFlash('success', 'L\'utilisateur a bien été supprimé');

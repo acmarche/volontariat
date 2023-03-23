@@ -4,7 +4,6 @@ namespace AcMarche\Volontariat\Mailer;
 
 trait MailerTrait
 {
-
     private function defaultParams(): array
     {
         return [

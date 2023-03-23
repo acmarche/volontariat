@@ -62,11 +62,11 @@ class VolontaireType extends AbstractType
                     'required' => false,
                     'multiple' => true,
                     'expanded' => true,
-                    'query_builder' => fn(SecteurRepository $er) => $er->secteursActifs(),
+                    'query_builder' => fn (SecteurRepository $er) => $er->secteursActifs(),
                 ]
             )
             ->add(
-                'photo',
+                'image',
                 VichImageType::class,
                 [
                     'label' => 'Photo',

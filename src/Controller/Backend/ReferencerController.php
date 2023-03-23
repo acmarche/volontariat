@@ -6,7 +6,6 @@ use AcMarche\Volontariat\Entity\Message;
 use AcMarche\Volontariat\Form\Contact\ReferencerType;
 use AcMarche\Volontariat\Mailer\Mailer;
 use AcMarche\Volontariat\Mailer\MessageService;
-use AcMarche\Volontariat\Manager\ContactManager;
 use AcMarche\Volontariat\Service\CaptchaService;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,7 +18,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class ReferencerController extends AbstractController
 {
     public function __construct(
-        private ContactManager $contactManager,
         private Mailer $mailer,
         private CaptchaService $captchaService,
         private MessageService $messageService

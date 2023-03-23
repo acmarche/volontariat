@@ -6,7 +6,6 @@ use AcMarche\Volontariat\Entity\Security\Token;
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Repository\TokenRepository;
 use AcMarche\Volontariat\Repository\UserRepository;
-use DateTime;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
@@ -20,7 +19,6 @@ class TokenManager
         private TokenRepository $tokenRepository,
         private UserRepository $userRepository
     ) {
-
     }
 
     public function getInstance(User $user): Token
@@ -34,7 +32,7 @@ class TokenManager
         return $token;
     }
 
-    public function generate(User $user, DateTime $expireAt = null): Token
+    public function generate(User $user, \DateTime $expireAt = null): Token
     {
         $token = $this->getInstance($user);
         try {
@@ -42,7 +40,7 @@ class TokenManager
         } catch (Exception) {
         }
         if (!$expireAt) {
-            $expireAt = new DateTime('+90 day');
+            $expireAt = new \DateTime('+90 day');
         }
         $token->setExpireAt($expireAt);
 
@@ -53,7 +51,7 @@ class TokenManager
 
     public function isExpired(Token $token): bool
     {
-        $today = new DateTime('today');
+        $today = new \DateTime('today');
 
         return $today > $token->getExpireAt();
     }
@@ -74,5 +72,4 @@ class TokenManager
             $request,
         );
     }
-
 }

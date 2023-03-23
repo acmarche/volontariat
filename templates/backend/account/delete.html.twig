@@ -1,0 +1,11 @@
+{% extends '@Volontariat/base.html.twig' %}
+
+{% block body %}
+
+<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+    <i class="fas fa-trash"></i> Supprimer mon compte
+</button>
+
+    {{ include('@Volontariat/backend/account/_delete.html.twig') }}
+{% endblock %}
+

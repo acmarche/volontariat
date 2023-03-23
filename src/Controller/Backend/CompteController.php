@@ -2,95 +2,119 @@
 
 namespace AcMarche\Volontariat\Controller\Backend;
 
-use AcMarche\Volontariat\Entity\Association;
-use AcMarche\Volontariat\Entity\Security\User;
-use AcMarche\Volontariat\Entity\Volontaire;
-use AcMarche\Volontariat\Form\User\UtilisateurEditType;
-use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
+use AcMarche\Volontariat\Form\User\ChangePasswordType;
+use AcMarche\Volontariat\Form\User\UserEditPublicType;
+use AcMarche\Volontariat\Repository\AssociationRepository;
+use AcMarche\Volontariat\Repository\UserRepository;
+use AcMarche\Volontariat\Repository\VolontaireRepository;
+use AcMarche\Volontariat\Security\PasswordGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/compte')]
 #[IsGranted('ROLE_VOLONTARIAT')]
 class CompteController extends AbstractController
 {
-    public function __construct(private TokenStorageInterface $tokenStorage, private ManagerRegistry $managerRegistry)
-    {
+    public function __construct(
+        private UserRepository $userRepository,
+        private AssociationRepository $associationRepository,
+        private VolontaireRepository $volontaireRepository,
+        private PasswordGenerator $passwordGenerator
+    ) {
     }
 
-    #[Route(path: '/', name: 'volontariat_compte_home')]
-    public function indexAction(Request $request): Response
+    #[Route(path: '/', name: 'volontariat_backend_account_edit')]
+    public function edit(Request $request): Response
     {
         $user = $this->getUser();
-        $formProfil = $this->createForm(UtilisateurEditType::class, $user);
-        $formProfil->handleRequest($request);
-        if ($formProfil->isSubmitted() && $formProfil->isValid()) {
-            $this->userManager->updateUser();
-            $this->addFlash('success', 'Profil mis à jour');
+        $oldEmail = $user->email;
+        $form = $this->createForm(UserEditPublicType::class, $user);
 
-            return $this->redirectToRoute('volontariat_compte_home');
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+
+            if ($oldEmail != $data->email) {
+                if ($this->userRepository->findOneByEmailAndSkip($data->email, $user)) {
+                    $this->addFlash('danger', 'Cette adresse mail est déjà prise vous ne pouvez pas l\'utiliser');
+
+                    return $this->redirectToRoute('volontariat_dashboard');
+                }
+            }
+
+            $this->userRepository->flush();
+            $this->addFlash('success', 'Le compte a été mis à jour');
+
+            return $this->redirectToRoute('volontariat_dashboard');
         }
 
         return $this->render(
-            '@Volontariat/dashboard/settings/index.html.twig',
+            '@Volontariat/backend/account/edit.html.twig',
             [
                 'user' => $user,
-                'tab_active' => 'profil',
-                'form_profil' => $formProfil->createView(),
-            ]
-        );
-    }
-
-    #[Route(path: '/delete', name: 'volontariat_backend_utilisateur_delete', methods: ['GET', 'DELETE'])]
-    public function deleteAction(Request $request): Response
-    {
-        $user = $this->getUser();
-        $form = $this->createDeleteForm($user);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->managerRegistry->getManager();
-            $volontaires = $em->getRepository(Volontaire::class)->findBy(['user' => $user]);
-            foreach ($volontaires as $volontaire) {
-                $em->remove($volontaire);
-            }
-
-            $associations = $em->getRepository(Association::class)->findBy(['user' => $user]);
-
-            foreach ($associations as $association) {
-                $em->remove($association);
-            }
-
-            $em->remove($user);
-            $em->flush();
-
-            $this->tokenStorage->setToken(null);
-
-            $this->addFlash("success", "L'utilisateur a bien été supprimé");
-
-            return $this->redirectToRoute('app_logout');
-        }
-
-        return $this->render(
-            '@Volontariat/dashboard/delete.html.twig',
-            [
                 'form' => $form->createView(),
             ]
         );
     }
 
-    private function createDeleteForm(User $user): FormInterface
+    #[Route(path: '/', name: 'volontariat_backend_password_edit')]
+    public function password(Request $request): Response
     {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('volontariat_backend_utilisateur_delete', array('id' => $user->getId())))
-            ->setMethod(Request::METHOD_DELETE)
-            ->add('submit', SubmitType::class, array('label' => 'Delete', 'attr' => array('class' => 'btn-danger')))
-            ->getForm();
+        $user = $this->getUser();
+        $formProfil = $this->createForm(ChangePasswordType::class, $user);
+
+        $formProfil->handleRequest($request);
+
+        if ($formProfil->isSubmitted() && $formProfil->isValid()) {
+            $data = $formProfil->getData();
+
+            $user->password = $this->passwordGenerator->cryptPassword($user, $data->plainPassword);
+
+            $this->userRepository->flush();
+
+            $this->addFlash('success', 'Profil mis à jour');
+
+            return $this->redirectToRoute('volontariat_dashboard');
+        }
+
+        return $this->render(
+            '@Volontariat/backend/account/password.html.twig',
+            [
+                'user' => $user,
+                'form' => $formProfil->createView(),
+            ]
+        );
+    }
+
+    #[Route(path: '/delete', name: 'volontariat_backend_user_delete', methods: ['GET', 'POST'])]
+    public function delete(Request $request): Response
+    {
+        $user = $this->getUser();
+
+        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+            if ($association = $this->associationRepository->findAssociationByUser($user)) {
+                $this->associationRepository->remove($association);
+            }
+            if ($volontaire = $this->volontaireRepository->findVolontaireByUser($user)) {
+                $this->volontaireRepository->remove($volontaire);
+            }
+
+            $this->userRepository->remove($user);
+            $this->userRepository->flush();
+            $this->addFlash('success', 'Le compte a bien été supprimé');
+
+            return $this->redirectToRoute('volontariat_home');
+        }
+
+        return $this->render(
+            '@Volontariat/backend/account/delete.html.twig',
+            [
+                'user' => $user,
+            ]
+        );
     }
 }

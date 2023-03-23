@@ -11,7 +11,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-class UtilisateurEditType extends AbstractType
+class UserEditType extends AbstractType
 {
     public function __construct(private AuthorizationCheckerInterface $authorizationChecker)
     {
@@ -20,8 +20,8 @@ class UtilisateurEditType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->remove("username")
-            ->remove("plainPassword");
+            ->remove('username')
+            ->remove('plainPassword');
 
         if ($this->authorizationChecker->isGranted(SecurityData::getRoleAdmin())) {
             $builder->add(
@@ -44,9 +44,9 @@ class UtilisateurEditType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
-            array(
+            [
                 'data_class' => User::class,
-            )
+            ]
         );
     }
 }

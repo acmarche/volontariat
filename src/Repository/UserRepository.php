@@ -44,6 +44,16 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $this->findOneBy(['email' => $email]);
     }
 
+    public function findOneByEmailAndSkip($email, User $user): ?User
+    {
+        return $this->createQueryBuilder('user')
+            ->andWhere('user.email = :email')
+            ->setParameter('email', $email)
+            ->andWhere('user.id != :id')
+            ->setParameter('id', $user->getId())
+            ->getQuery()->getOneOrNullResult();
+    }
+
     public function qbqForList(): QueryBuilder
     {
         return $this->createQueryBuilder('user')->addOrderBy('user.name');

@@ -6,8 +6,6 @@ use AcMarche\Volontariat\Entity\Activite;
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
@@ -45,7 +43,8 @@ class MailerActivite
     }
 
     /**
-     * L'admin doit valider une activite
+     * L'admin doit valider une activite.
+     *
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
@@ -56,21 +55,22 @@ class MailerActivite
 
         $body = $this->twig->render(
             '@Volontariat/mail/activite/to_validate.html.twig',
-            array(
-                "activite" => $activite,
-                "user" => $user,
-            )
+            [
+                'activite' => $activite,
+                'user' => $user,
+            ]
         );
 
         try {
             $this->send($this->from, $this->to, $sujet, $body);
         } catch (TransportException $e) {
-            $this->flashBag->add("error", $e->getMessage());
+            $this->flashBag->add('error', $e->getMessage());
         }
     }
 
     /**
-     * Prévient l'asbl qu'elle a été validée
+     * Prévient l'asbl qu'elle a été validée.
+     *
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
@@ -82,20 +82,21 @@ class MailerActivite
 
         $body = $this->twig->render(
             '@Volontariat/mail/activite/validee.html.twig',
-            array(
-                "activite" => $activite,
-            )
+            [
+                'activite' => $activite,
+            ]
         );
 
         try {
             $this->send($this->from, $user->getEmail(), $sujet, $body);
         } catch (TransportException $e) {
-            $this->flashBag->add("error", $e->getMessage());
+            $this->flashBag->add('error', $e->getMessage());
         }
     }
 
     /**
-     * Tout le monde est prévenu
+     * Tout le monde est prévenu.
+     *
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
@@ -108,10 +109,10 @@ class MailerActivite
         foreach ($volontaires as $volontaire) {
             $body = $this->twig->render(
                 '@Volontariat/mail/activite/new.html.twig',
-                array(
-                    "activite" => $activite,
-                    "volontaire" => $volontaire,
-                )
+                [
+                    'activite' => $activite,
+                    'volontaire' => $volontaire,
+                ]
             );
 
             try {
@@ -125,10 +126,10 @@ class MailerActivite
         foreach ($associations as $association) {
             $body = $this->twig->render(
                 '@Volontariat/mail/activite/new.html.twig',
-                array(
-                    "activite" => $activite,
-                    "volontaire" => $association,
-                )
+                [
+                    'activite' => $activite,
+                    'volontaire' => $association,
+                ]
             );
 
             try {

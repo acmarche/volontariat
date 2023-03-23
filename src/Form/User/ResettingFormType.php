@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: jfsenechal
  * Date: 9/07/18
- * Time: 13:45
+ * Time: 13:45.
  */
 
 namespace AcMarche\Volontariat\Form\User;
@@ -22,17 +22,17 @@ class ResettingFormType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('plainPassword', RepeatedType::class, array(
+        $builder->add('plainPassword', RepeatedType::class, [
             'type' => PasswordType::class,
-            'options' => array(
-                'attr' => array(
+            'options' => [
+                'attr' => [
                     'autocomplete' => 'new-password',
-                ),
-            ),
-            'first_options' => array('label' => 'Mot de passe'),
-            'second_options' => array('label' => 'Répéter le mot de passe'),
+                ],
+            ],
+            'first_options' => ['label' => 'Mot de passe'],
+            'second_options' => ['label' => 'Répéter le mot de passe'],
             'invalid_message' => 'Les mots de passe doivent correspondre',
-        ));
+        ]);
     }
 
     /**
@@ -40,9 +40,9 @@ class ResettingFormType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'data_class' => User::class,
             'csrf_token_id' => 'resetting',
-        ));
+        ]);
     }
 }

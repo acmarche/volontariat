@@ -4,7 +4,7 @@ namespace AcMarche\Volontariat\Controller\Admin;
 
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Form\User\ChangePasswordType;
-use AcMarche\Volontariat\Form\User\UtilisateurEditType;
+use AcMarche\Volontariat\Form\User\UserEditType;
 use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Repository\UserRepository;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
@@ -74,7 +74,7 @@ class UtilisateurController extends AbstractController
     #[Route(path: '/{id}/edit', name: 'volontariat_admin_user_edit', methods: ['GET', 'POST'])]
     public function editAction(Request $request, User $user): Response
     {
-        $editForm = $this->createForm(UtilisateurEditType::class, $user)
+        $editForm = $this->createForm(UserEditType::class, $user)
             ->add('submit', SubmitType::class, ['label' => 'Update']);
 
         $editForm->handleRequest($request);

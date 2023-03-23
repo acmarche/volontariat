@@ -63,6 +63,7 @@ class RegisterController extends AbstractController
             $this->userRepository->insert($user);
 
             $voluntary = Volontaire::newFromUser($user);
+            $voluntary->setUuid($voluntary->generateUuid());
             $this->volontaireRepository->insert($voluntary);
 
             $token = $this->tokenManager->generate($user);

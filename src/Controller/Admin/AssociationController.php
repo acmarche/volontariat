@@ -8,7 +8,6 @@ use AcMarche\Volontariat\Form\Search\SearchAssociationType;
 use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Service\FileHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -55,8 +54,8 @@ class AssociationController extends AbstractController
     public function newAction(Request $request): Response
     {
         $association = new Association();
-        $form = $this->createForm(AssocationType::class, $association)
-            ->add('submit', SubmitType::class, ['label' => 'Create']);
+        $form = $this->createForm(AssocationType::class, $association);
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->associationRepository->persist($association);
@@ -128,5 +127,4 @@ class AssociationController extends AbstractController
 
         return $this->redirectToRoute('volontariat_admin_association');
     }
-
 }

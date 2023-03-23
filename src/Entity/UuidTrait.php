@@ -7,7 +7,7 @@ use Symfony\Component\Uid\Uuid;
 
 trait UuidTrait
 {
-    #[ORM\Column(type: 'uuid', unique: false, nullable: true)]
+    #[ORM\Column(type: 'uuid', unique: true, nullable: false)]
     protected ?string $uuid = null;
 
     public function getUuid(): ?string

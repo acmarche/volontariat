@@ -55,6 +55,7 @@ class VolontaireController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $volontaire->setUuid($volontaire->generateUuid());
             $this->volontaireRepository->insert($volontaire);
 
             $this->fileHelper->traitementFiles($volontaire);

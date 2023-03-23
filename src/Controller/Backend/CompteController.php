@@ -26,7 +26,7 @@ class CompteController extends AbstractController
     ) {
     }
 
-    #[Route(path: '/', name: 'volontariat_backend_account_edit')]
+    #[Route(path: '/edit', name: 'volontariat_backend_account_edit')]
     public function edit(Request $request): Response
     {
         $user = $this->getUser();
@@ -61,7 +61,7 @@ class CompteController extends AbstractController
         );
     }
 
-    #[Route(path: '/', name: 'volontariat_backend_password_edit')]
+    #[Route(path: '/password', name: 'volontariat_backend_password_edit')]
     public function password(Request $request): Response
     {
         $user = $this->getUser();
@@ -96,6 +96,7 @@ class CompteController extends AbstractController
         $user = $this->getUser();
 
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+
             if ($association = $this->associationRepository->findAssociationByUser($user)) {
                 $this->associationRepository->remove($association);
             }

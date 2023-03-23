@@ -5,9 +5,9 @@ namespace AcMarche\Volontariat\Form\User;
 use AcMarche\Volontariat\Entity\Security\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Length;
 
 class ChangePasswordType extends AbstractType
 {
@@ -16,11 +16,10 @@ class ChangePasswordType extends AbstractType
         $builder
             ->add(
                 'plainPassword',
-                RepeatedType::class,
+                PasswordType::class,
                 [
-                    'type' => PasswordType::class,
-                    'first_options' => ['label' => 'Mot de passe'],
-                    'second_options' => ['label' => 'Répéter le mot de passe'],
+                    'label' => 'Nouveau mot de passe',
+                    'constraints' => [new Length(min: 6, max: 30)],
                 ]
             );
     }

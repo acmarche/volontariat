@@ -4,9 +4,9 @@
 
 <a href="{{ path('volontariat_admin_link_account_volontaire', { 'id': volontaire.id }) }}" role="button"
    class="btn btn-primary"><i
-            class="fas fa-link"></i> Associer à un utilisateur</a>
+            class="fas fa-link"></i> Associer/dissocier à un utilisateur</a>
 
-<a href="{{ path('volontariat_volontaire_show', { 'id': volontaire.id }) }}" role="button"
+<a href="{{ path('volontariat_volontaire_show', { 'uuid': volontaire.uuid }) }}" role="button"
    class="btn btn-primary" target="apercu"><i class="far fa-eye"></i> Voir sur le site</a>
 
 <a href="{{ path('volontariat_admin_volontaire') }}" class="btn btn-primary" role='button'><i

@@ -13,13 +13,6 @@
                     <table class="table table-bordered table-hover">
                         <tbody>
                         <tr>
-                            <th>Adresse</th>
-                            <td>
-                                {{ volontaire.address }}<br/>
-                                {{ volontaire.postalCode }} {{ volontaire.city }}
-                            </td>
-                        </tr>
-                        <tr>
                             <th>Email</th>
                             <td>
                                 {{ volontaire.email }}
@@ -33,29 +26,9 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>Né le</th>
+                            <th>Né en</th>
                             <td>
-                                {% if volontaire.birthday %}
-                                    {{ volontaire.birthday|date('d-m-Y') }}
-                                {% endif %}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Job</th>
-                            <td>
-                                {{ volontaire.job }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Disponibilité</th>
-                            <td>
-                                {{ volontaire.availability }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>Véhicule(s)</th>
-                            <td>
-                                {{ volontaire.vehicules | join(',') }}
+                                {{ volontaire.birthyear }}
                             </td>
                         </tr>
                         <tr>
@@ -78,10 +51,10 @@
 
             </div>
 
-            {% if volontaire.photoName %}
+            {% if volontaire.imageName %}
                 <img class="thumbnail"
-                     src="{{ vich_uploader_asset(volontaire, 'photo') | imagine_filter('acmarche_volontariat_thumb') }}"
-                     alt="{{ volontaire.photoName }}">
+                     src="{{ vich_uploader_asset(volontaire, 'image') | imagine_filter('acmarche_volontariat_thumb') }}"
+                     alt="{{ volontaire.imageName }}">
             {% endif %}
 
             {% if volontaire.description %}

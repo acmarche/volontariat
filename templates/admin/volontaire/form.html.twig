@@ -15,15 +15,6 @@
 
         <div class="row">
             <div class="col-md-6">
-                {{ form_row(form.address) }}
-            </div>
-            <div class="col-md-6">
-                {{ form_row(form.number) }}
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6">
                 {{ form_row(form.postalCode) }}
             </div>
             <div class="col-md-6">
@@ -36,29 +27,34 @@
                 {{ form_row(form.mobile) }}
             </div>
             <div class="col-md-6">
-                {{ form_row(form.birthday) }}
+                {{ form_row(form.birthyear) }}
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-6">
-                {{ form_row(form.description) }}
-            </div>
-        </div>
+        {{ form_row(form.description) }}
 
         <div class="row">
             <div class="col-md-6">
                 {{ form_row(form.email) }}
             </div>
         </div>
-
-        {{ form_row(form.photo) }}
+        {{ form_row(form.image) }}
     </div>
 
     <div class="col-md-6">
         {{ form_row(form.secteurs) }}
     </div>
 </div>
+
+<div class="row">
+    <div class="col-md-6">
+        {{ form_row(form.notification_new_association) }}
+    </div>
+    <div class="col-md-6">
+        {{ form_row(form.notification_message_association) }}
+    </div>
+</div>
+
 {{ form_row(form.inactif) }}
 <button type="submit" name="save" class="btn btn-primary my-1 mr-sm-2 mb-3">
     <i class="fas fa-save"></i> Sauvegarder

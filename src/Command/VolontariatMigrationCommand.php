@@ -52,8 +52,8 @@ class VolontariatMigrationCommand extends Command
             }
             $volontaire->setUuid($volontaire->generateUuid());
         }
-
         $this->associationRepository->flush();
+        return Command::SUCCESS;
 
         foreach ($this->userRepository->findAll() as $user) {
             $volontaires = $this->volontaireRepository->search(['user' => $user]);
@@ -65,7 +65,8 @@ class VolontariatMigrationCommand extends Command
                 $association->user = $user;
             }
         }
-        // $this->associationRepository->flush();
+
+        $this->associationRepository->flush();
         $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
 
         return Command::SUCCESS;

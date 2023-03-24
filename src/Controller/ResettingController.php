@@ -30,9 +30,10 @@ class ResettingController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user = $this->userRepository->findOneByEmail($form->getData()->getEmail());
+            $user = $this->userRepository->findOneByEmail($form->getData()->email);
             if (null === $user) {
                 $this->addFlash('danger', 'Aucun utilisateur trouvé avec cette adresse mail');
+                sleep(4);
 
                 return $this->redirectToRoute('volontariat_password_lost');
             }
@@ -47,7 +48,7 @@ class ResettingController extends AbstractController
                 $this->addFlash('danger', $e->getMessage());
             }
 
-            return $this->redirectToRoute('volontariat_password_confirmation');
+            return $this->redirectToRoute('volontariat_home');
         }
 
         return $this->render(

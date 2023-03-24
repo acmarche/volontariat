@@ -1,0 +1,38 @@
+{% extends '@Volontariat/base.html.twig' %}
+{% block title %}{{ besoin }}{% endblock %}
+{% block body %}
+    <div class="overflow-hidden bg-white shadow sm:rounded-md">
+        <div class="md:flex md:items-center md:justify-between">
+            <div class="min-w-0 flex-1">
+                <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+                    {{ besoin }}
+                </h2>
+            </div>
+        </div>
+        <div class="border-b border-gray-200 bg-white px-4 py-5 sm:px-6">
+            <p class="mt-1 text-sm text-gray-500">
+                {{ besoin.requirement|nl2br }}
+            </p>
+        </div>
+
+        <p class=" g-pl-90">
+            Pour <a href="{{ path('volontariat_association_show',{'id': association.id}) }}">{{ association }}</a>
+        </p>
+
+        <h4>Quand ?</h4>
+        {% if besoin.dateBegin %}
+            Du {{ besoin.dateBegin | date('d-m-Y') }}
+        {% endif %}
+
+        {% if besoin.dateEnd %}
+            au {{ besoin.dateEnd | date('d-m-Y') }}
+        {% endif %}
+
+        <h4>Période</h4>
+        {{ besoin.period | nl2br }}
+
+        <h4> Lieu de prestation</h4>
+        {{ besoin.place | nl2br }}
+
+    </div>
+{% endblock %}

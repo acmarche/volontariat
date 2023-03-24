@@ -4,20 +4,12 @@ namespace AcMarche\Volontariat\Entity;
 
 use AcMarche\Volontariat\Repository\BesoinRepository;
 use DateTime;
-use DateTimeImmutable;
-use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
-use Stringable;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * Besoin
- *
- *
- */
 #[ORM\Table(name: 'besoin')]
 #[ORM\Entity(repositoryClass: BesoinRepository::class)]
-class Besoin implements Stringable
+class Besoin implements \Stringable
 {
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
@@ -30,26 +22,26 @@ class Besoin implements Stringable
     protected ?string $name;
 
     #[ORM\Column(type: 'datetime')]
-    #[Assert\Type(DateTime::class)]
-    protected ?DateTimeInterface $date_begin;
+    #[Assert\Type(\DateTime::class)]
+    protected ?\DateTimeInterface $date_begin;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    #[Assert\Type(DateTime::class)]
-    protected ?DateTimeInterface $date_end;
+    #[Assert\Type(\DateTime::class)]
+    protected ?\DateTimeInterface $date_end;
     /**
-     * Description
+     * Description.
      */
     #[ORM\Column(type: 'text')]
     #[Assert\NotBlank]
     protected ?string $requirement;
     /**
-     * quand
+     * quand.
      */
     #[ORM\Column(type: 'text')]
     #[Assert\NotBlank]
     protected ?string $period;
     /**
-     * lieu
+     * lieu.
      */
     #[ORM\Column(type: 'text')]
     #[Assert\NotBlank]
@@ -63,12 +55,7 @@ class Besoin implements Stringable
     {
         return $this->getName();
     }
-    /**
-     * STOP
-     */
-    /**
-     * Get id.
-     */
+
     public function getId(): ?int
     {
         return $this->id;
@@ -97,9 +84,9 @@ class Besoin implements Stringable
     /**
      * Set dateBegin.
      *
-     * @param DateTime $dateBegin
+     * @param \DateTime $dateBegin
      */
-    public function setDateBegin(DateTimeInterface $dateBegin): static
+    public function setDateBegin(\DateTimeInterface $dateBegin): static
     {
         $this->date_begin = $dateBegin;
 
@@ -109,7 +96,7 @@ class Besoin implements Stringable
     /**
      * Get dateBegin.
      *
-     * @return DateTime|DateTimeImmutable|null
+     * @return \DateTime|\DateTimeImmutable|null
      */
     public function getDateBegin(): ?\DateTimeInterface
     {
@@ -118,10 +105,8 @@ class Besoin implements Stringable
 
     /**
      * Set dateEnd.
-     *
-     *
      */
-    public function setDateEnd(DateTime|DateTimeImmutable $dateEnd = null): static
+    public function setDateEnd(\DateTime|\DateTimeImmutable $dateEnd = null): static
     {
         $this->date_end = $dateEnd;
 
@@ -131,7 +116,7 @@ class Besoin implements Stringable
     /**
      * Get dateEnd.
      *
-     * @return DateTime|DateTimeImmutable|null
+     * @return \DateTime|\DateTimeImmutable|null
      */
     public function getDateEnd(): ?\DateTimeInterface
     {
@@ -200,8 +185,6 @@ class Besoin implements Stringable
 
     /**
      * Set association.
-     *
-     *
      */
     public function setAssociation(Association $association): static
     {

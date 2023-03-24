@@ -1,0 +1,50 @@
+{% extends '@Volontariat/base.html.twig' %}
+{% block title %}Les secteurs d'activités{% endblock %}
+{% block body %}
+    <div class="overflow-hidden bg-white shadow sm:rounded-md">
+        <div class="md:flex md:items-center md:justify-between">
+            <div class="min-w-0 flex-1">
+                <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+                    Liste des secteurs d'activités
+                </h2>
+            </div>
+        </div>
+        <div class="border-b border-gray-200 bg-white px-4 py-5 sm:px-6">
+            <p class="mt-1 text-sm text-gray-500">
+                Cliquez sur un des secteurs pour découvrir quelles associations ont choisi celui-ci.
+            </p>
+        </div>
+        <ul role="list" class="divide-y divide-gray-200">
+            {% for secteur in secteurs %}
+                <li>
+                    <a href="{{ path('volontariat_secteur_show', {'id': secteur.id}) }}" class="block hover:bg-gray-50">
+                        <div class="flex items-center px-4 py-4 sm:px-6">
+                            <div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
+                                <div class="truncate">
+                                    <div class="flex text-sm">
+                                        <p class="truncate font-medium text-green-default">{{ secteur.name }}</p>
+                                    </div>
+                                    <div class="mt-2 flex">
+                                        <div class="flex items-center text-sm text-gray-500">
+                                            <p>
+                                                {{ secteur.description }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ml-5 flex-shrink-0">
+                                <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"
+                                     aria-hidden="true">
+                                    <path fill-rule="evenodd"
+                                          d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                                          clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

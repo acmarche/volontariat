@@ -74,26 +74,38 @@ class MailerSecurity
         $this->mailer->send($email);
     }
 
-    public function sendRequestNewPassword(User $user): void
+    /**
+     * @param User $user
+     * @param Token $token
+     * @return void
+     * @throws TransportExceptionInterface
+     */
+    public function sendRequestNewPassword(User $user, Token $token): void
     {
-        $body = $this->twig->render(
-            '@Volontariat/security/resetting/email.txt.twig',
-            [
-                'user' => $user,
-            ]
-        );
+        $email = (new TemplatedEmail())
+            ->from($this->from)
+            ->to(new Address($user->email))
+            ->subject('Demande de changement de mot de passe sur la plate-forme du volontariat')
+            ->htmlTemplate('@Volontariat/emails/_lost_password.html.twig')
+            ->context(
+                array_merge($this->defaultParams(), [
+                    'user' => $user,
+                    'token' => $token->getValue(),
+                ])
+            );
 
-        $sujet = "Volontariat, demande d'un nouveau mot de passe";
-
-        $this->send($this->from, $user->email, $sujet, $body);
+        $this->mailer->send($email);
     }
 
     public function sendError(string $sujet, string $body): void
     {
-        $to = 'jf@marche.be';
-
+        $email = (new TemplatedEmail())
+            ->from($this->from)
+            ->to(new Address('jf@marche.be'))
+            ->subject($sujet)
+            ->setBody($body);
         try {
-            $this->send($this->from, $to, $sujet, $body);
+            $this->mailer->send($email);
         } catch (TransportException $e) {
         }
     }

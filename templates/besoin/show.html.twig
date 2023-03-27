@@ -15,11 +15,11 @@
             </p>
         </div>
 
-        <p class=" g-pl-90">
-            Pour <a href="{{ path('volontariat_association_show',{'slug': association.slug}) }}">{{ association }}</a>
+        <p class="m-3">
+            Pour l'association <a href="{{ path('volontariat_association_show',{'slug': association.slug}) }}">{{ association }}</a>
         </p>
 
-        <h4>Quand ?</h4>
+        <h4 class="text-lg text-green-default font-bold mt-3">Quand ?</h4>
         {% if besoin.dateBegin %}
             Du {{ besoin.dateBegin | date('d-m-Y') }}
         {% endif %}
@@ -28,11 +28,15 @@
             au {{ besoin.dateEnd | date('d-m-Y') }}
         {% endif %}
 
-        <h4>Période</h4>
-        {{ besoin.period | nl2br }}
+        {% if besoin.period %}
+            <h4 class="text-lg text-green-default font-bold mt-3">Période</h4>
+            {{ besoin.period | nl2br }}
+        {% endif %}
 
-        <h4> Lieu de prestation</h4>
-        {{ besoin.place | nl2br }}
+        {% if besoin.place %}
+            <h4 class="text-lg text-green-default font-bold mt-3">Lieu de prestation</h4>
+            {{ besoin.place | nl2br }}
+        {% endif %}
 
     </div>
 {% endblock %}

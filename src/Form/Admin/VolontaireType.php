@@ -86,7 +86,7 @@ class VolontaireType extends AbstractType
                 CheckboxType::class,
                 [
                     'label' => 'Nouvelle association',
-                    'help' => 'Lorsqu\'une association s\'est inscrite',
+                    'help' => 'Être notifié lorsqu\'une association s\'est inscrite',
                     'required' => false,
                 ]
             )
@@ -94,8 +94,8 @@ class VolontaireType extends AbstractType
                 'notification_message_association',
                 CheckboxType::class,
                 [
-                    'label' => 'Soliciation Asbl',
-                    'help' => 'Lorsqu\'une association envoie un message',
+                    'label' => 'Solliciation Asbl',
+                    'help' => 'Être notifié lorsqu\'une association envoie un message',
                     'required' => false,
                 ]
             );

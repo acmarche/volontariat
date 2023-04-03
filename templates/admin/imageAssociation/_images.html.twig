@@ -1,7 +1,7 @@
 <h3 class="text-success mt-3">Image(s) actuelle(s)</h3>
 
-<form method="post" action="{{ path('volontariat_admin_page_image_delete', {'id': page.id}) }}">
-    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ page.id) }}">
+<form method="post" action="{{ path('volontariat_admin_image_association_delete', {'id': association.id}) }}">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ association.id) }}">
 
     <div class="d-flex flex-row gap-2">
         {% for image in images %}

@@ -12,12 +12,14 @@
                 <thead>
                 <tr>
                     <th>Nom</th>
+                    <th>Actu ?</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for page in pages %}
                     <tr>
                         <td><a href="{{ path('volontariat_admin_page_show', { 'id': page.id }) }}">{{ page }}</a></td>
+                        <td>{{ page.actualite ? 'Oui' : 'Non' }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

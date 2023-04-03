@@ -23,7 +23,7 @@ class ImagePageController extends AbstractController
     }
 
     #[Route(path: '/new/{id}', name: 'volontariat_admin_page_image_edit', methods: ['GET', 'POST'])]
-    public function editaction(Request $request, Page $page): Response
+    public function edit(Request $request, Page $page): Response
     {
         $form = $this->createForm(ImageDropZoneType::class);
 

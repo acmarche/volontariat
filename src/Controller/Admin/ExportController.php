@@ -26,7 +26,7 @@ class ExportController extends AbstractController
     {
     }
     #[Route(path: '/volontaire/xls', name: 'volontariat_admin_volontaire_xls', methods: ['GET'])]
-    public function volontaireXlsaction(Request $request) : StreamedResponse
+    public function volontaireXls(Request $request) : StreamedResponse
     {
         $spreadsheet = new Spreadsheet();
         $this->volontaireXSLObject($request, $spreadsheet);

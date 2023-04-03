@@ -39,7 +39,7 @@ class BesoinController extends AbstractController
 
     #[Route(path: '/new/{id}', name: 'volontariat_backend_besoin_new', methods: ['GET', 'POST'])]
     #[IsGranted('edit', subject: 'association')]
-    public function newaction(Request $request, Association $association) : Response
+    public function new(Request $request, Association $association) : Response
     {
         $besoin = new Besoin();
         $besoin->setAssociation($association);
@@ -70,7 +70,7 @@ class BesoinController extends AbstractController
 
     #[Route(path: '/{id}/edit', name: 'volontariat_backend_besoin_edit')]
     #[IsGranted('edit', subject: 'besoin')]
-    public function editaction(Request $request, Besoin $besoin) : Response
+    public function edit(Request $request, Besoin $besoin) : Response
     {
         $em = $this->managerRegistry->getManager();
         $form = $this->createForm(BesoinType::class, $besoin)
@@ -94,7 +94,7 @@ class BesoinController extends AbstractController
     }
 
     #[Route(path: '/delete', name: 'volontariat_backend_besoin_delete', methods: ['DELETE'])]
-    public function deleteaction(Request $request) : RedirectResponse
+    public function delete(Request $request) : RedirectResponse
     {
         $association = null;
         $em = $this->managerRegistry->getManager();
@@ -123,7 +123,7 @@ class BesoinController extends AbstractController
     private function createDeleteForm(): FormInterface
     {
         return $this->createFormBuilder()
-            ->setaction($this->generateUrl('volontariat_backend_besoin_delete'))
+            ->set($this->generateUrl('volontariat_backend_besoin_delete'))
             ->setMethod(Request::METHOD_DELETE)
             ->getForm();
     }

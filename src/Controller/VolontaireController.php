@@ -23,7 +23,7 @@ class VolontaireController extends AbstractController
     }
 
     #[Route(path: '/', name: 'volontariat_volontaire')]
-    public function indexaction(Request $request): Response
+    public function index(Request $request): Response
     {
         $data = [];
         $search_form = $this->createForm(SearchVolontaireType::class, $data);
@@ -52,7 +52,7 @@ class VolontaireController extends AbstractController
     }
 
     #[Route(path: '/{uuid}', name: 'volontariat_volontaire_show')]
-    public function showaction(Volontaire $volontaire): Response
+    public function show(Volontaire $volontaire): Response
     {
         if (!$this->authorizationChecker->isGranted('show', $volontaire)) {
             return $this->render(

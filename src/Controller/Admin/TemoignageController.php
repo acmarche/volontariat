@@ -92,7 +92,7 @@ class TemoignageController extends AbstractController
     }
 
     #[Route(path: '/{id}/delete', name: 'volontariat_admin_temoignage_delete', methods: ['DELETE'])]
-    public function deleteaction(Temoignage $temoignage, Request $request) : RedirectResponse
+    public function delete(Temoignage $temoignage, Request $request) : RedirectResponse
     {
         $form = $this->createDeleteForm($temoignage);
         $form->handleRequest($request);
@@ -109,7 +109,7 @@ class TemoignageController extends AbstractController
     private function createDeleteForm(Temoignage $temoignage): FormInterface
     {
         return $this->createFormBuilder()
-            ->setaction(
+            ->set(
                 $this->generateUrl('volontariat_admin_temoignage_delete', array('id' => $temoignage->getId()))
             )
             ->setMethod(Request::METHOD_DELETE)

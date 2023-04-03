@@ -25,7 +25,7 @@ class AssociationController extends AbstractController
     }
 
     #[Route(path: '/', name: 'volontariat_admin_association', methods: ['GET', 'POST'])]
-    public function indexaction(Request $request): Response
+    public function index(Request $request): Response
     {
         $data = [];
         $data['valider'] = 2;
@@ -51,7 +51,7 @@ class AssociationController extends AbstractController
     }
 
     #[Route(path: '/new', name: 'volontariat_admin_association_new', methods: ['GET', 'POST'])]
-    public function newaction(Request $request): Response
+    public function new(Request $request): Response
     {
         $association = new Association();
         $form = $this->createForm(AssocationType::class, $association);
@@ -76,7 +76,7 @@ class AssociationController extends AbstractController
     }
 
     #[Route(path: '/{id}/show', name: 'volontariat_admin_association_show')]
-    public function showaction(Association $association): Response
+    public function show(Association $association): Response
     {
         $images = $this->fileHelper->getImages($association);
 
@@ -90,7 +90,7 @@ class AssociationController extends AbstractController
     }
 
     #[Route(path: '/{id}/edit', name: 'volontariat_admin_association_edit')]
-    public function editaction(Request $request, Association $association): Response
+    public function edit(Request $request, Association $association): Response
     {
         $form = $this->createForm(AssocationType::class, $association);
 

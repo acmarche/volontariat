@@ -23,7 +23,7 @@ class ActiviteController extends AbstractController
      * @param FileHelper $this ->fileHelper
      */
     #[Route(path: '/', name: 'volontariat_activite')]
-    public function indexaction() : Response
+    public function index() : Response
     {
         $em = $this->managerRegistry->getManager();
         $activites = $em->getRepository(Activite::class)->findAll();
@@ -40,7 +40,7 @@ class ActiviteController extends AbstractController
      *
      */
     #[Route(path: '/{id}', name: 'volontariat_activite_show', methods: ['GET'])]
-    public function showaction(Activite $activite) : Response
+    public function show(Activite $activite) : Response
     {
         $images = $this->fileHelper->getImages($activite);
         return $this->render('@Volontariat/activite/show.html.twig', array(

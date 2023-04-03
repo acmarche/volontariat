@@ -25,10 +25,10 @@ class ImageActiviteController extends AbstractController
 
     #[Route(path: '/new/{id}', name: 'volontariat_backend_image_activite', methods: ['GET'])]
     #[IsGranted('edit', subject: 'activite')]
-    public function editaction(Activite $activite): Response
+    public function edit(Activite $activite): Response
     {
         $form = $this->createFormBuilder()
-            ->setaction(
+            ->set(
                 $this->generateUrl('volontariat_backend_image_activite_upload', array('id' => $activite->getId()))
             )
             ->setMethod(Request::METHOD_POST)
@@ -51,7 +51,7 @@ class ImageActiviteController extends AbstractController
 
     #[Route(path: '/upload/{id}', name: 'volontariat_backend_image_activite_upload', methods: ['POST'])]
     #[IsGranted('edit', subject: 'activite')]
-    public function uploadaction(Request $request, Activite $activite): Response
+    public function upload(Request $request, Activite $activite): Response
     {
         if ($request->isXmlHttpRequest()) {
             $file = $request->files->get('file');
@@ -74,7 +74,7 @@ class ImageActiviteController extends AbstractController
 
     #[Route(path: '/delete/{id}', name: 'volontariat_backend_image_activite_delete', methods: ['DELETE'])]
     #[IsGranted('edit', subject: 'activite')]
-    public function deleteaction(Request $request, Activite $activite): RedirectResponse
+    public function delete(Request $request, Activite $activite): RedirectResponse
     {
         $form = $this->createDeleteForm($activite->getId());
         $form->handleRequest($request);
@@ -103,7 +103,7 @@ class ImageActiviteController extends AbstractController
     private function createDeleteForm($id): FormInterface
     {
         return $this->createFormBuilder()
-            ->setaction($this->generateUrl('volontariat_backend_image_activite_delete', array('id' => $id)))
+            ->set($this->generateUrl('volontariat_backend_image_activite_delete', array('id' => $id)))
             ->setMethod(Request::METHOD_DELETE)
             ->add(
                 'submit',

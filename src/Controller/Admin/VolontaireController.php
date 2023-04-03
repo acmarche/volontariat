@@ -25,7 +25,7 @@ class VolontaireController extends AbstractController
     }
 
     #[Route(path: '/', name: 'volontariat_admin_volontaire')]
-    public function indexaction(Request $request): Response
+    public function index(Request $request): Response
     {
         $data = [];
         $data['valider'] = 2;
@@ -48,7 +48,7 @@ class VolontaireController extends AbstractController
     }
 
     #[Route(path: '/new', name: 'volontariat_admin_volontaire_new', methods: ['GET', 'POST'])]
-    public function newaction(Request $request): Response
+    public function new(Request $request): Response
     {
         $volontaire = new Volontaire();
         $form = $this->createForm(VolontaireType::class, $volontaire);
@@ -75,7 +75,7 @@ class VolontaireController extends AbstractController
     }
 
     #[Route(path: '/{id}/show', name: 'volontariat_admin_volontaire_show')]
-    public function showaction(Volontaire $volontaire): Response
+    public function show(Volontaire $volontaire): Response
     {
         return $this->render(
             '@Volontariat/admin/volontaire/show.html.twig',
@@ -86,7 +86,7 @@ class VolontaireController extends AbstractController
     }
 
     #[Route(path: '/{id}/edit', name: 'volontariat_admin_volontaire_edit')]
-    public function editaction(Request $request, Volontaire $volontaire): Response
+    public function edit(Request $request, Volontaire $volontaire): Response
     {
         $form = $this->createForm(VolontaireType::class, $volontaire);
 

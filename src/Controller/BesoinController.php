@@ -16,7 +16,7 @@ class BesoinController extends AbstractController
     }
 
     #[Route(path: '/', name: 'volontariat_besoin')]
-    public function indexaction(): Response
+    public function index(): Response
     {
         $besoins = $this->besoinRepository->findAll();
 
@@ -29,7 +29,7 @@ class BesoinController extends AbstractController
     }
 
     #[Route(path: '/{id}', name: 'volontariat_besoin_show', methods: ['GET'])]
-    public function showaction(Besoin $besoin): Response
+    public function show(Besoin $besoin): Response
     {
         return $this->render(
             '@Volontariat/besoin/show.html.twig',

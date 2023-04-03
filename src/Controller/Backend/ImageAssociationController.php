@@ -25,10 +25,10 @@ class ImageAssociationController extends AbstractController
 
     #[Route(path: '/{id}', name: 'volontariat_backend_images_association', methods: ['GET'])]
     #[IsGranted('edit', subject: 'association')]
-    public function editaction(Association $association): Response
+    public function edit(Association $association): Response
     {
         $form = $this->createFormBuilder()
-            ->setaction($this->generateUrl('volontariat_backend_image_upload', array('id' => $association->getId())))
+            ->set($this->generateUrl('volontariat_backend_image_upload', array('id' => $association->getId())))
             ->setMethod(Request::METHOD_POST)
             ->getForm();
         $images = $this->fileHelper->getImages($association);
@@ -47,7 +47,7 @@ class ImageAssociationController extends AbstractController
 
     #[Route(path: '/upload/{id}', name: 'volontariat_backend_image_upload', methods: ['POST'])]
     #[IsGranted('edit', subject: 'association')]
-    public function uploadaction(Request $request, Association $association): Response
+    public function upload(Request $request, Association $association): Response
     {
         if ($request->isXmlHttpRequest()) {
             $file = $request->files->get('file');
@@ -70,7 +70,7 @@ class ImageAssociationController extends AbstractController
 
     #[Route(path: '/delete/{id}', name: 'volontariat_backend_image_delete', methods: ['DELETE'])]
     #[IsGranted('edit', subject: 'association')]
-    public function deleteaction(Request $request, Association $association): RedirectResponse
+    public function delete(Request $request, Association $association): RedirectResponse
     {
         $form = $this->createDeleteForm($association->getId());
         $form->handleRequest($request);
@@ -102,7 +102,7 @@ class ImageAssociationController extends AbstractController
     private function createDeleteForm($id): FormInterface
     {
         return $this->createFormBuilder()
-            ->setaction($this->generateUrl('volontariat_backend_image_delete', array('id' => $id)))
+            ->set($this->generateUrl('volontariat_backend_image_delete', array('id' => $id)))
             ->setMethod(Request::METHOD_DELETE)
             ->add(
                 'submit',

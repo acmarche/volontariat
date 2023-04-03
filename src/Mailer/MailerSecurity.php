@@ -85,7 +85,7 @@ class MailerSecurity
         $email = (new TemplatedEmail())
             ->from($this->from)
             ->to(new Address($user->email))
-            ->subject('Demande de changement de mot de passe sur la plate-forme du volontariat')
+            ->subject('Lien de connection sur la plate-forme du volontariat')
             ->htmlTemplate('@Volontariat/emails/_lost_password.html.twig')
             ->context(
                 array_merge($this->defaultParams(), [

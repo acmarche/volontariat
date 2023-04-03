@@ -1,41 +1,25 @@
 {% extends '@Volontariat/admin/base.html.twig' %}
 
-{% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('bundles/volontariat/dropzone/dropzone.css') }}">
-{% endblock %}
-
 {% block body %}
 
-    <h3>Gestion des images pour {{ activite }}</h3>
+    <div class="card">
+        <h3 class="card-header">Gestion des images pour {{ activite }}</h3>
+        <div class="card-body">
 
-    <a href="{{ path('volontariat_admin_activite_show', { 'id': activite.id }) }}" class="btn btn-primary"
-       role="button"><i class="fas fa-list"></i> Retour à l' activité</a>
+            <a href="{{ path('volontariat_admin_activite_show', { 'id': activite.id }) }}" class="btn btn-primary"
+               role="button"><i class="fas fa-list"></i> Retour à l' activité</a>
 
-    {{ form_start(form, { 'attr': {'id': 'formdrop','class': 'well dropzone'}}) }}
-    {{ form_errors(form) }}
-    {{ form_end(form) }}
+            {{ form_start(form, { 'attr': {'id': 'formdrop','class': 'well dropzone'}}) }}
+            {{ form_errors(form) }}
+            {{ form_end(form) }}
 
-    {% if images | length > 0 %}
-        {% include "@Volontariat/admin/imagePage/_images.html.twig" %}
-    {% else %}
-        <p class="text-warning">Aucune image actuellement</p>
-    {% endif %}
+            {% if images | length > 0 %}
+                {% include "@Volontariat/admin/imagePage/_images.html.twig" %}
+            {% else %}
+                <p class="text-warning">Aucune image actuellement</p>
+            {% endif %}
 
-    <br/>
+        </div>
+    </div>
 
 {% endblock %}
-
-{% block javascripts %}
-    <script src="{{ asset('bundles/volontariat/dropzone/dropzone.js') }}"></script>
-    <script type="text/javascript">
-        Dropzone.options.formdrop = {
-            dictDefaultMessage: "Glissez ici vos images ou cliquez sur cette zone pour ajouter des photos",
-            init: function () {
-                this.on("addedfile", function (file) {
-                    console.log("finished");
-                });
-            }
-        };
-    </script>
-{% endblock %}
-

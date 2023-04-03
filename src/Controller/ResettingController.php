@@ -33,7 +33,7 @@ class ResettingController extends AbstractController
             $user = $this->userRepository->findOneByEmail($form->getData()->email);
             if (null === $user) {
                 $this->addFlash('danger', 'Aucun utilisateur trouvé avec cette adresse mail');
-                sleep(4);
+                sleep(3);
 
                 return $this->redirectToRoute('volontariat_password_lost');
             }

@@ -1,22 +1,31 @@
-{{ form_start(form_delete) }}
-{{ form_errors(form_delete) }}
-{{ form_row(form_delete.submit) }}
+<h3 class="text-success mt-3">Image(s) actuelle(s)</h3>
 
-{% for image in images %}
-    <div class="float-left center-block" style="margin: 10px; outline: 1px #28ff3d solid;">
-        <p class="text-center">
-            <label>
-                <input type="checkbox" name="img[]" value="{{ image.name }}"/>
-            </label>
-        </p>
-        <a href="{{ image.url }}" title="{{ image.name }}" data-gallery>
-            {% if 'image' in image.mime %}
-                <img src="{{ image.url | imagine_filter('acmarche_volontariat_edit_thumb') }}" alt="img"
-                     class="img-thumbnail"/>
-            {% else %}
-                {{ image.name }}
-            {% endif %}
-        </a>
+<form method="post" action="{{ path('volontariat_admin_page_image_delete', {'id': page.id}) }}">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ page.id) }}">
+
+    <div class="d-flex flex-row">
+        {% for image in images %}
+            <div class="">
+                <p class="text-center">
+                    <label>
+                        <input type="checkbox" name="img[]" value="{{ image.name }}"/>
+                    </label>
+                </p>
+                <a href="{{ image.url }}" title="{{ image.name }}" data-gallery>
+                    {% if 'image' in image.mime %}
+                        <img src="{{ image.url | imagine_filter('acmarche_volontariat_edit_thumb') }}" alt="img"
+                             class="img-thumbnail"/>
+                    {% else %}
+                        {{ image.name }}
+                    {% endif %}
+                </a>
+            </div>
+        {% endfor %}
     </div>
-{% endfor %}
-{{ form_end(form_delete) }}
+
+    <button type="submit" class="btn btn-danger btn-sm">
+        <i class="fas fa-trash"></i>
+        Supprimer les images sélectionnées
+    </button>
+
+</form>

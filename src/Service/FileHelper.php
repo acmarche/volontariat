@@ -45,7 +45,7 @@ class FileHelper
     public function getFiles(Uploadable $uploadable): array
     {
         $finder = new Finder();
-        $files = array();
+        $files = [];
         $directory = $this->getUploadPath($uploadable);
         $webDirectory = $this->getDownloadPath($uploadable);
 
@@ -54,7 +54,7 @@ class FileHelper
             $i = 1;
 
             foreach ($finder as $file) {
-                $f = array();
+                $f = [];
 
                 $name = $file->getFilename();
                 $url = $webDirectory.$name;
@@ -65,8 +65,8 @@ class FileHelper
                 $f['name'] = $name;
                 $f['url'] = $url;
                 $f['mime'] = $mime;
-                $f['i'] = $i; //pour id zoom
-                $i++;
+                $f['i'] = $i; // pour id zoom
+                ++$i;
 
                 $files[] = $f;
             }
@@ -79,7 +79,7 @@ class FileHelper
     {
         $files = $this->getFiles($uploadable);
         foreach ($files as $i => $file) {
-            if (!preg_match('#image#', $file['mime'])) {
+            if (!str_contains($file['mime'], 'image')) {
                 unset($files[$i]);
             }
         }
@@ -92,7 +92,7 @@ class FileHelper
         $files = $this->getFiles($uploadable);
 
         foreach ($files as $i => $file) {
-            if (preg_match('#image#', $file['mime'])) {
+            if (str_contains($file['mime'], 'image')) {
                 unset($files[$i]);
             }
         }
@@ -127,7 +127,7 @@ class FileHelper
     protected function makePath(Uploadable $uploadable): string
     {
         return DIRECTORY_SEPARATOR.$uploadable->getPath().$this->directorySeparator.$uploadable->getId(
-            ).$this->directorySeparator;
+        ).$this->directorySeparator;
     }
 
     public function getUploadPath(Uploadable $uploadable): string

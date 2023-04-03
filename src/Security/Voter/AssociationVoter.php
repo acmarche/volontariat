@@ -4,6 +4,7 @@ namespace AcMarche\Volontariat\Security\Voter;
 
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Security\User;
+use AcMarche\Volontariat\Repository\AssociationRepository;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -24,14 +25,16 @@ class AssociationVoter extends Voter
     public const EDIT = 'edit';
     public const DELETE = 'delete';
 
-    public function __construct(private AccessDecisionManagerInterface $decisionManager)
-    {
+    public function __construct(
+        private AccessDecisionManagerInterface $decisionManager,
+        private AssociationRepository $associationRepository
+    ) {
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function supports($attribute, $subject):bool
+    protected function supports($attribute, $subject): bool
     {
         // this voter is only executed for three specific permissions on Post objects
         return $subject instanceof Association && in_array($attribute, [self::SHOW, self::EDIT, self::DELETE]);
@@ -40,7 +43,7 @@ class AssociationVoter extends Voter
     /**
      * {@inheritdoc}
      */
-    protected function voteOnAttribute($attribute, $association, TokenInterface $token):bool
+    protected function voteOnAttribute($attribute, $association, TokenInterface $token): bool
     {
         $user = $token->getUser();
 
@@ -51,6 +54,7 @@ class AssociationVoter extends Voter
         if ($this->decisionManager->decide($token, ['ROLE_VOLONTARIAT_ADMIN'])) {
             return true;
         }
+
         return match ($attribute) {
             self::SHOW => $this->canView($association, $token),
             self::EDIT => $this->canEdit($association, $token),
@@ -60,40 +64,47 @@ class AssociationVoter extends Voter
     }
 
     /**
-     * Voir dans l'admin
+     * Voir dans l'admin.
      */
     private function canView(Association $association, TokenInterface $token): bool
     {
-        return (bool) $this->canEdit($association, $token);
+        return (bool)$this->canEdit($association, $token);
     }
 
     private function canEdit(Association $association, TokenInterface $token): bool
     {
         $user = $token->getUser();
 
-        return $user === $association->getUser();
+        return $user === $association->user;
     }
 
     private function canDelete(Association $association, TokenInterface $token): bool
     {
-        return (bool) $this->canEdit($association, $token);
+        return (bool)$this->canEdit($association, $token);
     }
 
-      protected function canAccess(): bool
+    protected function canAccess(TokenInterface $token): bool
     {
         $user = $this->getUser();
         if ($user->hasRole('ROLE_VOLONTARIAT_ADMIN')) {
             return true;
         }
 
-        return $this->hasValidAssociation($user);
+        return $this->hasValidAssociation($user, $token);
     }
 
-     public function hasValidAssociation(User $user): bool
+    public function hasValidAssociation(User $user, TokenInterface $token): bool
     {
-        return $this->authorizationChecker->isGranted('ROLE_VOLONTARIAT') && $this->associationRepository->getAssociationsByUser($user,true)(
-                $user,
-                true
-            ) !== [];
+        if (!$this->decisionManager->decide($token, ['ROLE_VOLONTARIAT'])) {
+            return false;
+        }
+
+        $user = $token->getUser();
+        $association = $this->associationRepository->getAssociationsByUser($user, true);
+        if ($association) {
+            return true;
+        }
+
+        return false;
     }
 }

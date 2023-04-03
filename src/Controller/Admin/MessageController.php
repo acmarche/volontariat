@@ -26,7 +26,7 @@ class MessageController extends AbstractController
     }
 
     #[Route(path: '/', name: 'volontariat_admin_message')]
-    public function indexAction(): Response
+    public function indexaction(): Response
     {
         $em = $this->managerRegistry->getManager();
         $messages = [];
@@ -48,7 +48,7 @@ class MessageController extends AbstractController
     }
 
     #[Route(path: '/new/{query}', name: 'volontariat_admin_message_new')]
-    public function newAction(Request $request, $query = null): Response
+    public function newaction(Request $request, $query = null): Response
     {
         $message = new Message();
         $form = $this->createForm(

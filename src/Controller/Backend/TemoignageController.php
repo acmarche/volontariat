@@ -127,7 +127,7 @@ class TemoignageController extends AbstractController
     private function createDeleteForm(): FormInterface
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('volontariat_backend_temoignage_delete'))
+            ->setaction($this->generateUrl('volontariat_backend_temoignage_delete'))
             ->setMethod(Request::METHOD_DELETE)
             ->getForm();
     }

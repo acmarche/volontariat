@@ -26,7 +26,7 @@ class ActiviteController extends AbstractController
     }
 
     #[Route(path: '/index/{id}', name: 'volontariat_backend_activite', methods: ['GET'])]
-    public function indexAction(Association $association) : Response
+    public function indexaction(Association $association) : Response
     {
         $formDelete = $this->createDeleteForm();
         return $this->render('@Volontariat/backend/activite/index.html.twig', array(
@@ -68,7 +68,7 @@ class ActiviteController extends AbstractController
 
     #[Route(path: '/{id}/edit', name: 'volontariat_backend_activite_edit', methods: ['GET', 'POST'])]
     #[IsGranted('edit', subject: 'activite')]
-    public function editAction(Request $request, Activite $activite) : Response
+    public function editaction(Request $request, Activite $activite) : Response
     {
         $em = $this->managerRegistry->getManager();
         $editForm = $this->createForm(ActiviteType::class, $activite)
@@ -90,7 +90,7 @@ class ActiviteController extends AbstractController
     }
 
     #[Route(path: '/', name: 'volontariat_backend_activite_delete', methods: ['DELETE'])]
-    public function deleteAction(Request $request) : RedirectResponse
+    public function deleteaction(Request $request) : RedirectResponse
     {
         $association = null;
         $em = $this->managerRegistry->getManager();
@@ -118,7 +118,7 @@ class ActiviteController extends AbstractController
     private function createDeleteForm(): FormInterface
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('volontariat_backend_activite_delete'))
+            ->setaction($this->generateUrl('volontariat_backend_activite_delete'))
             ->setMethod(Request::METHOD_DELETE)
             ->getForm();
     }

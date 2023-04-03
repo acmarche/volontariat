@@ -23,7 +23,7 @@ class AssociationController extends AbstractController
     }
 
     #[Route(path: '/{id}/edit', name: 'volontariat_backend_association_edit')]
-    public function editAction(Request $request, Association $association): Response
+    public function editaction(Request $request, Association $association): Response
     {
         $form = $this->createForm(AssociationPublicType::class, $association);
 

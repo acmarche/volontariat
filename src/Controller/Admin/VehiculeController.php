@@ -25,7 +25,7 @@ class VehiculeController extends AbstractController
     }
 
     #[Route(path: '/', name: 'volontariat_admin_vehicule', methods: ['GET'])]
-    public function indexAction() : Response
+    public function indexaction() : Response
     {
         $em = $this->managerRegistry->getManager();
         $entities = $em->getRepository(Vehicule::class)->findAll();
@@ -38,7 +38,7 @@ class VehiculeController extends AbstractController
     }
 
     #[Route(path: '/new', name: 'volontariat_admin_vehicule_new', methods: ['GET', 'POST'])]
-    public function newAction(Request $request) : Response
+    public function newaction(Request $request) : Response
     {
         $vehicule = new Vehicule();
         $form = $this->createForm(VehiculeType::class, $vehicule)
@@ -62,7 +62,7 @@ class VehiculeController extends AbstractController
     }
 
     #[Route(path: '/{id}', name: 'volontariat_admin_vehicule_show', methods: ['GET'])]
-    public function showAction(Vehicule $vehicule) : Response
+    public function showaction(Vehicule $vehicule) : Response
     {
         $deleteForm = $this->createDeleteForm($vehicule);
         return $this->render(
@@ -75,7 +75,7 @@ class VehiculeController extends AbstractController
     }
 
     #[Route(path: '/{id}/edit', name: 'volontariat_admin_vehicule_edit', methods: ['GET', 'POST'])]
-    public function editAction(Request $request, Vehicule $vehicule) : Response
+    public function editaction(Request $request, Vehicule $vehicule) : Response
     {
         $em = $this->managerRegistry->getManager();
         $editForm = $this->createForm(VehiculeType::class, $vehicule)
@@ -97,7 +97,7 @@ class VehiculeController extends AbstractController
     }
 
     #[Route(path: '/{id}', name: 'volontariat_admin_vehicule_delete', methods: ['DELETE'])]
-    public function deleteAction(Request $request, Vehicule $vehicule) : RedirectResponse
+    public function deleteaction(Request $request, Vehicule $vehicule) : RedirectResponse
     {
         $form = $this->createDeleteForm($vehicule);
         $form->handleRequest($request);
@@ -114,7 +114,7 @@ class VehiculeController extends AbstractController
     private function createDeleteForm(Vehicule $vehicule): FormInterface
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('volontariat_admin_vehicule_delete', array('id' => $vehicule)))
+            ->setaction($this->generateUrl('volontariat_admin_vehicule_delete', array('id' => $vehicule)))
             ->setMethod(Request::METHOD_DELETE)
             ->add('submit', SubmitType::class, array('label' => 'Delete', 'attr' => array('class' => 'btn-danger')))
             ->getForm();

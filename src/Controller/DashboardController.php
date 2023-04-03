@@ -20,7 +20,7 @@ class DashboardController extends AbstractController
     }
 
     #[Route(path: '/', name: 'volontariat_dashboard')]
-    public function indexAction(): Response
+    public function indexaction(): Response
     {
         $user = $this->getUser();
 

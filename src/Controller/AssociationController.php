@@ -19,7 +19,7 @@ class AssociationController extends AbstractController
     }
 
     #[Route(path: '/', name: 'volontariat_association')]
-    public function indexAction(Request $request): Response
+    public function indexaction(Request $request): Response
     {
         $data = [];
 
@@ -49,7 +49,7 @@ class AssociationController extends AbstractController
     }
 
     #[Route(path: '/{slug}', name: 'volontariat_association_show')]
-    public function showAction(Association $association): Response
+    public function showaction(Association $association): Response
     {
         $images = $this->fileHelper->getImages($association);
 

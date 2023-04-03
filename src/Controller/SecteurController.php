@@ -16,7 +16,7 @@ class SecteurController extends AbstractController
     }
 
     #[Route(path: '/', name: 'volontariat_secteur')]
-    public function indexAction(): Response
+    public function indexaction(): Response
     {
         $secteurs = $this->secteurRepository->findAll();
 
@@ -26,7 +26,7 @@ class SecteurController extends AbstractController
     }
 
     #[Route(path: '/{id}', name: 'volontariat_secteur_show', methods: ['GET'])]
-    public function showAction(Secteur $secteur): Response
+    public function showaction(Secteur $secteur): Response
     {
         $associations = $secteur->getAssociations();
         $volontaires = $secteur->getVolontaires();

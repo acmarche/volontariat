@@ -23,10 +23,9 @@ class ImagePageController extends AbstractController
     }
 
     #[Route(path: '/new/{id}', name: 'volontariat_admin_page_image_edit', methods: ['GET', 'POST'])]
-    public function editAction(Request $request, Page $page): Response
+    public function editaction(Request $request, Page $page): Response
     {
-        $form = $this->createForm(ImageDropZoneType::class, null, [
-        ]);
+        $form = $this->createForm(ImageDropZoneType::class);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -82,8 +81,6 @@ class ImagePageController extends AbstractController
                     $this->addFlash('error', "L'image  $filename n'a pas pu être supprimée. ");
                 }
             }
-
-            $this->addFlash('success', 'L\'image a bien été supprimée');
         }
 
         return $this->redirectToRoute('volontariat_admin_page_show', ['id' => $page->getId()]);

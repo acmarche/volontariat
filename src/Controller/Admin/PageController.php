@@ -22,7 +22,7 @@ class PageController extends AbstractController
     }
 
     #[Route(path: '/', name: 'volontariat_admin_page', methods: ['GET'])]
-    public function indexAction(): Response
+    public function indexaction(): Response
     {
         $pages = $this->pageRepository->findAll();
 
@@ -35,7 +35,7 @@ class PageController extends AbstractController
     }
 
     #[Route(path: '/new', name: 'volontariat_admin_page_new', methods: ['GET', 'POST'])]
-    public function newAction(Request $request): Response
+    public function newaction(Request $request): Response
     {
         $page = new Page();
         $form = $this->createForm(PageType::class, $page);
@@ -60,7 +60,7 @@ class PageController extends AbstractController
     }
 
     #[Route(path: '/{id}', name: 'volontariat_admin_page_show', methods: ['GET'])]
-    public function showAction(Page $page): Response
+    public function showaction(Page $page): Response
     {
         $images = $this->fileHelper->getImages($page);
         $docs = $this->fileHelper->getDocuments($page);
@@ -76,7 +76,7 @@ class PageController extends AbstractController
     }
 
     #[Route(path: '/{id}/edit', name: 'volontariat_admin_page_edit', methods: ['GET', 'POST'])]
-    public function editAction(Request $request, Page $page): Response
+    public function editaction(Request $request, Page $page): Response
     {
         $form = $this->createForm(PageType::class, $page);
 

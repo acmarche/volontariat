@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class DefaultController extends AbstractController
 {
     #[Route(path: '/', name: 'volontariat_admin_home')]
-    public function indexAction() : Response
+    public function indexaction() : Response
     {
         return $this->render('@Volontariat/admin/default/index.html.twig');
     }

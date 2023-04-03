@@ -24,10 +24,10 @@ class ImageController extends AbstractController
     }
 
     #[Route(path: '/new/{id}', name: 'volontariat_admin_image_edit', methods: ['GET'])]
-    public function editAction(Association $association): Response
+    public function editaction(Association $association): Response
     {
         $form = $this->createFormBuilder()
-            ->setAction($this->generateUrl('volontariat_admin_image_upload', ['id' => $association->getId()]))
+            ->setaction($this->generateUrl('volontariat_admin_image_upload', ['id' => $association->getId()]))
             ->getForm();
 
         $images = $this->fileHelper->getImages($association);
@@ -68,7 +68,7 @@ class ImageController extends AbstractController
     }
 
     #[Route(path: '/upload/{id}', name: 'volontariat_admin_image_upload', methods: ['POST'])]
-    public function uploadAction(Request $request, Association $association): Response
+    public function uploadaction(Request $request, Association $association): Response
     {
         if ($request->isXmlHttpRequest()) {
             $file = $request->files->get('file');
@@ -90,7 +90,7 @@ class ImageController extends AbstractController
     }
 
     #[Route(path: '/delete/{id}', name: 'volontariat_admin_image_delete', methods: ['DELETE'])]
-    public function deleteAction(Request $request, Association $association): RedirectResponse
+    public function deleteaction(Request $request, Association $association): RedirectResponse
     {
         $form = $this->createDeleteForm($association->getId());
         $form->handleRequest($request);
@@ -119,7 +119,7 @@ class ImageController extends AbstractController
     private function createDeleteForm($id): FormInterface
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('volontariat_admin_image_delete', ['id' => $id]))
+            ->setaction($this->generateUrl('volontariat_admin_image_delete', ['id' => $id]))
             ->setMethod(Request::METHOD_DELETE)
             ->add(
                 'submit',

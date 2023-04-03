@@ -31,7 +31,7 @@ class UtilisateurController extends AbstractController
     }
 
     #[Route(path: '/', name: 'volontariat_admin_user', methods: ['GET'])]
-    public function indexAction(): Response
+    public function indexaction(): Response
     {
         $users = $this->userRepository->findBy([], ['name' => 'ASC']);
         foreach ($users as $user) {
@@ -56,7 +56,7 @@ class UtilisateurController extends AbstractController
     }
 
     #[Route(path: '/{id}', name: 'volontariat_admin_user_show', methods: ['GET'])]
-    public function showAction(User $user): Response
+    public function showaction(User $user): Response
     {
         $volontaire = $this->volontaireRepository->findVolontaireByUser($user);
         $association = $this->associationRepository->findAssociationByUser($user);
@@ -72,7 +72,7 @@ class UtilisateurController extends AbstractController
     }
 
     #[Route(path: '/{id}/edit', name: 'volontariat_admin_user_edit', methods: ['GET', 'POST'])]
-    public function editAction(Request $request, User $user): Response
+    public function editaction(Request $request, User $user): Response
     {
         $editForm = $this->createForm(UserEditType::class, $user)
             ->add('submit', SubmitType::class, ['label' => 'Update']);

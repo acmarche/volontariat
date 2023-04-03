@@ -24,10 +24,10 @@ class ImageActiviteController extends AbstractController
     }
 
     #[Route(path: '/new/{id}', name: 'volontariat_admin_activite_image_edit', methods: ['GET'])]
-    public function editAction(Activite $activite): Response
+    public function editaction(Activite $activite): Response
     {
         $form = $this->createFormBuilder()
-            ->setAction(
+            ->setaction(
                 $this->generateUrl('volontariat_admin_activite_image_upload', array('id' => $activite->getId()))
             )
             ->getForm();
@@ -46,7 +46,7 @@ class ImageActiviteController extends AbstractController
     }
 
     #[Route(path: '/upload/{id}', name: 'volontariat_admin_activite_image_upload', methods: ['POST'])]
-    public function uploadAction(Request $request, Activite $activite): Response
+    public function uploadaction(Request $request, Activite $activite): Response
     {
         if ($request->isXmlHttpRequest()) {
             $file = $request->files->get('file');
@@ -68,7 +68,7 @@ class ImageActiviteController extends AbstractController
     }
 
     #[Route(path: '/delete/{id}', name: 'volontariat_admin_activite_image_delete', methods: ['DELETE'])]
-    public function deleteAction(Request $request, Activite $activite): RedirectResponse
+    public function deleteaction(Request $request, Activite $activite): RedirectResponse
     {
         $form = $this->createDeleteForm($activite->getId());
         $form->handleRequest($request);
@@ -97,7 +97,7 @@ class ImageActiviteController extends AbstractController
     private function createDeleteForm($id): FormInterface
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('volontariat_admin_activite_image_delete', array('id' => $id)))
+            ->setaction($this->generateUrl('volontariat_admin_activite_image_delete', array('id' => $id)))
             ->setMethod(Request::METHOD_DELETE)
             ->add(
                 'submit',

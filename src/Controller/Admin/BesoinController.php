@@ -26,7 +26,7 @@ class BesoinController extends AbstractController
     }
 
     #[Route(path: '/', name: 'volontariat_admin_besoin')]
-    public function indexAction() : Response
+    public function indexaction() : Response
     {
         $em = $this->managerRegistry->getManager();
         $entities = $em->getRepository(Besoin::class)->findAll();
@@ -37,7 +37,7 @@ class BesoinController extends AbstractController
     }
 
     #[Route(path: '/new/{id}', name: 'volontariat_admin_besoin_new', methods: ['GET', 'POST'])]
-    public function newAction(Request $request, Association $association) : Response
+    public function newaction(Request $request, Association $association) : Response
     {
         $besoin = new Besoin();
         $besoin->setAssociation($association);
@@ -59,7 +59,7 @@ class BesoinController extends AbstractController
     }
 
     #[Route(path: '/{id}/show', name: 'volontariat_admin_besoin_show')]
-    public function showAction(Besoin $besoin) : Response
+    public function showaction(Besoin $besoin) : Response
     {
         $deleteForm = $this->createDeleteForm($besoin);
         return $this->render('@Volontariat/admin/besoin/show.html.twig', array(
@@ -69,7 +69,7 @@ class BesoinController extends AbstractController
     }
 
     #[Route(path: '/{id}/edit', name: 'volontariat_admin_besoin_edit')]
-    public function editAction(Request $request, Besoin $besoin) : Response
+    public function editaction(Request $request, Besoin $besoin) : Response
     {
         $em = $this->managerRegistry->getManager();
         $form = $this->createForm(BesoinType::class, $besoin)
@@ -89,7 +89,7 @@ class BesoinController extends AbstractController
     }
 
     #[Route(path: '/{id}/delete', name: 'volontariat_admin_besoin_delete', methods: ['DELETE'])]
-    public function deleteAction(Besoin $besoin, Request $request) : RedirectResponse
+    public function deleteaction(Besoin $besoin, Request $request) : RedirectResponse
     {
         $form = $this->createDeleteForm($besoin);
         $form->handleRequest($request);
@@ -106,7 +106,7 @@ class BesoinController extends AbstractController
     private function createDeleteForm(Besoin $besoin): FormInterface
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('volontariat_admin_besoin_delete', array('id' => $besoin->getId())))
+            ->setaction($this->generateUrl('volontariat_admin_besoin_delete', array('id' => $besoin->getId())))
             ->setMethod(Request::METHOD_DELETE)
             ->add('submit', SubmitType::class, array('label' => 'Delete', 'attr' => array('class' => 'btn-danger')))
             ->getForm();

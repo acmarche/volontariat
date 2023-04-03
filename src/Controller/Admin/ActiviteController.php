@@ -25,7 +25,7 @@ class ActiviteController extends AbstractController
     }
 
     #[Route(path: '/', name: 'volontariat_admin_activite')]
-    public function indexAction() : Response
+    public function indexaction() : Response
     {
         $em = $this->managerRegistry->getManager();
         $entities = $em->getRepository(Activite::class)->findAll();
@@ -38,7 +38,7 @@ class ActiviteController extends AbstractController
     }
 
     #[Route(path: '/new/{id}', name: 'volontariat_admin_activite_new', methods: ['GET', 'POST'])]
-    public function newAction(Request $request, Association $association) : Response
+    public function newaction(Request $request, Association $association) : Response
     {
         $activite = new Activite();
         $activite->setAssociation($association);
@@ -66,7 +66,7 @@ class ActiviteController extends AbstractController
     }
 
     #[Route(path: '/{id}/show', name: 'volontariat_admin_activite_show')]
-    public function showAction(Activite $activite) : Response
+    public function showaction(Activite $activite) : Response
     {
         $deleteForm = $this->createDeleteForm($activite);
         $images = $this->fileHelper->getImages($activite);
@@ -81,7 +81,7 @@ class ActiviteController extends AbstractController
     }
 
     #[Route(path: '/{id}/edit', name: 'volontariat_admin_activite_edit')]
-    public function editAction(Request $request, Activite $activite) : Response
+    public function editaction(Request $request, Activite $activite) : Response
     {
         $em = $this->managerRegistry->getManager();
         $form = $this->createForm(ActiviteType::class, $activite)
@@ -104,7 +104,7 @@ class ActiviteController extends AbstractController
     }
 
     #[Route(path: '/{id}/delete', name: 'volontariat_admin_activite_delete', methods: ['DELETE'])]
-    public function deleteAction(Activite $activite, Request $request) : RedirectResponse
+    public function deleteaction(Activite $activite, Request $request) : RedirectResponse
     {
         $form = $this->createDeleteForm($activite);
         $form->handleRequest($request);
@@ -121,7 +121,7 @@ class ActiviteController extends AbstractController
     private function createDeleteForm(Activite $activite): FormInterface
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('volontariat_admin_activite_delete', array('id' => $activite->getId())))
+            ->setaction($this->generateUrl('volontariat_admin_activite_delete', array('id' => $activite->getId())))
             ->setMethod(Request::METHOD_DELETE)
             ->add('submit', SubmitType::class, array('label' => 'Delete', 'attr' => array('class' => 'btn-danger')))
             ->getForm();

@@ -22,7 +22,7 @@ class VolontaireController extends AbstractController
 
     #[Route(path: '/{id}/edit', name: 'volontariat_backend_volontaire_edit')]
     #[IsGranted('edit', subject: 'volontaire')]
-    public function editAction(Request $request, Volontaire $volontaire): Response
+    public function editaction(Request $request, Volontaire $volontaire): Response
     {
         $form = $this->createForm(VolontairePublicType::class, $volontaire);
 

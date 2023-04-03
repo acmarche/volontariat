@@ -29,7 +29,7 @@ class ValiderController extends AbstractController
     }
 
     #[Route(path: '/', name: 'volontariat_admin_valider', methods: ['GET', 'POST'])]
-    public function indexAction(): Response
+    public function indexaction(): Response
     {
         $em = $this->managerRegistry->getManager();
         $associations = $this->associationRepository->findBy(['valider' => false]);
@@ -45,7 +45,7 @@ class ValiderController extends AbstractController
     }
 
     #[Route(path: '/association/{id}/edit', name: 'volontariat_admin_association_valider')]
-    public function associationAction(Request $request, Association $association): Response
+    public function associationaction(Request $request, Association $association): Response
     {
         $em = $this->managerRegistry->getManager();
         $form = $this->createForm(ValiderType::class, $association)
@@ -72,7 +72,7 @@ class ValiderController extends AbstractController
     }
 
     #[Route(path: '/activite/{id}/edit', name: 'volontariat_admin_activite_valider')]
-    public function activiteAction(Request $request, Activite $activite): Response
+    public function activiteaction(Request $request, Activite $activite): Response
     {
         $em = $this->managerRegistry->getManager();
         $form = $this->createForm(ValiderType::class, $activite)

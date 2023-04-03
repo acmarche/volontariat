@@ -23,7 +23,7 @@ class SecteurController extends AbstractController
     }
 
     #[Route(path: '/', name: 'volontariat_admin_secteur', methods: ['GET'])]
-    public function indexAction() : Response
+    public function indexaction() : Response
     {
         $em = $this->managerRegistry->getManager();
         $entities = $em->getRepository(Secteur::class)->findAll();
@@ -36,7 +36,7 @@ class SecteurController extends AbstractController
     }
 
     #[Route(path: '/new', name: 'volontariat_admin_secteur_new', methods: ['GET', 'POST'])]
-    public function newAction(Request $request) : Response
+    public function newaction(Request $request) : Response
     {
         $secteur = new Secteur();
         $form = $this->createForm(SecteurType::class, $secteur)
@@ -60,7 +60,7 @@ class SecteurController extends AbstractController
     }
 
     #[Route(path: '/{id}', name: 'volontariat_admin_secteur_show', methods: ['GET'])]
-    public function showAction(Secteur $secteur) : Response
+    public function showaction(Secteur $secteur) : Response
     {
         $deleteForm = $this->createDeleteForm($secteur);
         return $this->render(
@@ -73,7 +73,7 @@ class SecteurController extends AbstractController
     }
 
     #[Route(path: '/{id}/edit', name: 'volontariat_admin_secteur_edit', methods: ['GET', 'POST'])]
-    public function editAction(Request $request, Secteur $secteur) : Response
+    public function editaction(Request $request, Secteur $secteur) : Response
     {
         $em = $this->managerRegistry->getManager();
         $editForm = $this->createForm(SecteurType::class, $secteur)
@@ -95,7 +95,7 @@ class SecteurController extends AbstractController
     }
 
     #[Route(path: '/{id}', name: 'volontariat_admin_secteur_delete', methods: ['DELETE'])]
-    public function deleteAction(Request $request, Secteur $secteur) : RedirectResponse
+    public function deleteaction(Request $request, Secteur $secteur) : RedirectResponse
     {
         $form = $this->createDeleteForm($secteur);
         $form->handleRequest($request);
@@ -112,7 +112,7 @@ class SecteurController extends AbstractController
     private function createDeleteForm(Secteur $secteur): FormInterface
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('volontariat_admin_secteur_delete', array('id' => $secteur->getId())))
+            ->setaction($this->generateUrl('volontariat_admin_secteur_delete', array('id' => $secteur->getId())))
             ->setMethod(Request::METHOD_DELETE)
             ->add('submit', SubmitType::class, array('label' => 'Delete', 'attr' => array('class' => 'btn-danger')))
             ->getForm();

@@ -3,7 +3,7 @@
 {% block body %}
 
     <div class="card">
-        <h3 class="card-header">Nouveau message</h3>
+        <h3 class="card-header">Nouveau message pour {{ destinataires|length }} {{ query }}</h3>
         <div class="card-body">
             {{ form_start(form) }}
             {{ form_errors(form) }}

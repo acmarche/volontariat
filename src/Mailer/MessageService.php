@@ -22,7 +22,7 @@ class MessageService
     ) {
     }
 
-    public function getDestinataires($query, $isSelect = false)
+    public function getDestinataires(string $query)
     {
         switch ($query) {
             case 'association':
@@ -49,37 +49,4 @@ class MessageService
         return null;
     }
 
-
-    /**
-     * @param Association[] $associations
-     */
-    public function getFroms(User $user, $associations): array
-    {
-        $froms = [];
-        $froms[$user->getEmail()] = $user->getEmail();
-        foreach ($associations as $association) {
-            $froms[$association->getEmail()] = $association->getEmail();
-        }
-
-        return $froms;
-    }
-
-    public function getNom(User $user): string
-    {
-        $volontaires = $this->volontaireService->getVolontairesByUser($user);
-        if ((is_countable($volontaires) ? count($volontaires) : 0) > 0) {
-            return $volontaires[0]->getName().' '.$volontaires[0]->getSurname();
-        }
-        $associations = $this->associationService->getAssociationsByUser($user);
-        if ([] !== $associations) {
-            return $associations[0]->getNom();
-        }
-
-        return '';
-    }
-
-    public function getUser(Volontaire|Association $entity): ?User
-    {
-        return $entity->user;
-    }
 }

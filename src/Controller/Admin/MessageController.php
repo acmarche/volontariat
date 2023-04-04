@@ -52,18 +52,19 @@ class MessageController extends AbstractController
         );
     }
 
-    #[Route(path: '/new', name: 'volontariat_admin_message_new')]
-    public function new(Request $request, $query = null): Response
+    #[Route(path: '/new/{query}', name: 'volontariat_admin_message_new')]
+    public function new(Request $request, $query): Response
     {
         $message = new Message();
         $form = $this->createForm(MessageType::class, $message);
 
         $form->handleRequest($request);
         $destinataires = $this->messageService->getDestinataires($query);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
 
-            foreach ($this->associationRepository->findAcceptMessage() as $association) {
+            foreach ($destinataires as $association) {
                 $email = $this->messageService->getEmailEntity($association);
                 if ($email) {
                     $url = null;
@@ -87,6 +88,7 @@ class MessageController extends AbstractController
             '@Volontariat/admin/message/new.html.twig',
             [
                 'message' => $message,
+                'query' => $query,
                 'destinataires' => $destinataires,
                 'form' => $form->createView(),
             ]

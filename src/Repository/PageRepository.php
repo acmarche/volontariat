@@ -24,7 +24,7 @@ class PageRepository extends ServiceEntityRepository
     /**
      * @return array|Page[]
      */
-    public function findRecent(): array
+    public function findRecentNews(): array
     {
         return $this->createQueryBuilder('page')
             ->andWhere('page.actualite = 1')

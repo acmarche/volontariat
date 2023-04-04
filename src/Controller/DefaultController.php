@@ -23,7 +23,7 @@ class DefaultController extends AbstractController
     #[Route(path: '/', name: 'volontariat_home')]
     public function index(): Response
     {
-        $pages = $this->pageRepository->findRecent();
+        $pages = $this->pageRepository->findRecentNews();
         foreach ($pages as $page) {
             $page->images = $this->fileHelper->getImages($page);
         }

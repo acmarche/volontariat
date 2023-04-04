@@ -2,12 +2,16 @@
 
 namespace AcMarche\Volontariat\Security;
 
+use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Security\Token;
 use AcMarche\Volontariat\Entity\Security\User;
+use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Repository\TokenRepository;
 use AcMarche\Volontariat\Repository\UserRepository;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator;
 
@@ -17,7 +21,8 @@ class TokenManager
         private UserAuthenticatorInterface $userAuthenticator,
         private FormLoginAuthenticator $formLoginAuthenticator,
         private TokenRepository $tokenRepository,
-        private UserRepository $userRepository
+        private UserRepository $userRepository,
+        private RouterInterface $router
     ) {
     }
 
@@ -71,6 +76,23 @@ class TokenManager
             $user,
             $this->formLoginAuthenticator,
             $request,
+        );
+    }
+
+    public function getLinkToConnect(Association|Volontaire $entity): ?string
+    {
+        if (!$user = $entity->user) {
+            return null;
+        }
+
+        if (!$token = $this->getInstance($user)) {
+            return null;
+        }
+
+        return $this->router->generate(
+            'volontariat_token_show',
+            ['value' => $token->getValue()],
+            UrlGeneratorInterface::ABSOLUTE_URL
         );
     }
 }

@@ -1,0 +1,22 @@
+{% extends '@Volontariat/emails/basic.html.twig' %}
+{% block content %}
+
+    <div class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow prose prose-slate">
+        <div class="px-4 py-5 sm:px-6">
+            <h2 class="text-lg text-green-default font-bold">Message</h2>
+        </div>
+        <div class="px-4 py-5 sm:p-6">
+
+            <p class="my-5 mb-3">{{ content|nl2br }}</p>
+
+            {% if url %}
+                <a href="{{ url }}" class="m-5">
+                    Me connecter à la plate-forme
+                </a>
+            {% endif %}
+
+            {% include '@AcMarcheVolontariat/emails/_footer.html.twig' %}
+
+        </div>
+    </div>
+{% endblock %}

@@ -4,7 +4,7 @@ namespace AcMarche\Volontariat\Form\Admin;
 
 use AcMarche\Volontariat\Entity\Message;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -15,7 +15,6 @@ class MessageType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $query = $options['query'];
         $builder
             ->add(
                 'sujet',
@@ -29,6 +28,14 @@ class MessageType extends AbstractType
                 ]
             )
             ->add(
+                'urlToken',
+                CheckboxType::class, [
+                    'required' => false,
+                    'label' => 'Url de connection',
+                    'help' => 'Ajouter une url de connection au mail',
+                ]
+            )
+            ->add(
                 'file',
                 FileType::class,
                 [
@@ -36,17 +43,6 @@ class MessageType extends AbstractType
                     'required' => false,
                 ]
             );
-
-        if (!$query) {
-            $builder->add(
-                'selection_destinataires',
-                ChoiceType::class,
-                [
-                    'placeholder' => 'Choisissez les destinataires',
-                    'choices' => ['Associations' => 'association', 'Volontaires' => 'volontaire'],
-                ]
-            );
-        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -54,10 +50,7 @@ class MessageType extends AbstractType
         $resolver->setDefaults(
             [
                 'data_class' => Message::class,
-                'query' => null,
             ]
         );
-
-        $resolver->setAllowedTypes('query', ['string', 'null']);
     }
 }

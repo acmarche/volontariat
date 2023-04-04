@@ -96,17 +96,4 @@ class MailerSecurity
 
         $this->mailer->send($email);
     }
-
-    public function sendError(string $sujet, string $body): void
-    {
-        $email = (new TemplatedEmail())
-            ->from($this->from)
-            ->to(new Address('jf@marche.be'))
-            ->subject($sujet)
-            ->setBody($body);
-        try {
-            $this->mailer->send($email);
-        } catch (TransportException $e) {
-        }
-    }
 }

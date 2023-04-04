@@ -5,16 +5,25 @@
     <div class="card">
         <h3 class="card-header">Nouveau message</h3>
         <div class="card-body">
-
-            <div class="alert alert-info">
-                Insérez le mot clef {urltoken} si vous voulez insérer l'url permettant de se connecter automatiquement.
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            {{ form_row(form.sujet) }}
+            {{ form_row(form.contenu) }}
+            <div class="row">
+                <div class="col-6">
+                    {{ form_row(form.file) }}
+                </div>
+                <div class="col-6">
+                    {{ form_row(form.urlToken) }}
+                </div>
             </div>
 
-            {% if query %}
-                <p class="">{{ destinataires | length }} destinataires {{ query }}</p>
-            {% endif %}
+            <button type="submit" name="save" class="btn btn-primary my-1 mr-sm-2 mb-3">
+                <i class="fas fa-paper-plane"></i> Envoyer
+            </button>
 
-            {{ form(form) }}
+            {{ form_end(form) }}
+
         </div>
         <div class="card-footer">
             <a href="{{ path('volontariat_admin_message') }}">

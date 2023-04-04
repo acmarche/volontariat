@@ -83,6 +83,17 @@ class AssociationRepository extends ServiceEntityRepository
     /**
      * @return Association[]
      */
+    public function findAcceptMessage(): array
+    {
+        return $this->createQBl()
+            ->andWhere('association.notification_message_association = 1')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Association[]
+     */
     public function getRecent(int $limit = 9): array
     {
         return $this->createQBl()
@@ -120,16 +131,6 @@ class AssociationRepository extends ServiceEntityRepository
             ->getQuery()->getOneOrNullResult();
     }
 
-    private function createQBl(): QueryBuilder
-    {
-        return $this->createQueryBuilder('association')
-            ->leftJoin('association.secteurs', 'secteurs', 'WITH')
-            ->leftJoin('association.besoins', 'besoins', 'WITH')
-            ->leftJoin('association.user', 'user', 'WITH')
-            ->addSelect('secteurs', 'besoins', 'user')
-            ->addOrderBy('association.name', 'ASC');
-    }
-
     /**
      * @return array|Association[]
      */
@@ -161,5 +162,15 @@ class AssociationRepository extends ServiceEntityRepository
         }
 
         return $t;
+    }
+
+    private function createQBl(): QueryBuilder
+    {
+        return $this->createQueryBuilder('association')
+            ->leftJoin('association.secteurs', 'secteurs', 'WITH')
+            ->leftJoin('association.besoins', 'besoins', 'WITH')
+            ->leftJoin('association.user', 'user', 'WITH')
+            ->addSelect('secteurs', 'besoins', 'user')
+            ->addOrderBy('association.name', 'ASC');
     }
 }

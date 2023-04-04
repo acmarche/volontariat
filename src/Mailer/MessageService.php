@@ -36,12 +36,7 @@ class MessageService
         }
     }
 
-    /**
-     * @param $entity Volontaire|Association
-     *
-     * @return string|null
-     */
-    public function getEmailEntity($entity)
+    public function getEmailEntity(Association|Volontaire $entity): ?string
     {
         if ($entity->email) {
             return $entity->email;

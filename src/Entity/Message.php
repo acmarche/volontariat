@@ -2,16 +2,16 @@
 
 namespace AcMarche\Volontariat\Entity;
 
+use AcMarche\Volontariat\Repository\MessageRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Stringable;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: MessageRepository::class)]
 #[ORM\Table(name: 'message')]
 #[ORM\HasLifecycleCallbacks]
-class Message implements Stringable
+class Message implements \Stringable
 {
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
@@ -31,11 +31,13 @@ class Message implements Stringable
 
     protected array $froms;
 
-    protected ?File $file;
+    protected ?File $file = null;
 
     protected ?string $nom;
 
     protected ?string $nom_destinataire;
+
+    public bool $urlToken = false;
 
     public function __toString(): string
     {

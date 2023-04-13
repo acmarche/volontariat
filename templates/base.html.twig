@@ -8,13 +8,14 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('bundles/acmarchevolontariat/favicon.ico') }}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="https://cdn-eu.readspeaker.com/script/11982/webReader/webReader.js?pids=wr" type="text/javascript" id="rs_req_Init"></script>
     {% block stylesheets %}
         {{ encore_entry_link_tags('app') }}
     {% endblock %}
 </head>
 <body id="app">
 {% include '@Volontariat/header/_header.html.twig' %}
-<main class="container mt-12 mx-auto sm:px-6 lg:px-8 max-w-7xl" >
+<main class="container mt-12 mx-auto sm:px-6 lg:px-8 max-w-7xl" id="maincontent" >
     {% include '@Volontariat/_flash_messages.html.twig' %}
     {% block body %}
 

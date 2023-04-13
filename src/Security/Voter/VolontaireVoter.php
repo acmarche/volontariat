@@ -25,8 +25,6 @@ class VolontaireVoter extends Voter
     public const EDIT = 'edit';
     public const DELETE = 'delete';
 
-    private ?User $user = null;
-
     public function __construct(
         private AccessDecisionManagerInterface $decisionManager,
     ) {
@@ -50,7 +48,7 @@ class VolontaireVoter extends Voter
     /**
      * {@inheritdoc}
      */
-    protected function voteOnAttribute($attribute, $volontaire, TokenInterface $token): bool
+    protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
 
@@ -65,21 +63,33 @@ class VolontaireVoter extends Voter
         }
 
         return match ($attribute) {
-            self::INDEX => $this->canIndex(),
-            self::SHOW => $this->canView($volontaire, $token),
-            self::EDIT => $this->canEdit($volontaire, $token),
-            self::DELETE => $this->canDelete($volontaire, $token),
+            self::INDEX => $this->canIndex($token),
+            self::SHOW => $this->canView($subject, $token),
+            self::EDIT => $this->canEdit($subject, $token),
+            self::DELETE => $this->canDelete($subject, $token),
             default => false,
         };
     }
 
-    private function canIndex(): bool
+    private function canIndex(TokenInterface $token): bool
     {
-        return $this->associationService->hasValidAssociation($this->user);
+        /**
+         * @var User $user
+         */
+        $user = $token->getUser();
+        if (!$user) {
+            return false;
+        }
+        $association = $user->association;
+        if (!$association) {
+            return false;
+        }
+
+        return (bool) $association->valider;
     }
 
     /**
-     * Voir dans l'admin
+     * Voir dans l'admin.
      */
     private function canView(Volontaire $volontaire, TokenInterface $token): bool
     {
@@ -87,34 +97,18 @@ class VolontaireVoter extends Voter
             return true;
         }
 
-        return $this->associationService->hasValidAssociation($this->user);
+        return false;
     }
 
     private function canEdit(Volontaire $volontaire, TokenInterface $token): bool
     {
         $user = $token->getUser();
 
-        return $user === $volontaire->getUser();
+        return $user === $volontaire->user;
     }
 
     private function canDelete(Volontaire $volontaire, TokenInterface $token): bool
     {
-        return (bool)$this->canEdit($volontaire, $token);
+        return $this->canEdit($volontaire, $token);
     }
-
-
-    public function hasValidVolontaire(User $user): bool
-    {
-        return (is_countable($this->volontaireRepository->getVolontairesByUser($user, true)) ? count($this->volontaireRepository->getVolontairesByUser($user, true)) : 0) > 0;
-    }
-
-    public function getAssociationsWithSameSecteur(Volontaire $volontaire)
-    {
-        $secteurs = $volontaire->getSecteurs();
-
-        return $this->associationRepository->findAssociationBySecteur(
-            $secteurs
-        );
-    }
-
 }

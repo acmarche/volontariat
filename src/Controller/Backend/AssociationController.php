@@ -2,7 +2,6 @@
 
 namespace AcMarche\Volontariat\Controller\Backend;
 
-use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Form\AssociationPublicType;
 use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Service\FileHelper;
@@ -22,12 +21,20 @@ class AssociationController extends AbstractController
     ) {
     }
 
-    #[Route(path: '/{id}/edit', name: 'volontariat_backend_association_edit')]
-    public function edit(Request $request, Association $association): Response
+    #[Route(path: '/edit', name: 'volontariat_backend_association_edit')]
+    public function edit(Request $request): Response
     {
+        $user = $this->getUser();
+
+        if (!$association = $user->association) {
+            $this->addFlash('success', 'Aucune fiche association trouvée');
+
+            return $this->redirectToRoute('volontariat_dashboard');
+        }
         $form = $this->createForm(AssociationPublicType::class, $association);
 
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $this->fileHelper->traitementFiles($association);
             $this->associationRepository->flush();

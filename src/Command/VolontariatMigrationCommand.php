@@ -41,30 +41,10 @@ class VolontariatMigrationCommand extends Command
         // imagename
 
         foreach ($this->associationRepository->findAll() as $association) {
-            // $association->generateSlug();
-            //  $association->address = $association->address.' '.$association->number;
+            $association->setUuid($association->generateUuid());
         }
 
-        foreach ($this->volontaireRepository->findAll() as $volontaire) {
-            // $volontaire->address = $volontaire->address.' '.$volontaire->number;
-            if ($volontaire->birthday) {
-          //      $volontaire->birthyear = $volontaire->birthday->format('Y');
-            }
-            // $volontaire->setUuid($volontaire->generateUuid());
-        }
-
-        foreach ($this->userRepository->findAll() as $user) {
-            $volontaires = $this->volontaireRepository->search(['user' => $user]);
-            foreach ($volontaires as $volontaire) {
-                $volontaire->user = $user;
-            }
-            $associations = $this->associationRepository->search(['user' => $user]);
-            foreach ($associations as $association) {
-                $association->user = $user;
-            }
-        }
-
-        //   $this->associationRepository->flush();
+        $this->associationRepository->flush();
         $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
 
         return Command::SUCCESS;

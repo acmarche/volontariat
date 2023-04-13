@@ -43,7 +43,7 @@ class AssociationVoter extends Voter
     /**
      * {@inheritdoc}
      */
-    protected function voteOnAttribute($attribute, $association, TokenInterface $token): bool
+    protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
 
@@ -56,9 +56,9 @@ class AssociationVoter extends Voter
         }
 
         return match ($attribute) {
-            self::SHOW => $this->canView($association, $token),
-            self::EDIT => $this->canEdit($association, $token),
-            self::DELETE => $this->canDelete($association, $token),
+            self::SHOW => $this->canView($subject, $token),
+            self::EDIT => $this->canEdit($subject, $token),
+            self::DELETE => $this->canDelete($subject, $token),
             default => false,
         };
     }
@@ -68,29 +68,29 @@ class AssociationVoter extends Voter
      */
     private function canView(Association $association, TokenInterface $token): bool
     {
-        return (bool)$this->canEdit($association, $token);
+        return $this->canEdit($association, $token);
     }
 
     private function canEdit(Association $association, TokenInterface $token): bool
     {
+        /**
+         * @var User $user
+         */
         $user = $token->getUser();
+        if (!$user) {
+            return false;
+        }
+        $associationUser = $user->association;
+        if (!$associationUser) {
+            return false;
+        }
 
-        return $user === $association->user;
+        return $associationUser->getId() === $association->getId();
     }
 
     private function canDelete(Association $association, TokenInterface $token): bool
     {
-        return (bool)$this->canEdit($association, $token);
-    }
-
-    protected function canAccess(TokenInterface $token): bool
-    {
-        $user = $this->getUser();
-        if ($user->hasRole('ROLE_VOLONTARIAT_ADMIN')) {
-            return true;
-        }
-
-        return $this->hasValidAssociation($user, $token);
+        return $this->canEdit($association, $token);
     }
 
     public function hasValidAssociation(User $user, TokenInterface $token): bool

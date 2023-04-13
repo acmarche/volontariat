@@ -2,7 +2,6 @@
 
 namespace AcMarche\Volontariat\Controller\Backend;
 
-use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Form\VolontairePublicType;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,10 +19,17 @@ class VolontaireController extends AbstractController
     ) {
     }
 
-    #[Route(path: '/{id}/edit', name: 'volontariat_backend_volontaire_edit')]
+    #[Route(path: '/edit', name: 'volontariat_backend_volontaire_edit')]
     #[IsGranted('edit', subject: 'volontaire')]
-    public function edit(Request $request, Volontaire $volontaire): Response
+    public function edit(Request $request): Response
     {
+        $user = $this->getUser();
+
+        if (!$volontaire= $user->volontaire) {
+            $this->addFlash('success', 'Aucune fiche volontaire trouvée');
+
+            return $this->redirectToRoute('volontariat_dashboard');
+        }
         $form = $this->createForm(VolontairePublicType::class, $volontaire);
 
         $form->handleRequest($request);
@@ -43,5 +49,4 @@ class VolontaireController extends AbstractController
             ]
         );
     }
-
 }

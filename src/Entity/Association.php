@@ -24,6 +24,7 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
     use TimestampableTrait;
     use SluggableTrait;
     use ImageTrait;
+    use UuidTrait;
 
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]

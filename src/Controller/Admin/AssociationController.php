@@ -54,6 +54,8 @@ class AssociationController extends AbstractController
     public function new(Request $request): Response
     {
         $association = new Association();
+        $association->setUuid($association->generateUuid());
+
         $form = $this->createForm(AssocationType::class, $association);
 
         $form->handleRequest($request);

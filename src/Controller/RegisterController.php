@@ -89,6 +89,7 @@ class RegisterController extends AbstractController
     public function registerAssociation(Request $request): Response
     {
         $association = new Association();
+        $association->setUuid($association->generateUuid());
         $form = $this->createForm(RegisterAssociationType::class, $association);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

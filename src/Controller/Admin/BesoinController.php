@@ -2,113 +2,94 @@
 
 namespace AcMarche\Volontariat\Controller\Admin;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Form\FormInterface;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Besoin;
 use AcMarche\Volontariat\Form\Admin\BesoinType;
+use AcMarche\Volontariat\Repository\BesoinRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
-use Symfony\Component\Routing\Annotation\Route;
-
-use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/admin/besoin')]
 #[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class BesoinController extends AbstractController
 {
-    public function __construct(private ManagerRegistry $managerRegistry)
+    public function __construct(private BesoinRepository $besoinRepository)
     {
     }
 
     #[Route(path: '/', name: 'volontariat_admin_besoin')]
-    public function index() : Response
+    public function index(): Response
     {
-        $em = $this->managerRegistry->getManager();
-        $entities = $em->getRepository(Besoin::class)->findAll();
-        return $this->render('@Volontariat/admin/besoin/index.html.twig', array(
+        $entities = $this->besoinRepository->findAll();
 
+        return $this->render('@Volontariat/admin/besoin/index.html.twig', [
             'entities' => $entities,
-        ));
+        ]);
     }
 
     #[Route(path: '/new/{id}', name: 'volontariat_admin_besoin_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, Association $association) : Response
+    public function new(Request $request, Association $association): Response
     {
         $besoin = new Besoin();
         $besoin->setAssociation($association);
-        $form = $this->createForm(BesoinType::class, $besoin)
-            ->add('submit', SubmitType::class, array('label' => 'Create'));
+        $form = $this->createForm(BesoinType::class, $besoin);
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->managerRegistry->getManager();
-            $em->persist($besoin);
-            $em->flush();
-            $this->addFlash("success", "Le besoin a bien été ajouté");
+            $this->besoinRepository->persist($besoin);
+            $this->besoinRepository->flush();
+            $this->addFlash('success', 'Le besoin a bien été ajouté');
 
             return $this->redirectToRoute('volontariat_admin_besoin_show', ['id' => $besoin->getId()]);
         }
-        return $this->render('@Volontariat/admin/besoin/new.html.twig', array(
+
+        return $this->render('@Volontariat/admin/besoin/new.html.twig', [
             'besoin' => $besoin,
             'form' => $form->createView(),
-        ));
+        ]);
     }
 
     #[Route(path: '/{id}/show', name: 'volontariat_admin_besoin_show')]
-    public function show(Besoin $besoin) : Response
+    public function show(Besoin $besoin): Response
     {
-        $deleteForm = $this->createDeleteForm($besoin);
-        return $this->render('@Volontariat/admin/besoin/show.html.twig', array(
+        return $this->render('@Volontariat/admin/besoin/show.html.twig', [
             'besoin' => $besoin,
-            'delete_form' => $deleteForm->createView(),
-        ));
+        ]);
     }
 
     #[Route(path: '/{id}/edit', name: 'volontariat_admin_besoin_edit')]
-    public function edit(Request $request, Besoin $besoin) : Response
+    public function edit(Request $request, Besoin $besoin): Response
     {
-        $em = $this->managerRegistry->getManager();
-        $form = $this->createForm(BesoinType::class, $besoin)
-            ->add('submit', SubmitType::class, array('label' => 'Update'));
+        $form = $this->createForm(BesoinType::class, $besoin);
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em->flush();
+            $this->besoinRepository->flush();
 
             $this->addFlash('success', 'Le besoin a bien été modifié');
 
             return $this->redirectToRoute('volontariat_admin_besoin_show', ['id' => $besoin->getId()]);
         }
-        return $this->render('@Volontariat/admin/besoin/edit.html.twig', array(
+
+        return $this->render('@Volontariat/admin/besoin/edit.html.twig', [
             'besoin' => $besoin,
             'form' => $form->createView(),
-        ));
+        ]);
     }
 
-    #[Route(path: '/{id}/delete', name: 'volontariat_admin_besoin_delete', methods: ['DELETE'])]
-    public function delete(Besoin $besoin, Request $request) : RedirectResponse
+    #[Route(path: '/{id}/delete', name: 'volontariat_admin_besoin_delete', methods: ['POST'])]
+    public function delete(Request $request, Besoin $besoin): RedirectResponse
     {
-        $form = $this->createDeleteForm($besoin);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->managerRegistry->getManager();
-
-            $em->remove($besoin);
-            $em->flush();
-
-            $this->addFlash('success', 'Le besoin a bien été supprimé');
+        if ($this->isCsrfTokenValid('delete'.$besoin->getId(), $request->request->get('_token'))) {
+            $this->besoinRepository->remove($besoin);
+            $this->besoinRepository->flush();
+            $this->addFlash('success', 'L\'association a bien été supprimée');
         }
-        return $this->redirectToRoute('volontariat_admin_besoin');
-    }
-    private function createDeleteForm(Besoin $besoin): FormInterface
-    {
-        return $this->createFormBuilder()
-            ->set($this->generateUrl('volontariat_admin_besoin_delete', array('id' => $besoin->getId())))
-            ->setMethod(Request::METHOD_DELETE)
-            ->add('submit', SubmitType::class, array('label' => 'Delete', 'attr' => array('class' => 'btn-danger')))
-            ->getForm();
+
+        return $this->redirectToRoute('volontariat_admin_association');
     }
 }

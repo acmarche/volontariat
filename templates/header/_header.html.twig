@@ -62,8 +62,8 @@
                             Secteurs d'activités
                         </a>
                         <a href="{{ path('volontariat_besoin') }}"
-                           class="inline-flex items-center border-b-2  {{ app.current_route == 'volontariat_secteur' ? 'border-green-default' : 'border-transparent' }}  px-1 pt-1 text-sm font-medium text-gray-500 hover:border-green-light hover:text-gray-700">
-                            Petites annonces
+                           class="inline-flex items-center border-b-2  {{ app.current_route == 'volontariat_besoin' ? 'border-green-default' : 'border-transparent' }}  px-1 pt-1 text-sm font-medium text-gray-500 hover:border-green-light hover:text-gray-700">
+                            À la une
                         </a>
                         {% if app.user == null %}
                             <a href="{{ path('volontariat_register_index') }}"

@@ -1,9 +1,10 @@
 {% set url = null %}
 {% if association.imageName %}
-    {% set url = association.imageName | imagine_filter('acmarche_volontariat_400_270') %}
+    {% set url = vich_uploader_asset(association, 'image')  %}
 {% elseif association.firstImage %}
-    {% set url = association.firstImage.url | imagine_filter('acmarche_volontariat_400_270') %}
+    {% set url = association.firstImage | acmarche_volontariat_download_image(association) %}
 {% endif %}
+{#| imagine_filter('grh_thumb')  #}
 {% if url %}
     <div class="relative w-full">
         <img src="{{ url }}"

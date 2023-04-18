@@ -26,8 +26,12 @@ class FileDownload extends AbstractExtension
         ];
     }
 
-    private function download($fileName, Uploadable $uploadable): string
+    private function download(?string $fileName, Uploadable $uploadable): string
     {
+        if (!$fileName) {
+            return '';
+        }
+
         return $this->fileHelper->getDownloadPath($uploadable).$fileName;
     }
 }

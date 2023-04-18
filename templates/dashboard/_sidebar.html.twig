@@ -12,7 +12,7 @@
     </a>
 
     {% if volontaire %}
-        <a href="{{ path('volontariat_backend_volontaire_edit', {'id': volontaire.id}) }}"
+        <a href="{{ path('volontariat_backend_volontaire_edit') }}"
            class="border-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center border-l-4 px-3 py-2 text-sm font-medium">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                  stroke="currentColor" class="text-gray-400 group-hover:text-gray-500 mr-3 h-6 w-6 flex-shrink-0">
@@ -24,7 +24,7 @@
     {% endif %}
 
     {% if association %}
-        <a href="{{ path('volontariat_backend_association_edit', {'id': association.id}) }}"
+        <a href="{{ path('volontariat_backend_association_edit') }}"
            class="border-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center border-l-4 px-3 py-2 text-sm font-medium">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                  stroke="currentColor" class="text-gray-400 group-hover:text-gray-500 mr-3 h-6 w-6 flex-shrink-0">

@@ -89,13 +89,8 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
     /**
      * @var Besoin[]|iterable $besoins
      */
-    #[ORM\OneToMany(targetEntity: Besoin::class, mappedBy: 'association', cascade: ['remove'])]
+    #[ORM\OneToMany(mappedBy: 'association', targetEntity: Besoin::class, cascade: ['remove'])]
     public Collection $besoins;
-    /**
-     * @var Activite[]|iterable $activites
-     */
-    #[ORM\OneToMany(targetEntity: Activite::class, mappedBy: 'association', cascade: ['remove'])]
-    public Collection $activites;
 
     #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'])]
     public ?User $user = null;

@@ -58,8 +58,6 @@ class VolontaireController extends AbstractController
             $volontaire->setUuid($volontaire->generateUuid());
             $this->volontaireRepository->insert($volontaire);
 
-            $this->fileHelper->traitementFiles($volontaire);
-
             $this->addFlash('success', 'Le volontaire a bien été ajouté');
 
             return $this->redirectToRoute('volontariat_admin_volontaire_show', ['id' => $volontaire->getId()]);
@@ -92,7 +90,6 @@ class VolontaireController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->fileHelper->traitementFiles($volontaire);
             $this->volontaireRepository->flush();
 
             $this->addFlash('success', 'Le volontaire a bien été modifié');

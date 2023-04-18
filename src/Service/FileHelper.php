@@ -5,7 +5,6 @@ namespace AcMarche\Volontariat\Service;
 use AcMarche\Volontariat\InterfaceDef\Uploadable;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mime\MimeTypes;
@@ -98,30 +97,6 @@ class FileHelper
         }
 
         return $files;
-    }
-
-    public function traitementFiles($entity): void
-    {
-        if ($photoName = $this->traitementFile($entity->getImage(), $entity)) {
-            $entity->setImageName($photoName);
-        }
-    }
-
-    protected function traitementFile($file, Uploadable $uploadable): ?string
-    {
-        if ($file instanceof UploadedFile) {
-            $fileName = md5(uniqid()).'.'.$file->guessExtension();
-
-            try {
-                $this->uploadFile($uploadable, $file, $fileName);
-
-                return $fileName;
-            } catch (FileException $error) {
-                throw new FileException($error->getMessage());
-            }
-        }
-
-        return null;
     }
 
     protected function makePath(Uploadable $uploadable): string

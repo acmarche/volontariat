@@ -97,6 +97,7 @@ class AssocationType extends AbstractType
                 'notification_new_voluntary',
                 CheckboxType::class,
                 [
+                    'label' => 'Notification volontaire',
                     'help' => 'Décochez la case pour ne plus recevoir de mail lorsqu\'un volontaire s\'inscris',
                     'required' => false,
                 ]
@@ -105,6 +106,7 @@ class AssocationType extends AbstractType
                 'notification_message_association',
                 CheckboxType::class,
                 [
+                    'label' => 'Notification générale',
                     'help' => 'Décochez la case pour ne plus recevoir de mail de la plate-forme',
                     'required' => false,
                 ]

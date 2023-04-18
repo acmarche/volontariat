@@ -2,7 +2,8 @@
 
 namespace AcMarche\Volontariat\Repository;
 
-use DateTime;
+use AcMarche\Volontariat\Doctrine\OrmCrudTrait;
+use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Besoin;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -14,36 +15,21 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class BesoinRepository extends ServiceEntityRepository
 {
+    use OrmCrudTrait;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Besoin::class);
     }
 
-
-    public function insert(Besoin $besoin): void
-    {
-        $this->_em->persist($besoin);
-        $this->flush();
-    }
-
-    public function flush(): void
-    {
-        $this->_em->flush();
-    }
-
-    public function remove(Besoin $besoin): void
-    {
-        $this->_em->remove($besoin);
-        $this->flush();
-    }
-
     /**
      * @param int $max
+     *
      * @return Besoin[]
      */
     public function getRecent($max = 5): array
     {
-        $now = new DateTime();
+        $now = new \DateTime();
 
         $qb = $this->createQueryBuilder('so');
         $qb->leftJoin('so.association', 'association', 'WITH');
@@ -58,5 +44,18 @@ class BesoinRepository extends ServiceEntityRepository
         $query = $qb->getQuery();
 
         return $query->getResult();
+    }
+
+    /**
+     * @param Association|null $association
+     * @return Besoin[]
+     */
+    public function findByAssociation(?Association $association): array
+    {
+        return $this->createQueryBuilder('besoin')
+            ->andWhere('besoin.association = :association')
+            ->setParameter('association', $association)
+            ->getQuery()
+            ->getResult();
     }
 }

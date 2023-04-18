@@ -22,13 +22,23 @@
 
                 {% if association %}
                     <li class="py-4">
+                        <a href="{{ path('volontariat_association_show', {'slug': association.slug}) }}">
+                            Mon association sur le site : {{ association }}
+                        </a>
+                    </li>
+                    <li class="py-4">
                         <a href="{{ path('volontariat_volontaire') }}">
                             Consulter la liste des volontaires
                         </a>
                     </li>
                     <li class="py-4">
-                        <a href="{{ path('volontariat_association_show', {'slug': association.slug}) }}">
-                            Mon association sur le site
+                        <a href="{{ path('volontariat_backend_besoin') }}">
+                            Publier une annonce de volontariat
+                        </a>
+                    </li>
+                    <li class="py-4">
+                        <a href="{{ path('volontariat_volontaire') }}">
+                            Gérer mes images
                         </a>
                     </li>
                 {% endif %}

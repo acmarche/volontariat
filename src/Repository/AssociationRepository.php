@@ -5,12 +5,12 @@ namespace AcMarche\Volontariat\Repository;
 use AcMarche\Volontariat\Doctrine\OrmCrudTrait;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Secteur;
-use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Entity\Volontaire;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @method Association|null find($id, $lockMode = null, $lockVersion = null)
@@ -123,7 +123,7 @@ class AssociationRepository extends ServiceEntityRepository
     /**
      * @throws NonUniqueResultException
      */
-    public function findAssociationByUser(User $user): ?Association
+    public function findAssociationByUser(UserInterface $user): ?Association
     {
         return $this->createQBl()
             ->andWhere('association.user = :user')

@@ -3,12 +3,12 @@
 namespace AcMarche\Volontariat\Repository;
 
 use AcMarche\Volontariat\Doctrine\OrmCrudTrait;
-use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Entity\Volontaire;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @method Volontaire|null find($id, $lockMode = null, $lockVersion = null)
@@ -125,7 +125,7 @@ class VolontaireRepository extends ServiceEntityRepository
     /**
      * @throws NonUniqueResultException
      */
-    public function findVolontaireByUser(User $user): ?Volontaire
+    public function findVolontaireByUser(UserInterface $user): ?Volontaire
     {
         return $this->createQbl()
             ->andWhere('volontaire.user = :user')

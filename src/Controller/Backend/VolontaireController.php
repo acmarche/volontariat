@@ -25,7 +25,9 @@ class VolontaireController extends AbstractController
     {
         $user = $this->getUser();
 
-        if (!$volontaire= $user->volontaire) {
+        $volontaire = $this->volontaireRepository->findVolontaireByUser($user);
+
+        if (!$volontaire) {
             $this->addFlash('success', 'Aucune fiche volontaire trouvée');
 
             return $this->redirectToRoute('volontariat_dashboard');

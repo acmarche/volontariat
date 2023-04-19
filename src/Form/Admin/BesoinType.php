@@ -5,6 +5,7 @@ namespace AcMarche\Volontariat\Form\Admin;
 use AcMarche\Volontariat\Entity\Besoin;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -24,25 +25,30 @@ class BesoinType extends AbstractType
             ->add(
                 'date_begin',
                 DateType::class,
-                array(
+                [
+                    'label' => 'Date de début de publication',
                     'widget' => 'single_text',
                     'required' => true,
                     'help' => 'Date de début de diffusion, format 20/10/2019',
-                    'attr' => array(
+                    'attr' => [
                         'class' => 'datepicker',
-                    ),
-                )
+                    ],
+                ]
             )
             ->add(
                 'date_end',
                 DateType::class,
-                array(
+                [
+                    'label' => 'Date de fin de publication',
                     'widget' => 'single_text',
                     'required' => true,
                     'help' => 'Date de fin de diffusion, format 20/10/2019',
-                )
+                ]
             )
-            ->add('requirement')
+            ->add('requirement', TextareaType::class, [
+                'label' => 'Description',
+                'attr' => ['rows' => 3],
+            ])
             ->add('period')
             ->add('place');
     }
@@ -50,9 +56,9 @@ class BesoinType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
-            array(
+            [
                 'data_class' => Besoin::class,
-            )
+            ]
         );
     }
 }

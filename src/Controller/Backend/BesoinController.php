@@ -57,11 +57,12 @@ class BesoinController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $besoin->setUuid($besoin->generateUuid());
             $this->besoinRepository->persist($besoin);
             $this->besoinRepository->flush();
             $this->addFlash('success', 'Le besoin a bien été ajouté');
 
-            return $this->redirectToRoute('volontariat_backend_besoin', ['id' => $this->association->getId()]);
+            return $this->redirectToRoute('volontariat_backend_besoin');
         }
 
         return $this->render(
@@ -73,7 +74,7 @@ class BesoinController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}/edit', name: 'volontariat_backend_besoin_edit')]
+    #[Route(path: '/{uuid}/edit', name: 'volontariat_backend_besoin_edit')]
     #[IsGranted('edit', subject: 'besoin')]
     public function edit(Request $request, Besoin $besoin): Response
     {
@@ -85,13 +86,12 @@ class BesoinController extends AbstractController
             $this->besoinRepository->flush();
 
             $this->addFlash('success', 'Le besoin a bien été modifié');
-            $association = $besoin->getAssociation();
 
-            return $this->redirectToRoute('volontariat_backend_besoin', ['id' => $association->getId()]);
+            return $this->redirectToRoute('volontariat_backend_besoin');
         }
 
         return $this->render(
-            '@Volontariat/backend/besoin/edit.html.twig',
+            '@Volontariat/backend/besoin/new.html.twig',
             [
                 'besoin' => $besoin,
                 'form' => $form->createView(),
@@ -99,12 +99,18 @@ class BesoinController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}/delete', name: 'volontariat_backend_besoin_delete', methods: ['POST'])]
-    public function delete(Request $request, Besoin $besoin): RedirectResponse
+    #[Route(path: '/delete', name: 'volontariat_backend_besoin_delete', methods: ['POST'])]
+    public function delete(Request $request): RedirectResponse
     {
-        if ($this->isCsrfTokenValid('delete'.$besoin->getId(), $request->request->get('_token'))) {
-            $this->besoinRepository->remove($besoin);
-            $this->besoinRepository->flush();
+        if ($this->isCsrfTokenValid('deletedd', $request->request->get('_token'))) {
+            $uid = $request->request->get('id');
+            $besoin = $this->besoinRepository->findOneBy(['uuid' => $uid]);
+            if ($besoin) {
+                if ($this->isGranted('edit', $besoin)) {
+                    $this->besoinRepository->remove($besoin);
+                    $this->besoinRepository->flush();
+                }
+            }
             $this->addFlash('success', 'Le besoin a bien été supprimé');
         }
 

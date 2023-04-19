@@ -11,6 +11,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: BesoinRepository::class)]
 class Besoin implements \Stringable
 {
+    use UuidTrait;
+
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]

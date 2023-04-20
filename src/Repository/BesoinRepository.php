@@ -47,7 +47,6 @@ class BesoinRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param Association|null $association
      * @return Besoin[]
      */
     public function findByAssociation(?Association $association): array
@@ -55,6 +54,20 @@ class BesoinRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('besoin')
             ->andWhere('besoin.association = :association')
             ->setParameter('association', $association)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Besoin[]
+     */
+    public function search(string $keyword): array
+    {
+        return $this->createQueryBuilder('besoin')
+            ->andWhere(
+                'besoin.name LIKE :mot OR besoin.requirement LIKE :mot OR besoin.place LIKE :mot '
+            )
+            ->setParameter('mot', '%'.$keyword.'%')
             ->getQuery()
             ->getResult();
     }

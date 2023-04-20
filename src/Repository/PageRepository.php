@@ -30,4 +30,17 @@ class PageRepository extends ServiceEntityRepository
             ->andWhere('page.actualite = 1')
             ->orderBy('page.id', 'DESC')->getQuery()->getResult();
     }
+
+    /**
+     * @return Page[]
+     */
+    public function search(string $keyword): array
+    {
+        return $this->createQueryBuilder('page')
+            ->andWhere('page.actualite = 1')
+            ->andWhere('page.title LIKE :mot OR page.content LIKE :mot OR page.excerpt LIKE :mot ')
+            ->setParameter('mot', '%'.$keyword.'%')
+            ->orderBy('page.id', 'DESC')
+            ->getQuery()->getResult();
+    }
 }

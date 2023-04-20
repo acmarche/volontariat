@@ -5,8 +5,10 @@ namespace AcMarche\Volontariat\Controller;
 use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Repository\PageRepository;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
+use AcMarche\Volontariat\Search\Searcher;
 use AcMarche\Volontariat\Service\FileHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -16,7 +18,8 @@ class DefaultController extends AbstractController
         private FileHelper $fileHelper,
         private PageRepository $pageRepository,
         private AssociationRepository $associationRepository,
-        private VolontaireRepository $volontaireRepository
+        private VolontaireRepository $volontaireRepository,
+        private Searcher $searcher
     ) {
     }
 
@@ -34,6 +37,23 @@ class DefaultController extends AbstractController
             'pages' => $pages,
             'volontaires' => $volontaires,
             'associations' => $associations,
+        ]);
+    }
+
+    #[Route(path: '/search', name: 'volontariat_search')]
+    public function search(Request $request): Response
+    {
+        $keyword = $request->query->get('keyword');
+        $results = [];
+        if (!$keyword) {
+            $this->addFlash('danger', 'Veuillez encoder un mot clef');
+        } else {
+            $results = $this->searcher->search($keyword);
+        }
+
+        return $this->render('@Volontariat/default/search.html.twig', [
+            'keyword' => $keyword,
+            'results' => $results,
         ]);
     }
 }

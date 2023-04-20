@@ -83,6 +83,21 @@ class AssociationRepository extends ServiceEntityRepository
     /**
      * @return Association[]
      */
+    public function searchFront(string $keyword): array
+    {
+        return $this->createQBl()
+            ->andWhere('association.notification_message_association = 1')
+            ->andWhere(
+                'association.email LIKE :mot OR association.name LIKE :mot OR association.description LIKE :mot '
+            )
+            ->setParameter('mot', '%'.$keyword.'%')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return Association[]
+     */
     public function findAcceptMessage(): array
     {
         return $this->createQBl()

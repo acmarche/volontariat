@@ -16,7 +16,8 @@
             {% for volontaire in volontaires %}
                 <li>
                     {% if volontaire.imageName %}
-                        <img class="mx-auto h-24 w-24 rounded-full" src="{{ vich_uploader_asset(volontaire, 'image') | imagine_filter('acmarche_volontariat_index') }}"
+                        <img class="mx-auto h-24 w-24 rounded-full"
+                             src="{{ vich_uploader_asset(volontaire, 'image') | imagine_filter('acmarche_volontariat_index') }}"
                              alt="">
                     {% else %}
                         <svg class="mx-auto  rounded-full h-12 w-12 text-gray-300" fill="currentColor"
@@ -31,7 +32,11 @@
                         </a>
                     </h3>
                     <p class="text-sm leading-6 text-gray-600">
-                        De {{ volontaire.city }} {% if volontaire.birthyear %}({{ volontaire.birthyear }} ans)  {% endif %}
+                        De {{ volontaire.city }}
+                        {% if volontaire.birthyear %}
+                            {% set age = date().diff(date(volontaire.birthday)).y %}
+                            ({{ age }} ans)
+                        {% endif %}
                     </p>
                 </li>
             {% endfor %}

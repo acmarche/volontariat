@@ -15,9 +15,9 @@ class SecteurType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name', TextType::class, array(
-                'attr' => array('size' => 45)
-            ))
+            ->add('name', TextType::class, [
+                'attr' => ['size' => 45],
+            ])
             ->add(
                 'display',
                 CheckboxType::class,
@@ -26,17 +26,17 @@ class SecteurType extends AbstractType
                     'required' => false,
                 ]
             )
-            ->add('description', TextareaType::class, array(
+            ->add('description', TextareaType::class, [
                 'required' => false,
-                'attr' => array(
-                    'rows' => 8)
-            ));
+                'attr' => [
+                    'rows' => 8],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(array(
-            'data_class' => Secteur::class
-        ));
+        $resolver->setDefaults([
+            'data_class' => Secteur::class,
+        ]);
     }
 }

@@ -13,6 +13,10 @@ class FileHelper
 {
     public string $directorySeparator;
 
+    /**
+     * @param string $rootUploadPath   $root/public/uploads/volontariat
+     * @param string $rootDownloadPath /uploads/volontariat
+     */
     public function __construct(private string $rootUploadPath, private string $rootDownloadPath)
     {
         $this->directorySeparator = DIRECTORY_SEPARATOR;
@@ -46,7 +50,7 @@ class FileHelper
         $finder = new Finder();
         $files = [];
         $directory = $this->getUploadPath($uploadable);
-        $webDirectory = $this->getDownloadPath($uploadable);
+        $downloadPath = $this->getDownloadPath($uploadable);
 
         if (is_dir($directory)) {
             $finder->files()->in($directory);
@@ -56,7 +60,7 @@ class FileHelper
                 $f = [];
 
                 $name = $file->getFilename();
-                $url = $webDirectory.$name;
+                $url = $downloadPath.$name;
                 $size = $file->getSize();
                 $mime = MimeTypes::getDefault()->guessMimeType($file->getPathname());
 

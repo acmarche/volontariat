@@ -2,7 +2,6 @@
 
 namespace AcMarche\Volontariat\Controller\Backend;
 
-use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Form\Admin\ImageDropZoneType;
 use AcMarche\Volontariat\Service\FileHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,17 +17,24 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('ROLE_VOLONTARIAT')]
 class ImageAssociationController extends AbstractController
 {
+    use getAssociationTrait;
+
     public function __construct(private FileHelper $fileHelper)
     {
     }
 
-    #[Route(path: '/{id}', name: 'volontariat_backend_images_association', methods: ['GET'])]
-    #[IsGranted('edit', subject: 'association')]
-    public function edit(Request $request, Association $association): Response
+    #[Route(path: '/', name: 'volontariat_backend_images_association', methods: ['GET'])]
+    public function edit(Request $request): Response
     {
+        if (($hasAssociation = $this->hasAssociation()) !== null) {
+            return $hasAssociation;
+        }
+
+        $this->denyAccessUnlessGranted('edit', $this->association);
+
         $form = $this->createForm(ImageDropZoneType::class);
 
-        $images = $this->fileHelper->getImages($association);
+        $images = $this->fileHelper->getImages($this->association);
 
         $form->handleRequest($request);
 
@@ -47,7 +53,7 @@ class ImageAssociationController extends AbstractController
                     $fileName = $orignalName.'-'.uniqid().'.'.$file->guessClientExtension();
 
                     try {
-                        $this->fileHelper->uploadFile($association, $file, $fileName);
+                        $this->fileHelper->uploadFile($this->association, $file, $fileName);
                     } catch (FileException $error) {
                         $this->addFlash('error', $error->getMessage());
                     }
@@ -61,22 +67,22 @@ class ImageAssociationController extends AbstractController
             '@Volontariat/backend/association/images_edit.html.twig',
             [
                 'images' => $images,
-                'association' => $association,
+                'association' => $this->association,
                 'form' => $form->createView(),
             ]
         );
     }
 
-#[Route(path: '/delete/{id}', name: 'volontariat_backend_image_association_delete', methods: ['POST'])]
-    public function delete(Request $request, Association $association): RedirectResponse
+    #[Route(path: '/delete', name: 'volontariat_backend_image_association_delete', methods: ['POST'])]
+    public function delete(Request $request): RedirectResponse
     {
-        if ($this->isCsrfTokenValid('delete'.$association->getId(), $request->request->get('_token'))) {
-
+        $this->denyAccessUnlessGranted('edit', $this->association);
+        if ($this->isCsrfTokenValid('delete'.$this->association->getId(), $request->request->get('_token'))) {
             $all = $request->request->all();
             $files = $all['img'];
             foreach ($files as $filename) {
                 try {
-                    $this->fileHelper->deleteOneDoc($association, $filename);
+                    $this->fileHelper->deleteOneDoc($this->association, $filename);
                     $this->addFlash('success', "L'image $filename a bien été supprimée");
                 } catch (FileException) {
                     $this->addFlash('error', "L'image  $filename n'a pas pu être supprimée. ");
@@ -84,6 +90,6 @@ class ImageAssociationController extends AbstractController
             }
         }
 
-        return $this->redirectToRoute('volontariat_admin_association_show', ['id' => $association->getId()]);
+        return $this->redirectToRoute('volontariat_dashboard');
     }
 }

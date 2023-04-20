@@ -11,7 +11,7 @@
                 {% for association in associations %}
                     {% set url = asset('bundles/acmarchevolontariat/img/door-784775_1920zz.jpg') %}
                     {% if association.imageName %}
-                        {% set url = association.imageName | imagine_filter('acmarche_volontariat_400_270') %}
+                        {% set url = vich_uploader_asset(association, 'image') | imagine_filter('acmarche_volontariat_400_270') %}
                     {% elseif association.firstImage %}
                         {% set url = association.firstImage.url | imagine_filter('acmarche_volontariat_400_270') %}
                     {% endif %}
@@ -27,7 +27,7 @@
                             </h3>
                         </a>
                         <p class="text-base leading-7 text-gray-600 font-bold">{{ association.city }}</p>
-                        <p class="mt-4 text-base text-base leading-7 text-gray-600">{{ association.description|u.truncate(450,'...')|nl2br }}</p>
+                        <p class="mt-4 text-base leading-7 text-gray-600">{{ association.description|u.truncate(450,'...')|nl2br }}</p>
                     </li>
                 {% endfor %}
             </ul>

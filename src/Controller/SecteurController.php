@@ -18,7 +18,7 @@ class SecteurController extends AbstractController
     #[Route(path: '/', name: 'volontariat_secteur')]
     public function index(): Response
     {
-        $secteurs = $this->secteurRepository->findAll();
+        $secteurs = $this->secteurRepository->findAllOrdered();
 
         return $this->render('@Volontariat/secteur/index.html.twig', [
             'secteurs' => $secteurs,

@@ -1,8 +1,71 @@
 <header class="relative z-20">
     <nav class="bg-white shadow">
-        <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-            <div class="relative flex h-16 justify-between">
-                <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
+        <div class="mx-auto max-w-7xl px-2 sm:px-4 lg:px-8">
+            <div class="flex h-16 justify-between">
+                <div class="flex px-2 lg:px-0">
+                    <div class="flex flex-shrink-0 items-center">
+                        <img class="block h-8 w-auto lg:hidden"
+                             src="{{ asset('/bundles/acmarchevolontariat/images/Marche.png') }}" alt="Volontariat">
+                        <img class="hidden h-8 w-auto lg:block"
+                             src="{{ asset('/bundles/acmarchevolontariat/images/Marche.png') }}" alt="Volontariat">
+                    </div>
+                    <div class="hidden lg:ml-6 lg:flex lg:space-x-8">
+                        <!-- Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" -->
+                        <a href="/"
+                           class="inline-flex items-center border-b-2 {{ app.current_route == 'volontariat_home' ? 'border-green-default' : 'border-transparent' }} px-1 pt-1 text-sm font-medium text-gray-900">
+                            Accueil
+                        </a>
+                        <a href="{{ path('volontariat_volontaire') }}"
+                           class="inline-flex items-center border-b-2 {{ app.current_route == 'volontariat_volontaire' ? 'border-green-default' : 'border-transparent' }} px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                            Volontaires
+                        </a>
+                        <a href="{{ path('volontariat_association') }}"
+                           class="inline-flex items-center border-b-2 {{ app.current_route == 'volontariat_association' ? 'border-green-default' : 'border-transparent' }} px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                            Associations
+                        </a>
+                        {% if app.user == null %}
+                            <a href="{{ path('volontariat_register_index') }}"
+                               class="inline-flex items-center border-b-2 {{ app.current_route == 'volontariat_register_index' ? 'border-green-default' : 'border-transparent' }} px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                                Je m'inscris
+                            </a>
+                            <a href="{{ path('app_login') }}"
+                               class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                                Je me connecte
+                            </a>
+                        {% endif %}
+                        <a href="{{ path('volontariat_secteur') }}"
+                           class="inline-flex items-center border-b-2 {{ app.current_route == 'volontariat_secteur' ? 'border-green-default' : 'border-transparent' }} px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                            Secteurs d'activités
+                        </a>
+                        <a href="{{ path('volontariat_besoin') }}"
+                           class="inline-flex items-center border-b-2 {{ app.current_route == 'volontariat_besoin' ? 'border-green-default' : 'border-transparent' }} px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                            À la une
+                        </a>
+                        <a href="{{ path('volontariat_contact') }}"
+                           class="inline-flex items-center border-b-2 {{ app.current_route == 'volontariat_contact' ? 'border-green-default' : 'border-transparent' }} px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                            Contactez-nous
+                        </a>
+                    </div>
+                </div>
+                <div class="flex flex-1 items-center justify-center px-2 lg:ml-6 lg:justify-end">
+                    <div class="w-full max-w-lg lg:max-w-xs">
+                        <label for="search" class="sr-only">Rechercher</label>
+                        <div class="relative">
+                            <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                                <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"
+                                     aria-hidden="true">
+                                    <path fill-rule="evenodd"
+                                          d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
+                                          clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                            <input id="search" name="search"
+                                   class="block w-full rounded-md border-0 bg-white py-1.5 pl-10 pr-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                   placeholder="Rechercher" type="search">
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center lg:hidden">
                     <!-- Mobile menu button -->
                     <button type="button"
                             class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
@@ -31,67 +94,22 @@
                         </svg>
                     </button>
                 </div>
-                <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                    <div class="flex flex-shrink-0 items-center">
-                        <a href="/" class="block h-8 w-auto lg:hidden">
-                            <img class="block h-8 w-auto lg:hidden"
-                                 src="{{ asset('/bundles/acmarchevolontariat/images/Marche.png') }}"
-                                 alt="Marche">
-                        </a>
-                        <a href="/" class="hidden h-8 w-auto lg:block">
-                            <img class="hidden h-8 w-auto lg:block"
-                                 src="{{ asset('/bundles/acmarchevolontariat/images/Marche.png') }}"
-                                 alt="Marche">
-                        </a>
-                    </div>
-                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
-                        <!-- Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" -->
-                        <!-- { app.current_route } -->
-                        <a href="/"
-                           class="inline-flex items-center border-b-2 {{ app.current_route == 'volontariat_home' ? 'border-green-default' : 'border-transparent' }}  px-1 pt-1 text-sm font-medium text-gray-900">Accueil</a>
-                        <a href="{{ path('volontariat_volontaire') }}"
-                           class="inline-flex items-center border-b-2  {{ app.current_route == 'volontariat_volontaire' ? 'border-green-default' : 'border-transparent' }}  px-1 pt-1 text-sm font-medium text-gray-500 hover:border-green-light hover:text-gray-700">
-                            Volontaires
-                        </a>
-                        <a href="{{ path('volontariat_association') }}"
-                           class="inline-flex items-center border-b-2  {{ app.current_route == 'volontariat_association' ? 'border-green-default' : 'border-transparent' }}  px-1 pt-1 text-sm font-medium text-gray-500 hover:border-green-light hover:text-gray-700">
-                            Associations
-                        </a>
-                        {% if app.user == null %}
-                            <a href="{{ path('volontariat_register_index') }}"
-                               class="inline-flex items-center border-b-2  {{ app.current_route == 'volontariat_register_index' ? 'border-green-default' : 'border-transparent' }}  px-1 pt-1 text-sm font-medium text-gray-500 hover:border-green-light hover:text-gray-700">
-                                Je m'inscris
-                            </a>
-                            <a href="{{ path('app_login') }}"
-                               class="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-green-light hover:text-gray-700">
-                                Je me connecte
-                            </a>
-                        {% endif %}
-                        <a href="{{ path('volontariat_secteur') }}"
-                           class="inline-flex items-center border-b-2  {{ app.current_route == 'volontariat_secteur' ? 'border-green-default' : 'border-transparent' }}  px-1 pt-1 text-sm font-medium text-gray-500 hover:border-green-light hover:text-gray-700">
-                            Secteurs d'activités
-                        </a>
-                        <a href="{{ path('volontariat_besoin') }}"
-                           class="inline-flex items-center border-b-2  {{ app.current_route == 'volontariat_besoin' ? 'border-green-default' : 'border-transparent' }}  px-1 pt-1 text-sm font-medium text-gray-500 hover:border-green-light hover:text-gray-700">
-                            À la une
-                        </a>
-                        <a href="{{ path('volontariat_contact') }}"
-                           class="inline-flex items-center border-b-2  {{ app.current_route == 'volontariat_contact' ? 'border-green-default' : 'border-transparent' }}  px-1 pt-1 text-sm font-medium text-gray-500 hover:border-green-light hover:text-gray-700">
-                            Contactez-nous
-                        </a>
-                    </div>
-                </div>
+
                 {% if app.user %}
-                    <div title="Menu"
-                         class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                    <div class="hidden lg:ml-4 lg:flex lg:items-center" x-data="{ menuOpen: false }">
                         <!-- Profile dropdown -->
-                        <div class="relative ml-3" x-data="{ open: false }">
+                        <div class="relative ml-4 flex-shrink-0">
                             <div>
                                 <button type="button"
-                                        @click="open = !open"
+                                        @click="menuOpen = !menuOpen"
                                         class="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                         id="user-menu-button" aria-expanded="false" aria-haspopup="true">
                                     <span class="sr-only">Open user menu</span>
+                                    {#
+                                    <img class="h-8 w-8 rounded-full"
+                                           src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                           alt="">
+                                    #}
                                     <span class="h-8 w-8 overflow-hidden rounded-full bg-gray-100">
                                         <svg class="h-full w-full text-gray-300" fill="currentColor"
                                              viewBox="0 0 24 24">
@@ -104,32 +122,35 @@
                             <!--
                               Dropdown menu, show/hide based on menu state.
 
-                              Entering: "transition ease-out duration-200"
+                              Entering: "transition ease-out duration-100"
                                 From: "transform opacity-0 scale-95"
                                 To: "transform opacity-100 scale-100"
                               Leaving: "transition ease-in duration-75"
                                 From: "transform opacity-100 scale-100"
                                 To: "transform opacity-0 scale-95"
                             -->
-                            <div x-show="open"
+                            <div class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                 x-show="menuOpen"
                                  x-cloak
-                                 x-transition:enter="transition ease-out duration-200"
+                                 x-transition:enter="transition ease-out duration-100"
                                  x-transition:enter-start="opacity-0 scale-95"
                                  x-transition:enter-end="opacity-100 scale-100"
                                  x-transition:leave="transition ease-in duration-75"
                                  x-transition:leave-start="opacity-100 scale-100"
                                  x-transition:leave-end="opacity-0 scale-95"
-                                 class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                                  role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button"
                                  tabindex="-1">
                                 <!-- Active: "bg-gray-100", Not Active: "" -->
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1"
+                                <a href="{{ path('volontariat_backend_account_edit') }}"
+                                   class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1"
                                    id="user-menu-item-0">{{ app.user.name }} {{ app.user.surname }}</a>
                                 <a href="{{ path('volontariat_dashboard') }}"
-                                   class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1"
+                                   class="block px-4 py-2 text-sm text-gray-700"
+                                   role="menuitem" tabindex="-1"
                                    id="user-menu-item-1">Tableau de bord</a>
                                 <a href="{{ path('app_logout') }}" class="block px-4 py-2 text-sm text-gray-700"
-                                   role="menuitem" tabindex="-1"
+                                   role="menuitem"
+                                   tabindex="-1"
                                    id="user-menu-item-2">Me déconnecter</a>
                             </div>
                         </div>
@@ -139,38 +160,71 @@
         </div>
 
         <!-- Mobile menu, show/hide based on menu state. -->
-        <div class="sm:hidden" id="mobile-menu">
-            <div class="space-y-1 pt-2 pb-4">
-                <!-- Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700" -->
+        <div class="lg:hidden" id="mobile-menu">
+            <div class="space-y-1 pb-3 pt-2">
+                <!-- Current: "bg-indigo-50 border-indigo-500 text-indigo-700", Default: "border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800" -->
                 <a href="/"
                    class="block border-l-4 border-indigo-500 bg-indigo-50 py-2 pl-3 pr-4 text-base font-medium text-indigo-700">
                     Accueil
                 </a>
                 <a href="{{ path('volontariat_volontaire') }}"
-                   class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700">
+                   class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800">
                     Volontaires
                 </a>
                 <a href="{{ path('volontariat_association') }}"
-                   class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700">
+                   class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800">
                     Associations
                 </a>
-                <a href="{{ path('volontariat_besoin') }}"
-                   class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700">
-                    Besoins de vous
-                </a>
-                <a href="{{ path('volontariat_secteur') }}"
-                   class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700">
-                    Secteurs
-                </a>
                 <a href="{{ path('volontariat_register_index') }}"
-                   class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700">
+                   class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800">
                     Je m'inscris
                 </a>
+                <a href="{{ path('app_login') }}"
+                   class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800">
+                    Je me connecte
+                </a>
+                <a href="{{ path('volontariat_secteur') }}"
+                   class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800">
+                    Secteurs d'activités
+                </a>
+                <a href="{{ path('volontariat_besoin') }}"
+                   class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800">
+                    À la une
+                </a>
                 <a href="{{ path('volontariat_contact') }}"
-                   class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-700">
+                   class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800">
                     Contactez-nous
                 </a>
             </div>
+            {% if app.user %}
+                <div class="border-t border-gray-200 pb-3 pt-4">
+                    <div class="flex items-center px-4">
+                        <div class="flex-shrink-0">
+                            <img class="h-10 w-10 rounded-full"
+                                 src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                 alt="">
+                        </div>
+                        <div class="ml-3">
+                            <div class="text-base font-medium text-gray-800">{{ app.user.name }} {{ app.user.surname }}</div>
+                            <div class="text-sm font-medium text-gray-500">tom@example.com</div>
+                        </div>
+                    </div>
+                    <div class="mt-3 space-y-1">
+                        <a href="{{ path('volontariat_backend_account_edit') }}"
+                           class="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800">
+                            {{ app.user.name }} {{ app.user.surname }}
+                        </a>
+                        <a href="{{ path('volontariat_dashboard') }}"
+                           class="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800">
+                            Tableau de bord
+                        </a>
+                        <a href="{{ path('app_logout') }}"
+                           class="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800">
+                            Me déconnecter
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </nav>
 </header>

@@ -111,6 +111,13 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
         return 'association';
     }
 
+    public function __construct()
+    {
+        $this->secteurs = new ArrayCollection();
+        $this->besoins = new ArrayCollection();
+        $this->images = [];
+    }
+
     public function __toString(): string
     {
         return $this->name;
@@ -152,13 +159,5 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
     public function getId()
     {
         return $this->id;
-    }
-
-    public function __construct()
-    {
-        $this->secteurs = new ArrayCollection();
-        $this->besoins = new ArrayCollection();
-        $this->activites = new ArrayCollection();
-        $this->images = [];
     }
 }

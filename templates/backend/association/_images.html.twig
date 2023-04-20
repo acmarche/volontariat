@@ -1,0 +1,31 @@
+<h3 class="text-success mt-3">Image(s) actuelle(s)</h3>
+
+<form method="post" action="{{ path('volontariat_backend_image_association_delete') }}">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ association.id) }}">
+
+    <div class="d-flex flex-row gap-2">
+        {% for image in images %}
+            <div class="">
+                <p class="text-center">
+                    <label>
+                        <input type="checkbox" name="img[]" value="{{ image.name }}"/>
+                    </label>
+                </p>
+                <a href="{{ image.url }}" title="{{ image.name }}" data-gallery>
+                    {% if 'image' in image.mime %}
+                        <img src="{{ image.url | imagine_filter('acmarche_volontariat_edit_thumb') }}" alt="img"
+                             class="img-thumbnail"/>
+                    {% else %}
+                        {{ image.name }}
+                    {% endif %}
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+
+    <button type="submit" class="btn btn-danger btn-sm mt-3">
+        <i class="fas fa-trash"></i>
+        Supprimer les images sélectionnées
+    </button>
+
+</form>

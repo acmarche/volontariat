@@ -1,4 +1,4 @@
-{% extends '@Volontariat/admin/base.html.twig' %}
+{% extends '@Volontariat/base.html.twig' %}
 
 {% block body %}
 
@@ -12,13 +12,13 @@
             {{ form_end(form) }}
 
             {% if images | length > 0 %}
-                {% include "@Volontariat/admin/imageAssociation/_images.html.twig" %}
+                {% include "@Volontariat/backend/association/_images.html.twig" %}
             {% else %}
                 <p class="text-warning">Aucune image actuellement</p>
             {% endif %}
         </div>
         <div class="card-footer">
-            <a href="{{ path('volontariat_admin_association_show', { 'id': association.id }) }}" class="btn btn-primary"
+            <a href="{{ path('volontariat_dashboard') }}" class="btn btn-primary"
                role="button"><i class="fas fa-list"></i> Retour à l' association</a>
         </div>
     </div>

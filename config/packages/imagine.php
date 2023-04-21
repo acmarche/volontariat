@@ -14,7 +14,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'acmarche_volontariat_thumb' => [
                     'quality' => 100,
                     'cache' => 'default',
-                    'filters' => ['thumbnail' => ['size' => [120, 90], 'mode' => 'outbound']],
+                    'filters' => ['thumbnail' => ['size' => [120, 90], 'mode' => 'inset']],
                 ],
                 'acmarche_volontariat_400_270' => [
                     'quality' => 100,

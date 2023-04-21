@@ -64,7 +64,7 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
     public ?string $mobile;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    #[Assert\Length(max: 600)]
+    #[Assert\Length(max: 900)]
     public ?string $description;
     /**
      * Description des besoins permanent.

@@ -31,29 +31,8 @@ class MessageController extends AbstractController
     ) {
     }
 
-    #[Route(path: '/', name: 'volontariat_admin_message')]
-    public function index(): Response
-    {
-        $messages = [];
-        $args = ['is_publish' => 1];
-        $user = $this->getUser();
-        if (null !== $user) {
-            if (true === $user->hasRole('ROLE_ADMIN')) {
-                $messages = $this->messageRepository->findAll();
-            }
-        } else {
-            $messages = $this->messageRepository->findBy($args);
-        }
-        $count = is_countable($messages) ? count($messages) : 0;
-
-        return $this->render(
-            '@Volontariat/admin/message/index.html.twig',
-            ['messages' => $messages, 'count' => $count]
-        );
-    }
-
     #[Route(path: '/new/{query}', name: 'volontariat_admin_message_new')]
-    public function new(Request $request, $query): Response
+    public function new(Request $request, string $query): Response
     {
         $message = new Message();
         $form = $this->createForm(MessageType::class, $message);

@@ -20,7 +20,6 @@ class VolontaireController extends AbstractController
     }
 
     #[Route(path: '/edit', name: 'volontariat_backend_volontaire_edit')]
-    #[IsGranted('edit', subject: 'volontaire')]
     public function edit(Request $request): Response
     {
         $user = $this->getUser();
@@ -32,6 +31,9 @@ class VolontaireController extends AbstractController
 
             return $this->redirectToRoute('volontariat_dashboard');
         }
+
+        $this->denyAccessUnlessGranted('edit', $volontaire);
+
         $form = $this->createForm(VolontairePublicType::class, $volontaire);
 
         $form->handleRequest($request);

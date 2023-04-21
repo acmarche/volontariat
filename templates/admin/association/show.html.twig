@@ -64,7 +64,7 @@
                 <div class="col-6">
                     {% if association.imageName %}
                         <img class="thumbnail"
-                             src="{{ association.imageName | acmarche_volontariat_download_image(association) | imagine_filter('acmarche_volontariat_thumb') }}"
+                             src="{{ vich_uploader_asset(association, 'image') | imagine_filter('acmarche_volontariat_thumb') }}"
                              alt="{{ association.imageName }}">
                     {% endif %}
                 </div>

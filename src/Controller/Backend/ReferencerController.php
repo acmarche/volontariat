@@ -2,7 +2,9 @@
 
 namespace AcMarche\Volontariat\Controller\Backend;
 
+use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Message;
+use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Form\Contact\ReferencerType;
 use AcMarche\Volontariat\Mailer\MailerContact;
@@ -15,7 +17,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route(path: '/backend/referencer')]
+#[Route(path: '/referencer')]
 class ReferencerController extends AbstractController
 {
     use getAssociationTrait;
@@ -27,9 +29,9 @@ class ReferencerController extends AbstractController
     ) {
     }
 
-    #[Route(path: '/volontaire/{uuid}', name: 'volontariat_backend_volontaire')]
+    #[Route(path: '/volontaire/{uuid}', name: 'volontariat_referencer_volontaire')]
     #[IsGranted('ROLE_VOLONTARIAT')]
-    public function index(Request $request, Volontaire $volontaire): Response
+    public function volontaire(Request $request, Volontaire $volontaire): Response
     {
         if (($hasAssociation = $this->hasAssociation()) !== null) {
             return $hasAssociation;
@@ -39,7 +41,6 @@ class ReferencerController extends AbstractController
         $message->nom = $this->association->name;
         $message->sujet = $this->association->name;
         $message->from = $this->association->email;
-        $message->to = $volontaire->email;
 
         $form = $this->createForm(ReferencerType::class, $message);
 
@@ -63,6 +64,47 @@ class ReferencerController extends AbstractController
             [
                 'form' => $form->createView(),
                 'volontaire' => $volontaire,
+            ]
+        );
+    }
+
+    #[Route(path: '/association/{slug}', name: 'volontariat_referencer_association')]
+    public function association(Request $request, Association $association): Response
+    {
+        /**
+         * @var User $user
+         */
+        $user = $this->getUser();
+
+        $message = new Message();
+        if ($user) {
+            $message->nom = $user->name;
+            $message->sujet = $user->name;
+            $message->from = $user->email;
+        }
+
+        $form = $this->createForm(ReferencerType::class, $message);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+
+            try {
+                $this->mailerContact->sendReferencerAssociation($association, $data);
+                $this->addFlash('success', 'Le message a bien été envoyé');
+            } catch (TransportExceptionInterface $e) {
+                $this->addFlash('danger', 'Erreur lors de l\'envoie: '.$e->getMessage());
+            }
+
+            return $this->redirectToRoute('volontariat_association');
+        }
+
+        return $this->render(
+            '@Volontariat/contact/referencer_association.html.twig',
+            [
+                'form' => $form->createView(),
+                'association' => $association,
             ]
         );
     }

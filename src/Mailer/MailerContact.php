@@ -42,9 +42,6 @@ class MailerContact
     }
 
     /**
-     * @param Volontaire $volontaire
-     * @param array $data
-     * @return void
      * @throws TransportExceptionInterface
      */
     public function sendToVolontaire(Volontaire $volontaire, array $data): void
@@ -66,9 +63,6 @@ class MailerContact
     }
 
     /**
-     * @param Association $association
-     * @param array $data
-     * @return void
      * @throws TransportExceptionInterface
      */
     public function sendToAssociation(Association $association, array $data): void
@@ -90,10 +84,6 @@ class MailerContact
     }
 
     /**
-     * @param Association $association
-     * @param Volontaire $volontaire
-     * @param Message $data
-     * @return void
      * @throws TransportExceptionInterface
      */
     public function sendReferencerVolontaire(Association $association, Volontaire $volontaire, Message $data): void
@@ -109,6 +99,27 @@ class MailerContact
                     'data' => $data,
                     'association' => $association,
                     'volontaire' => $volontaire,
+                ])
+            );
+
+        $this->mailer->send($email);
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     */
+    public function sendReferencerAssociation(Association $association, Message $data): void
+    {
+        $email = (new TemplatedEmail())
+            ->from($data->from)
+            ->to(new Address($data->to))
+            ->bcc(new Address($this->from))
+            ->subject($data->sujet.' vous recommande une association')
+            ->htmlTemplate('@Volontariat/emails/_recommande_association.html.twig')
+            ->context(
+                array_merge($this->defaultParams(), [
+                    'data' => $data,
+                    'association' => $association,
                 ])
             );
 

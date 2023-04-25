@@ -6,7 +6,19 @@
         </div>
         <div class="px-4 py-5 sm:p-6">
 
+            Bonjour,<br/><br/>
 
+            <strong>{{ data.sujet }}</strong> vous recommande l'association suivante : <br/><br/>
+
+            <a href="{{ url('volontariat_association_show', {'slug': association.slug}) }}"
+               class="text-atlantis-600 hover:text-rose-300">
+                {{ association }}
+            </a>
+            <br/><br/>
+            {{ data.contenu|nl2br }}
+            <br/><br/>
+            <a href="https://volontariat.marche.be/">Plate forme du Volontariat - Marche-en-Famenne</a>
+            <br/><br/>
             {% include '@AcMarcheVolontariat/emails/_footer.html.twig' %}
 
         </div>

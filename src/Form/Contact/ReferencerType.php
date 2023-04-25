@@ -34,7 +34,6 @@ class ReferencerType extends AbstractType
                 EmailType::class,
                 [
                     'label' => 'Adresse mail du destinataire',
-                    'attr' => ['readonly' => true],
                 ]
             )
             ->add(

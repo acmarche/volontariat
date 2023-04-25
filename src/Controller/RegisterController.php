@@ -90,8 +90,10 @@ class RegisterController extends AbstractController
     {
         $association = new Association();
         $association->setUuid($association->generateUuid());
+
         $form = $this->createForm(RegisterAssociationType::class, $association);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $email = $form->getData()->getEmail();
             if (null !== $this->userRepository->findOneByEmail($email)) {

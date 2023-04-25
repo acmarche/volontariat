@@ -35,6 +35,7 @@ class MailerSecurity
         $email = (new TemplatedEmail())
             ->from($this->from)
             ->to(new Address($voluntary->email))
+            ->bcc(new Address($this->from))
             ->subject('Bienvenue sur la plate-forme du volontariat')
             ->htmlTemplate('@Volontariat/emails/_welcome_voluntary.html.twig')
             ->context(
@@ -61,6 +62,7 @@ class MailerSecurity
         $email = (new TemplatedEmail())
             ->from($this->from)
             ->to(new Address($association->email))
+            ->bcc(new Address($this->from))
             ->subject('Bienvenue sur la plate-forme du volontariat')
             ->htmlTemplate('@Volontariat/emails/_welcome_association.html.twig')
             ->context(

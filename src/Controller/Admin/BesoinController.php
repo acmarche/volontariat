@@ -35,6 +35,7 @@ class BesoinController extends AbstractController
     public function new(Request $request, Association $association): Response
     {
         $besoin = new Besoin();
+        $besoin->setUuid($besoin->generateUuid());
         $besoin->setAssociation($association);
         $form = $this->createForm(BesoinType::class, $besoin);
 

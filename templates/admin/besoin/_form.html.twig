@@ -1,0 +1,22 @@
+{{ form_start(form) }}
+{{ form_errors(form) }}
+{{ form_row(form.name) }}
+
+<div class="row">
+    <div class="col-6">
+        {{ form_row(form.date_begin) }}
+    </div>
+    <div class="col-6">
+        {{ form_row(form.date_end) }}
+    </div>
+</div>
+
+{{ form_row(form.period) }}
+{{ form_row(form.place) }}
+{{ form_row(form.requirement) }}
+
+<button type="submit" name="save" class="btn btn-primary my-1 mr-sm-2 mb-3">
+    <i class="fas fa-save"></i> Sauvegarder
+</button>
+
+{{ form_end(form) }}

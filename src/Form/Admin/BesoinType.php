@@ -49,8 +49,12 @@ class BesoinType extends AbstractType
                 'label' => 'Description',
                 'attr' => ['rows' => 3],
             ])
-            ->add('period')
-            ->add('place');
+            ->add('period', TextareaType::class, [
+                'label' => 'Quand ?',
+            ])
+            ->add('place', TextType::class, [
+                'label' => 'Lieu de prestation',
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

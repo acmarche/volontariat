@@ -1,22 +1,21 @@
 {% extends '@Volontariat/admin/base.html.twig' %}
-{% block stylesheets %}
-    <link href="{{ asset('bundles/volontariat/jquery-ui/jquery-ui.css') }}" rel="stylesheet">
-{% endblock %}
+
 {% block body -%}
 
-        <h3>{{ besoin }}</h3>
+    <div class="card">
+        <h3 class="card-header">{{ besoin }}</h3>
+        <div class="card-body">
 
-    <div class="row">
-        <div class="col-lg-8">
-            {{ form(form) }}
+            <div class="row">
+                <div class="col-lg-8">
+                    {% include '@AcMarcheVolontariat/admin/besoin/_form.html.twig' %}
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a href="{{ path('volontariat_admin_besoin_show', {'id':besoin.id}) }}">
+                <span class="fas fa-list"></span> Annuler
+            </a>
         </div>
     </div>
-
-    <a href="{{ path('volontariat_admin_besoin_show', {'id':besoin.id}) }}">
-        <span class="fas fa-list"></span> Annuler
-    </a>
-
-{% endblock %}
-{% block scripts %}
-    {% include '@Volontariat/admin/form/calendar.html.twig' %}
 {% endblock %}

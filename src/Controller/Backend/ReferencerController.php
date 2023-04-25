@@ -3,61 +3,66 @@
 namespace AcMarche\Volontariat\Controller\Backend;
 
 use AcMarche\Volontariat\Entity\Message;
+use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Form\Contact\ReferencerType;
-use AcMarche\Volontariat\Mailer\Mailer;
+use AcMarche\Volontariat\Mailer\MailerContact;
 use AcMarche\Volontariat\Mailer\MessageService;
 use AcMarche\Volontariat\Service\CaptchaService;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route(path: '/backend/referencer')]
 class ReferencerController extends AbstractController
 {
+    use getAssociationTrait;
+
     public function __construct(
-        private Mailer $mailer,
+        private MailerContact $mailerContact,
         private CaptchaService $captchaService,
         private MessageService $messageService
     ) {
     }
 
-    #[Route(path: '/', name: 'volontariat_backend_referencer')]
+    #[Route(path: '/volontaire/{uuid}', name: 'volontariat_backend_volontaire')]
     #[IsGranted('ROLE_VOLONTARIAT')]
-    public function index(Request $request): Response
+    public function index(Request $request, Volontaire $volontaire): Response
     {
-        if (($user = $this->getUser()) !== null) {
-            $this->contactManager->populateFromUser($user);
+        if (($hasAssociation = $this->hasAssociation()) !== null) {
+            return $hasAssociation;
         }
-        $user = $this->getUser();
-        $associations = $this->associationService->getAssociationsByUser($user, true);
-        $froms = $this->messageService->getFroms($user, $associations);
+
         $message = new Message();
-        $nom = $this->messageService->getNom($user);
-        $message->setNom($nom);
-        $form = $this->createForm(ReferencerType::class, $message, ['froms' => $froms])
-            ->add('Envoyer', SubmitType::class);
+        $message->nom = $this->association->name;
+        $message->sujet = $this->association->name;
+        $message->from = $this->association->email;
+        $message->to = $volontaire->email;
+
+        $form = $this->createForm(ReferencerType::class, $message);
+
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            if (!$this->captchaService->captchaverify($request->get('g-recaptcha-response'))) {
-                $this->addFlash('danger', 'Contrôle anti-spam non valide');
-            } else {
-                $this->mailer->sendReferencer($data, $user);
+
+            try {
+                $this->mailerContact->sendReferencerVolontaire($this->association, $volontaire, $data);
                 $this->addFlash('success', 'Le message a bien été envoyé');
+            } catch (TransportExceptionInterface $e) {
+                $this->addFlash('danger', 'Erreur lors de l\'envoie: '.$e->getMessage());
             }
 
-            return $this->redirectToRoute('volontariat_dashboard');
+            return $this->redirectToRoute('volontariat_volontaire');
         }
-        $keySite = $this->getParameter('acmarche_volontariat_captcha_site_key');
 
         return $this->render(
-            '@Volontariat/contact/referencer.html.twig',
+            '@Volontariat/contact/referencer_volontaire.html.twig',
             [
-                'siteKey' => $keySite,
                 'form' => $form->createView(),
+                'volontaire' => $volontaire,
             ]
         );
     }

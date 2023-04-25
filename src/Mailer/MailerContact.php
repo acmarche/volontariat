@@ -3,6 +3,7 @@
 namespace AcMarche\Volontariat\Mailer;
 
 use AcMarche\Volontariat\Entity\Association;
+use AcMarche\Volontariat\Entity\Message;
 use AcMarche\Volontariat\Entity\Volontaire;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -40,6 +41,12 @@ class MailerContact
         $this->mailer->send($email);
     }
 
+    /**
+     * @param Volontaire $volontaire
+     * @param array $data
+     * @return void
+     * @throws TransportExceptionInterface
+     */
     public function sendToVolontaire(Volontaire $volontaire, array $data): void
     {
         $email = (new TemplatedEmail())
@@ -58,6 +65,12 @@ class MailerContact
         $this->mailer->send($email);
     }
 
+    /**
+     * @param Association $association
+     * @param array $data
+     * @return void
+     * @throws TransportExceptionInterface
+     */
     public function sendToAssociation(Association $association, array $data): void
     {
         $email = (new TemplatedEmail())
@@ -70,6 +83,32 @@ class MailerContact
                 array_merge($this->defaultParams(), [
                     'data' => $data,
                     'association' => $association,
+                ])
+            );
+
+        $this->mailer->send($email);
+    }
+
+    /**
+     * @param Association $association
+     * @param Volontaire $volontaire
+     * @param Message $data
+     * @return void
+     * @throws TransportExceptionInterface
+     */
+    public function sendReferencerVolontaire(Association $association, Volontaire $volontaire, Message $data): void
+    {
+        $email = (new TemplatedEmail())
+            ->from($data->from)
+            ->to(new Address($volontaire->email))
+            ->bcc(new Address($this->from))
+            ->subject($association->name.' vous recommande un volontaire')
+            ->htmlTemplate('@Volontariat/emails/_recommande_volontaire.html.twig')
+            ->context(
+                array_merge($this->defaultParams(), [
+                    'data' => $data,
+                    'association' => $association,
+                    'volontaire' => $volontaire,
                 ])
             );
 

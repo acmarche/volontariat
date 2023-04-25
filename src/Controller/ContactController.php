@@ -43,7 +43,7 @@ class ContactController extends AbstractController
         return $this->render('@Volontariat/contact/contact.html.twig', ['form' => $form]);
     }
 
-    #[Route(path: '/volontaire/{uuid}}', name: 'volontariat_contact_volontaire')]
+    #[Route(path: '/volontaire/{uuid}', name: 'volontariat_contact_volontaire')]
     #[IsGranted('show', subject: 'volontaire')]
     public function volontaire(Request $request, Volontaire $volontaire): Response
     {
@@ -53,9 +53,12 @@ class ContactController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-
-            $this->mailerContact->sendToVolontaire($volontaire, $data);
-            $this->addFlash('success', 'Le volontaire a bien été contacté');
+            try {
+                $this->addFlash('success', 'Le volontaire a bien été contacté');
+                $this->mailerContact->sendToVolontaire($volontaire, $data);
+            } catch (TransportExceptionInterface|\Exception $e) {
+                $this->addFlash('danger', 'Erreur lors de l\'envoie du mail');
+            }
 
             return $this->redirectToRoute('volontariat_volontaire_show', ['id' => $volontaire->getId()]);
         }
@@ -77,9 +80,12 @@ class ContactController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-
-            $this->mailerContact->sendToAssociation($association, $data);
-            $this->addFlash('success', 'L\'association a bien été contactée');
+            try {
+                $this->addFlash('success', 'L\'association a bien été contactée');
+                $this->mailerContact->sendToAssociation($association, $data);
+            } catch (TransportExceptionInterface|\Exception $e) {
+                $this->addFlash('danger', 'Erreur lors de l\'envoie du mail');
+            }
 
             return $this->redirectToRoute('volontariat_association_show', ['id' => $association->getId()]);
         }

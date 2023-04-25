@@ -39,12 +39,12 @@ class Mailer
         Message $data,
         ?string $url = null
     ): void {
-        $content = $data->getContenu();
+        $content = $data->contenu;
 
         $email = (new TemplatedEmail())
             ->from($this->from)
             ->to(new Address($to))
-            ->subject($data->getSujet())
+            ->subject($data->sujet)
             ->htmlTemplate('@Volontariat/emails/_to_all.html.twig')
             ->context(
                 array_merge($this->defaultParams(), [
@@ -54,7 +54,7 @@ class Mailer
                 ])
             );
 
-        if ($uploadedFile = $data->getFile()) {
+        if ($uploadedFile = $data->file) {
             if ($uploadedFile instanceof UploadedFile) {
                 $email->attachFromPath(
                     $uploadedFile->getPathname(),

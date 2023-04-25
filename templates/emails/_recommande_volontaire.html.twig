@@ -1,0 +1,29 @@
+{% extends '@Volontariat/emails/basic.html.twig' %}
+{% block content %}
+    <div class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow prose prose-slate">
+        <div class="px-4 py-5 sm:px-6">
+            <h2 class="text-lg text-green-default font-bold">Recommandation d'un volontaire</h2>
+        </div>
+        <div class="px-4 py-5 sm:p-6">
+
+            Bonjour,<br/><br/>
+
+            L'association <strong>{{ association }}</strong> vous recommande le volontaire suivant : <br/><br/>
+
+            {{ volontaire.surname }} de {{ volontaire.city }}
+            {% if volontaire.birthyear %}
+                {% set age = date().diff(date(volontaire.birthday)).y %}
+                ({{ age }} ans)
+            {% endif %}
+            <br/><br/>
+            Si vous désirez accéder à ses coordonnées, vous devez enregistrer votre association sur notre plate-forme
+            <br/><br/>
+            <a href="https://volontariat.marche.be/">Plate forme du Volontariat - Marche-en-Famenne</a>
+            <br/><br/>
+            {{ data.contenu|nl2br }}
+            <br/><br/>
+            {% include '@AcMarcheVolontariat/emails/_footer.html.twig' %}
+
+        </div>
+    </div>
+{% endblock %}

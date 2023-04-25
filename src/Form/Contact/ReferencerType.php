@@ -4,7 +4,6 @@ namespace AcMarche\Volontariat\Form\Contact;
 
 use AcMarche\Volontariat\Entity\Message;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -15,57 +14,45 @@ class ReferencerType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $froms = $options['froms'];
-
         $builder
             ->add(
-                'nom',
+                'sujet',
                 TextType::class,
                 [
                     'label' => 'Votre nom',
                 ]
             )
             ->add(
-                'froms',
-                ChoiceType::class,
-                [
-                    'label' => 'Votre mail',
-                    'choices' => $froms,
-                ]
-            )
-            ->add(
-                'nom_destinataire',
+                'from',
                 TextType::class,
                 [
-                    'label' => 'Nom de l\'Association ou du volontaire',
+                    'label' => 'Votre mail',
                 ]
             )
             ->add(
-                'destinataires',
+                'to',
                 EmailType::class,
                 [
-                    'label' => 'Mail de l\'Association ou du volontaire',
+                    'label' => 'Adresse mail du destinataire',
+                    'attr' => ['readonly' => true],
                 ]
             )
             ->add(
                 'contenu',
                 TextareaType::class,
-                array(
+                [
                     'label' => 'Votre texte',
-                    'attr' => array('rows' => 8),
-                )
+                    'attr' => ['rows' => 8],
+                ]
             );
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(
-            array(
+            [
                 'data_class' => Message::class,
-                'froms' => [],
-            )
+            ]
         );
-
-        $resolver->setRequired('froms');
     }
 }

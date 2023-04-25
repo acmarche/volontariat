@@ -1,0 +1,39 @@
+{{ form_start(form, {'attr': {'class': 'px-6 pb-24 pt-20 sm:pb-32 lg:py-48 lg:px-8'}}) }}
+{{ form_errors(form) }}
+
+<div class="mx-auto max-w-xl lg:mr-0 lg:max-w-lg">
+    <div class="grid grid-cols-1 gap-y-6 gap-x-8 sm:grid-cols-2">
+        <div>
+            {{ form_label(form.from, null, {'label_attr': {'class': 'block text-sm font-semibold leading-6 text-gray-900'}}) }}
+            {{ form_errors(form.from) }}
+            {{ form_widget(form.from, {'attr': {'class': 'mt-2.5 block w-full rounded-md border-0 py-2 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'}}) }}
+            {{ form_help(form.from) }}
+        </div>
+        <div>
+            {{ form_label(form.sujet, null, {'label_attr': {'class': 'block text-sm font-semibold leading-6 text-gray-900'}}) }}
+            {{ form_errors(form.sujet) }}
+            {{ form_widget(form.sujet, {'attr': {'class': 'mt-2.5 block w-full rounded-md border-0 py-2 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'}}) }}
+            {{ form_help(form.sujet) }}
+        </div>
+        <div class="sm:col-span-2">
+            {{ form_label(form.to, null, {'label_attr': {'class': 'block text-sm font-semibold leading-6 text-gray-900'}}) }}
+            {{ form_errors(form.to) }}
+            {{ form_widget(form.to, {'attr': {'class': 'mt-2.5 block w-full rounded-md border-0 py-2 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'}}) }}
+            {{ form_help(form.to) }}
+        </div>
+        <div class="sm:col-span-2">
+            {{ form_label(form.contenu, null, {'label_attr': {'class': 'block text-sm font-semibold leading-6 text-gray-900'}}) }}
+            {{ form_errors(form.contenu) }}
+            {{ form_widget(form.contenu, {'attr': {'class': 'mt-2.5 block w-full rounded-md border-0 py-2 px-3.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'}}) }}
+            {{ form_help(form.contenu) }}
+        </div>
+    </div>
+    <div class="mt-8 flex justify-end">
+        <button type="submit"
+                class="rounded-md bg-green-default px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-green-light focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+            Référencer
+        </button>
+    </div>
+</div>
+
+{{ form_end(form) }}

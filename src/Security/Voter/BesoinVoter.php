@@ -31,7 +31,7 @@ class BesoinVoter extends Voter
     /**
      * {@inheritdoc}
      */
-    protected function supports($attribute, $subject):bool
+    protected function supports($attribute, $subject): bool
     {
         // this voter is only executed for three specific permissions on Post objects
         return $subject instanceof Besoin && in_array($attribute, [self::SHOW, self::EDIT, self::DELETE]);
@@ -40,7 +40,7 @@ class BesoinVoter extends Voter
     /**
      * {@inheritdoc}
      */
-    protected function voteOnAttribute($attribute, $besoin, TokenInterface $token):bool
+    protected function voteOnAttribute($attribute, $besoin, TokenInterface $token): bool
     {
         $user = $token->getUser();
 
@@ -51,6 +51,7 @@ class BesoinVoter extends Voter
         if ($this->decisionManager->decide($token, ['ROLE_VOLONTARIAT_ADMIN'])) {
             return true;
         }
+
         return match ($attribute) {
             self::SHOW => $this->canView($besoin, $token),
             self::EDIT => $this->canEdit($besoin, $token),
@@ -60,7 +61,7 @@ class BesoinVoter extends Voter
     }
 
     /**
-     * Voir dans l'admin
+     * Voir dans l'admin.
      */
     private function canView(Besoin $besoin, TokenInterface $token): bool
     {
@@ -70,7 +71,7 @@ class BesoinVoter extends Voter
     private function canEdit(Besoin $besoin, TokenInterface $token): bool
     {
         $user = $token->getUser();
-        $associationUser = $besoin->getAssociation()->getUser();
+        $associationUser = $besoin->getAssociation()->user;
 
         return $user === $associationUser;
     }

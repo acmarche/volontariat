@@ -56,7 +56,7 @@ class Mailer
 
         if ($uploadedFile = $data->getFile()) {
             if ($uploadedFile instanceof UploadedFile) {
-                $email->attachFromPath($uploadedFile);
+                $email->attachFromPath($uploadedFile->getPathname(), $uploadedFile->getClientOriginalName(), $uploadedFile->getClientMimeType());
             }
         }
         $this->mailer->send($email);

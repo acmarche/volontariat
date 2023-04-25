@@ -6,9 +6,6 @@ use AcMarche\Volontariat\Entity\Message;
 use AcMarche\Volontariat\Form\Admin\MessageType;
 use AcMarche\Volontariat\Mailer\Mailer;
 use AcMarche\Volontariat\Mailer\MessageService;
-use AcMarche\Volontariat\Repository\AssociationRepository;
-use AcMarche\Volontariat\Repository\MessageRepository;
-use AcMarche\Volontariat\Repository\VolontaireRepository;
 use AcMarche\Volontariat\Security\TokenManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,9 +20,6 @@ class MessageController extends AbstractController
 {
     public function __construct(
         private MessageService $messageService,
-        private AssociationRepository $associationRepository,
-        private VolontaireRepository $volontaireRepository,
-        private MessageRepository $messageRepository,
         private TokenManager $tokenManager,
         private Mailer $mailer,
     ) {
@@ -56,11 +50,12 @@ class MessageController extends AbstractController
                         $this->addFlash('danger', 'Erreur envoie pour '.$email.' '.$e->getMessage());
                     }
                 }
+                break;
             }
 
             $this->addFlash('success', 'Votre message a bien été envoyé');
 
-            return $this->redirectToRoute('volontariat_admin_message_new');
+            return $this->redirectToRoute('volontariat_admin_home');
         }
 
         return $this->render(

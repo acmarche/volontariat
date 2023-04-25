@@ -593,6 +593,20 @@ html {
   /* see https://www.getrevue.co/profile/shrutibalasa/issues/did-you-know-about-scroll-padding-easy-solution-to-fixed-header-problem-1325973 */
 }
 
+* {
+  /* outline: 1px #0ae4ff solid;*/
+}
+
+a {
+  --tw-text-opacity: 1;
+  color: rgb(83 146 30 / var(--tw-text-opacity));
+}
+
+a:hover {
+  --tw-text-opacity: 1;
+  color: rgb(253 164 175 / var(--tw-text-opacity));
+}
+
 [x-cloak] {
   display: none !important;
 }
@@ -1241,6 +1255,17 @@ img, video, iframe {
   grid-template-rows: auto 1fr auto;
 }
 
+.alert {
+  position: relative;
+  width: 100%;
+  border-radius: 0.25rem;
+  border-width: 1px;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
 .m-5 {
   margin: 1.25rem;
 }
@@ -1345,6 +1370,11 @@ img, video, iframe {
   font-weight: 600;
 }
 
+.text-atlantis-600 {
+  --tw-text-opacity: 1;
+  color: rgb(83 146 30 / var(--tw-text-opacity));
+}
+
 .text-gray-400 {
   --tw-text-opacity: 1;
   color: rgb(156 163 175 / var(--tw-text-opacity));
@@ -1374,6 +1404,11 @@ img, video, iframe {
 .hover\:text-red-200:hover {
   --tw-text-opacity: 1;
   color: rgb(254 202 202 / var(--tw-text-opacity));
+}
+
+.hover\:text-rose-300:hover {
+  --tw-text-opacity: 1;
+  color: rgb(253 164 175 / var(--tw-text-opacity));
 }
 
 @media (min-width: 640px) {

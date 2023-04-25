@@ -2,10 +2,6 @@
 
 namespace AcMarche\Volontariat\Command;
 
-use AcMarche\Volontariat\Repository\AssociationRepository;
-use AcMarche\Volontariat\Repository\BesoinRepository;
-use AcMarche\Volontariat\Repository\UserRepository;
-use AcMarche\Volontariat\Repository\VolontaireRepository;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -18,14 +14,10 @@ use Symfony\Component\Console\Style\SymfonyStyle;
     name: 'volontariat:migration',
     description: 'Add a short description for your command',
 )]
-class VolontariatMigrationCommand extends Command
+class MigrationCommand extends Command
 {
-    public function __construct(
-        private AssociationRepository $associationRepository,
-        private BesoinRepository $besoinRepository,
-        private VolontaireRepository $volontaireRepository,
-        private UserRepository $userRepository
-    ) {
+    public function __construct()
+    {
         parent::__construct();
     }
 
@@ -40,13 +32,7 @@ class VolontariatMigrationCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        // imagename
 
-        foreach ($this->besoinRepository->findAll() as $association) {
-            $association->setUuid($association->generateUuid());
-        }
-
-        $this->besoinRepository->flush();
         $io->success('You have a new command! Now make it your own! Pass --help to see your options.');
 
         return Command::SUCCESS;

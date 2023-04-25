@@ -1,7 +1,6 @@
 <?php
 
 use AcMarche\Volontariat\Entity\Security\User;
-use AcMarche\Volontariat\Security\Md5VerySecureHasher;
 use AcMarche\Volontariat\Security\MessageDigestPasswordHasher;
 use AcMarche\Volontariat\Security\VolontariatAuthenticator;
 use Symfony\Config\SecurityConfig;

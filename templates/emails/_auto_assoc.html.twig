@@ -1,0 +1,58 @@
+{% extends '@Volontariat/emails/basic.html.twig' %}
+{% block content %}
+    <div class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow prose prose-slate">
+        <div class="px-4 py-5 sm:px-6">
+            <h2 class="text-lg text-green-default font-bold">{{ association }}</h2>
+        </div>
+        <div class="px-4 py-5 sm:p-6">
+            Madame,<br/>
+            Monsieur,<br/><br/>
+
+            Vous faites partie des nombreuses associations présentes sur la Plate-Forme du Volontariat mise en vie <br/>
+            par le Plan de Cohésion Sociale et le Centre de Support Télématique de la Ville de Marche-en-Famenne.
+            <br/><br/>
+            Afin de dynamiser et de faire vivre la plate-Forme du Volontariat, nous avons besoin de vous !<br/>
+            Nous vous invitons à actualiser votre profil en révisant vos données diffusées <br/>
+            (adresse mail, descriptif de vos actions, besoin(s) en matière de volontariat,...) <br/>
+            mais aussi en y ajoutant de nouvelles informations par le biais de photos, de nouvelles actions, évènements,
+            afin de rendre votre page encore plus attractive !
+            <br/><br/>
+            <a href="{{ urlAccount }}" class="text-atlantis-600 hover:text-rose-300">
+                Me connecter à mon compte
+            </a>
+            <br/><br/>
+            Vous avez envie de partager cette expérience ? Le volontariat peut-il intéresser vos partenaires, vos
+            connaissances ?
+            <br/>
+            Alors, n’hésitez pas à référencer une association, un volontaire potentiels via les pages :
+            <br/>
+            <ul>
+                <li>
+                    <a href="{{ urlAssociations }}" class="text-atlantis-600 hover:text-rose-300">Liste des associations</a>
+                </li>
+                <li>
+                    <a href="{{ urlVolontaires }}" class="text-atlantis-600 hover:text-rose-300">Liste des volontaires</a>
+                </li>
+            </ul>
+            <br/>
+            (Onglet "Je référence" : lorsque vous êtes sur la fiche d'une assocation ou d'un volontaire. <br/>
+            <br/>
+            Ce qui permettra au référencé de recevoir un mail d’invitation à s’inscrire sur la plate-forme en
+            l’informant <br/>
+            que c’est Mr ou Me X qui l’a référencé)
+            <br/><br/>
+            Si, par ailleurs, vous ne souhaitez plus être présent sur la Plate-Forme, <br/>
+            <a href="{{ urlAccount }}" class="text-atlantis-600 hover:text-rose-300">
+                il vous est alors possible de désactiver, voire de supprimer votre compte en cliquant sur le lien.
+            </a>
+            <br/><br/>
+            Nous restons, bien entendu, à votre disposition pour toutes informations complémentaires.
+            <br/><br/>
+            Anne-Christine Wanlin<br/>
+            Collaboratrice au Plan de Cohésion sociale de la Ville de Marche<br/>
+
+            {% include '@AcMarcheVolontariat/emails/_footer.html.twig' %}
+
+        </div>
+    </div>
+{% endblock %}

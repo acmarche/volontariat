@@ -22,6 +22,7 @@ class AcMarcheVolontariatBundle extends AbstractBundle
     {
         $container->import('../config/packages/doctrine.php');
         $container->import('../config/packages/imagine.php');
+        $container->import('../config/packages/routing.php');
         $container->import('../config/packages/security.php');
         $container->import('../config/packages/vich_uploader.php');
         $container->import('../config/packages/twig.php');

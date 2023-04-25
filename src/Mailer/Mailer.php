@@ -56,26 +56,45 @@ class Mailer
 
         if ($uploadedFile = $data->getFile()) {
             if ($uploadedFile instanceof UploadedFile) {
-                $email->attachFromPath($uploadedFile->getPathname(), $uploadedFile->getClientOriginalName(), $uploadedFile->getClientMimeType());
+                $email->attachFromPath(
+                    $uploadedFile->getPathname(),
+                    $uploadedFile->getClientOriginalName(),
+                    $uploadedFile->getClientMimeType()
+                );
             }
         }
         $this->mailer->send($email);
     }
 
-    public function send($from, $destinataires, $sujet, $body, $bcc = null): void
-    {
-        $mail = (new Email())
-            ->subject($sujet)
-            ->from($from)
-            ->to($destinataires);
+    /**
+     * @param array $data
+     *
+     * @throws TransportExceptionInterface
+     */
+    public function sendAutoAssociation(
+        Association $association,
+        string $to,
+        string $urlAccount,
+        string $urlAssociations,
+        string $urlVolontaires
+    ): void {
 
-        if ($bcc) {
-            $mail->bcc($bcc);
-        }
+        $email = (new TemplatedEmail())
+            ->from($this->from)
+            ->to(new Address($to))
+            ->subject('Plate-forme du Volontariat')
+            ->htmlTemplate('@Volontariat/emails/_auto_assoc.html.twig')
+            ->context(
+                array_merge($this->defaultParams(), [
+                    'association' => $association,
+                    'urlAccount' => $urlAccount,
+                    'urlAssociations' => $urlAssociations,
+                    'urlVolontaires' => $urlVolontaires,
+                ])
+            );
 
-        $mail->text($body);
 
-        $this->mailer->send($mail);
+        $this->mailer->send($email);
     }
 
 }

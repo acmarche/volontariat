@@ -1,15 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jfsenechal
- * Date: 12/02/18
- * Time: 10:32.
- */
 
 namespace AcMarche\Volontariat\Mailer;
 
 use AcMarche\Volontariat\Entity\Association;
-use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
@@ -24,16 +17,11 @@ class MessageService
 
     public function getDestinataires(string $query)
     {
-        switch ($query) {
-            case 'association':
-                return $this->associationRepository->search(['valider' => true]);
-
-            case 'volontaire':
-                return $this->volontaireRepository->search(['valider' => true]);
-
-            default:
-                return [];
-        }
+        return match ($query) {
+            'association' => $this->associationRepository->search(['valider' => true]),
+            'volontaire' => $this->volontaireRepository->search(['valider' => true]),
+            default => [],
+        };
     }
 
     public function getEmailEntity(Association|Volontaire $entity): ?string
@@ -42,11 +30,7 @@ class MessageService
             return $entity->email;
         }
 
-        if ($entity->user) {
-            return $entity->user->email;
-        }
-
-        return null;
+        return $entity->user?->email;
     }
 
 }

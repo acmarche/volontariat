@@ -50,7 +50,6 @@ class MessageController extends AbstractController
                         $this->addFlash('danger', 'Erreur envoie pour '.$email.' '.$e->getMessage());
                     }
                 }
-                break;
             }
 
             $this->addFlash('success', 'Votre message a bien été envoyé');

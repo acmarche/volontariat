@@ -6,7 +6,6 @@ use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Form\Admin\VolontaireType;
 use AcMarche\Volontariat\Form\Search\SearchVolontaireType;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
-use AcMarche\Volontariat\Service\FileHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,8 +18,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class VolontaireController extends AbstractController
 {
     public function __construct(
-        private VolontaireRepository $volontaireRepository,
-        private FileHelper $fileHelper
+        private VolontaireRepository $volontaireRepository
     ) {
     }
 

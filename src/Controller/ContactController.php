@@ -60,7 +60,7 @@ class ContactController extends AbstractController
                 $this->addFlash('danger', 'Erreur lors de l\'envoie du mail');
             }
 
-            return $this->redirectToRoute('volontariat_volontaire_show', ['id' => $volontaire->getId()]);
+            return $this->redirectToRoute('volontariat_volontaire_show', ['uuid' => $volontaire->getUuid()]);
         }
 
         return $this->render(
@@ -87,7 +87,7 @@ class ContactController extends AbstractController
                 $this->addFlash('danger', 'Erreur lors de l\'envoie du mail');
             }
 
-            return $this->redirectToRoute('volontariat_association_show', ['id' => $association->getId()]);
+            return $this->redirectToRoute('volontariat_association_show', ['slug' => $association->getSlug()]);
         }
 
         return $this->render(

@@ -63,7 +63,7 @@ class AssociationController extends AbstractController
             $this->associationRepository->persist($association);
             $this->associationRepository->flush();
 
-            $this->addFlash('success', 'Le association a bien été ajouté');
+            $this->addFlash('success', 'L\' association a bien été ajoutée');
 
             return $this->redirectToRoute('volontariat_admin_association_show', ['id' => $association->getId()]);
         }
@@ -101,7 +101,7 @@ class AssociationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->associationRepository->flush();
 
-            $this->addFlash('success', 'Le association a bien été modifié');
+            $this->addFlash('success', 'L\' association a bien été modifiée');
 
             return $this->redirectToRoute('volontariat_admin_association_show', ['id' => $association->getId()]);
         }

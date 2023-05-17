@@ -115,6 +115,7 @@ class AssociationController extends AbstractController
         );
     }
 
+
     #[Route(path: '/{id}/delete', name: 'volontariat_admin_association_delete', methods: ['POST'])]
     public function delete(Request $request, Association $association): RedirectResponse
     {

@@ -95,7 +95,7 @@ class RegisterController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $email = $form->getData()->getEmail();
+            $email = $form->getData()->email;
             if (null !== $this->userRepository->findOneByEmail($email)) {
                 $this->addFlash('danger', 'Une association est déjà inscrite avec cette adresse email');
 

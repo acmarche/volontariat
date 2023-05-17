@@ -4,19 +4,11 @@ namespace AcMarche\Volontariat\Mailer;
 
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Message;
-use AcMarche\Volontariat\Entity\Security\User;
-use AcMarche\Volontariat\Entity\Volontaire;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\Mailer\Exception\TransportException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Email;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
 
 class Mailer
 {
@@ -67,8 +59,11 @@ class Mailer
     }
 
     /**
-     * @param array $data
-     *
+     * @param Association $association
+     * @param string $to
+     * @param string $urlAccount
+     * @param string $urlAssociations
+     * @param string $urlVolontaires
      * @throws TransportExceptionInterface
      */
     public function sendAutoAssociation(

@@ -102,7 +102,7 @@ class UtilisateurController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user->password = $this->passwordGenerator->cryptPassword($user, $form->getData()->getPlainPassword());
+            $user->password = $this->passwordGenerator->cryptPassword($user, $form->getData()->plainPassword);
             $this->userRepository->flush();
 
             $this->addFlash('success', 'Mot de passe changé');

@@ -45,6 +45,9 @@ return static function (SecurityConfig $security) {
         //   'switch_user' => true,
         'entry_point' => VolontariatAuthenticator::class,
         'custom_authenticators' => [VolontariatAuthenticator::class],
+        'login_throttling' => [
+            'max_attempts' => 6, //per minute...
+        ],
     ];
 
     $security->firewall('main', $main)

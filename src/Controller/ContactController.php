@@ -6,6 +6,7 @@ use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Form\Contact\ContactType;
 use AcMarche\Volontariat\Mailer\MailerContact;
+use AcMarche\Volontariat\Spam\Handler\SpamHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +18,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class ContactController extends AbstractController
 {
     public function __construct(
-        private MailerContact $mailerContact,
+        private readonly MailerContact $mailerContact,
+        private readonly SpamHandler $spamHandler
     ) {
     }
 
@@ -53,11 +55,15 @@ class ContactController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            try {
-                $this->addFlash('success', 'Le volontaire a bien été contacté');
-                $this->mailerContact->sendToVolontaire($volontaire, $data);
-            } catch (TransportExceptionInterface|\Exception $e) {
-                $this->addFlash('danger', 'Erreur lors de l\'envoie du mail');
+            if ($this->spamHandler->isAccepted($request)) {
+                try {
+                    $this->addFlash('success', 'Le volontaire a bien été contacté');
+                    $this->mailerContact->sendToVolontaire($volontaire, $data);
+                } catch (TransportExceptionInterface|\Exception $e) {
+                    $this->addFlash('danger', 'Erreur lors de l\'envoie du mail');
+                }
+            } else {
+                $this->addFlash('danger', 'Nombre maximum de contact envoyés.');
             }
 
             return $this->redirectToRoute('volontariat_volontaire_show', ['uuid' => $volontaire->getUuid()]);
@@ -80,11 +86,15 @@ class ContactController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            try {
-                $this->addFlash('success', 'L\'association a bien été contactée');
-                $this->mailerContact->sendToAssociation($association, $data);
-            } catch (TransportExceptionInterface|\Exception $e) {
-                $this->addFlash('danger', 'Erreur lors de l\'envoie du mail');
+            if ($this->spamHandler->isAccepted($request)) {
+                try {
+                    $this->addFlash('success', 'L\'association a bien été contactée');
+                    $this->mailerContact->sendToAssociation($association, $data);
+                } catch (TransportExceptionInterface|\Exception $e) {
+                    $this->addFlash('danger', 'Erreur lors de l\'envoie du mail');
+                }
+            } else {
+                $this->addFlash('danger', 'Nombre maximum de contact envoyés.');
             }
 
             return $this->redirectToRoute('volontariat_association_show', ['slug' => $association->getSlug()]);

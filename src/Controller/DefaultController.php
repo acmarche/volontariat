@@ -7,6 +7,7 @@ use AcMarche\Volontariat\Repository\PageRepository;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
 use AcMarche\Volontariat\Search\Searcher;
 use AcMarche\Volontariat\Service\FileHelper;
+use AcMarche\Volontariat\Spam\Handler\SpamHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,11 +16,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class DefaultController extends AbstractController
 {
     public function __construct(
-        private FileHelper $fileHelper,
-        private PageRepository $pageRepository,
-        private AssociationRepository $associationRepository,
-        private VolontaireRepository $volontaireRepository,
-        private Searcher $searcher
+        private readonly FileHelper $fileHelper,
+        private readonly PageRepository $pageRepository,
+        private readonly AssociationRepository $associationRepository,
+        private readonly VolontaireRepository $volontaireRepository,
+        private readonly Searcher $searcher,
+        private readonly SpamHandler $spamHandler
     ) {
     }
 
@@ -55,5 +57,18 @@ class DefaultController extends AbstractController
             'keyword' => $keyword,
             'results' => $results,
         ]);
+    }
+
+    #[Route(path: '/captcha', name: 'volontariat_captcha')]
+    public function captcha(): Response
+    {
+        $animals = $this->spamHandler->generate();
+
+        return $this->render(
+            '@Volontariat/contact/_animals.html.twig',
+            [
+                'animals' => $animals,
+            ]
+        );
     }
 }

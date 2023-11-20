@@ -32,18 +32,23 @@ class ContactController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
 
-            try {
-                $this->addFlash('success', 'Votre demande a bien été envoyée');
-                $this->mailerContact->sendContact($data);
-            } catch (TransportExceptionInterface|\Exception $e) {
-                $this->addFlash('danger', 'Erreur lors de l\'envoie du mail');
-            }
+            if ($this->spamHandler->checkCaptcha($data['captcha'])) {
+                try {
+                    $this->addFlash('success', 'Votre demande a bien été envoyée');
+                    $this->mailerContact->sendContact($data);
 
-            return $this->redirectToRoute('volontariat_home');
+                    return $this->redirectToRoute('volontariat_home');
+                } catch (TransportExceptionInterface|\Exception $e) {
+                    $this->addFlash('danger', 'Erreur lors de l\'envoie du mail');
+                }
+            } else {
+                $this->addFlash('danger', 'Vous n\'avez pas sélectionné le chat :-(');
+            }
         }
 
         return $this->render('@Volontariat/contact/contact.html.twig', ['form' => $form]);
     }
+
 
     #[Route(path: '/volontaire/{uuid}', name: 'volontariat_contact_volontaire')]
     #[IsGranted('show', subject: 'volontaire')]

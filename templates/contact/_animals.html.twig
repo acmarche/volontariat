@@ -1,0 +1,25 @@
+<h4 class="text-2xl text-green-default mb-2 mb-cta-dark">Filtre anti-spam</h4>
+<hr>
+<p><strong>Sélectionnez l'image représentant un chat</strong></p>
+<div class="flex flex-row gap-3">
+    {% for animal in animals %}
+        <button type="button" class="animal border-transparent focus:border-2 focus:border-green-700" data-url="{{ animal }}">
+            <img src="{{ animal }}" rel="nofollow" alt="animal" class="w-32 h-32 object-cover">
+        </button>
+    {% endfor %}
+</div>
+{% block javascripts %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var btns = document.querySelectorAll('.animal');
+            console.log(btns)
+            Array.prototype.forEach.call(btns, function (el, i) {
+                el.addEventListener('click', () => {
+                    el.classList.toggle('border-0');
+                    el.classList.toggle('border-2');
+                    document.querySelector('#contact_captcha').value = el.dataset.url;
+                });
+            });
+        });
+    </script>
+{% endblock %}

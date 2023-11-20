@@ -46,7 +46,8 @@ class ContactType extends AbstractType
                     'required' => true,
                     'attr' => ['rows' => 8],
                 ]
-            );
+            )
+            ->add('captcha', CaptchaFieldType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

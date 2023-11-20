@@ -32,7 +32,7 @@ class ContactController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
 
-            if ($this->spamHandler->checkCaptcha($data['captcha'])) {
+            if ($this->validateForm($request, $data)) {
                 try {
                     $this->addFlash('success', 'Votre demande a bien été envoyée');
                     $this->mailerContact->sendContact($data);
@@ -41,14 +41,11 @@ class ContactController extends AbstractController
                 } catch (TransportExceptionInterface|\Exception $e) {
                     $this->addFlash('danger', 'Erreur lors de l\'envoie du mail');
                 }
-            } else {
-                $this->addFlash('danger', 'Vous n\'avez pas sélectionné le chat :-(');
             }
         }
 
         return $this->render('@Volontariat/contact/contact.html.twig', ['form' => $form]);
     }
-
 
     #[Route(path: '/volontaire/{uuid}', name: 'volontariat_contact_volontaire')]
     #[IsGranted('show', subject: 'volontaire')]
@@ -60,15 +57,14 @@ class ContactController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            if ($this->spamHandler->isAccepted($request)) {
+
+            if ($this->validateForm($request, $data)) {
                 try {
                     $this->addFlash('success', 'Le volontaire a bien été contacté');
                     $this->mailerContact->sendToVolontaire($volontaire, $data);
                 } catch (TransportExceptionInterface|\Exception $e) {
                     $this->addFlash('danger', 'Erreur lors de l\'envoie du mail');
                 }
-            } else {
-                $this->addFlash('danger', 'Nombre maximum de contact envoyés.');
             }
 
             return $this->redirectToRoute('volontariat_volontaire_show', ['uuid' => $volontaire->getUuid()]);
@@ -91,15 +87,13 @@ class ContactController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            if ($this->spamHandler->isAccepted($request)) {
+            if ($this->validateForm($request, $data)) {
                 try {
                     $this->addFlash('success', 'L\'association a bien été contactée');
                     $this->mailerContact->sendToAssociation($association, $data);
                 } catch (TransportExceptionInterface|\Exception $e) {
                     $this->addFlash('danger', 'Erreur lors de l\'envoie du mail');
                 }
-            } else {
-                $this->addFlash('danger', 'Nombre maximum de contact envoyés.');
             }
 
             return $this->redirectToRoute('volontariat_association_show', ['slug' => $association->getSlug()]);
@@ -112,6 +106,22 @@ class ContactController extends AbstractController
                 'form' => $form->createView(),
             ]
         );
+    }
+
+    private function validateForm(Request $request, array $data): bool
+    {
+        if (!$this->spamHandler->isAccepted($request)) {
+            $this->addFlash('danger', 'Nombre maximum de contact envoyés.');
+
+            return false;
+        }
+        if (!$this->spamHandler->checkCaptcha($data['captcha'])) {
+            $this->addFlash('danger', 'Vous n\'avez pas sélectionné le chat :-(');
+
+            return false;
+        }
+
+        return true;
     }
 
 }

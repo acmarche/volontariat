@@ -15,14 +15,6 @@
                            class="inline-flex items-center border-b-2 {{ app.current_route == 'volontariat_home' ? 'border-green-default' : 'border-transparent' }} px-1 pt-1 text-sm font-medium text-gray-900">
                             Accueil
                         </a>
-                        <a href="{{ path('volontariat_volontaire') }}"
-                           class="inline-flex items-center border-b-2 {{ app.current_route == 'volontariat_volontaire' ? 'border-green-default' : 'border-transparent' }} px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
-                            Volontaires
-                        </a>
-                        <a href="{{ path('volontariat_association') }}"
-                           class="inline-flex items-center border-b-2 {{ app.current_route == 'volontariat_association' ? 'border-green-default' : 'border-transparent' }} px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
-                            Associations
-                        </a>
                         {% if app.user == null %}
                             <a href="{{ path('volontariat_register_index') }}"
                                class="inline-flex items-center border-b-2 {{ app.current_route == 'volontariat_register_index' ? 'border-green-default' : 'border-transparent' }} px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
@@ -36,6 +28,14 @@
                         <a href="{{ path('volontariat_secteur') }}"
                            class="inline-flex items-center border-b-2 {{ app.current_route == 'volontariat_secteur' ? 'border-green-default' : 'border-transparent' }} px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
                             Secteurs d'activités
+                        </a>
+                        <a href="{{ path('volontariat_volontaire') }}"
+                           class="inline-flex items-center border-b-2 {{ app.current_route == 'volontariat_volontaire' ? 'border-green-default' : 'border-transparent' }} px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                            Volontaires
+                        </a>
+                        <a href="{{ path('volontariat_association') }}"
+                           class="inline-flex items-center border-b-2 {{ app.current_route == 'volontariat_association' ? 'border-green-default' : 'border-transparent' }} px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">
+                            Associations
                         </a>
                         <a href="{{ path('volontariat_besoin') }}"
                            class="inline-flex items-center border-b-2 {{ app.current_route == 'volontariat_besoin' ? 'border-green-default' : 'border-transparent' }} px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700">

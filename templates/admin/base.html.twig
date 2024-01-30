@@ -7,11 +7,14 @@
     <link rel="icon" type="image/x-icon" href="{{ asset('bundles/acmarchevolontariat/favicon.ico') }}"/>
     <meta name="description" content="">
     <meta name="author" content="Cst">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+    {% block stylesheets %}
+        {{ ux_controller_link_tags() }}
+    {% endblock %}
 
-    {{ encore_entry_link_tags('app_admin') }}
-    {{ encore_entry_script_tags('app_admin') }}
-
-    {% block stylesheets %}{% endblock %}
+    {% block javascripts %}
+        {% block importmap %}{{ importmap('app_admin') }}{% endblock %}
+    {% endblock %}
 
     <link href="{{ asset('bundles/acmarchevolontariat/assets/css/print.css') }}" rel="stylesheet" media="print">
     <meta name="theme-color" content="#563d7c">
@@ -81,7 +84,7 @@
         {% endblock %}
     </div>
 </footer>
-{% block javascripts %}{% endblock %}
+{% block scripts %}{% endblock %}
 
 </body>
 </html>

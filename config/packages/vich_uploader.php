@@ -18,6 +18,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'association_file' => [
                     'uri_prefix' => '/files/associations',
                     'upload_destination' => '%kernel.project_dir%/public/files/associations',
+                    'namer' => 'vich_uploader.namer_uniqid',
                 ],
                 'volontaire_image' => [
                     'uri_prefix' => '/files/volontaires',

@@ -4,6 +4,7 @@ namespace AcMarche\Volontariat\Form\Admin;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\UX\Dropzone\Form\DropzoneType;
 
 class ImageDropZoneType extends AbstractType
@@ -16,6 +17,15 @@ class ImageDropZoneType extends AbstractType
             ],
             'label' => false,
             'multiple' => true,
+            'constraints' => [
+                 new File([
+                    'maxSize' => '8000k',
+                    'mimeTypes' => [
+                        'image/*',
+                    ],
+                    'mimeTypesMessage' => 'Veuillez télécharger une image valide',
+                ]),
+            ],
         ]);
     }
 }

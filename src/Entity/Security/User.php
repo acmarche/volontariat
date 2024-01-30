@@ -91,7 +91,7 @@ class User implements UserInterface, PasswordHasherAwareInterface, LegacyPasswor
         return array_unique($roles);
     }
 
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
     }
 

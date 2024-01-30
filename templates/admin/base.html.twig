@@ -29,7 +29,7 @@
     <div class="container">
         {% block brand %}
             <a class="navbar-brand" href="{{ path('volontariat_home') }}">
-                <i class="fas fa-frog icon-rose d-inline-block align-text-top"></i>
+                <i class="ti ti-friends icon-rose d-inline-block align-text-top"></i>
                 <span class="ms-2 fs-4 navbar-text">Volontariat</span>
             </a>
         {% endblock %}
@@ -44,13 +44,13 @@
             <ul class="navbar-nav mb-2 mb-lg-0">
                 {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
                     <li class="nav-item">
-                        <a href="{{ path('app_login') }}" class="nav-link"><i class="fas fa-sign-in-alt"></i>
+                        <a href="{{ path('app_login') }}" class="nav-link"><i class="ti ti-login-2"></i>
                             Se connecter</a>
                     </li>
                 {% else %}
                     <li class="nav-item">
                         <a href="{{ path('volontariat_home') }}" class="nav-link"><i
-                                    class="fas fa-user"></i>
+                                    class="ti ti-user"></i>
                             Compte</a>
                     </li>
                 {% endif %}

@@ -2,8 +2,6 @@
 
 namespace AcMarche\Volontariat\Doctrine;
 
-use Doctrine\ORM\EntityManager;
-
 trait OrmCrudTrait
 {
     public function insert(object $object): void

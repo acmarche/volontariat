@@ -4,9 +4,9 @@
     {{ form_row(form.nom, {label_attr: {class: 'sr-only'}, attr:{'class': 'my-1 mr-sm-2'} }) }}
     <br/><br/>
 
-    <a href="{{ path('volontariat_admin_message_new', { 'query': 'association' }) }}" role="button"
-       class="btn btn-primary"><i
-                class="ti ti-send"></i> Envoyer un message</a>
+    <button type="submit" name="save" class="btn btn-primary my-1 mr-sm-2 mb-3">
+        <i class="ti ti-device-floppy"></i> Rechercher
+    </button>
 
     {{ form_end(form) }}
     <br/><br/>

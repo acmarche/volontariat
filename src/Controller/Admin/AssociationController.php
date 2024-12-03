@@ -21,8 +21,7 @@ class AssociationController extends AbstractController
     public function __construct(
         private AssociationRepository $associationRepository,
         private FileHelper $fileHelper,
-    ) {
-    }
+    ) {}
 
     #[Route(path: '/', name: 'volontariat_admin_association', methods: ['GET', 'POST'])]
     public function index(Request $request): Response
@@ -32,7 +31,7 @@ class AssociationController extends AbstractController
 
         $search_form = $this->createForm(
             SearchAssociationType::class,
-            $data
+            $data,
         );
         $search_form->handleRequest($request);
         if ($search_form->isSubmitted() && $search_form->isValid()) {
@@ -46,7 +45,7 @@ class AssociationController extends AbstractController
             [
                 'form' => $search_form->createView(),
                 'associations' => $associations,
-            ]
+            ],
         );
     }
 
@@ -67,6 +66,7 @@ class AssociationController extends AbstractController
 
             return $this->redirectToRoute('volontariat_admin_association_show', ['id' => $association->getId()]);
         }
+        $response = new Response(null, $form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
 
         return $this->render(
             '@Volontariat/admin/association/new.html.twig',
@@ -74,6 +74,7 @@ class AssociationController extends AbstractController
                 'association' => $association,
                 'form' => $form->createView(),
             ]
+            , $response,
         );
     }
 
@@ -87,7 +88,7 @@ class AssociationController extends AbstractController
             [
                 'association' => $association,
                 'images' => $images,
-            ]
+            ],
         );
     }
 
@@ -111,7 +112,7 @@ class AssociationController extends AbstractController
             [
                 'association' => $association,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 

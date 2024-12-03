@@ -18,9 +18,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class VolontaireController extends AbstractController
 {
     public function __construct(
-        private VolontaireRepository $volontaireRepository
-    ) {
-    }
+        private VolontaireRepository $volontaireRepository,
+    ) {}
 
     #[Route(path: '/', name: 'volontariat_admin_volontaire')]
     public function index(Request $request): Response
@@ -36,12 +35,15 @@ class VolontaireController extends AbstractController
         }
         $volontaires = $this->volontaireRepository->search($data);
 
+        $response = new Response(null, $search_form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
+
         return $this->render(
             '@Volontariat/admin/volontaire/index.html.twig',
             [
                 'form' => $search_form->createView(),
                 'volontaires' => $volontaires,
             ]
+            , $response,
         );
     }
 
@@ -66,7 +68,7 @@ class VolontaireController extends AbstractController
             [
                 'volontaire' => $volontaire,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -77,7 +79,7 @@ class VolontaireController extends AbstractController
             '@Volontariat/admin/volontaire/show.html.twig',
             [
                 'volontaire' => $volontaire,
-            ]
+            ],
         );
     }
 
@@ -100,7 +102,7 @@ class VolontaireController extends AbstractController
             [
                 'volontaire' => $volontaire,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 

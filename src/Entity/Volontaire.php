@@ -125,8 +125,8 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
     public ?User $user = null;
     #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => 1])]
     public bool $valider = true;
-    #[ORM\Column(type: 'boolean', nullable: true)]
-    public ?bool $inactif = null;
+    #[ORM\Column(type: 'boolean', nullable: false)]
+    public bool $inactif = false;
     #[ORM\Column(type: 'text', nullable: true)]
     public ?string $notes;
 

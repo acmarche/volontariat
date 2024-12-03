@@ -42,45 +42,54 @@ class VolontaireRepository extends ServiceEntityRepository
         $qb = $this->createQbl();
 
         if ($nom) {
-            $qb->andWhere('volontaire.email LIKE :mot OR volontaire.name LIKE :mot OR volontaire.surname LIKE :mot ')
+            $qb
+                ->andWhere('volontaire.email LIKE :mot OR volontaire.name LIKE :mot OR volontaire.surname LIKE :mot ')
                 ->setParameter('mot', '%'.$nom.'%');
         }
 
         if ($localite) {
-            $qb->andWhere('volontaire.city LIKE :loca ')
+            $qb
+                ->andWhere('volontaire.city LIKE :loca ')
                 ->setParameter('loca', '%'.$localite.'%');
         }
 
         if ($createdAt) {
-            $qb->andWhere('volontaire.createdAt >= :date ')
+            $qb
+                ->andWhere('volontaire.createdAt >= :date ')
                 ->setParameter('date', $createdAt);
         }
 
         if ($secteur) {
-            $qb->andWhere('secteurs = :secteur ')
+            $qb
+                ->andWhere('secteurs = :secteur ')
                 ->setParameter('secteur', $secteur);
         }
 
         if (is_array($secteurs) && [] !== $secteurs) {
-            $qb->andWhere('secteurs IN :secteurs')
+            $qb
+                ->andWhere('secteurs IN :secteurs')
                 ->setParameter('secteurs', $secteur);
         }
 
         if ($vehicule) {
-            $qb->andWhere('vehicules = :vehicule')
+            $qb
+                ->andWhere('vehicules = :vehicule')
                 ->setParameter('vehicule', $vehicule);
         }
 
         if (false === $valider) {
-            $qb->andWhere('volontaire.valider = :valider')
+            $qb
+                ->andWhere('volontaire.valider = :valider')
                 ->setParameter('valider', false);
         } elseif (2 != $valider) {
-            $qb->andWhere('volontaire.valider = :valider')
+            $qb
+                ->andWhere('volontaire.valider = :valider')
                 ->setParameter('valider', true);
         }
 
         if ($user) {
-            $qb->andWhere('user = :user')
+            $qb
+                ->andWhere('user = :user')
                 ->setParameter('user', $user);
         }
 
@@ -94,7 +103,8 @@ class VolontaireRepository extends ServiceEntityRepository
      */
     public function getRecent(int $max = 8): array
     {
-        return $this->createQbl()
+        return $this
+            ->createQbl()
             ->setMaxResults($max)
             ->addOrderBy('RAND()')
             ->getQuery()
@@ -106,7 +116,8 @@ class VolontaireRepository extends ServiceEntityRepository
      */
     public function getLocalitesForSearch(): array
     {
-        $results = $this->createQbl()
+        $results = $this
+            ->createQbl()
             ->orderBy('volontaire.city')
             ->getQuery()->getResult();
 
@@ -127,16 +138,34 @@ class VolontaireRepository extends ServiceEntityRepository
      */
     public function findVolontaireByUser(UserInterface $user): ?Volontaire
     {
-        return $this->createQbl()
+        return $this
+            ->createQbl()
             ->andWhere('volontaire.user = :user')
             ->setParameter('user', $user)
             ->orderBy('volontaire.city')
             ->getQuery()->getOneOrNullResult();
     }
 
+    /**
+     * @return Volontaire[]
+     */
+    public function findVolontairesWantBeNotified(): array
+    {
+        return $this
+            ->createQbl()
+            ->andWhere('volontaire.notification_message_association = :notification')
+            ->andWhere('volontaire.valider = :valider')
+            ->andWhere('volontaire.inactif = :inactif')
+            ->setParameter('notification', true)
+            ->setParameter('valider', true)
+            ->setParameter('inactif', false)
+            ->getQuery()->getResult();
+    }
+
     public function createQbl(): QueryBuilder
     {
-        return $this->createQueryBuilder('volontaire')
+        return $this
+            ->createQueryBuilder('volontaire')
             ->leftJoin('volontaire.association', 'association', 'WITH')
             ->leftJoin('volontaire.secteurs', 'secteurs', 'WITH')
             ->leftJoin('volontaire.user', 'user', 'WITH')

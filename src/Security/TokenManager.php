@@ -13,13 +13,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
-use Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator;
+use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
 
 class TokenManager
 {
     public function __construct(
         private UserAuthenticatorInterface $userAuthenticator,
-        private FormLoginAuthenticator $formLoginAuthenticator,
+        private AuthenticatorInterface $formLoginAuthenticator,
         private TokenRepository $tokenRepository,
         private UserRepository $userRepository,
         private RouterInterface $router

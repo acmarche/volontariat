@@ -4,11 +4,13 @@ namespace AcMarche\Volontariat\Controller\Backend;
 
 use AcMarche\Volontariat\Entity\Besoin;
 use AcMarche\Volontariat\Form\Admin\BesoinType;
+use AcMarche\Volontariat\Message\BesoinCreated;
 use AcMarche\Volontariat\Repository\BesoinRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -18,9 +20,10 @@ class BesoinController extends AbstractController
 {
     use getAssociationTrait;
 
-    public function __construct(private BesoinRepository $besoinRepository)
-    {
-    }
+    public function __construct(
+        private readonly BesoinRepository $besoinRepository,
+        private readonly MessageBusInterface $dispatcher,
+    ) {}
 
     #[Route(path: '/index', name: 'volontariat_backend_besoin', methods: ['GET'])]
     public function index(): Response
@@ -35,7 +38,7 @@ class BesoinController extends AbstractController
             [
                 'association' => $this->association,
                 'annonces' => $annonces,
-            ]
+            ],
         );
     }
 
@@ -61,6 +64,7 @@ class BesoinController extends AbstractController
             $this->besoinRepository->persist($besoin);
             $this->besoinRepository->flush();
             $this->addFlash('success', 'Le besoin a bien été ajouté');
+            $this->dispatcher->dispatch(new BesoinCreated($besoin->getId()));
 
             return $this->redirectToRoute('volontariat_backend_besoin');
         }
@@ -70,7 +74,7 @@ class BesoinController extends AbstractController
             [
                 'besoin' => $besoin,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -95,7 +99,7 @@ class BesoinController extends AbstractController
             [
                 'besoin' => $besoin,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 

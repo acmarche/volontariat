@@ -105,7 +105,7 @@ class Mailer
             ->from($association->email)
             ->to(new Address($volontaire->email))
             ->cc(new Address('jf@marche.be'))
-            ->subject('Un nouveau besoin la plate-forme du volontariat')
+            ->subject('Un nouveau besoin sur la plate-forme du volontariat')
             ->htmlTemplate('@Volontariat/emails/_new_besoin.html.twig')
             ->context(
                 array_merge($this->defaultParams(), [

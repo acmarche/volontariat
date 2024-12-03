@@ -113,7 +113,8 @@ class RegisterController extends AbstractController
 
             try {
                 $this->mailer->sendWelcomeAssociation($association, $plainPassword, $token);
-                $this->addFlash('success', 'Vous êtes bien inscrit');
+                $this->addFlash('success', 'Votre Asbl a bien été inscrite');
+                $this->addFlash('warning', 'Votre Asbl doit être validée par un administrateur');
             } catch (TransportException|LoaderError|RuntimeError|SyntaxError|TransportExceptionInterface $e) {
                 $this->addFlash('error', $e->getMessage());
             }

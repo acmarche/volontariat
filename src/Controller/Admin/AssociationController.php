@@ -40,12 +40,15 @@ class AssociationController extends AbstractController
 
         $associations = $this->associationRepository->search($data);
 
+        $response = new Response(null, $search_form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
+
         return $this->render(
             '@Volontariat/admin/association/index.html.twig',
             [
                 'form' => $search_form->createView(),
                 'associations' => $associations,
-            ],
+            ]
+            , $response,
         );
     }
 
@@ -66,15 +69,13 @@ class AssociationController extends AbstractController
 
             return $this->redirectToRoute('volontariat_admin_association_show', ['id' => $association->getId()]);
         }
-        $response = new Response(null, $form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
 
         return $this->render(
             '@Volontariat/admin/association/new.html.twig',
             [
                 'association' => $association,
                 'form' => $form->createView(),
-            ]
-            , $response,
+            ],
         );
     }
 

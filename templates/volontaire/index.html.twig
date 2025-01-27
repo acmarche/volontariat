@@ -33,10 +33,6 @@
                     </h3>
                     <p class="text-sm leading-6 text-gray-600">
                         De {{ volontaire.city }}
-                        {% if volontaire.birthyear %}
-                            {% set age = date().diff(date(volontaire.birthday)).y %}
-                            ({{ age }} ans)
-                        {% endif %}
                     </p>
                 </li>
             {% endfor %}

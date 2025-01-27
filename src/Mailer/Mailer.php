@@ -104,7 +104,7 @@ class Mailer
         $email = (new TemplatedEmail())
             ->from($association->email)
             ->to(new Address($volontaire->email))
-            ->cc(new Address('jf@marche.be'))
+            ->bcc(new Address('jf@marche.be'))
             ->subject('Un nouveau besoin sur la plate-forme du volontariat')
             ->htmlTemplate('@Volontariat/emails/_new_besoin.html.twig')
             ->context(

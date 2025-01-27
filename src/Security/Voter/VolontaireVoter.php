@@ -95,6 +95,10 @@ class VolontaireVoter extends Voter
      */
     private function canView(Volontaire $volontaire, TokenInterface $token): bool
     {
+        if ($this->decisionManager->decide($token, [SecurityData::getRoleAssociation()])) {
+            return true;
+        }
+
         if ($this->canEdit($volontaire, $token)) {
             return true;
         }

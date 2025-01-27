@@ -19,6 +19,7 @@ class CaptchaApi
         $this->client = HttpClient::create();
     }
 
+
     /**
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
@@ -38,6 +39,16 @@ class CaptchaApi
     public function getCat(): string
     {
         $number = random_int(1, 16);
+
+        $url = 'https://api.thecatapi.com/v1/images/search';
+        $response = $this->client->request('GET', $url);
+
+        $content = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        if (is_array($content)) {
+            if (isset($content[0]['url'])) {
+                return $content[0]['url'];
+            }
+        }
 
         return 'https://placekitten.com/150/150?image='.$number;
     }

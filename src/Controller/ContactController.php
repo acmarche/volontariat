@@ -20,9 +20,8 @@ class ContactController extends AbstractController
 {
     public function __construct(
         private readonly MailerContact $mailerContact,
-        private readonly SpamHandler $spamHandler
-    ) {
-    }
+        private readonly SpamHandler $spamHandler,
+    ) {}
 
     #[Route(path: '/', name: 'volontariat_contact')]
     public function contact(Request $request): Response
@@ -50,8 +49,10 @@ class ContactController extends AbstractController
 
     #[Route(path: '/volontaire/{uuid}', name: 'volontariat_contact_volontaire')]
     #[IsGranted('show', subject: 'volontaire')]
-    public function volontaire(Request $request, #[MapEntity(expr: 'repository.findOneByUuid(uuid)')] Volontaire $volontaire): Response
-    {
+    public function volontaire(
+        Request $request,
+        #[MapEntity(expr: 'repository.findOneByUuid(uuid)')] Volontaire $volontaire,
+    ): Response {
         $form = $this->createForm(ContactType::class, null);
 
         $form->handleRequest($request);
@@ -76,7 +77,7 @@ class ContactController extends AbstractController
             [
                 'volontaire' => $volontaire,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -105,7 +106,7 @@ class ContactController extends AbstractController
             [
                 'association' => $association,
                 'form' => $form->createView(),
-            ]
+            ],
         );
     }
 
@@ -116,6 +117,7 @@ class ContactController extends AbstractController
 
             return false;
         }
+
         if (!$this->spamHandler->checkCaptcha($data['captcha'])) {
             $this->addFlash('danger', 'Vous n\'avez pas sélectionné le chat :-(');
 

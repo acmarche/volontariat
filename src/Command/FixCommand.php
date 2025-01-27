@@ -28,14 +28,14 @@ class FixCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
-        foreach ($this->associationRepository->findAll() as $teletravail) {
-            $teletravail->uuid = $teletravail->generateUuid();
+        foreach ($this->associationRepository->findAll() as $object) {
+           $object->uuid = $object->generateUuid();
         }
-        foreach ($this->besoinRepository->findAll() as $teletravail) {
-            $teletravail->uuid = $teletravail->generateUuid();
+        foreach ($this->besoinRepository->findAll() as $object) {
+           $object->uuid = $object->generateUuid();
         }
-        foreach ($this->volontaireRepository->findAll() as $teletravail) {
-            $teletravail->uuid = $teletravail->generateUuid();
+        foreach ($this->volontaireRepository->findAll() as $object) {
+           $object->uuid = $object->generateUuid();
         }
         try {
             $this->associationRepository->flush();

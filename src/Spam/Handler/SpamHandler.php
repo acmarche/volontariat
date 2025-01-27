@@ -31,7 +31,7 @@ class SpamHandler
             return false;
         }
 
-        return str_contains($value, 'kitten');
+        return str_contains($value, 'thecatapi');
     }
 
     /**

@@ -28,6 +28,7 @@
             {{ form_help(form.content) }}
         </div>
     </div>
+    {{ form_row(form.captcha) }}
     {{ render(path('volontariat_captcha')) }}
     <div class="mt-8 flex justify-end">
         <button type="submit"

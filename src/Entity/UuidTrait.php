@@ -8,8 +8,8 @@ use Symfony\Component\Uid\Uuid;
 
 trait UuidTrait
 {
-    #[ORM\Column(type: Types::GUID, unique: true, nullable: false)]
-    protected ?string $uuid = null;
+    #[ORM\Column(type: Types::GUID, unique: true, nullable: true)]
+    public ?string $uuid = null;
 
     public function getUuid(): ?string
     {

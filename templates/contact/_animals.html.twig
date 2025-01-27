@@ -3,16 +3,17 @@
 <p><strong>Sélectionnez l'image représentant un chat</strong></p>
 <div class="flex flex-row gap-3 mt-2">
     {% for animal in animals %}
-        <button type="button" class="animal border-transparent focus:border-2 focus:border-green-700" data-url="{{ animal }}">
+        <button type="button" class="animal border-transparent focus:border-2 focus:border-green-700"
+                data-url="{{ animal }}">
             <img src="{{ animal }}" rel="nofollow" alt="animal" class="w-32 h-32 object-cover">
         </button>
     {% endfor %}
+
 </div>
 {% block scripts %}
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            var btns = document.querySelectorAll('.animal');
-            console.log(btns)
+            const btns = document.querySelectorAll('.animal');
             Array.prototype.forEach.call(btns, function (el, i) {
                 el.addEventListener('click', () => {
                     el.classList.toggle('border-0');

@@ -12,6 +12,7 @@
                     <th>Email</th>
                     <th>Fiche association</th>
                     <th>Fiche volontaire</th>
+                    <th>Rôles</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -36,6 +37,11 @@
                                     {{ user.volontaire }}
                                 </a>
                             {% endif %}
+                        </td>
+                        <td>
+                            {% for role in user.roles %}
+                                {{ role }}
+                            {% endfor %}
                         </td>
                     </tr>
                 {% endfor %}

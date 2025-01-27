@@ -53,6 +53,14 @@
                         {% endif %}
                     </td>
                 </tr>
+                <tr>
+                    <th>Rôles</th>
+                    <td>
+                        {% for role in user.roles %}
+                            {{ role }}
+                        {% endfor %}
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>

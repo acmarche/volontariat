@@ -2,12 +2,13 @@
 
 namespace AcMarche\Volontariat\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
 trait UuidTrait
 {
-    #[ORM\Column(type: 'uuid', unique: true, nullable: false)]
+    #[ORM\Column(type: Types::GUID, unique: true, nullable: false)]
     protected ?string $uuid = null;
 
     public function getUuid(): ?string

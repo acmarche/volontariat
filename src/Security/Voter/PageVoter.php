@@ -4,6 +4,7 @@ namespace AcMarche\Volontariat\Security\Voter;
 
 use AcMarche\Volontariat\Entity\Page;
 use AcMarche\Volontariat\Entity\Security\User;
+use AcMarche\Volontariat\Security\SecurityData;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -48,7 +49,7 @@ class PageVoter extends Voter
             return false;
         }
 
-        if ($this->decisionManager->decide($token, ['ROLE_VOLONTARIAT_ADMIN'])) {
+        if ($this->decisionManager->decide($token, [SecurityData::getRoleAdmin()])) {
             return true;
         }
         return match ($attribute) {

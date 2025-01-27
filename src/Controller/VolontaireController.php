@@ -6,6 +6,8 @@ use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Form\Search\SearchVolontaireType;
 use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
+use AcMarche\Volontariat\Security\SecurityData;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,9 +20,8 @@ class VolontaireController extends AbstractController
     public function __construct(
         private VolontaireRepository $volontaireRepository,
         private AssociationRepository $associationRepository,
-        private AuthorizationCheckerInterface $authorizationChecker
-    ) {
-    }
+        private AuthorizationCheckerInterface $authorizationChecker,
+    ) {}
 
     #[Route(path: '/', name: 'volontariat_volontaire')]
     public function index(Request $request): Response
@@ -32,12 +33,12 @@ class VolontaireController extends AbstractController
             $data = $search_form->getData();
         }
         $volontaires = $this->volontaireRepository->search($data);
-        if (!$this->authorizationChecker->isGranted('index')) {
+        if (!$this->authorizationChecker->isGranted(SecurityData::getRoleAssociation())) {
             return $this->render(
                 '@Volontariat/volontaire/index_not_connected.html.twig',
                 [
                     'volontaires' => $volontaires,
-                ]
+                ],
             );
         }
 
@@ -47,19 +48,19 @@ class VolontaireController extends AbstractController
                 'search_form' => $search_form->createView(),
                 'volontaires' => $volontaires,
                 'search' => $search_form->isSubmitted(),
-            ]
+            ],
         );
     }
 
     #[Route(path: '/{uuid}', name: 'volontariat_volontaire_show')]
-    public function show(Volontaire $volontaire): Response
+    public function show(#[MapEntity(expr: 'repository.findOneByUuid(uuid)')] Volontaire $volontaire): Response
     {
         if (!$this->authorizationChecker->isGranted('show', $volontaire)) {
             return $this->render(
                 '@Volontariat/volontaire/show_not_connected.html.twig',
                 [
                     'volontaire' => $volontaire,
-                ]
+                ],
             );
         }
 
@@ -70,7 +71,7 @@ class VolontaireController extends AbstractController
             [
                 'volontaire' => $volontaire,
                 'associations' => $associations,
-            ]
+            ],
         );
     }
 }

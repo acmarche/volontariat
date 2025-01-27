@@ -5,6 +5,7 @@ namespace AcMarche\Volontariat\Security\Voter;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Repository\AssociationRepository;
+use AcMarche\Volontariat\Security\SecurityData;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -51,7 +52,7 @@ class AssociationVoter extends Voter
             return false;
         }
 
-        if ($this->decisionManager->decide($token, ['ROLE_VOLONTARIAT_ADMIN'])) {
+        if ($this->decisionManager->decide($token, [SecurityData::getRoleAdmin()])) {
             return true;
         }
 
@@ -95,7 +96,7 @@ class AssociationVoter extends Voter
 
     public function hasValidAssociation(User $user, TokenInterface $token): bool
     {
-        if (!$this->decisionManager->decide($token, ['ROLE_VOLONTARIAT'])) {
+        if (!$this->decisionManager->decide($token, [SecurityData::getRoleVolontariat()])) {
             return false;
         }
 

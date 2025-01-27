@@ -10,6 +10,7 @@ use AcMarche\Volontariat\Form\Contact\ReferencerType;
 use AcMarche\Volontariat\Mailer\MailerContact;
 use AcMarche\Volontariat\Mailer\MessageService;
 use AcMarche\Volontariat\Service\CaptchaService;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,7 +32,7 @@ class ReferencerController extends AbstractController
 
     #[Route(path: '/volontaire/{uuid}', name: 'volontariat_referencer_volontaire')]
     #[IsGranted('ROLE_VOLONTARIAT')]
-    public function volontaire(Request $request, Volontaire $volontaire): Response
+    public function volontaire(Request $request,#[MapEntity(expr: 'repository.findOneByUuid(uuid)')]  Volontaire $volontaire): Response
     {
         if (($hasAssociation = $this->hasAssociation()) !== null) {
             return $hasAssociation;

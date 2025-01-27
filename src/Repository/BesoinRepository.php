@@ -6,6 +6,7 @@ use AcMarche\Volontariat\Doctrine\OrmCrudTrait;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Besoin;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\ParameterType;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -35,7 +36,8 @@ class BesoinRepository extends ServiceEntityRepository
         $qb->leftJoin('so.association', 'association', 'WITH');
         $qb->addSelect('association');
 
-        $qb->andWhere('so.date_end >= :date ')
+        $qb
+            ->andWhere('so.date_end >= :date ')
             ->setParameter('date', $now);
 
         $qb->setMaxResults($max);
@@ -51,7 +53,8 @@ class BesoinRepository extends ServiceEntityRepository
      */
     public function findByAssociation(?Association $association): array
     {
-        return $this->createQueryBuilder('besoin')
+        return $this
+            ->createQueryBuilder('besoin')
             ->andWhere('besoin.association = :association')
             ->setParameter('association', $association)
             ->getQuery()
@@ -63,12 +66,28 @@ class BesoinRepository extends ServiceEntityRepository
      */
     public function search(string $keyword): array
     {
-        return $this->createQueryBuilder('besoin')
+        return $this
+            ->createQueryBuilder('besoin')
             ->andWhere(
-                'besoin.name LIKE :mot OR besoin.requirement LIKE :mot OR besoin.place LIKE :mot '
+                'besoin.name LIKE :mot OR besoin.requirement LIKE :mot OR besoin.place LIKE :mot ',
             )
             ->setParameter('mot', '%'.$keyword.'%')
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * Use MapEntity url
+     * @param string $uuid
+     * @return Besoin|null
+     */
+    public function findOneByUuid(string $uuid): ?Besoin
+    {
+        return $this
+            ->createQueryBuilder('besoin')
+            ->andWhere('besoin.uuid = :uuid')
+            ->setParameter('uuid', $uuid, ParameterType::STRING)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }

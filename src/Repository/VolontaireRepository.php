@@ -5,6 +5,7 @@ namespace AcMarche\Volontariat\Repository;
 use AcMarche\Volontariat\Doctrine\OrmCrudTrait;
 use AcMarche\Volontariat\Entity\Volontaire;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\ParameterType;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -171,5 +172,20 @@ class VolontaireRepository extends ServiceEntityRepository
             ->leftJoin('volontaire.user', 'user', 'WITH')
             ->leftJoin('volontaire.vehicules', 'vehicules', 'WITH')
             ->addSelect('secteurs', 'vehicules', 'user', 'association');
+    }
+
+    /**
+     * Use MapEntity url
+     * @param string $uuid
+     * @return Volontaire|null
+     */
+    public function findOneByUuid(string $uuid): ?Volontaire
+    {
+        return $this
+            ->createQueryBuilder('volontaire')
+            ->andWhere('volontaire.uuid = :uuid')
+            ->setParameter('uuid', $uuid, ParameterType::STRING)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }

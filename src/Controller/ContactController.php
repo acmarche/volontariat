@@ -7,6 +7,7 @@ use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Form\Contact\ContactType;
 use AcMarche\Volontariat\Mailer\MailerContact;
 use AcMarche\Volontariat\Spam\Handler\SpamHandler;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -49,7 +50,7 @@ class ContactController extends AbstractController
 
     #[Route(path: '/volontaire/{uuid}', name: 'volontariat_contact_volontaire')]
     #[IsGranted('show', subject: 'volontaire')]
-    public function volontaire(Request $request, Volontaire $volontaire): Response
+    public function volontaire(Request $request, #[MapEntity(expr: 'repository.findOneByUuid(uuid)')] Volontaire $volontaire): Response
     {
         $form = $this->createForm(ContactType::class, null);
 

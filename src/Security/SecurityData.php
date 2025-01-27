@@ -12,7 +12,7 @@ class SecurityData
 {
     public static function getRoles(): iterable
     {
-        $roles = [self::getRoleAdmin(), self::getRoleVolontariat()];
+        $roles = [self::getRoleAdmin(), self::getRoleVolontariat(), self::getRoleAssociation()];
 
         return array_combine($roles, $roles);
     }
@@ -25,5 +25,10 @@ class SecurityData
     public static function getRoleVolontariat(): string
     {
         return 'ROLE_VOLONTARIAT';
+    }
+
+    public static function getRoleAssociation(): string
+    {
+        return 'ROLE_VOLONTARIAT_ASSOCIATION';
     }
 }

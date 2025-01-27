@@ -4,6 +4,7 @@ namespace AcMarche\Volontariat\Security\Voter;
 
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Entity\Volontaire;
+use AcMarche\Volontariat\Security\SecurityData;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -24,6 +25,7 @@ class VolontaireVoter extends Voter
     public const SHOW = 'show';
     public const EDIT = 'edit';
     public const DELETE = 'delete';
+    private ?User $user = null;
 
     public function __construct(
         private AccessDecisionManagerInterface $decisionManager,
@@ -58,7 +60,7 @@ class VolontaireVoter extends Voter
 
         $this->user = $user;
 
-        if ($this->decisionManager->decide($token, ['ROLE_VOLONTARIAT_ADMIN'])) {
+        if ($this->decisionManager->decide($token, [SecurityData::getRoleAdmin()])) {
             return true;
         }
 

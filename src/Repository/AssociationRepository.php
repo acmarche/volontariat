@@ -7,6 +7,7 @@ use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Secteur;
 use AcMarche\Volontariat\Entity\Volontaire;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\ParameterType;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -48,32 +49,38 @@ class AssociationRepository extends ServiceEntityRepository
         $qb = $this->createQBl();
 
         if ($nom) {
-            $qb->andWhere(
-                'association.email LIKE :mot OR association.name LIKE :mot OR association.description LIKE :mot '
-            )
+            $qb
+                ->andWhere(
+                    'association.email LIKE :mot OR association.name LIKE :mot OR association.description LIKE :mot ',
+                )
                 ->setParameter('mot', '%'.$nom.'%');
         }
 
         if ($secteur) {
-            $qb->andWhere('secteurs = :secteur ')
+            $qb
+                ->andWhere('secteurs = :secteur ')
                 ->setParameter('secteur', $secteur);
         }
 
         if (is_array($secteurs)) {
-            $qb->andWhere('secteurs IN ARRAY :secteurs ')
+            $qb
+                ->andWhere('secteurs IN ARRAY :secteurs ')
                 ->setParameter('secteurs', $secteurs);
         }
 
         if ($user) {
-            $qb->andWhere('user = :user')
+            $qb
+                ->andWhere('user = :user')
                 ->setParameter('user', $user);
         }
 
         if (false === $valider) {
-            $qb->andWhere('association.valider = :valider')
+            $qb
+                ->andWhere('association.valider = :valider')
                 ->setParameter('valider', false);
         } elseif (2 != $valider) {
-            $qb->andWhere('association.valider = :valider')
+            $qb
+                ->andWhere('association.valider = :valider')
                 ->setParameter('valider', true);
         }
 
@@ -85,10 +92,11 @@ class AssociationRepository extends ServiceEntityRepository
      */
     public function searchFront(string $keyword): array
     {
-        return $this->createQBl()
+        return $this
+            ->createQBl()
             ->andWhere('association.notification_message_association = 1')
             ->andWhere(
-                'association.email LIKE :mot OR association.name LIKE :mot OR association.description LIKE :mot '
+                'association.email LIKE :mot OR association.name LIKE :mot OR association.description LIKE :mot ',
             )
             ->setParameter('mot', '%'.$keyword.'%')
             ->getQuery()
@@ -100,7 +108,8 @@ class AssociationRepository extends ServiceEntityRepository
      */
     public function findAcceptMessage(): array
     {
-        return $this->createQBl()
+        return $this
+            ->createQBl()
             ->andWhere('association.notification_message_association = 1')
             ->getQuery()
             ->getResult();
@@ -111,7 +120,8 @@ class AssociationRepository extends ServiceEntityRepository
      */
     public function getRecent(int $limit = 9): array
     {
-        return $this->createQBl()
+        return $this
+            ->createQBl()
             ->setMaxResults($limit)
             ->addOrderBy('RAND()')
             ->getQuery()
@@ -120,7 +130,8 @@ class AssociationRepository extends ServiceEntityRepository
 
     public function getAllEmail(): array
     {
-        $results = $this->createQBl()
+        $results = $this
+            ->createQBl()
             ->andWhere('association.mailing = 0')
             ->getQuery()
             ->getResult();
@@ -140,7 +151,8 @@ class AssociationRepository extends ServiceEntityRepository
      */
     public function findAssociationByUser(UserInterface $user): ?Association
     {
-        return $this->createQBl()
+        return $this
+            ->createQBl()
             ->andWhere('association.user = :user')
             ->setParameter('user', $user)
             ->getQuery()->getOneOrNullResult();
@@ -151,7 +163,8 @@ class AssociationRepository extends ServiceEntityRepository
      */
     public function findAssociationsBySecteur(Secteur $secteur): array
     {
-        return $this->createQBl()
+        return $this
+            ->createQBl()
             ->andWhere(':secteurId MEMBER OF association.secteurs')
             ->setParameter('secteurId', $secteur->getId())
             ->getQuery()->getResult();
@@ -181,11 +194,27 @@ class AssociationRepository extends ServiceEntityRepository
 
     private function createQBl(): QueryBuilder
     {
-        return $this->createQueryBuilder('association')
+        return $this
+            ->createQueryBuilder('association')
             ->leftJoin('association.secteurs', 'secteurs', 'WITH')
             ->leftJoin('association.besoins', 'besoins', 'WITH')
             ->leftJoin('association.user', 'user', 'WITH')
             ->addSelect('secteurs', 'besoins', 'user')
             ->addOrderBy('association.name', 'ASC');
+    }
+
+    /**
+     * Use MapEntity url
+     * @param string $uuid
+     * @return Association|null
+     */
+    public function findOneByUuid(string $uuid): ?Association
+    {
+        return $this
+            ->createQueryBuilder('association')
+            ->andWhere('association.uuid = :uuid')
+            ->setParameter('uuid', $uuid, ParameterType::STRING)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }

@@ -6,6 +6,7 @@ use AcMarche\Volontariat\Entity\Besoin;
 use AcMarche\Volontariat\Form\Admin\BesoinType;
 use AcMarche\Volontariat\Message\BesoinCreated;
 use AcMarche\Volontariat\Repository\BesoinRepository;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -80,7 +81,7 @@ class BesoinController extends AbstractController
 
     #[Route(path: '/{uuid}/edit', name: 'volontariat_backend_besoin_edit')]
     #[IsGranted('edit', subject: 'besoin')]
-    public function edit(Request $request, Besoin $besoin): Response
+    public function edit(Request $request,#[MapEntity(expr: 'repository.findOneByUuid(uuid)')]  Besoin $besoin): Response
     {
         $form = $this->createForm(BesoinType::class, $besoin);
 

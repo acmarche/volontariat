@@ -1,6 +1,7 @@
 <?php
 
 use AcMarche\Volontariat\Entity\Security\User;
+use AcMarche\Volontariat\Security\MessageDigestPasswordHasher;
 use AcMarche\Volontariat\Security\VolontariatAuthenticator;
 use Symfony\Config\SecurityConfig;
 
@@ -11,6 +12,15 @@ return static function (SecurityConfig $security): void {
         ->class(User::class)
         ->managerName('default')
         ->property('email');
+
+    $security
+        ->passwordHasher('cap_hasher')
+        ->id(MessageDigestPasswordHasher::class);
+
+    $security
+        ->passwordHasher(User::class)
+        ->algorithm('sodium')
+        ->migrateFrom(['cap_hasher']);
 
     $security
         ->firewall('dev')

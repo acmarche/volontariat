@@ -35,7 +35,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         }
 
         $user->password = $newHashedPassword;
-        $this->persist($user);
+
         $this->flush();
     }
 
@@ -46,7 +46,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     public function findOneByEmailAndSkip($email, User $user): ?User
     {
-        return $this->createQueryBuilder('user')
+        return $this
+            ->createQueryBuilder('user')
             ->andWhere('user.email = :email')
             ->setParameter('email', $email)
             ->andWhere('user.id != :id')

@@ -7,6 +7,7 @@ use AcMarche\Volontariat\Entity\Security\Token;
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Entity\Volontaire;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
@@ -17,6 +18,7 @@ class MailerSecurity
 
     public function __construct(
         private MailerInterface $mailer,
+        #[Autowire('%env(VOLONTARIAT_MAILER_FROM)%')]
         private string $from
     ) {
     }

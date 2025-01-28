@@ -7,6 +7,7 @@ use AcMarche\Volontariat\Entity\Besoin;
 use AcMarche\Volontariat\Entity\Message;
 use AcMarche\Volontariat\Entity\Volontaire;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
@@ -19,6 +20,7 @@ class Mailer
     public function __construct(
         private MessageService $messageService,
         private MailerInterface $mailer,
+        #[Autowire('%env(VOLONTARIAT_MAILER_FROM)%')]
         private string $from,
     ) {}
 

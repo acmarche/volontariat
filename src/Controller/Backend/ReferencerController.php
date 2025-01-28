@@ -9,7 +9,6 @@ use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Form\Contact\ReferencerType;
 use AcMarche\Volontariat\Mailer\MailerContact;
 use AcMarche\Volontariat\Mailer\MessageService;
-use AcMarche\Volontariat\Service\CaptchaService;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,7 +24,6 @@ class ReferencerController extends AbstractController
 
     public function __construct(
         private MailerContact $mailerContact,
-        private CaptchaService $captchaService,
         private MessageService $messageService
     ) {
     }

@@ -1,55 +1,53 @@
 <?php
 
 use AcMarche\Volontariat\Entity\Security\User;
-use AcMarche\Volontariat\Security\MessageDigestPasswordHasher;
 use AcMarche\Volontariat\Security\VolontariatAuthenticator;
 use Symfony\Config\SecurityConfig;
 
-return static function (SecurityConfig $security) {
-    $has512 = [
-        'algorithm' => 'sha512',
-        'encode_as_base64' => false,
-        'iterations' => 1,
-    ];
+return static function (SecurityConfig $security): void {
+    $security
+        ->provider('volontariat_user_provider')
+        ->entity()
+        ->class(User::class)
+        ->managerName('default')
+        ->property('email');
 
-    /*  $security->passwordHasher(Md5VerySecureHasher::class, $has512)
-          ->hashAlgorithm('sha512')
-          ->encodeAsBase64(false)
-          ->iterations(1)
-          ->migrateFrom('legacy')
-          ;*/
+    $security
+        ->firewall('dev')
+        ->pattern('^/(_(profiler|wdt)|css|images|js)/')
+        ->security(false);
 
-    //  $security->passwordHasher(MessageDigestPasswordHasher::class, $has512);
-
-    $security->passwordHasher('cap_hasher')
-        ->id(MessageDigestPasswordHasher::class);
-
-    $security->passwordHasher(User::class)
-        ->algorithm('auto')
-        ->migrateFrom(['cap_hasher']);
-
-    /* $security->passwordHasher(User::class, $has512)
-     ->encodeAsBase64(false);*/
-
-    $security->provider('user_provider', [
-        'entity' => [
-            'class' => User::class,
-            'property' => 'email',
-        ],
-    ]);
-
-    $main = [
-        'provider' => 'user_provider',
-        'logout' => ['path' => 'app_logout'],
-        'form_login' => [],
-        //   'switch_user' => true,
-        'entry_point' => VolontariatAuthenticator::class,
-        'custom_authenticators' => [VolontariatAuthenticator::class],
-        'login_throttling' => [
-            'max_attempts' => 6, //per minute...
-        ],
-    ];
-
-    $security->firewall('main', $main)
+    $mainFirewall = $security
+        ->firewall('main')
         ->lazy(true);
+
+    $mainFirewall
+        ->formLogin()
+        ->loginPath('app_login')
+        ->rememberMe(true)
+        ->enableCsrf(true);
+
+    $mainFirewall
+        ->logout()
+        ->path('app_logout');
+
+    $authenticators = [VolontariatAuthenticator::class];
+
+    $mainFirewall
+        ->customAuthenticators($authenticators)
+        ->provider('volontariat_user_provider')
+        ->entryPoint(VolontariatAuthenticator::class)
+        ->loginThrottling()
+        ->maxAttempts(6)
+        ->interval('15 minutes');
+
+    $mainFirewall
+        ->rememberMe([
+            'secret' => '%kernel.secret%',
+            'lifetime' => 604800,
+            'path' => '/',
+            'always_remember_me' => true,
+        ]);
+
+    $security->roleHierarchy('ROLE_VOLONTARIAT_ADMIN', ['ROLE_VOLONTARIAT_ASSOCIATION']);
 };

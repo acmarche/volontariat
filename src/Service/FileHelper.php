@@ -3,6 +3,7 @@
 namespace AcMarche\Volontariat\Service;
 
 use AcMarche\Volontariat\InterfaceDef\Uploadable;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\File;
@@ -12,13 +13,19 @@ use Symfony\Component\Mime\MimeTypes;
 class FileHelper
 {
     public string $directorySeparator;
+    private string $rootUploadPath;
+    private string $rootDownloadPath;
 
     /**
-     * @param string $rootUploadPath   $root/public/uploads/volontariat
+     * @param string $rootUploadPath $root/public/uploads/volontariat
      * @param string $rootDownloadPath /uploads/volontariat
      */
-    public function __construct(private string $rootUploadPath, private string $rootDownloadPath)
-    {
+    public function __construct(
+        #[Autowire('kernel.project_dir')]
+        private readonly string $projectDir,
+    ) {
+        $this->rootDownloadPath = '/uploads/volontariat';
+        $this->rootUploadPath = $this->projectDir.'/public/uploads/volontariat';
         $this->directorySeparator = DIRECTORY_SEPARATOR;
     }
 
@@ -106,7 +113,7 @@ class FileHelper
     protected function makePath(Uploadable $uploadable): string
     {
         return DIRECTORY_SEPARATOR.$uploadable->getPath().$this->directorySeparator.$uploadable->getId(
-        ).$this->directorySeparator;
+            ).$this->directorySeparator;
     }
 
     public function getUploadPath(Uploadable $uploadable): string

@@ -10,7 +10,7 @@ use Symfony\Contracts\Service\Attribute\Required;
 
 trait getAssociationTrait
 {
-    private ?Association $association = null;
+    public ?Association $association = null;
 
     #[Required]
     public function setTuteurUtils(AssociationRepository $associationRepository): void

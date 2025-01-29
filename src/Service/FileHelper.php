@@ -2,6 +2,8 @@
 
 namespace AcMarche\Volontariat\Service;
 
+use AcMarche\Volontariat\Entity\Association;
+use AcMarche\Volontariat\Entity\Page;
 use AcMarche\Volontariat\InterfaceDef\Uploadable;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Filesystem;
@@ -12,16 +14,12 @@ use Symfony\Component\Mime\MimeTypes;
 
 class FileHelper
 {
-    public string $directorySeparator;
+    private string $directorySeparator;
     private string $rootUploadPath;
     private string $rootDownloadPath;
 
-    /**
-     * @param string $rootUploadPath $root/public/uploads/volontariat
-     * @param string $rootDownloadPath /uploads/volontariat
-     */
     public function __construct(
-        #[Autowire('kernel.project_dir')]
+        #[Autowire('%kernel.project_dir%')]
         private readonly string $projectDir,
     ) {
         $this->rootDownloadPath = '/uploads/volontariat';
@@ -29,8 +27,21 @@ class FileHelper
         $this->directorySeparator = DIRECTORY_SEPARATOR;
     }
 
-    public function uploadFile(Uploadable $uploadable, UploadedFile $file, $fileName): File
+    /**
+     * @param Uploadable|Association|Page $uploadable
+     * @param UploadedFile $file
+     * @return File
+     */
+    public function treatmentFile(Uploadable|Association|Page $uploadable, UploadedFile $file): File
     {
+        $orignalName = preg_replace(
+            '#.'.$file->guessClientExtension().'#',
+            '',
+            $file->getClientOriginalName(),
+        );
+        $fileName = $orignalName.'-'.uniqid().'.'.$file->guessClientExtension();
+        $nom = str_replace('.'.$file->getClientOriginalExtension(), '', $file->getClientOriginalName());
+
         $directory = $this->getUploadPath($uploadable);
 
         return $file->move($directory, $fileName);

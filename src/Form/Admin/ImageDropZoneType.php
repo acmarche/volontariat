@@ -11,7 +11,7 @@ class ImageDropZoneType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('file', DropzoneType::class, [
+      /*  $builder->add('file', DropzoneType::class, [
             'attr' => [
                 'placeholder' => 'Cliquez ici pour sélectioner les images',
             ],
@@ -26,6 +26,6 @@ class ImageDropZoneType extends AbstractType
                     'mimeTypesMessage' => 'Veuillez télécharger une image valide',
                 ]),
             ],
-        ]);
+        ]);*/
     }
 }

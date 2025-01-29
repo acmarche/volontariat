@@ -28,9 +28,8 @@ class AssociationVoter extends Voter
 
     public function __construct(
         private AccessDecisionManagerInterface $decisionManager,
-        private AssociationRepository $associationRepository
-    ) {
-    }
+        private AssociationRepository $associationRepository,
+    ) {}
 
     /**
      * {@inheritdoc}
@@ -81,7 +80,9 @@ class AssociationVoter extends Voter
         if (!$user) {
             return false;
         }
-        $associationUser = $user->association;
+
+        $associationUser = $this->associationRepository->findAssociationByUser($user);
+
         if (!$associationUser) {
             return false;
         }

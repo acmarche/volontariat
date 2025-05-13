@@ -85,7 +85,7 @@ class CompteController extends AbstractController
             '@Volontariat/backend/account/password.html.twig',
             [
                 'user' => $user,
-                'form' => $formProfil->createView(),
+                'form' => $formProfil,
             ]
         );
     }

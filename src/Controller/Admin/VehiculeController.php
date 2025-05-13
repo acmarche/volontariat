@@ -69,7 +69,7 @@ class VehiculeController extends AbstractController
             '@Volontariat/admin/vehicule/show.html.twig',
             array(
             'vehicule' => $vehicule,
-            'delete_form' => $deleteForm->createView(),
+            'delete_form' => $deleteForm,
         )
         );
     }
@@ -91,7 +91,7 @@ class VehiculeController extends AbstractController
             '@Volontariat/admin/vehicule/edit.html.twig',
             array(
             'vehicule' => $vehicule,
-            'edit_form' => $editForm->createView(),
+            'edit_form' =>  $editForm,
         )
         );
     }

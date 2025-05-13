@@ -85,7 +85,7 @@ class SecteurController extends AbstractController
             '@Volontariat/admin/secteur/edit.html.twig',
             [
                 'secteur' => $secteur,
-                'form' => $editForm->createView(),
+                'form' =>  $editForm,
             ]
         );
     }

@@ -39,13 +39,16 @@ class AssociationController extends AbstractController
 
             return $this->redirectToRoute('volontariat_dashboard');
         }
+        $response = new Response(null, $form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
+
 
         return $this->render(
             '@Volontariat/backend/association/edit.html.twig',
             [
                 'association' => $this->association,
                 'form' => $form,
-            ]
+            ],
+            $response
         );
     }
 }

@@ -89,7 +89,7 @@ class UtilisateurController extends AbstractController
             '@Volontariat/admin/user/edit.html.twig',
             [
                 'user' => $user,
-                'edit_form' => $editForm->createView(),
+                'edit_form' =>  $editForm,
             ]
         );
     }

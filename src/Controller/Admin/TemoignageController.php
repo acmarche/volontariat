@@ -64,7 +64,7 @@ class TemoignageController extends AbstractController
             '@Volontariat/admin/temoignage/show.html.twig',
             [
                 'temoignage' => $temoignage,
-                'delete_form' => $deleteForm->createView(),
+                'delete_form' => $deleteForm,
             ]
         );
     }

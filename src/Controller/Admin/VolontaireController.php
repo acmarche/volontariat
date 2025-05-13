@@ -40,7 +40,7 @@ class VolontaireController extends AbstractController
         return $this->render(
             '@Volontariat/admin/volontaire/index.html.twig',
             [
-                'form' => $search_form->createView(),
+                'form' => $search_form,
                 'volontaires' => $volontaires,
             ]
             , $response,

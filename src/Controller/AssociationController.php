@@ -42,7 +42,7 @@ class AssociationController extends AbstractController
         return $this->render(
             '@Volontariat/association/index.html.twig',
             [
-                'search_form' => $search_form->createView(),
+                'search_form' => $search_form,
                 'associations' => $associations,
             ]
         );

@@ -42,7 +42,7 @@ class LinkController extends AbstractController
             '@Volontariat/admin/link/account.html.twig',
             [
                 'object' => $association,
-                'form' => $form->createView(),
+                'form' => $form,
             ]
         );
     }
@@ -64,7 +64,7 @@ class LinkController extends AbstractController
             '@Volontariat/admin/link/account.html.twig',
             [
                 'object' => $volontaire,
-                'form' => $form->createView(),
+                'form' => $form,
             ]
         );
     }

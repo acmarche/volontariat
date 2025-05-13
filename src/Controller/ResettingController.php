@@ -54,7 +54,7 @@ class ResettingController extends AbstractController
         return $this->render(
             '@Volontariat/security/lost_password.html.twig',
             [
-                'form' => $form->createView(),
+                'form' => $form,
             ]
         );
     }

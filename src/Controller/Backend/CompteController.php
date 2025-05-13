@@ -56,7 +56,7 @@ class CompteController extends AbstractController
             '@Volontariat/backend/account/edit.html.twig',
             [
                 'user' => $user,
-                'form' => $form->createView(),
+                'form' => $form,
             ]
         );
     }

@@ -48,7 +48,7 @@ class ImageAssociationController extends AbstractController
             [
                 'images' => $images,
                 'association' => $this->association,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
             $response,
         );

@@ -74,7 +74,7 @@ class AssociationController extends AbstractController
             '@Volontariat/admin/association/new.html.twig',
             [
                 'association' => $association,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -112,7 +112,7 @@ class AssociationController extends AbstractController
             '@Volontariat/admin/association/edit.html.twig',
             [
                 'association' => $association,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

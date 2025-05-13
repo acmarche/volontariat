@@ -63,7 +63,7 @@ class MessageController extends AbstractController
                 'message' => $message,
                 'query' => $query,
                 'destinataires' => $destinataires,
-                'form' => $form->createView(),
+                'form' => $form,
             ]
         );
     }

@@ -40,7 +40,7 @@ class ImagePageController extends AbstractController
             [
                 'images' => $images,
                 'page' => $page,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

@@ -34,7 +34,7 @@ class TokenController extends AbstractController
         return $this->render(
             '@Volontariat/user/token.html.twig',
             [
-                'form' => $form->createView(),
+                'form' => $form,
             ]
         );
     }

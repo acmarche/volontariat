@@ -50,7 +50,7 @@ class BesoinController extends AbstractController
 
         return $this->render('@Volontariat/admin/besoin/new.html.twig', [
             'besoin' => $besoin,
-            'form' => $form->createView(),
+            'form' => $form,
         ]);
     }
 
@@ -78,7 +78,7 @@ class BesoinController extends AbstractController
 
         return $this->render('@Volontariat/admin/besoin/edit.html.twig', [
             'besoin' => $besoin,
-            'form' => $form->createView(),
+            'form' => $form,
         ]);
     }
 

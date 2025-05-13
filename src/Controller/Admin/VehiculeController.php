@@ -56,7 +56,7 @@ class VehiculeController extends AbstractController
             '@Volontariat/admin/vehicule/new.html.twig',
             array(
             'vehicule' => $vehicule,
-            'form' => $form->createView(),
+            'form' => $form,
         )
         );
     }

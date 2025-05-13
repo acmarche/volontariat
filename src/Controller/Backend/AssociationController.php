@@ -44,7 +44,7 @@ class AssociationController extends AbstractController
             '@Volontariat/backend/association/edit.html.twig',
             [
                 'association' => $this->association,
-                'form' => $form->createView(),
+                'form' => $form,
             ]
         );
     }

@@ -114,7 +114,7 @@ class UtilisateurController extends AbstractController
             '@Volontariat/admin/user/password.html.twig',
             [
                 'user' => $user,
-                'form' => $form->createView(),
+                'form' => $form,
             ]
         );
     }

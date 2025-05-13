@@ -74,7 +74,7 @@ class BesoinController extends AbstractController
             '@Volontariat/backend/besoin/new.html.twig',
             [
                 'besoin' => $besoin,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -99,7 +99,7 @@ class BesoinController extends AbstractController
             '@Volontariat/backend/besoin/new.html.twig',
             [
                 'besoin' => $besoin,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

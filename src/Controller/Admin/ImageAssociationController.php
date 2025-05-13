@@ -36,7 +36,7 @@ class ImageAssociationController extends AbstractController
         return $this->render('@Volontariat/admin/imageAssociation/edit.html.twig', [
             'images' => $images,
             'association' => $association,
-            'form' => $form->createView(),
+            'form' => $form,
         ]);
     }
 

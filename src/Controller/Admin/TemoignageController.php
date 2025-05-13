@@ -51,7 +51,7 @@ class TemoignageController extends AbstractController
             '@Volontariat/admin/temoignage/new.html.twig',
             [
                 'temoignage' => $temoignage,
-                'form' => $form->createView(),
+                'form' => $form,
             ]
         );
     }
@@ -86,7 +86,7 @@ class TemoignageController extends AbstractController
             '@Volontariat/admin/temoignage/edit.html.twig',
             [
                 'temoignage' => $temoignage,
-                'form' => $form->createView(),
+                'form' => $form,
             ]
         );
     }

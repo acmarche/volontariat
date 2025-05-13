@@ -54,7 +54,7 @@ class PageController extends AbstractController
             '@Volontariat/admin/page/new.html.twig',
             [
                 'page' => $page,
-                'form' => $form->createView(),
+                'form' => $form,
             ]
         );
     }
@@ -92,7 +92,7 @@ class PageController extends AbstractController
             '@Volontariat/admin/page/edit.html.twig',
             [
                 'page' => $page,
-                'form' => $form->createView(),
+                'form' => $form,
             ]
         );
     }

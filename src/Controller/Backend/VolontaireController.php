@@ -49,7 +49,7 @@ class VolontaireController extends AbstractController
             '@Volontariat/backend/volontaire/edit.html.twig',
             [
                 'volontaire' => $volontaire,
-                'form' => $form->createView(),
+                'form' => $form,
             ]
         );
     }

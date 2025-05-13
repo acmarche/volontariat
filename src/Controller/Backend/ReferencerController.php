@@ -61,7 +61,7 @@ class ReferencerController extends AbstractController
         return $this->render(
             '@Volontariat/contact/referencer_volontaire.html.twig',
             [
-                'form' => $form->createView(),
+                'form' => $form,
                 'volontaire' => $volontaire,
             ]
         );
@@ -102,7 +102,7 @@ class ReferencerController extends AbstractController
         return $this->render(
             '@Volontariat/contact/referencer_association.html.twig',
             [
-                'form' => $form->createView(),
+                'form' => $form,
                 'association' => $association,
             ]
         );

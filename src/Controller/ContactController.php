@@ -76,7 +76,7 @@ class ContactController extends AbstractController
             '@Volontariat/contact/volontaire.html.twig',
             [
                 'volontaire' => $volontaire,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -105,7 +105,7 @@ class ContactController extends AbstractController
             '@Volontariat/contact/association.html.twig',
             [
                 'association' => $association,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

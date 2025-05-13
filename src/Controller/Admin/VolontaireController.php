@@ -67,7 +67,7 @@ class VolontaireController extends AbstractController
             '@Volontariat/admin/volontaire/new.html.twig',
             [
                 'volontaire' => $volontaire,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }
@@ -101,7 +101,7 @@ class VolontaireController extends AbstractController
             '@Volontariat/admin/volontaire/edit.html.twig',
             [
                 'volontaire' => $volontaire,
-                'form' => $form->createView(),
+                'form' => $form,
             ],
         );
     }

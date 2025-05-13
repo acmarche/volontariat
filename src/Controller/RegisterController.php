@@ -80,7 +80,7 @@ class RegisterController extends AbstractController
         return $this->render(
             '@Volontariat/registration/register_voluntary.html.twig',
             [
-                'form' => $form->createView(),
+                'form' => $form,
             ]
         );
     }
@@ -125,7 +125,7 @@ class RegisterController extends AbstractController
         return $this->render(
             '@Volontariat/registration/register_association.html.twig',
             [
-                'form' => $form->createView(),
+                'form' => $form,
             ]
         );
     }

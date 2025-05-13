@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Length;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class VolontaireType extends AbstractType
@@ -43,6 +44,9 @@ class VolontaireType extends AbstractType
             ->add('birthyear', IntegerType::class, [
                 'required' => false,
                 'label' => 'Année de naissance',
+                'constraints' => [
+                    new Length(min: 1970, max: 2020),
+                ],
             ])
             ->add(
                 'description',
@@ -62,7 +66,7 @@ class VolontaireType extends AbstractType
                     'required' => false,
                     'multiple' => true,
                     'expanded' => true,
-                    'query_builder' => fn (SecteurRepository $er) => $er->secteursActifs(),
+                    'query_builder' => fn(SecteurRepository $er) => $er->secteursActifs(),
                 ]
             )
             ->add(

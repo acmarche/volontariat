@@ -15,9 +15,12 @@
             </p>
         </div>
 
-        <h4 class="text-lg text-green-default font-bold mt-3">Intéressé par cette mission, clique sur le lien ci-dessous</h4>
+        <h4 class="text-lg text-green-default font-bold mt-3">Intéressé par cette mission, clique sur le lien
+            ci-dessous</h4>
         <p class="m-3">
-            Pour l'association <a href="{{ path('volontariat_association_show',{'slug': association.slug}) }}">{{ association }}</a>
+            <a href="{{ path('volontariat_association_show',{'slug': association.slug}) }}">
+                Pour l'association {{ association }}
+            </a>
         </p>
 
         <h4 class="text-lg text-green-default font-bold mt-3">Quand ?</h4>

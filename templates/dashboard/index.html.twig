@@ -15,7 +15,7 @@
                 {% if volontaire %}
                     <li class="py-4">
                         <a href="{{ path('volontariat_volontaire_show', {'uuid': volontaire.uuid}) }}">
-                            Ma fiche volontaire sur le site
+                            Complète ta fiche de volontaire en cliquant sur le lien
                         </a>
                     </li>
                 {% endif %}
@@ -23,7 +23,7 @@
                 {% if association %}
                     <li class="py-4">
                         <a href="{{ path('volontariat_association_show', {'slug': association.slug}) }}">
-                            Mon association sur le site : {{ association }}
+                            Complète ta fiche associative {{ association }} en cliquant sur le lien
                         </a>
                     </li>
                     <li class="py-4">

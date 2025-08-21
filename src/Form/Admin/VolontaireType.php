@@ -52,7 +52,7 @@ class VolontaireType extends AbstractType
                 'description',
                 TextareaType::class,
                 [
-                    'label' => 'Décrivez votre motivation',
+                    'label' => 'Pourquoi veux-tu devenir volontaire?',
                     'attr' => ['rows' => 4],
                 ]
             )

@@ -16,32 +16,67 @@
         </div>
         <div class="px-4 sm:px-6 lg:px-8">
             <div class="mt-8 flow-root">
-                <div class="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div class="hidden sm:block -my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                    <!-- Desktop Table -->
                     <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                        <table class="min-w-full divide-y divide-gray-300">
-                            <tbody class="divide-y divide-gray-200">
-                            {% for besoin in besoins %}
+
+                            <table class="min-w-full divide-y divide-gray-300">
+                                <thead>
                                 <tr>
-                                    <td class="whitespace-nowrap py-4 pl-4 pr-3  font-medium text-gray-900 sm:pl-0">
-                                        <a href="{{ path('volontariat_besoin_show', {'id': besoin.id}) }}">
-                                            {{ besoin.name }}
-                                        </a>
-                                    </td>
-                                    <td class="whitespace-nowrap py-4 px-3  text-gray-500">
+                                    <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Name</th>
+                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Dates</th>
+                                    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Association</th>
+                                </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-200">
+                                {% for besoin in besoins %}
+                                    <tr>
+                                        <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                                            <a href="{{ path('volontariat_besoin_show', {'id': besoin.id}) }}" class="hover:underline">
+                                                {{ besoin.name }}
+                                            </a>
+                                        </td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                            {% if besoin.dateBegin %}
+                                                Du {{ besoin.dateBegin | date('d-m-Y') }}
+                                            {% endif %}
+                                            {% if besoin.dateEnd %}
+                                                au {{ besoin.dateEnd | date('d-m-Y') }}
+                                            {% endif %}
+                                        </td>
+                                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                            {{ besoin.association }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                    </div>
+                </div>
+
+                <!-- Mobile Card Layout -->
+                <div class="block sm:hidden">
+                    <div class="space-y-4">
+                        {% for besoin in besoins %}
+                            <div class="bg-white shadow px-4 py-5 sm:px-6 rounded-lg">
+                                <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                    <a href="{{ path('volontariat_besoin_show', {'id': besoin.id}) }}" class="hover:underline">
+                                        {{ besoin.name }}
+                                    </a>
+                                </h3>
+                                <div class="mt-2 max-w-xl text-sm text-gray-500">
+                                    <p>{{ besoin.association }}</p>
+                                    <p>
                                         {% if besoin.dateBegin %}
                                             Du {{ besoin.dateBegin | date('d-m-Y') }}
                                         {% endif %}
                                         {% if besoin.dateEnd %}
-                                            au  {{ besoin.dateEnd | date('d-m-Y') }}
+                                            au {{ besoin.dateEnd | date('d-m-Y') }}
                                         {% endif %}
-                                    </td>
-                                    <td class="whitespace-nowrap py-4 px-3  text-gray-500">
-                                        {{ besoin.association }}
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
+                                    </p>
+                                </div>
+                            </div>
+                        {% endfor %}
                     </div>
                 </div>
             </div>

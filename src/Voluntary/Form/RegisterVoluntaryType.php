@@ -51,7 +51,7 @@ class RegisterVoluntaryType extends AbstractType
                 'required' => true,
                 'label' => false,
                 'help_html' => true,
-                'help' => '<a href="/page/vieprive" target="_blank">J\'ai pris connaissance du règlement de la vie privée</a>',
+                'help' => '<a href="https://www.marche.be/administration/rgpd/" target="_blank">J\'ai pris connaissance du règlement de la vie privée</a>',
             ]);
     }
 

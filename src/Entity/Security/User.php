@@ -29,8 +29,8 @@ class User implements UserInterface, PasswordHasherAwareInterface, LegacyPasswor
     #[ORM\Column(type: Types::STRING, length: 180, unique: true)]
     public string $email;
 
-    #[ORM\Column(type: Types::ARRAY, nullable: true)]
-    public iterable $roles = [];
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    public array $roles;
 
     #[ORM\Column(type: Types::STRING)]
     public string $password;

@@ -38,7 +38,7 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
     public ?string $name;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
-    protected ?string $slug = null;
+    protected $slug;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
     public ?string $address;

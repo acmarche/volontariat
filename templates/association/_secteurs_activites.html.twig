@@ -1,9 +1,9 @@
 <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
-    <dt class="text-sm font-medium text-gray-500">Secteurs</dt>
-    <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+    <dt class=" font-medium text-gray-500">Secteurs</dt>
+    <dd class="mt-1  text-gray-900 sm:col-span-2 sm:mt-0">
         <ul role="list" class="divide-y divide-gray-200 rounded-md border border-gray-200">
             {% for secteur in association.secteurs %}
-                <li class="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
+                <li class="flex items-center justify-between py-3 pl-3 pr-4 ">
                     <div class="flex w-0 flex-1 items-center">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 flex-shrink-0 text-gray-400"
                              viewBox="0 0 24 24" width="24" height="24">
@@ -22,11 +22,11 @@
 {#
 {% if association.activites|length > 0 %}
     <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
-        <dt class="text-sm font-medium text-gray-500">Activités</dt>
-        <dd class="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+        <dt class=" font-medium text-gray-500">Activités</dt>
+        <dd class="mt-1  text-gray-900 sm:col-span-2 sm:mt-0">
             <ul role="list" class="divide-y divide-gray-200 rounded-md border border-gray-200">
                 {% for activite in association.activites %}
-                    <li class="flex items-center justify-between py-3 pl-3 pr-4 text-sm">
+                    <li class="flex items-center justify-between py-3 pl-3 pr-4 ">
                         <div class="flex w-0 flex-1 items-center">
                             <svg class="h-5 w-5 flex-shrink-0 text-gray-400" viewBox="0 0 20 20"
                                  fill="currentColor" aria-hidden="true">

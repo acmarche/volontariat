@@ -1,7 +1,7 @@
 <nav class="flex-1 space-y-1 bg-white" aria-label="Sidebar">
     <!-- Current: "border-indigo-600 bg-indigo-50 text-indigo-600", Default: "border-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-900" -->
     <a href="#"
-       class="border-indigo-600 bg-indigo-50 text-indigo-600 group flex items-center border-l-4 px-3 py-2 text-sm font-medium">
+       class="border-indigo-600 bg-indigo-50 text-indigo-600 group flex items-center border-l-4 px-3 py-2  font-medium">
         <!-- Current: "text-indigo-500", Default: "text-gray-400 group-hover:text-gray-500" -->
         <svg class="text-indigo-500 mr-3 h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24"
              stroke-width="1.5" stroke="currentColor" aria-hidden="true">
@@ -13,7 +13,7 @@
 
     {% if volontaire %}
         <a href="{{ path('volontariat_backend_volontaire_edit') }}"
-           class="border-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center border-l-4 px-3 py-2 text-sm font-medium">
+           class="border-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center border-l-4 px-3 py-2  font-medium">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                  stroke="currentColor" class="text-gray-400 group-hover:text-gray-500 mr-3 h-6 w-6 flex-shrink-0">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -25,7 +25,7 @@
 
     {% if association %}
         <a href="{{ path('volontariat_backend_association_edit') }}"
-           class="border-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center border-l-4 px-3 py-2 text-sm font-medium">
+           class="border-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center border-l-4 px-3 py-2  font-medium">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                  stroke="currentColor" class="text-gray-400 group-hover:text-gray-500 mr-3 h-6 w-6 flex-shrink-0">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -36,7 +36,7 @@
     {% endif %}
 
     <a href="{{ path('volontariat_backend_account_edit') }}"
-       class="border-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center border-l-4 px-3 py-2 text-sm font-medium">
+       class="border-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center border-l-4 px-3 py-2  font-medium">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
              class="text-gray-400 group-hover:text-gray-500 mr-3 h-6 w-6 flex-shrink-0">
             <path stroke-linecap="round" stroke-linejoin="round"
@@ -47,7 +47,7 @@
     </a>
 
     <a href="{{ path('volontariat_backend_password_edit') }}"
-       class="border-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center border-l-4 px-3 py-2 text-sm font-medium">
+       class="border-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center border-l-4 px-3 py-2  font-medium">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
              class="text-gray-400 group-hover:text-gray-500 mr-3 h-6 w-6 flex-shrink-0">
             <path stroke-linecap="round" stroke-linejoin="round"
@@ -57,7 +57,7 @@
     </a>
 
     <a href="{{ path('volontariat_backend_user_delete') }}"
-       class="border-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center border-l-4 px-3 py-2 text-sm font-medium">
+       class="border-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center border-l-4 px-3 py-2  font-medium">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
              class="text-gray-400 group-hover:text-gray-500 mr-3 h-6 w-6 flex-shrink-0">
             <path stroke-linecap="round" stroke-linejoin="round"
@@ -68,7 +68,7 @@
 
     {% if is_granted('ROLE_VOLONTARIAT_ADMIN') %}
         <a href="{{ path('volontariat_admin_home') }}"
-           class="border-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center border-l-4 px-3 py-2 text-sm font-medium">
+           class="border-transparent text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center border-l-4 px-3 py-2  font-medium">
             <svg class="text-gray-400 group-hover:text-gray-500 mr-3 h-6 w-6 flex-shrink-0" fill="none"
                  viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round"

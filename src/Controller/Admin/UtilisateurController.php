@@ -2,6 +2,8 @@
 
 namespace AcMarche\Volontariat\Controller\Admin;
 
+use AcMarche\Volontariat\Entity\Association;
+use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Form\User\ChangePasswordType;
 use AcMarche\Volontariat\Form\User\UserEditType;
@@ -18,7 +20,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route(path: '/admin/user')]
 #[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class UtilisateurController extends AbstractController
 {
@@ -30,7 +31,7 @@ class UtilisateurController extends AbstractController
     ) {
     }
 
-    #[Route(path: '/', name: 'volontariat_admin_user', methods: ['GET'])]
+    #[Route(path: '/admin/user/', name: 'volontariat_admin_user', methods: ['GET'])]
     public function index(): Response
     {
         $users = $this->userRepository->findBy([], ['name' => 'ASC']);
@@ -40,6 +41,7 @@ class UtilisateurController extends AbstractController
             } catch (NonUniqueResultException $e) {
                 dd($user);
             }
+
             try {
                 $user->association = $this->associationRepository->findAssociationByUser($user);
             } catch (NonUniqueResultException $e) {
@@ -55,7 +57,7 @@ class UtilisateurController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}', name: 'volontariat_admin_user_show', methods: ['GET'])]
+    #[Route(path: '/admin/user/{id}', name: 'volontariat_admin_user_show', methods: ['GET'])]
     public function show(User $user): Response
     {
         $volontaire = $this->volontaireRepository->findVolontaireByUser($user);
@@ -71,7 +73,7 @@ class UtilisateurController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}/edit', name: 'volontariat_admin_user_edit', methods: ['GET', 'POST'])]
+    #[Route(path: '/admin/user/{id}/edit', name: 'volontariat_admin_user_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, User $user): Response
     {
         $editForm = $this->createForm(UserEditType::class, $user)
@@ -94,7 +96,7 @@ class UtilisateurController extends AbstractController
         );
     }
 
-    #[Route(path: '/password/{id}', name: 'volontariat_admin_user_password', methods: ['GET', 'POST'])]
+    #[Route(path: '/admin/user/password/{id}', name: 'volontariat_admin_user_password', methods: ['GET', 'POST'])]
     public function password(Request $request, User $user): Response
     {
         $form = $this->createForm(ChangePasswordType::class, $user);
@@ -119,16 +121,18 @@ class UtilisateurController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}/delete', name: 'volontariat_admin_user_delete', methods: ['POST'])]
+    #[Route(path: '/admin/user/{id}/delete', name: 'volontariat_admin_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
-            if ($association = $this->associationRepository->findAssociationByUser($user)) {
+            if (($association = $this->associationRepository->findAssociationByUser($user)) instanceof Association) {
                 $this->associationRepository->remove($association);
             }
-            if ($volontaire = $this->volontaireRepository->findVolontaireByUser($user)) {
+
+            if (($volontaire = $this->volontaireRepository->findVolontaireByUser($user)) instanceof Volontaire) {
                 $this->volontaireRepository->remove($volontaire);
             }
+
             $this->userRepository->remove($user);
             $this->userRepository->flush();
             $this->addFlash('success', 'L\'utilisateur a bien été supprimé');

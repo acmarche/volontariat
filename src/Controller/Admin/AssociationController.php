@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route(path: '/admin/association')]
 #[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class AssociationController extends AbstractController
 {
@@ -23,36 +22,36 @@ class AssociationController extends AbstractController
         private FileHelper $fileHelper,
     ) {}
 
-    #[Route(path: '/', name: 'volontariat_admin_association', methods: ['GET', 'POST'])]
+    #[Route(path: '/admin/association/', name: 'volontariat_admin_association', methods: ['GET', 'POST'])]
     public function index(Request $request): Response
     {
         $data = [];
         $data['valider'] = 2;
 
-        $search_form = $this->createForm(
+        $form = $this->createForm(
             SearchAssociationType::class,
             $data,
         );
-        $search_form->handleRequest($request);
-        if ($search_form->isSubmitted() && $search_form->isValid()) {
-            $data = $search_form->getData();
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
         }
 
         $associations = $this->associationRepository->search($data);
 
-        $response = new Response(null, $search_form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
+        $response = new Response(null, $form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
 
         return $this->render(
             '@Volontariat/admin/association/index.html.twig',
             [
-                'form' => $search_form,
+                'form' => $form,
                 'associations' => $associations,
             ]
             , $response,
         );
     }
 
-    #[Route(path: '/new', name: 'volontariat_admin_association_new', methods: ['GET', 'POST'])]
+    #[Route(path: '/admin/association/new', name: 'volontariat_admin_association_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $association = new Association();
@@ -79,7 +78,7 @@ class AssociationController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}/show', name: 'volontariat_admin_association_show')]
+    #[Route(path: '/admin/association/{id}/show', name: 'volontariat_admin_association_show')]
     public function show(Association $association): Response
     {
         $images = $this->fileHelper->getImages($association);
@@ -93,7 +92,7 @@ class AssociationController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}/edit', name: 'volontariat_admin_association_edit')]
+    #[Route(path: '/admin/association/{id}/edit', name: 'volontariat_admin_association_edit')]
     public function edit(Request $request, Association $association): Response
     {
         $form = $this->createForm(AssocationType::class, $association);
@@ -118,7 +117,7 @@ class AssociationController extends AbstractController
     }
 
 
-    #[Route(path: '/{id}/delete', name: 'volontariat_admin_association_delete', methods: ['POST'])]
+    #[Route(path: '/admin/association/{id}/delete', name: 'volontariat_admin_association_delete', methods: ['POST'])]
     public function delete(Request $request, Association $association): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$association->getId(), $request->request->get('_token'))) {

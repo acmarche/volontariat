@@ -29,7 +29,7 @@ class MailerContact
      */
     public function sendContact(array $data): void
     {
-        $email = (new TemplatedEmail())
+        $templatedEmail = (new TemplatedEmail())
             ->from(new Address($this->from,$data['email']))
             ->to(new Address($this->from))
             ->subject('Contact sur la plate-forme du volontariat')
@@ -40,7 +40,7 @@ class MailerContact
                 ])
             );
 
-        $this->mailer->send($email);
+        $this->mailer->send($templatedEmail);
     }
 
     /**
@@ -48,7 +48,7 @@ class MailerContact
      */
     public function sendToVolontaire(Volontaire $volontaire, array $data): void
     {
-        $email = (new TemplatedEmail())
+        $templatedEmail = (new TemplatedEmail())
             ->from(new Address($this->from,$data['email']))
             ->to(new Address($volontaire->email))
             ->bcc(new Address($this->from))
@@ -61,7 +61,7 @@ class MailerContact
                 ])
             );
 
-        $this->mailer->send($email);
+        $this->mailer->send($templatedEmail);
     }
 
     /**
@@ -69,7 +69,7 @@ class MailerContact
      */
     public function sendToAssociation(Association $association, array $data): void
     {
-        $email = (new TemplatedEmail())
+        $templatedEmail = (new TemplatedEmail())
             ->from(new Address($this->from,$data['email']))
             ->to(new Address($this->from))
             ->bcc(new Address($this->from))
@@ -82,49 +82,49 @@ class MailerContact
                 ])
             );
 
-        $this->mailer->send($email);
+        $this->mailer->send($templatedEmail);
     }
 
     /**
      * @throws TransportExceptionInterface
      */
-    public function sendReferencerVolontaire(Association $association, Volontaire $volontaire, Message $data): void
+    public function sendReferencerVolontaire(Association $association, Volontaire $volontaire, Message $message): void
     {
-        $email = (new TemplatedEmail())
-            ->from(new Address($this->from,$data['email']))
+        $templatedEmail = (new TemplatedEmail())
+            ->from(new Address($this->from,$message['email']))
             ->to(new Address($volontaire->email))
             ->bcc(new Address($this->from))
             ->subject($association->name.' vous recommande un volontaire')
             ->htmlTemplate('@Volontariat/emails/_recommande_volontaire.html.twig')
             ->context(
                 array_merge($this->defaultParams(), [
-                    'data' => $data,
+                    'data' => $message,
                     'association' => $association,
                     'volontaire' => $volontaire,
                 ])
             );
 
-        $this->mailer->send($email);
+        $this->mailer->send($templatedEmail);
     }
 
     /**
      * @throws TransportExceptionInterface
      */
-    public function sendReferencerAssociation(Association $association, Message $data): void
+    public function sendReferencerAssociation(Association $association, Message $message): void
     {
-        $email = (new TemplatedEmail())
+        $templatedEmail = (new TemplatedEmail())
             ->from(new Address($this->from))
-            ->to(new Address($data->to))
+            ->to(new Address($message->to))
             ->bcc(new Address($this->from))
-            ->subject($data->sujet.' vous recommande une association')
+            ->subject($message->sujet.' vous recommande une association')
             ->htmlTemplate('@Volontariat/emails/_recommande_association.html.twig')
             ->context(
                 array_merge($this->defaultParams(), [
-                    'data' => $data,
+                    'data' => $message,
                     'association' => $association,
                 ])
             );
 
-        $this->mailer->send($email);
+        $this->mailer->send($templatedEmail);
     }
 }

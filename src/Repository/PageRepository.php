@@ -11,14 +11,15 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Page|null find($id, $lockMode = null, $lockVersion = null)
  * @method Page|null findOneBy(array $criteria, array $orderBy = null)
  * @method Page[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<Page>
  */
 class PageRepository extends ServiceEntityRepository
 {
     use OrmCrudTrait;
 
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        parent::__construct($registry, Page::class);
+        parent::__construct($managerRegistry, Page::class);
     }
 
     /**

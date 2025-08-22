@@ -2,6 +2,8 @@
 
 namespace AcMarche\Volontariat\Entity;
 
+use Stringable;
+use Doctrine\DBAL\Types\Types;
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\InterfaceDef\Uploadable;
 use AcMarche\Volontariat\Repository\AssociationRepository;
@@ -19,7 +21,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: AssociationRepository::class)]
 #[ORM\Table(name: 'association')]
-class Association implements Uploadable, TimestampableInterface, SluggableInterface, \Stringable
+class Association implements Uploadable, TimestampableInterface, SluggableInterface, Stringable
 {
     use TimestampableTrait;
     use SluggableTrait;
@@ -27,65 +29,70 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
     use UuidTrait;
 
     #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     public int $id;
 
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column(type: Types::STRING)]
     #[Assert\NotBlank]
     public ?string $name;
 
-    #[ORM\Column(type: 'string', nullable: true)]
-    protected $slug;
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    protected ?string $slug = null;
 
-    #[ORM\Column(type: 'string', nullable: true)]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     public ?string $address;
 
-    #[ORM\Column(type: 'string', nullable: true)]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     public ?string $number;
 
-    #[ORM\Column(type: 'integer', nullable: true)]
+    #[ORM\Column(type: Types::INTEGER, nullable: true)]
     public ?int $postalCode;
 
-    #[ORM\Column(type: 'string', nullable: true)]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     public ?string $city;
 
     #[ORM\Column(name: 'email')]
     #[Assert\Email(message: "The email '{{ value }}' is not a valid email.")]
     public ?string $email;
 
-    #[ORM\Column(type: 'string', nullable: true)]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     public ?string $web_site;
 
-    #[ORM\Column(type: 'string', nullable: true)]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     public ?string $phone;
 
-    #[ORM\Column(type: 'string', nullable: true)]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     public ?string $mobile;
 
-    #[ORM\Column(type: 'text', nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Assert\Length(max: 900)]
     public ?string $description;
+
     /**
      * Description des besoins permanent.
      */
-    #[ORM\Column(type: 'text', nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     public ?string $requirement;
+
     /**
      * lieu besoins permanents.
      */
-    #[ORM\Column(type: 'text', nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     public ?string $place;
+
     /**
      * contact besoins permanents.
      */
-    #[ORM\Column(type: 'text', nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     public ?string $contact;
+
     /**
      * @var Secteur[]|iterable $secteurs
      */
     #[ORM\ManyToMany(targetEntity: Secteur::class, inversedBy: 'associations')]
     public Collection $secteurs;
+
     /**
      * @var Besoin[]|iterable $besoins
      */
@@ -94,12 +101,14 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
 
     #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'])]
     public ?User $user = null;
-    #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => 0])]
+
+    #[ORM\Column(type: Types::BOOLEAN, nullable: false, options: ['default' => 0])]
     public bool $valider = false;
-    #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => 1])]
+
+    #[ORM\Column(type: Types::BOOLEAN, nullable: false, options: ['default' => 1])]
     public bool $notification_new_voluntary = true;
 
-    #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: Types::BOOLEAN, nullable: false, options: ['default' => 1])]
     public bool $notification_message_association = true;
 
     #[Vich\UploadableField(mapping: 'association_image', fileNameProperty: 'imageName')]
@@ -115,7 +124,6 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
     {
         $this->secteurs = new ArrayCollection();
         $this->besoins = new ArrayCollection();
-        $this->images = [];
     }
 
     public function __toString(): string
@@ -138,9 +146,7 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
     public function getFirstImage(): ?array
     {
         if ([] !== $this->images) {
-            $first = $this->images[0];
-
-            return $first;
+            return $this->images[0];
         }
 
         return null;
@@ -156,7 +162,7 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
         return true;
     }
 
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }

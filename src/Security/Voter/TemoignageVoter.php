@@ -22,10 +22,12 @@ class TemoignageVoter extends Voter
     // Defining these constants is overkill for this simple application, but for real
     // applications, it's a recommended practice to avoid relying on "magic strings"
     public const SHOW = 'show';
+
     public const EDIT = 'edit';
+
     public const DELETE = 'delete';
 
-    public function __construct(private AccessDecisionManagerInterface $decisionManager)
+    public function __construct(private AccessDecisionManagerInterface $accessDecisionManager)
     {
     }
 
@@ -49,9 +51,10 @@ class TemoignageVoter extends Voter
             return false;
         }
 
-        if ($this->decisionManager->decide($token, [SecurityData::getRoleAdmin()])) {
+        if ($this->accessDecisionManager->decide($token, [SecurityData::getRoleAdmin()])) {
             return true;
         }
+
         return match ($attribute) {
             self::SHOW => $this->canView($temoignage, $token),
             self::EDIT => $this->canEdit($temoignage, $token),
@@ -65,7 +68,7 @@ class TemoignageVoter extends Voter
      */
     private function canView(Temoignage $temoignage, TokenInterface $token): bool
     {
-        return (bool) $this->canEdit($temoignage, $token);
+        return $this->canEdit($temoignage, $token);
     }
 
     private function canEdit(Temoignage $temoignage, TokenInterface $token): bool
@@ -78,6 +81,6 @@ class TemoignageVoter extends Voter
 
     private function canDelete(Temoignage $temoignage, TokenInterface $token): bool
     {
-        return (bool) $this->canEdit($temoignage, $token);
+        return $this->canEdit($temoignage, $token);
     }
 }

@@ -8,14 +8,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route(path: '/secteur')]
 class SecteurController extends AbstractController
 {
     public function __construct(private SecteurRepository $secteurRepository)
     {
     }
 
-    #[Route(path: '/', name: 'volontariat_secteur')]
+    #[Route(path: '/secteur/', name: 'volontariat_secteur')]
     public function index(): Response
     {
         $secteurs = $this->secteurRepository->findAllOrdered();
@@ -25,7 +24,7 @@ class SecteurController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/{id}', name: 'volontariat_secteur_show', methods: ['GET'])]
+    #[Route(path: '/secteur/{id}', name: 'volontariat_secteur_show', methods: ['GET'])]
     public function show(Secteur $secteur): Response
     {
         $associations = $secteur->getAssociations();

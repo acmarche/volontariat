@@ -22,10 +22,12 @@ class BesoinVoter extends Voter
     // Defining these constants is overkill for this simple application, but for real
     // applications, it's a recommended practice to avoid relying on "magic strings"
     public const SHOW = 'show';
+
     public const EDIT = 'edit';
+
     public const DELETE = 'delete';
 
-    public function __construct(private AccessDecisionManagerInterface $decisionManager)
+    public function __construct(private AccessDecisionManagerInterface $accessDecisionManager)
     {
     }
 
@@ -49,7 +51,7 @@ class BesoinVoter extends Voter
             return false;
         }
 
-        if ($this->decisionManager->decide($token, [SecurityData::getRoleAdmin()])) {
+        if ($this->accessDecisionManager->decide($token, [SecurityData::getRoleAdmin()])) {
             return true;
         }
 
@@ -66,7 +68,7 @@ class BesoinVoter extends Voter
      */
     private function canView(Besoin $besoin, TokenInterface $token): bool
     {
-        return (bool) $this->canEdit($besoin, $token);
+        return $this->canEdit($besoin, $token);
     }
 
     private function canEdit(Besoin $besoin, TokenInterface $token): bool
@@ -79,6 +81,6 @@ class BesoinVoter extends Voter
 
     private function canDelete(Besoin $besoin, TokenInterface $token): bool
     {
-        return (bool) $this->canEdit($besoin, $token);
+        return $this->canEdit($besoin, $token);
     }
 }

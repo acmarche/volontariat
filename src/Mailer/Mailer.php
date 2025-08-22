@@ -2,6 +2,7 @@
 
 namespace AcMarche\Volontariat\Mailer;
 
+use Symfony\Component\HttpFoundation\File\File;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Besoin;
 use AcMarche\Volontariat\Entity\Message;
@@ -25,48 +26,42 @@ class Mailer
     ) {}
 
     /**
-     * @param array $data
+     * @param array $message
      *
      * @throws TransportExceptionInterface
      */
     public function sendRegularMessage(
         string $to,
-        Message $data,
+        Message $message,
         ?string $url = null,
     ): void {
-        $content = $data->contenu;
+        $content = $message->contenu;
 
-        $email = (new TemplatedEmail())
+        $templatedEmail = (new TemplatedEmail())
             ->from($this->from)
             ->to(new Address($to))
-            ->subject($data->sujet)
+            ->subject($message->sujet)
             ->htmlTemplate('@Volontariat/emails/_to_all.html.twig')
             ->context(
                 array_merge($this->defaultParams(), [
-                    'data' => $data,
+                    'data' => $message,
                     'content' => $content,
                     'url' => $url,
                 ]),
             );
 
-        if ($uploadedFile = $data->file) {
-            if ($uploadedFile instanceof UploadedFile) {
-                $email->attachFromPath(
-                    $uploadedFile->getPathname(),
-                    $uploadedFile->getClientOriginalName(),
-                    $uploadedFile->getClientMimeType(),
-                );
-            }
+        if (($uploadedFile = $message->file) instanceof File && $uploadedFile instanceof UploadedFile) {
+            $templatedEmail->attachFromPath(
+                $uploadedFile->getPathname(),
+                $uploadedFile->getClientOriginalName(),
+                $uploadedFile->getClientMimeType(),
+            );
         }
-        $this->mailer->send($email);
+
+        $this->mailer->send($templatedEmail);
     }
 
     /**
-     * @param Association $association
-     * @param string $to
-     * @param string $urlAccount
-     * @param string $urlAssociations
-     * @param string $urlVolontaires
      * @throws TransportExceptionInterface
      */
     public function sendAutoAssociation(
@@ -76,7 +71,7 @@ class Mailer
         string $urlAssociations,
         string $urlVolontaires,
     ): void {
-        $email = (new TemplatedEmail())
+        $templatedEmail = (new TemplatedEmail())
             ->from($this->from)
             ->to(new Address($to))
             ->subject('Plate-forme du Volontariat')
@@ -91,7 +86,7 @@ class Mailer
             );
 
 
-        $this->mailer->send($email);
+        $this->mailer->send($templatedEmail);
     }
 
     /**
@@ -103,7 +98,7 @@ class Mailer
         Volontaire $volontaire,
         ?string $urlLink,
     ): void {
-        $email = (new TemplatedEmail())
+        $templatedEmail = (new TemplatedEmail())
             ->from($association->email)
             ->to(new Address($volontaire->email))
             ->bcc(new Address('jf@marche.be'))
@@ -117,7 +112,7 @@ class Mailer
                 ]),
             );
 
-        $this->mailer->send($email);
+        $this->mailer->send($templatedEmail);
     }
 
 }

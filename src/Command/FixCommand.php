@@ -2,6 +2,7 @@
 
 namespace AcMarche\Volontariat\Command;
 
+use Exception;
 use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Repository\BesoinRepository;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
@@ -27,20 +28,23 @@ class FixCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = new SymfonyStyle($input, $output);
-        foreach ($this->associationRepository->findAll() as $object) {
-           $object->uuid = $object->generateUuid();
+        $symfonyStyle = new SymfonyStyle($input, $output);
+        foreach ($this->associationRepository->findAll() as $volontaire) {
+           $volontaire->uuid = $volontaire->generateUuid();
         }
-        foreach ($this->besoinRepository->findAll() as $object) {
-           $object->uuid = $object->generateUuid();
+
+        foreach ($this->besoinRepository->findAll() as $volontaire) {
+           $volontaire->uuid = $volontaire->generateUuid();
         }
-        foreach ($this->volontaireRepository->findAll() as $object) {
-           $object->uuid = $object->generateUuid();
+
+        foreach ($this->volontaireRepository->findAll() as $volontaire) {
+           $volontaire->uuid = $volontaire->generateUuid();
         }
+
         try {
             $this->associationRepository->flush();
-        } catch (\Exception $e) {
-            $io->error($e->getMessage());
+        } catch (Exception $exception) {
+            $symfonyStyle->error($exception->getMessage());
         }
 
         return Command::SUCCESS;

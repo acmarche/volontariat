@@ -2,6 +2,7 @@
 
 namespace AcMarche\Volontariat\Security;
 
+use DateTime;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Security\Token;
 use AcMarche\Volontariat\Entity\Security\User;
@@ -37,16 +38,18 @@ class TokenManager
         return $token;
     }
 
-    public function generate(User $user, ?\DateTime $expireAt = null): Token
+    public function generate(User $user, ?DateTime $expireAt = null): Token
     {
         $token = $this->getInstance($user);
         try {
             $token->setValue(bin2hex(random_bytes(20)));
         } catch (Exception) {
         }
-        if (!$expireAt) {
-            $expireAt = new \DateTime('+90 day');
+
+        if (!$expireAt instanceof DateTime) {
+            $expireAt = new DateTime('+90 day');
         }
+
         $token->setExpireAt($expireAt);
 
         $this->tokenRepository->flush();
@@ -56,7 +59,7 @@ class TokenManager
 
     public function isExpired(Token $token): bool
     {
-        $today = new \DateTime('today');
+        $today = new DateTime('today');
 
         return $today > $token->getExpireAt();
     }
@@ -67,6 +70,7 @@ class TokenManager
         foreach ($users as $user) {
             $this->generate($user);
         }
+
         $this->userRepository->flush();
     }
 
@@ -81,7 +85,7 @@ class TokenManager
 
     public function getLinkToConnect(Association|Volontaire $entity): ?string
     {
-        if (!$user = $entity->user) {
+        if (!($user = $entity->user) instanceof User) {
             return null;
         }
 

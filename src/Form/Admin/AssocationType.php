@@ -17,9 +17,9 @@ use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class AssocationType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $builder
+        $formBuilder
             ->add('name', TextType::class, [
                 'required' => true,
             ])
@@ -59,7 +59,7 @@ class AssocationType extends AbstractType
                 'description',
                 TextareaType::class,
                 [
-                    'label' => 'Description de l\'association',
+                    'label' => "Description de l'association",
                     'help' => 'Décrivez brièvement votre association, max 600 caractères',
                     'attr' => [
                         'rows' => 8,
@@ -121,9 +121,9 @@ class AssocationType extends AbstractType
             );
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $optionsResolver): void
     {
-        $resolver->setDefaults(
+        $optionsResolver->setDefaults(
             [
                 'data_class' => Association::class,
             ]

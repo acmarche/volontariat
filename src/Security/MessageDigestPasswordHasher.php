@@ -2,6 +2,7 @@
 
 namespace AcMarche\Volontariat\Security;
 
+use InvalidArgumentException;
 use Symfony\Component\PasswordHasher\Exception\InvalidPasswordException;
 use Symfony\Component\PasswordHasher\Exception\LogicException;
 use Symfony\Component\PasswordHasher\Hasher\CheckPasswordLengthTrait;
@@ -12,8 +13,11 @@ class MessageDigestPasswordHasher implements LegacyPasswordHasherInterface
     use CheckPasswordLengthTrait;
 
     private string $algorithm;
-    private bool $encodeHashAsBase64;
+
+    private bool $encodeHashAsBase64 = false;
+
     private int $iterations = 1;
+
     private int $hashLength = -1;
 
     /**
@@ -24,7 +28,6 @@ class MessageDigestPasswordHasher implements LegacyPasswordHasherInterface
     public function __construct(string $algorithm = 'sha512', bool $encodeHashAsBase64 = false, int $iterations = 1)
     {
         $this->algorithm = $algorithm;
-        $this->encodeHashAsBase64 = false;
 
         try {
             $this->hashLength = \strlen($this->hash('', 'salt'));
@@ -77,7 +80,7 @@ class MessageDigestPasswordHasher implements LegacyPasswordHasherInterface
         }
 
         if (false !== strrpos($salt, '{') || false !== strrpos($salt, '}')) {
-            throw new \InvalidArgumentException('Cannot use { or } in salt.');
+            throw new InvalidArgumentException('Cannot use { or } in salt.');
         }
 
         return $password.'{'.$salt.'}';

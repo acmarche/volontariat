@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route(path: '/admin/volontaire')]
 #[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class VolontaireController extends AbstractController
 {
@@ -21,33 +20,34 @@ class VolontaireController extends AbstractController
         private VolontaireRepository $volontaireRepository,
     ) {}
 
-    #[Route(path: '/', name: 'volontariat_admin_volontaire')]
+    #[Route(path: '/admin/volontaire/', name: 'volontariat_admin_volontaire')]
     public function index(Request $request): Response
     {
         $data = [];
         $data['valider'] = 2;
 
-        $search_form = $this->createForm(SearchVolontaireType::class, $data);
-        $search_form->handleRequest($request);
+        $form = $this->createForm(SearchVolontaireType::class, $data);
+        $form->handleRequest($request);
 
-        if ($search_form->isSubmitted() && $search_form->isValid()) {
-            $data = $search_form->getData();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
         }
+
         $volontaires = $this->volontaireRepository->search($data);
 
-        $response = new Response(null, $search_form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
+        $response = new Response(null, $form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
 
         return $this->render(
             '@Volontariat/admin/volontaire/index.html.twig',
             [
-                'form' => $search_form,
+                'form' => $form,
                 'volontaires' => $volontaires,
             ]
             , $response,
         );
     }
 
-    #[Route(path: '/new', name: 'volontariat_admin_volontaire_new', methods: ['GET', 'POST'])]
+    #[Route(path: '/admin/volontaire/new', name: 'volontariat_admin_volontaire_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $volontaire = new Volontaire();
@@ -72,7 +72,7 @@ class VolontaireController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}/show', name: 'volontariat_admin_volontaire_show')]
+    #[Route(path: '/admin/volontaire/{id}/show', name: 'volontariat_admin_volontaire_show')]
     public function show(Volontaire $volontaire): Response
     {
         return $this->render(
@@ -83,7 +83,7 @@ class VolontaireController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}/edit', name: 'volontariat_admin_volontaire_edit')]
+    #[Route(path: '/admin/volontaire/{id}/edit', name: 'volontariat_admin_volontaire_edit')]
     public function edit(Request $request, Volontaire $volontaire): Response
     {
         $form = $this->createForm(VolontaireType::class, $volontaire);
@@ -106,7 +106,7 @@ class VolontaireController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}/delete', name: 'volontariat_admin_volontaire_delete', methods: ['POST'])]
+    #[Route(path: '/admin/volontaire/{id}/delete', name: 'volontariat_admin_volontaire_delete', methods: ['POST'])]
     public function delete(Request $request, Volontaire $volontaire): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$volontaire->getId(), $request->request->get('_token'))) {

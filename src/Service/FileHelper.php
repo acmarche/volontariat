@@ -14,53 +14,48 @@ use Symfony\Component\Mime\MimeTypes;
 
 class FileHelper
 {
-    private string $directorySeparator;
+    private string $directorySeparator = DIRECTORY_SEPARATOR;
+
     private string $rootUploadPath;
-    private string $rootDownloadPath;
+
+    private string $rootDownloadPath = '/uploads/volontariat';
 
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
         private readonly string $projectDir,
     ) {
-        $this->rootDownloadPath = '/uploads/volontariat';
         $this->rootUploadPath = $this->projectDir.'/public/uploads/volontariat';
-        $this->directorySeparator = DIRECTORY_SEPARATOR;
     }
 
-    /**
-     * @param Uploadable|Association|Page $uploadable
-     * @param UploadedFile $file
-     * @return File
-     */
-    public function treatmentFile(Uploadable|Association|Page $uploadable, UploadedFile $file): File
+    public function treatmentFile(Uploadable|Association|Page $uploadable, UploadedFile $uploadedFile): File
     {
         $orignalName = preg_replace(
-            '#.'.$file->guessClientExtension().'#',
+            '#.'.$uploadedFile->guessClientExtension().'#',
             '',
-            $file->getClientOriginalName(),
+            $uploadedFile->getClientOriginalName(),
         );
-        $fileName = $orignalName.'-'.uniqid().'.'.$file->guessClientExtension();
-        $nom = str_replace('.'.$file->getClientOriginalExtension(), '', $file->getClientOriginalName());
+        $fileName = $orignalName.'-'.uniqid().'.'.$uploadedFile->guessClientExtension();
+        str_replace('.'.$uploadedFile->getClientOriginalExtension(), '', $uploadedFile->getClientOriginalName());
 
         $directory = $this->getUploadPath($uploadable);
 
-        return $file->move($directory, $fileName);
+        return $uploadedFile->move($directory, $fileName);
     }
 
-    public function deleteOneDoc(Uploadable $uploadable, $filename): void
+    public function deleteOneDoc(Uploadable $uploadable, string $filename): void
     {
         $directory = $this->getUploadPath($uploadable);
         $file = $directory.$this->directorySeparator.$filename;
 
-        $fs = new Filesystem();
-        $fs->remove($file);
+        $filesystem = new Filesystem();
+        $filesystem->remove($file);
     }
 
     public function deleteAllDocs(Uploadable $uploadable): void
     {
         $directory = $this->getUploadPath($uploadable);
-        $fs = new Filesystem();
-        $fs->remove($directory);
+        $filesystem = new Filesystem();
+        $filesystem->remove($directory);
     }
 
     public function getFiles(Uploadable $uploadable): array
@@ -96,7 +91,10 @@ class FileHelper
         return $files;
     }
 
-    public function getImages(Uploadable $uploadable, $max = 60)
+    /**
+     * @return mixed[]
+     */
+    public function getImages(Uploadable $uploadable, $max = 60): array
     {
         $files = $this->getFiles($uploadable);
         foreach ($files as $i => $file) {
@@ -108,7 +106,10 @@ class FileHelper
         return $files;
     }
 
-    public function getDocuments(Uploadable $uploadable, $max = 60)
+    /**
+     * @return mixed[]
+     */
+    public function getDocuments(Uploadable $uploadable, $max = 60): array
     {
         $files = $this->getFiles($uploadable);
 

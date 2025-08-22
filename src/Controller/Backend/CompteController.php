@@ -2,6 +2,8 @@
 
 namespace AcMarche\Volontariat\Controller\Backend;
 
+use AcMarche\Volontariat\Entity\Association;
+use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Form\User\ChangePasswordType;
 use AcMarche\Volontariat\Form\User\UserEditPublicType;
 use AcMarche\Volontariat\Repository\AssociationRepository;
@@ -14,7 +16,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route(path: '/compte')]
 #[IsGranted('ROLE_VOLONTARIAT')]
 class CompteController extends AbstractController
 {
@@ -26,7 +27,7 @@ class CompteController extends AbstractController
     ) {
     }
 
-    #[Route(path: '/edit', name: 'volontariat_backend_account_edit')]
+    #[Route(path: '/compte/edit', name: 'volontariat_backend_account_edit')]
     public function edit(Request $request): Response
     {
         $user = $this->getUser();
@@ -38,12 +39,9 @@ class CompteController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
 
-            if ($oldEmail != $data->email) {
-                if ($this->userRepository->findOneByEmailAndSkip($data->email, $user)) {
-                    $this->addFlash('danger', 'Cette adresse mail est déjà prise vous ne pouvez pas l\'utiliser');
-
-                    return $this->redirectToRoute('volontariat_dashboard');
-                }
+            if ($oldEmail != $data->email && $this->userRepository->findOneByEmailAndSkip($data->email, $user)) {
+                $this->addFlash('danger', 'Cette adresse mail est déjà prise vous ne pouvez pas l\'utiliser');
+                return $this->redirectToRoute('volontariat_dashboard');
             }
 
             $this->userRepository->flush();
@@ -61,7 +59,7 @@ class CompteController extends AbstractController
         );
     }
 
-    #[Route(path: '/password', name: 'volontariat_backend_password_edit')]
+    #[Route(path: '/compte/password', name: 'volontariat_backend_password_edit')]
     public function password(Request $request): Response
     {
         $user = $this->getUser();
@@ -90,17 +88,18 @@ class CompteController extends AbstractController
         );
     }
 
-    #[Route(path: '/delete', name: 'volontariat_backend_user_delete', methods: ['GET', 'POST'])]
+    #[Route(path: '/compte/delete', name: 'volontariat_backend_user_delete', methods: ['GET', 'POST'])]
     public function delete(Request $request): Response
     {
         $user = $this->getUser();
 
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
 
-            if ($association = $this->associationRepository->findAssociationByUser($user)) {
+            if (($association = $this->associationRepository->findAssociationByUser($user)) instanceof Association) {
                 $this->associationRepository->remove($association);
             }
-            if ($volontaire = $this->volontaireRepository->findVolontaireByUser($user)) {
+
+            if (($volontaire = $this->volontaireRepository->findVolontaireByUser($user)) instanceof Volontaire) {
                 $this->volontaireRepository->remove($volontaire);
             }
 

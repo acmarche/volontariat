@@ -22,10 +22,12 @@ class PageVoter extends Voter
     // Defining these constants is overkill for this simple application, but for real
     // applications, it's a recommended practice to avoid relying on "magic strings"
     public const SHOW = 'show';
+
     public const EDIT = 'edit';
+
     public const DELETE = 'delete';
 
-    public function __construct(private AccessDecisionManagerInterface $decisionManager)
+    public function __construct(private AccessDecisionManagerInterface $accessDecisionManager)
     {
     }
 
@@ -49,13 +51,14 @@ class PageVoter extends Voter
             return false;
         }
 
-        if ($this->decisionManager->decide($token, [SecurityData::getRoleAdmin()])) {
+        if ($this->accessDecisionManager->decide($token, [SecurityData::getRoleAdmin()])) {
             return true;
         }
+
         return match ($attribute) {
-            self::SHOW => $this->canView($page, $token),
-            self::EDIT => $this->canEdit($page, $token),
-            self::DELETE => $this->canDelete($page, $token),
+            self::SHOW => $this->canView(),
+            self::EDIT => $this->canEdit(),
+            self::DELETE => $this->canDelete(),
             default => false,
         };
     }
@@ -63,18 +66,18 @@ class PageVoter extends Voter
     /**
      * Voir dans l'admin
      */
-    private function canView(Page $page, TokenInterface $token): bool
+    private function canView(): bool
     {
         return true;
     }
 
-    private function canEdit(Page $page, TokenInterface $token): bool
+    private function canEdit(): bool
     {
         return false;
     }
 
-    private function canDelete(Page $page, TokenInterface $token): bool
+    private function canDelete(): bool
     {
-        return (bool) $this->canEdit($page, $token);
+        return $this->canEdit();
     }
 }

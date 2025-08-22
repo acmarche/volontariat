@@ -32,6 +32,7 @@ class DefaultController extends AbstractController
         foreach ($pages as $page) {
             $page->images = $this->fileHelper->getImages($page);
         }
+
         $volontaires = $this->volontaireRepository->getRecent();
         $associations = $this->associationRepository->getRecent();
 

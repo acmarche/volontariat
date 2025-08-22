@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route(path: '/admin/export')]
 #[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class ExportController extends AbstractController
 {
@@ -21,38 +20,37 @@ class ExportController extends AbstractController
     {
     }
 
-    #[Route(path: '/volontaire/xls', name: 'volontariat_admin_volontaire_xls', methods: ['GET'])]
-    public function volontaireXls(Request $request): StreamedResponse
+    #[Route(path: '/admin/export/volontaire/xls', name: 'volontariat_admin_volontaire_xls', methods: ['GET'])]
+    public function volontaireXls(): StreamedResponse
     {
         $spreadsheet = new Spreadsheet();
-        $this->volontaireXSLObject($request, $spreadsheet);
-        $writer = new Xlsx($spreadsheet);
-        $response = new StreamedResponse(
-            function () use ($writer) {
-                $writer->save('php://output');
+        $this->volontaireXSLObject($spreadsheet);
+        $xlsx = new Xlsx($spreadsheet);
+        $streamedResponse = new StreamedResponse(
+            function () use ($xlsx): void {
+                $xlsx->save('php://output');
             },
             Response::HTTP_OK,
             []
         );
-        $response->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
-        $response->headers->set('Content-Disposition', 'attachment;filename=volontaires.xls');
-        $response->headers->set('Pragma', 'public');
-        $response->headers->set('Cache-Control', 'maxage=1');
-
-        return $response;
+        $streamedResponse->headers->set('Content-Type', 'text/vnd.ms-excel; charset=utf-8');
+        $streamedResponse->headers->set('Content-Disposition', 'attachment;filename=volontaires.xls');
+        $streamedResponse->headers->set('Pragma', 'public');
+        $streamedResponse->headers->set('Cache-Control', 'maxage=1');
+        return $streamedResponse;
     }
 
-    private function volontaireXSLObject(Request $request, Spreadsheet $spreadsheet): Worksheet
+    private function volontaireXSLObject(Spreadsheet $spreadsheet): Worksheet
     {
         $volontaires = $this->volontaireRepository->search([]);
 
-        $sheet = $spreadsheet->getActiveSheet();
+        $worksheet = $spreadsheet->getActiveSheet();
 
         /**
          * title.
          */
         $c = 1;
-        $sheet->setCellValue('A'.$c, 'Nom')
+        $worksheet->setCellValue('A'.$c, 'Nom')
             ->setCellValue('B'.$c, 'Prenom')
             ->setCellValue('C'.$c, 'Rue')
             ->setCellValue('D'.$c, 'Code postal')
@@ -70,7 +68,7 @@ class ExportController extends AbstractController
         foreach ($volontaires as $volontaire) {
             $neLe = null != $volontaire->birthyear;
 
-            $sheet->setCellValue('A'.$l, $volontaire->name)
+            $worksheet->setCellValue('A'.$l, $volontaire->name)
                 ->setCellValue('B'.$l, $volontaire->surname)
                 ->setCellValue('C'.$l, $volontaire->address)
                 ->setCellValue('D'.$l, $volontaire->postalCode)
@@ -85,6 +83,6 @@ class ExportController extends AbstractController
             ++$l;
         }
 
-        return $sheet;
+        return $worksheet;
     }
 }

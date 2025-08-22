@@ -2,6 +2,7 @@
 
 namespace AcMarche\Volontariat\Repository;
 
+use DateTime;
 use AcMarche\Volontariat\Doctrine\OrmCrudTrait;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Besoin;
@@ -13,14 +14,15 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Besoin|null find($id, $lockMode = null, $lockVersion = null)
  * @method Besoin|null findOneBy(array $criteria, array $orderBy = null)
  * @method Besoin[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<Besoin>
  */
 class BesoinRepository extends ServiceEntityRepository
 {
     use OrmCrudTrait;
 
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        parent::__construct($registry, Besoin::class);
+        parent::__construct($managerRegistry, Besoin::class);
     }
 
     /**
@@ -28,22 +30,22 @@ class BesoinRepository extends ServiceEntityRepository
      *
      * @return Besoin[]
      */
-    public function getRecent($max = 5): array
+    public function getRecent(?int $max = 5): array
     {
-        $now = new \DateTime();
+        $now = new DateTime();
 
-        $qb = $this->createQueryBuilder('so');
-        $qb->leftJoin('so.association', 'association', 'WITH');
-        $qb->addSelect('association');
+        $queryBuilder = $this->createQueryBuilder('so');
+        $queryBuilder->leftJoin('so.association', 'association', 'WITH');
+        $queryBuilder->addSelect('association');
 
-        $qb
+        $queryBuilder
             ->andWhere('so.date_end >= :date ')
             ->setParameter('date', $now);
 
-        $qb->setMaxResults($max);
-        $qb->addOrderBy('so.date_begin', 'DESC');
+        $queryBuilder->setMaxResults($max);
+        $queryBuilder->addOrderBy('so.date_begin', 'DESC');
 
-        $query = $qb->getQuery();
+        $query = $queryBuilder->getQuery();
 
         return $query->getResult();
     }
@@ -78,8 +80,6 @@ class BesoinRepository extends ServiceEntityRepository
 
     /**
      * Use MapEntity url
-     * @param string $uuid
-     * @return Besoin|null
      */
     public function findOneByUuid(string $uuid): ?Besoin
     {

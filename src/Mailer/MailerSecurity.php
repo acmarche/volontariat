@@ -26,41 +26,35 @@ class MailerSecurity
     /**
      * Lors de la création du compte.
      *
-     * @param Volontaire $voluntary
-     * @param string $password
-     * @param Token $token
      * @throws TransportExceptionInterface
      */
-    public function sendWelcomeVoluntary(Volontaire $voluntary, string $password, Token $token): void
+    public function sendWelcomeVoluntary(Volontaire $volontaire, string $password, Token $token): void
     {
-        $email = (new TemplatedEmail())
+        $templatedEmail = (new TemplatedEmail())
             ->from($this->from)
-            ->to(new Address($voluntary->email))
+            ->to(new Address($volontaire->email))
             ->bcc(new Address($this->from))
             ->subject('Bienvenue sur la plate-forme du volontariat')
             ->htmlTemplate('@Volontariat/emails/_welcome_voluntary.html.twig')
             ->context(
                 array_merge($this->defaultParams(), [
-                    'voluntary' => $voluntary,
+                    'voluntary' => $volontaire,
                     'password' => $password,
                     'token' => $token->getValue(),
                 ])
             );
 
-        $this->mailer->send($email);
+        $this->mailer->send($templatedEmail);
     }
 
     /**
      * Lors de la création du compte.
      *
-     * @param Association $association
-     * @param string $password
-     * @param Token $token
      * @throws TransportExceptionInterface
      */
-    public function sendWelcomeAssociation(Association $association, string $password, Token $token)
+    public function sendWelcomeAssociation(Association $association, string $password, Token $token): void
     {
-        $email = (new TemplatedEmail())
+        $templatedEmail = (new TemplatedEmail())
             ->from($this->from)
             ->to(new Address($association->email))
             ->bcc(new Address($this->from))
@@ -74,18 +68,15 @@ class MailerSecurity
                 ])
             );
 
-        $this->mailer->send($email);
+        $this->mailer->send($templatedEmail);
     }
 
     /**
-     * @param User $user
-     * @param Token $token
-     * @return void
      * @throws TransportExceptionInterface
      */
     public function sendRequestNewPassword(User $user, Token $token): void
     {
-        $email = (new TemplatedEmail())
+        $templatedEmail = (new TemplatedEmail())
             ->from($this->from)
             ->to(new Address($user->email))
             ->subject('Lien de connection sur la plate-forme du volontariat')
@@ -97,6 +88,6 @@ class MailerSecurity
                 ])
             );
 
-        $this->mailer->send($email);
+        $this->mailer->send($templatedEmail);
     }
 }

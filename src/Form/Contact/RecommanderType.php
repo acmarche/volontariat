@@ -13,11 +13,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RecommanderType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
         $froms = $options['froms'];
 
-        $builder
+        $formBuilder
             ->add(
                 'nom',
                 TextType::class,
@@ -51,15 +51,15 @@ class RecommanderType extends AbstractType
             );
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $optionsResolver): void
     {
-        $resolver->setDefaults(
+        $optionsResolver->setDefaults(
             array(
                 'data_class' => Message::class,
                 'froms' => [],
             )
         );
 
-        $resolver->setRequired('froms');
+        $optionsResolver->setRequired('froms');
     }
 }

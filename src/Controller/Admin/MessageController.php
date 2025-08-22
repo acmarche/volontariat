@@ -14,7 +14,6 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route(path: '/admin/message')]
 #[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class MessageController extends AbstractController
 {
@@ -25,25 +24,27 @@ class MessageController extends AbstractController
     ) {
     }
 
-    #[Route(path: '/new/{query}', name: 'volontariat_admin_message_new')]
+    #[Route(path: '/admin/message/new/{query}', name: 'volontariat_admin_message_new')]
     public function new(Request $request, string $query): Response
     {
         $message = new Message();
         $form = $this->createForm(MessageType::class, $message);
 
         $form->handleRequest($request);
+
         $destinataires = $this->messageService->getDestinataires($query);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
 
-            foreach ($destinataires as $association) {
-                $email = $this->messageService->getEmailEntity($association);
+            foreach ($destinataires as $destinataire) {
+                $email = $this->messageService->getEmailEntity($destinataire);
                 if ($email) {
                     $url = null;
                     if ($data->urlToken) {
-                        $url = $this->tokenManager->getLinkToConnect($association);
+                        $url = $this->tokenManager->getLinkToConnect($destinataire);
                     }
+
                     try {
                         $this->mailer->sendRegularMessage($email, $data, $url);
                     } catch (TransportExceptionInterface $e) {

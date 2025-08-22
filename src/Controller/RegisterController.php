@@ -24,7 +24,6 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-#[Route(path: '/register')]
 class RegisterController extends AbstractController
 {
     public function __construct(
@@ -32,18 +31,18 @@ class RegisterController extends AbstractController
         private VolontaireRepository $volontaireRepository,
         private AssociationRepository $associationRepository,
         private TokenManager $tokenManager,
-        private MailerSecurity $mailer,
+        private MailerSecurity $mailerSecurity,
         private PasswordGenerator $passwordGenerator,
     ) {
     }
 
-    #[Route(path: '/', name: 'volontariat_register_index', methods: ['GET'])]
+    #[Route(path: '/register/', name: 'volontariat_register_index', methods: ['GET'])]
     public function index(): Response
     {
         return $this->render('@Volontariat/registration/index.html.twig');
     }
 
-    #[Route(path: '/voluntary', name: 'volontariat_register_voluntary', methods: ['GET', 'POST'])]
+    #[Route(path: '/register/voluntary', name: 'volontariat_register_voluntary', methods: ['GET', 'POST'])]
     public function registerVoluntary(Request $request): Response
     {
         $user = new User();
@@ -51,7 +50,7 @@ class RegisterController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $email = $form->getData()->email;
-            if (null !== $this->userRepository->findOneByEmail($email)) {
+            if ($this->userRepository->findOneByEmail($email) instanceof User) {
                 $this->addFlash('danger', 'Un volontaire est déjà inscrit avec cette adresse email');
 
                 return $this->redirectToRoute('volontariat_register_voluntary');
@@ -69,7 +68,7 @@ class RegisterController extends AbstractController
             $token = $this->tokenManager->generate($user);
 
             try {
-                $this->mailer->sendWelcomeVoluntary($voluntary, $plainPassword, $token);
+                $this->mailerSecurity->sendWelcomeVoluntary($voluntary, $plainPassword, $token);
             } catch (TransportException|TransportExceptionInterface $e) {
                 $this->addFlash('error', $e->getMessage());
             }
@@ -85,7 +84,7 @@ class RegisterController extends AbstractController
         );
     }
 
-    #[Route(path: '/association', name: 'volontariat_register_association', methods: ['GET', 'POST'])]
+    #[Route(path: '/register/association', name: 'volontariat_register_association', methods: ['GET', 'POST'])]
     public function registerAssociation(Request $request): Response
     {
         $association = new Association();
@@ -96,7 +95,7 @@ class RegisterController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $email = $form->getData()->email;
-            if (null !== $this->userRepository->findOneByEmail($email)) {
+            if ($this->userRepository->findOneByEmail($email) instanceof User) {
                 $this->addFlash('danger', 'Une association est déjà inscrite avec cette adresse email');
 
                 return $this->redirectToRoute('volontariat_register_association');
@@ -112,7 +111,7 @@ class RegisterController extends AbstractController
             $token = $this->tokenManager->generate($user);
 
             try {
-                $this->mailer->sendWelcomeAssociation($association, $plainPassword, $token);
+                $this->mailerSecurity->sendWelcomeAssociation($association, $plainPassword, $token);
                 $this->addFlash('success', 'Votre Asbl a bien été inscrite');
                 $this->addFlash('warning', 'Votre Asbl doit être validée par un administrateur');
             } catch (TransportException|LoaderError|RuntimeError|SyntaxError|TransportExceptionInterface $e) {
@@ -130,7 +129,7 @@ class RegisterController extends AbstractController
         );
     }
 
-    #[Route(path: '/complete', name: 'volontariat_register_complete', methods: ['GET'])]
+    #[Route(path: '/register/complete', name: 'volontariat_register_complete', methods: ['GET'])]
     public function complete(): Response
     {
         return $this->render(

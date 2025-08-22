@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route(path: '/admin/besoin')]
 #[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class BesoinController extends AbstractController
 {
@@ -21,7 +20,7 @@ class BesoinController extends AbstractController
     {
     }
 
-    #[Route(path: '/', name: 'volontariat_admin_besoin')]
+    #[Route(path: '/admin/besoin/', name: 'volontariat_admin_besoin')]
     public function index(): Response
     {
         $entities = $this->besoinRepository->findAll();
@@ -31,12 +30,13 @@ class BesoinController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/new/{id}', name: 'volontariat_admin_besoin_new', methods: ['GET', 'POST'])]
+    #[Route(path: '/admin/besoin/new/{id}', name: 'volontariat_admin_besoin_new', methods: ['GET', 'POST'])]
     public function new(Request $request, Association $association): Response
     {
         $besoin = new Besoin();
         $besoin->setUuid($besoin->generateUuid());
         $besoin->setAssociation($association);
+
         $form = $this->createForm(BesoinType::class, $besoin);
 
         $form->handleRequest($request);
@@ -54,7 +54,7 @@ class BesoinController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/{id}/show', name: 'volontariat_admin_besoin_show')]
+    #[Route(path: '/admin/besoin/{id}/show', name: 'volontariat_admin_besoin_show')]
     public function show(Besoin $besoin): Response
     {
         return $this->render('@Volontariat/admin/besoin/show.html.twig', [
@@ -62,7 +62,7 @@ class BesoinController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/{id}/edit', name: 'volontariat_admin_besoin_edit')]
+    #[Route(path: '/admin/besoin/{id}/edit', name: 'volontariat_admin_besoin_edit')]
     public function edit(Request $request, Besoin $besoin): Response
     {
         $form = $this->createForm(BesoinType::class, $besoin);
@@ -82,7 +82,7 @@ class BesoinController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/{id}/delete', name: 'volontariat_admin_besoin_delete', methods: ['POST'])]
+    #[Route(path: '/admin/besoin/{id}/delete', name: 'volontariat_admin_besoin_delete', methods: ['POST'])]
     public function delete(Request $request, Besoin $besoin): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$besoin->getId(), $request->request->get('_token'))) {

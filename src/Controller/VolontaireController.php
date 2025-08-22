@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-#[Route(path: '/volontaire')]
 class VolontaireController extends AbstractController
 {
     public function __construct(
@@ -23,15 +22,16 @@ class VolontaireController extends AbstractController
         private AuthorizationCheckerInterface $authorizationChecker,
     ) {}
 
-    #[Route(path: '/', name: 'volontariat_volontaire')]
+    #[Route(path: '/volontaire/', name: 'volontariat_volontaire')]
     public function index(Request $request): Response
     {
         $data = [];
-        $search_form = $this->createForm(SearchVolontaireType::class, $data);
-        $search_form->handleRequest($request);
-        if ($search_form->isSubmitted() && $search_form->isValid()) {
-            $data = $search_form->getData();
+        $form = $this->createForm(SearchVolontaireType::class, $data);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
         }
+
         $volontaires = $this->volontaireRepository->search($data);
         if (!$this->authorizationChecker->isGranted(SecurityData::getRoleAssociation())) {
             return $this->render(
@@ -45,14 +45,14 @@ class VolontaireController extends AbstractController
         return $this->render(
             '@Volontariat/volontaire/index.html.twig',
             [
-                'search_form' => $search_form,
+                'search_form' => $form,
                 'volontaires' => $volontaires,
-                'search' => $search_form->isSubmitted(),
+                'search' => $form->isSubmitted(),
             ],
         );
     }
 
-    #[Route(path: '/{uuid}', name: 'volontariat_volontaire_show')]
+    #[Route(path: '/volontaire/{uuid}', name: 'volontariat_volontaire_show')]
     public function show(#[MapEntity(expr: 'repository.findOneByUuid(uuid)')] Volontaire $volontaire): Response
     {
         if (!$this->authorizationChecker->isGranted('show', $volontaire)) {

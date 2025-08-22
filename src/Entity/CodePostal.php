@@ -2,6 +2,7 @@
 
 namespace AcMarche\Volontariat\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use AcMarche\Volontariat\Repository\CodePostalRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -11,21 +12,21 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CodePostal
 {
     #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected int $id;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: false)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: false)]
     #[Assert\NotBlank]
     protected ?string $nom;
 
-    #[ORM\Column(type: 'integer', nullable: false)]
+    #[ORM\Column(type: Types::INTEGER, nullable: false)]
     protected int $code;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     protected ?string $is_commune;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     protected ?string $province;
 
     public function getId(): ?int

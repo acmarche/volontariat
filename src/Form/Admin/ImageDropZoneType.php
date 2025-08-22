@@ -9,7 +9,7 @@ use Symfony\UX\Dropzone\Form\DropzoneType;
 
 class ImageDropZoneType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
       /*  $builder->add('file', DropzoneType::class, [
             'attr' => [

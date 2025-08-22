@@ -12,14 +12,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route(path: '/token')]
 class TokenController extends AbstractController
 {
     public function __construct(private TokenManager $tokenManager)
     {
     }
 
-    #[Route(path: '/', name: 'volontariat_token_index')]
+    #[Route(path: '/token/', name: 'volontariat_token_index')]
     #[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
     public function index(Request $request): Response
     {
@@ -39,7 +38,7 @@ class TokenController extends AbstractController
         );
     }
 
-    #[Route(path: '/{value}', name: 'volontariat_token_show')]
+    #[Route(path: '/token/{value}', name: 'volontariat_token_show')]
     public function show(Request $request, Token $token): RedirectResponse
     {
         if ($this->tokenManager->isExpired($token)) {
@@ -47,6 +46,7 @@ class TokenController extends AbstractController
 
             return $this->redirectToRoute('volontariat_home');
         }
+
         $user = $token->getUser();
         $this->tokenManager->loginUser($request, $user, 'main');
 

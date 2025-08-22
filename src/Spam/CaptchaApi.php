@@ -12,11 +12,12 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class CaptchaApi
 {
     public const SESSION_NAME = 'sepul_comment';
-    private HttpClientInterface $client;
+
+    private HttpClientInterface $httpClient;
 
     public function __construct()
     {
-        $this->client = HttpClient::create();
+        $this->httpClient = HttpClient::create();
     }
 
 
@@ -29,7 +30,7 @@ class CaptchaApi
     public function getDog(): string
     {
         $url = 'https://dog.ceo/api/breeds/image/random';
-        $response = $this->client->request('GET', $url);
+        $response = $this->httpClient->request('GET', $url);
 
         $content = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
@@ -41,13 +42,11 @@ class CaptchaApi
         $number = random_int(1, 16);
 
         $url = 'https://api.thecatapi.com/v1/images/search';
-        $response = $this->client->request('GET', $url);
+        $response = $this->httpClient->request('GET', $url);
 
         $content = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
-        if (is_array($content)) {
-            if (isset($content[0]['url'])) {
-                return $content[0]['url'];
-            }
+        if (is_array($content) && isset($content[0]['url'])) {
+            return $content[0]['url'];
         }
 
         return 'https://placekitten.com/150/150?image='.$number;

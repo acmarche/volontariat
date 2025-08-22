@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route(path: '/admin/temoignage')]
 #[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class TemoignageController extends AbstractController
 {
@@ -24,14 +23,14 @@ class TemoignageController extends AbstractController
     {
     }
 
-    #[Route(path: '/', name: 'volontariat_admin_temoignage', methods: ['GET'])]
+    #[Route(path: '/admin/temoignage/', name: 'volontariat_admin_temoignage', methods: ['GET'])]
     public function index(TemoignageRepository $temoignageRepository) : Response
     {
         $temoignages = $temoignageRepository->findAll();
         return $this->render('@Volontariat/admin/temoignage/index.html.twig', ['temoignages' => $temoignages]);
     }
 
-    #[Route(path: '/new', name: 'volontariat_admin_temoignage_new', methods: ['GET', 'POST'])]
+    #[Route(path: '/admin/temoignage/new', name: 'volontariat_admin_temoignage_new', methods: ['GET', 'POST'])]
     public function new(Request $request) : Response
     {
         $temoignage = new Temoignage();
@@ -47,6 +46,7 @@ class TemoignageController extends AbstractController
 
             return $this->redirectToRoute('volontariat_admin_temoignage');
         }
+
         return $this->render(
             '@Volontariat/admin/temoignage/new.html.twig',
             [
@@ -56,7 +56,7 @@ class TemoignageController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}', requirements: ['id' => '\d+'], name: 'volontariat_admin_temoignage_show', methods: ['GET'])]
+    #[Route(path: '/admin/temoignage/{id}', requirements: ['id' => '\d+'], name: 'volontariat_admin_temoignage_show', methods: ['GET'])]
     public function show(Temoignage $temoignage) : Response
     {
         $deleteForm = $this->createDeleteForm($temoignage);
@@ -69,7 +69,7 @@ class TemoignageController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}/edit', requirements: ['id' => '\d+'], name: 'volontariat_admin_temoignage_edit', methods: ['GET', 'POST'])]
+    #[Route(path: '/admin/temoignage/{id}/edit', requirements: ['id' => '\d+'], name: 'volontariat_admin_temoignage_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Temoignage $temoignage) : Response
     {
         $form = $this->createForm(TemoignageType::class, $temoignage)
@@ -82,6 +82,7 @@ class TemoignageController extends AbstractController
 
             return $this->redirectToRoute('volontariat_admin_temoignage_show', ['id' => $temoignage->getId()]);
         }
+
         return $this->render(
             '@Volontariat/admin/temoignage/edit.html.twig',
             [
@@ -91,7 +92,7 @@ class TemoignageController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}/delete', name: 'volontariat_admin_temoignage_delete', methods: ['DELETE'])]
+    #[Route(path: '/admin/temoignage/{id}/delete', name: 'volontariat_admin_temoignage_delete', methods: ['DELETE'])]
     public function delete(Temoignage $temoignage, Request $request) : RedirectResponse
     {
         $form = $this->createDeleteForm($temoignage);
@@ -104,8 +105,10 @@ class TemoignageController extends AbstractController
 
             $this->addFlash('success', 'Le témoignange a bien été supprimé');
         }
+
         return $this->redirectToRoute('volontariat_admin_temoignage');
     }
+
     private function createDeleteForm(Temoignage $temoignage): FormInterface
     {
         return $this->createFormBuilder()

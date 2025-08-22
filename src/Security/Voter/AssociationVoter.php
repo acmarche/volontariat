@@ -23,11 +23,13 @@ class AssociationVoter extends Voter
     // Defining these constants is overkill for this simple application, but for real
     // applications, it's a recommended practice to avoid relying on "magic strings"
     public const SHOW = 'show';
+
     public const EDIT = 'edit';
+
     public const DELETE = 'delete';
 
     public function __construct(
-        private AccessDecisionManagerInterface $decisionManager,
+        private AccessDecisionManagerInterface $accessDecisionManager,
         private AssociationRepository $associationRepository,
     ) {}
 
@@ -51,7 +53,7 @@ class AssociationVoter extends Voter
             return false;
         }
 
-        if ($this->decisionManager->decide($token, [SecurityData::getRoleAdmin()])) {
+        if ($this->accessDecisionManager->decide($token, [SecurityData::getRoleAdmin()])) {
             return true;
         }
 
@@ -83,7 +85,7 @@ class AssociationVoter extends Voter
 
         $associationUser = $this->associationRepository->findAssociationByUser($user);
 
-        if (!$associationUser) {
+        if (!$associationUser instanceof Association) {
             return false;
         }
 
@@ -97,16 +99,12 @@ class AssociationVoter extends Voter
 
     public function hasValidAssociation(User $user, TokenInterface $token): bool
     {
-        if (!$this->decisionManager->decide($token, [SecurityData::getRoleVolontariat()])) {
+        if (!$this->accessDecisionManager->decide($token, [SecurityData::getRoleVolontariat()])) {
             return false;
         }
 
         $user = $token->getUser();
         $association = $this->associationRepository->getAssociationsByUser($user, true);
-        if ($association) {
-            return true;
-        }
-
-        return false;
+        return (bool) $association;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace AcMarche\Volontariat\Controller;
 
+use Exception;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Form\Contact\ContactType;
@@ -15,7 +16,6 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route(path: '/contact')]
 class ContactController extends AbstractController
 {
     public function __construct(
@@ -23,7 +23,7 @@ class ContactController extends AbstractController
         private readonly SpamHandler $spamHandler,
     ) {}
 
-    #[Route(path: '/', name: 'volontariat_contact')]
+    #[Route(path: '/contact/', name: 'volontariat_contact')]
     public function contact(Request $request): Response
     {
         $form = $this->createForm(ContactType::class);
@@ -38,8 +38,8 @@ class ContactController extends AbstractController
                     $this->mailerContact->sendContact($data);
 
                     return $this->redirectToRoute('volontariat_home');
-                } catch (TransportExceptionInterface|\Exception $e) {
-                    $this->addFlash('danger', 'Erreur lors de l\'envoie du mail');
+                } catch (TransportExceptionInterface|Exception $e) {
+                    $this->addFlash('danger', "Erreur lors de l'envoie du mail");
                 }
             }
         }
@@ -47,7 +47,7 @@ class ContactController extends AbstractController
         return $this->render('@Volontariat/contact/contact.html.twig', ['form' => $form]);
     }
 
-    #[Route(path: '/volontaire/{uuid}', name: 'volontariat_contact_volontaire')]
+    #[Route(path: '/contact/volontaire/{uuid}', name: 'volontariat_contact_volontaire')]
     #[IsGranted('show', subject: 'volontaire')]
     public function volontaire(
         Request $request,
@@ -64,8 +64,8 @@ class ContactController extends AbstractController
                 try {
                     $this->addFlash('success', 'Le volontaire a bien été contacté');
                     $this->mailerContact->sendToVolontaire($volontaire, $data);
-                } catch (TransportExceptionInterface|\Exception $e) {
-                    $this->addFlash('danger', 'Erreur lors de l\'envoie du mail');
+                } catch (TransportExceptionInterface|Exception $e) {
+                    $this->addFlash('danger', "Erreur lors de l'envoie du mail");
                 }
             }
 
@@ -81,7 +81,7 @@ class ContactController extends AbstractController
         );
     }
 
-    #[Route(path: '/association/{slug}', name: 'volontariat_contact_association')]
+    #[Route(path: '/contact/association/{slug}', name: 'volontariat_contact_association')]
     public function association(Request $request, Association $association): Response
     {
         $form = $this->createForm(ContactType::class, null);
@@ -93,8 +93,8 @@ class ContactController extends AbstractController
                 try {
                     $this->addFlash('success', 'L\'association a bien été contactée');
                     $this->mailerContact->sendToAssociation($association, $data);
-                } catch (TransportExceptionInterface|\Exception $e) {
-                    $this->addFlash('danger', 'Erreur lors de l\'envoie du mail');
+                } catch (TransportExceptionInterface|Exception $e) {
+                    $this->addFlash('danger', "Erreur lors de l'envoie du mail");
                 }
             }
 
@@ -126,5 +126,4 @@ class ContactController extends AbstractController
 
         return true;
     }
-
 }

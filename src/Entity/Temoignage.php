@@ -8,6 +8,7 @@
 
 namespace AcMarche\Volontariat\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use AcMarche\Volontariat\Repository\TemoignageRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Stringable;
@@ -18,22 +19,23 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Temoignage implements Stringable
 {
     #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected int $id;
 
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column(type: Types::STRING)]
     #[Assert\NotBlank]
     protected string $nom;
 
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column(type: Types::STRING)]
     #[Assert\NotBlank]
     protected string $village;
 
-    #[ORM\Column(type: 'text')]
+    #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank]
     protected ?string $message;
-    #[ORM\Column(type: 'string', nullable: true)]
+
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     private ?string $user = null;
 
     public function __toString(): string
@@ -51,10 +53,8 @@ class Temoignage implements Stringable
 
     /**
      * Set prenom.
-     *
-     * @param string $nom
      */
-    public function setNom($nom): static
+    public function setNom(string $nom): static
     {
         $this->nom = $nom;
 
@@ -71,10 +71,8 @@ class Temoignage implements Stringable
 
     /**
      * Set village.
-     *
-     * @param string $village
      */
-    public function setVillage($village): static
+    public function setVillage(string $village): static
     {
         $this->village = $village;
 
@@ -94,7 +92,7 @@ class Temoignage implements Stringable
      *
      * @param string $message
      */
-    public function setMessage($message): static
+    public function setMessage(?string $message): static
     {
         $this->message = $message;
 
@@ -117,7 +115,7 @@ class Temoignage implements Stringable
     /**
      * @param string $user
      */
-    public function setUser($user): void
+    public function setUser(?string $user): void
     {
         $this->user = $user;
     }

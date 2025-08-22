@@ -2,6 +2,8 @@
 
 namespace AcMarche\Volontariat\Entity;
 
+use Stringable;
+use Doctrine\DBAL\Types\Types;
 use AcMarche\Volontariat\Repository\SecteurRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -10,27 +12,30 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: SecteurRepository::class)]
 #[ORM\Table(name: 'secteur')]
-class Secteur implements \Stringable
+class Secteur implements Stringable
 {
     #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected int $id;
 
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column(type: Types::STRING)]
     #[Assert\NotBlank]
     protected ?string $name;
 
-    #[ORM\Column(type: 'string', nullable: true)]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     protected ?string $description;
-    #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => 1])]
+
+    #[ORM\Column(type: Types::BOOLEAN, nullable: false, options: ['default' => 1])]
     private bool $display = true;
+
     /**
      * @var Association[]|iterable
      */
     #[ORM\ManyToMany(targetEntity: Association::class, mappedBy: 'secteurs')]
     #[ORM\OrderBy(['name' => 'ASC'])]
     protected Collection $associations;
+
     /**
      * @var Volontaire[]|iterable
      */
@@ -72,7 +77,7 @@ class Secteur implements \Stringable
      *
      * @param string $name
      */
-    public function setName($name): static
+    public function setName(?string $name): static
     {
         $this->name = $name;
 
@@ -89,10 +94,8 @@ class Secteur implements \Stringable
 
     /**
      * Set description.
-     *
-     * @param string|null $description
      */
-    public function setDescription($description = null): static
+    public function setDescription(?string $description = null): static
     {
         $this->description = $description;
 
@@ -129,6 +132,7 @@ class Secteur implements \Stringable
 
     /**
      * Get associations.
+     * @return Collection<int, Association>
      */
     public function getAssociations(): iterable
     {
@@ -157,6 +161,7 @@ class Secteur implements \Stringable
 
     /**
      * Get volontaires.
+     * @return Collection<int, Volontaire>
      */
     public function getVolontaires(): iterable
     {

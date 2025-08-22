@@ -2,6 +2,9 @@
 
 namespace AcMarche\Volontariat\Entity\Security;
 
+use Stringable;
+use Doctrine\DBAL\Types\Types;
+use DateTimeInterface;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Repository\UserRepository;
@@ -14,41 +17,52 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: 'users')]
-class User implements UserInterface, PasswordHasherAwareInterface, LegacyPasswordAuthenticatedUserInterface, \Stringable, TimestampableInterface
+class User implements UserInterface, PasswordHasherAwareInterface, LegacyPasswordAuthenticatedUserInterface, Stringable, TimestampableInterface
 {
     use TimestampableTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    public $id;
-    #[ORM\Column(type: 'string', length: 180, unique: true)]
+    #[ORM\Column(type: Types::INTEGER)]
+    public ?int $id = null;
+
+    #[ORM\Column(type: Types::STRING, length: 180, unique: true)]
     public string $email;
-    #[ORM\Column(type: 'array', nullable: true)]
+
+    #[ORM\Column(type: Types::ARRAY, nullable: true)]
     public iterable $roles = [];
-    #[ORM\Column(type: 'string')]
+
+    #[ORM\Column(type: Types::STRING)]
     public string $password;
-    #[ORM\Column(type: 'string', nullable: true)]
+
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     public ?string $salt = null;
-    #[ORM\Column(type: 'string', length: 100, nullable: true)]
+
+    #[ORM\Column(type: Types::STRING, length: 100, nullable: true)]
     public ?string $name = null;
-    #[ORM\Column(type: 'string', length: 100, nullable: true)]
+
+    #[ORM\Column(type: Types::STRING, length: 100, nullable: true)]
     public ?string $surname;
-    #[ORM\Column(type: 'boolean', nullable: true)]
+
+    #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     public ?bool $accord = null;
 
-    #[ORM\Column(type: 'datetime', nullable: true)]
-    public ?\DateTimeInterface $accord_date = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    public ?DateTimeInterface $accord_date = null;
+
     #[ORM\OneToOne(mappedBy: 'user', targetEntity: Token::class, cascade: ['remove'])]
     public ?Token $token = null;
 
     // register voluntary
     public ?string $plainPassword = null;
+
     public ?string $city = null;
+
     public ?Volontaire $volontaire = null;
+
     public ?Association $association = null;
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->email;
     }

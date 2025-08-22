@@ -2,6 +2,8 @@
 
 namespace AcMarche\Volontariat\Entity;
 
+use Stringable;
+use Doctrine\DBAL\Types\Types;
 use AcMarche\Volontariat\InterfaceDef\Uploadable;
 use AcMarche\Volontariat\Repository\PageRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,34 +13,34 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PageRepository::class)]
 #[ORM\Table(name: 'page')]
-class Page implements Uploadable, SluggableInterface, \Stringable
+class Page implements Uploadable, SluggableInterface, Stringable
 {
     use SluggableTrait;
 
     #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     public int $id;
 
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column(type: Types::STRING)]
     #[Assert\NotBlank]
     public string $title;
 
-    #[ORM\Column(type: 'string', nullable: true)]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     public ?string $excerpt;
 
-    #[ORM\Column(type: 'text', nullable: false)]
+    #[ORM\Column(type: Types::TEXT, nullable: false)]
     #[Assert\NotBlank]
     public ?string $content;
 
-    #[ORM\Column(type: 'integer', nullable: true)]
+    #[ORM\Column(type: Types::INTEGER, nullable: true)]
     #[Assert\Type(type: 'integer')]
     public ?int $ordre;
 
-    #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => 0])]
+    #[ORM\Column(type: Types::BOOLEAN, nullable: false, options: ['default' => 0])]
     public bool $actualite = false;
 
-    public array $images;
+    public array $images = [];
 
     public function __toString(): string
     {
@@ -57,11 +59,6 @@ class Page implements Uploadable, SluggableInterface, \Stringable
         return $images[0]['url'] ?? null;
     }
 
-    public function __construct()
-    {
-        $this->images = [];
-    }
-
     public function getSluggableFields(): array
     {
         return ['title'];
@@ -72,7 +69,7 @@ class Page implements Uploadable, SluggableInterface, \Stringable
         return true;
     }
 
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }

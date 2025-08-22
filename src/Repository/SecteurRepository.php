@@ -12,14 +12,15 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Secteur|null find($id, $lockMode = null, $lockVersion = null)
  * @method Secteur|null findOneBy(array $criteria, array $orderBy = null)
  * @method Secteur[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<Secteur>
  */
 class SecteurRepository extends ServiceEntityRepository
 {
     use OrmCrudTrait;
 
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        parent::__construct($registry, Secteur::class);
+        parent::__construct($managerRegistry, Secteur::class);
     }
 
     public function findAllOrdered(): array
@@ -32,17 +33,18 @@ class SecteurRepository extends ServiceEntityRepository
      */
     public function getForSearch(): array
     {
-        $qb = $this->createQueryBuilder('secteur');
+        $queryBuilder = $this->createQueryBuilder('secteur');
 
-        $qb->andWhere('secteur.display = 1');
-        $qb->orderBy('secteur.name');
-        $query = $qb->getQuery();
+        $queryBuilder->andWhere('secteur.display = 1');
+        $queryBuilder->orderBy('secteur.name');
+
+        $query = $queryBuilder->getQuery();
 
         $results = $query->getResult();
         $types = [];
 
-        foreach ($results as $type) {
-            $types[$type->getName()] = $type->getId();
+        foreach ($results as $result) {
+            $types[$result->getName()] = $result->getId();
         }
 
         return $types;
@@ -50,11 +52,11 @@ class SecteurRepository extends ServiceEntityRepository
 
     public function secteursActifs(): QueryBuilder
     {
-        $qb = $this->createQueryBuilder('secteur');
-        $qb->andWhere('secteur.display = 1');
+        $queryBuilder = $this->createQueryBuilder('secteur');
+        $queryBuilder->andWhere('secteur.display = 1');
 
-        $qb->orderBy('secteur.name');
+        $queryBuilder->orderBy('secteur.name');
 
-        return $qb;
+        return $queryBuilder;
     }
 }

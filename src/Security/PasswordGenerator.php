@@ -9,7 +9,7 @@ use Symfony\Component\String\ByteString;
 class PasswordGenerator
 {
     public function __construct(
-        private UserPasswordHasherInterface $userPasswordEncoder
+        private UserPasswordHasherInterface $userPasswordHasher
     ) {
     }
 
@@ -20,7 +20,7 @@ class PasswordGenerator
 
     public function cryptPassword(User $user, string $plainPassword): string
     {
-        return $this->userPasswordEncoder->hashPassword($user, $plainPassword);
+        return $this->userPasswordHasher->hashPassword($user, $plainPassword);
     }
 
     public function generateAndCrypt(User $user): string

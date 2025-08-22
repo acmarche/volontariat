@@ -20,12 +20,10 @@ class CodePostalIsBelgiumValidator extends ConstraintValidator
 
     public function validate($value, Constraint $constraint): void
     {
-        if ($value) {
-            if (!$this->codePostalRepository->findBy(['code' => (int)$value])) {
-                $this->context->buildViolation($constraint->message)
-                    ->setParameter('{{ string }}', $value)
-                    ->addViolation();
-            }
+        if ($value && !$this->codePostalRepository->findBy(['code' => (int)$value])) {
+            $this->context->buildViolation($constraint->message)
+                ->setParameter('{{ string }}', $value)
+                ->addViolation();
         }
     }
 }

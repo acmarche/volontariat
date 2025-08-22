@@ -17,22 +17,20 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route(path: '/referencer')]
 class ReferencerController extends AbstractController
 {
     use getAssociationTrait;
-
     public function __construct(
         private MailerContact $mailerContact,
         private MessageService $messageService
     ) {
     }
 
-    #[Route(path: '/volontaire/{uuid}', name: 'volontariat_referencer_volontaire')]
+    #[Route(path: '/referencer/volontaire/{uuid}', name: 'volontariat_referencer_volontaire')]
     #[IsGranted('ROLE_VOLONTARIAT')]
     public function volontaire(Request $request,#[MapEntity(expr: 'repository.findOneByUuid(uuid)')]  Volontaire $volontaire): Response
     {
-        if (($hasAssociation = $this->hasAssociation()) !== null) {
+        if (($hasAssociation = $this->hasAssociation()) instanceof Response) {
             return $hasAssociation;
         }
 
@@ -52,7 +50,7 @@ class ReferencerController extends AbstractController
                 $this->mailerContact->sendReferencerVolontaire($this->association, $volontaire, $data);
                 $this->addFlash('success', 'Le message a bien été envoyé');
             } catch (TransportExceptionInterface $e) {
-                $this->addFlash('danger', 'Erreur lors de l\'envoie: '.$e->getMessage());
+                $this->addFlash('danger', "Erreur lors de l'envoie: ".$e->getMessage());
             }
 
             return $this->redirectToRoute('volontariat_volontaire');
@@ -67,7 +65,7 @@ class ReferencerController extends AbstractController
         );
     }
 
-    #[Route(path: '/association/{slug}', name: 'volontariat_referencer_association')]
+    #[Route(path: '/referencer/association/{slug}', name: 'volontariat_referencer_association')]
     public function association(Request $request, Association $association): Response
     {
         /**
@@ -93,7 +91,7 @@ class ReferencerController extends AbstractController
                 $this->mailerContact->sendReferencerAssociation($association, $data);
                 $this->addFlash('success', 'Le message a bien été envoyé');
             } catch (TransportExceptionInterface $e) {
-                $this->addFlash('danger', 'Erreur lors de l\'envoie: '.$e->getMessage());
+                $this->addFlash('danger', "Erreur lors de l'envoie: ".$e->getMessage());
             }
 
             return $this->redirectToRoute('volontariat_association');

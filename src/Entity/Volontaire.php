@@ -2,6 +2,9 @@
 
 namespace AcMarche\Volontariat\Entity;
 
+use Stringable;
+use Doctrine\DBAL\Types\Types;
+use DateTimeInterface;
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\InterfaceDef\Uploadable;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
@@ -20,7 +23,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[ORM\Table(name: 'volontaire')]
 #[ORM\Entity(repositoryClass: VolontaireRepository::class)]
 #[Vich\Uploadable]
-class Volontaire implements Uploadable, TimestampableInterface, SluggableInterface, \Stringable
+class Volontaire implements Uploadable, TimestampableInterface, SluggableInterface, Stringable
 {
     use TimestampableTrait;
     use SluggableTrait;
@@ -29,91 +32,99 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
     use UuidTrait;
 
     #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     public int $id;
 
-    #[ORM\Column(type: 'string', nullable: true)]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     public ?string $civility;
 
-    #[ORM\Column(type: 'string', nullable: false)]
+    #[ORM\Column(type: Types::STRING, nullable: false)]
     #[Assert\NotBlank]
     public string $name;
 
-    #[ORM\Column(type: 'string', nullable: false)]
+    #[ORM\Column(type: Types::STRING, nullable: false)]
     #[Assert\NotNull]
     public ?string $surname;
 
-    #[ORM\Column(type: 'string', nullable: true)]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     public ?string $address;
 
-    #[ORM\Column(type: 'smallint', nullable: true)]
+    #[ORM\Column(type: Types::SMALLINT, nullable: true)]
     public ?int $number;
+
     /**
      * @AcMarcheAssert\CodePostalIsBelgium
      */
-    #[ORM\Column(type: 'integer', nullable: true)]
+    #[ORM\Column(type: Types::INTEGER, nullable: true)]
     #[Assert\NotBlank]
     public ?int $postalCode;
 
-    #[ORM\Column(type: 'string', nullable: false)]
+    #[ORM\Column(type: Types::STRING, nullable: false)]
     public ?string $city;
 
     #[ORM\Column(name: 'email')]
     #[Assert\Email(message: "The email '{{ value }}' is not a valid email.")]
     public string $email;
 
-    #[ORM\Column(type: 'string', nullable: true)]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     public ?string $phone;
 
-    #[ORM\Column(type: 'string', nullable: true)]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     public ?string $mobile;
 
-    #[ORM\Column(type: 'string', nullable: true)]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     public ?string $fax;
 
-    #[ORM\Column(type: 'date', nullable: true)]
-    public ?\DateTimeInterface $birthday;
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    public ?DateTimeInterface $birthday;
 
-    #[ORM\Column(type: 'smallint', nullable: true)]
+    #[ORM\Column(type: Types::SMALLINT, nullable: true)]
     public ?int $birthyear;
+
     /**
      * Métier actuel ou ancien job.
      */
-    #[ORM\Column(type: 'text', nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     public ?string $job;
+
     /**
      * Secteur (version libre).
      */
-    #[ORM\Column(type: 'text', nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     public ?string $secteur;
+
     /**
      * Disponible quand (we, apres journee).
      */
-    #[ORM\Column(type: 'text', nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     public ?string $availability;
+
     /**
      * dispose d'un véhicule.
      */
-    #[ORM\Column(type: 'string', nullable: true)]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     public ?string $car;
+
     /**
      * @var Vehicule[]|iterable $vehicules
      */
     #[ORM\ManyToMany(targetEntity: Vehicule::class, inversedBy: 'volontaires', cascade: ['persist'])]
     public Collection $vehicules;
 
-    #[ORM\Column(type: 'text', nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     public ?string $known_by;
 
-    #[ORM\Column(type: 'text', nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     public ?string $description;
+
     /**
      * @var Secteur[]|iterable $secteurs
      */
     #[ORM\ManyToMany(targetEntity: Secteur::class, inversedBy: 'volontaires')]
     #[ORM\OrderBy(['name' => 'ASC'])]
     public Collection $secteurs;
+
     /**
      * membres des association.
      *
@@ -121,13 +132,17 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
      */
     #[ORM\ManyToMany(targetEntity: Association::class)]
     public Collection|null $association = null;
+
     #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'])]
     public ?User $user = null;
-    #[ORM\Column(type: 'boolean', nullable: false, options: ['default' => 1])]
+
+    #[ORM\Column(type: Types::BOOLEAN, nullable: false, options: ['default' => 1])]
     public bool $valider = true;
-    #[ORM\Column(type: 'boolean', nullable: false)]
+
+    #[ORM\Column(type: Types::BOOLEAN, nullable: false)]
     public bool $inactif = false;
-    #[ORM\Column(type: 'text', nullable: true)]
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     public ?string $notes;
 
     #[Vich\UploadableField(mapping: 'volontaire_image', fileNameProperty: 'imageName')]
@@ -173,7 +188,7 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
         return $voluntary;
     }
 
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }

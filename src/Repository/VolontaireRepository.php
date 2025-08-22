@@ -16,14 +16,15 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @method Volontaire|null findOneBy(array $criteria, array $orderBy = null)
  * @method Volontaire[]    findAll()
  * @method Volontaire[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<Volontaire>
  */
 class VolontaireRepository extends ServiceEntityRepository
 {
     use OrmCrudTrait;
 
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        parent::__construct($registry, Volontaire::class);
+        parent::__construct($managerRegistry, Volontaire::class);
     }
 
     /**
@@ -40,63 +41,63 @@ class VolontaireRepository extends ServiceEntityRepository
         $valider = $args['valider'] ?? null;
         $createdAt = $args['createdAt'] ?? null;
 
-        $qb = $this->createQbl();
+        $queryBuilder = $this->createQbl();
 
         if ($nom) {
-            $qb
+            $queryBuilder
                 ->andWhere('volontaire.email LIKE :mot OR volontaire.name LIKE :mot OR volontaire.surname LIKE :mot ')
                 ->setParameter('mot', '%'.$nom.'%');
         }
 
         if ($localite) {
-            $qb
+            $queryBuilder
                 ->andWhere('volontaire.city LIKE :loca ')
                 ->setParameter('loca', '%'.$localite.'%');
         }
 
         if ($createdAt) {
-            $qb
+            $queryBuilder
                 ->andWhere('volontaire.createdAt >= :date ')
                 ->setParameter('date', $createdAt);
         }
 
         if ($secteur) {
-            $qb
+            $queryBuilder
                 ->andWhere('secteurs = :secteur ')
                 ->setParameter('secteur', $secteur);
         }
 
         if (is_array($secteurs) && [] !== $secteurs) {
-            $qb
+            $queryBuilder
                 ->andWhere('secteurs IN :secteurs')
                 ->setParameter('secteurs', $secteur);
         }
 
         if ($vehicule) {
-            $qb
+            $queryBuilder
                 ->andWhere('vehicules = :vehicule')
                 ->setParameter('vehicule', $vehicule);
         }
 
         if (false === $valider) {
-            $qb
+            $queryBuilder
                 ->andWhere('volontaire.valider = :valider')
                 ->setParameter('valider', false);
         } elseif (2 != $valider) {
-            $qb
+            $queryBuilder
                 ->andWhere('volontaire.valider = :valider')
                 ->setParameter('valider', true);
         }
 
         if ($user) {
-            $qb
+            $queryBuilder
                 ->andWhere('user = :user')
                 ->setParameter('user', $user);
         }
 
-        $qb->addOrderBy('volontaire.name', 'ASC');
+        $queryBuilder->addOrderBy('volontaire.name', 'ASC');
 
-        return $qb->getQuery()->getResult();
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**
@@ -124,8 +125,8 @@ class VolontaireRepository extends ServiceEntityRepository
 
         $cities = [];
 
-        foreach ($results as $type) {
-            $city = strtoupper($type->city);
+        foreach ($results as $result) {
+            $city = strtoupper($result->city);
             if (!in_array($city, $cities)) {
                 $cities[$city] = $city;
             }
@@ -176,8 +177,6 @@ class VolontaireRepository extends ServiceEntityRepository
 
     /**
      * Use MapEntity url
-     * @param string $uuid
-     * @return Volontaire|null
      */
     public function findOneByUuid(string $uuid): ?Volontaire
     {

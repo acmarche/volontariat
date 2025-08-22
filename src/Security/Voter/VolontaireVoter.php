@@ -22,13 +22,15 @@ class VolontaireVoter extends Voter
     // Defining these constants is overkill for this simple application, but for real
     // applications, it's a recommended practice to avoid relying on "magic strings"
     public const INDEX = 'index';
+
     public const SHOW = 'show';
+
     public const EDIT = 'edit';
+
     public const DELETE = 'delete';
-    private ?User $user = null;
 
     public function __construct(
-        private AccessDecisionManagerInterface $decisionManager,
+        private AccessDecisionManagerInterface $accessDecisionManager,
     ) {
     }
 
@@ -58,9 +60,7 @@ class VolontaireVoter extends Voter
             return false;
         }
 
-        $this->user = $user;
-
-        if ($this->decisionManager->decide($token, [SecurityData::getRoleAdmin()])) {
+        if ($this->accessDecisionManager->decide($token, [SecurityData::getRoleAdmin()])) {
             return true;
         }
 
@@ -82,6 +82,7 @@ class VolontaireVoter extends Voter
         if (!$user) {
             return false;
         }
+
         $association = $user->association;
         if (!$association) {
             return false;
@@ -95,15 +96,11 @@ class VolontaireVoter extends Voter
      */
     private function canView(Volontaire $volontaire, TokenInterface $token): bool
     {
-        if ($this->decisionManager->decide($token, [SecurityData::getRoleAssociation()])) {
+        if ($this->accessDecisionManager->decide($token, [SecurityData::getRoleAssociation()])) {
             return true;
         }
 
-        if ($this->canEdit($volontaire, $token)) {
-            return true;
-        }
-
-        return false;
+        return $this->canEdit($volontaire, $token);
     }
 
     private function canEdit(Volontaire $volontaire, TokenInterface $token): bool

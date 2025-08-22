@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 use Symfony\Config\TwigConfig;
 
-return static function (TwigConfig $twig) {
-    $twig
+return static function (TwigConfig $twigConfig): void {
+    $twigConfig
         ->formThemes(['bootstrap_5_layout.html.twig'])
         ->path('%kernel.project_dir%/src/AcMarche/Volontariat/templates', 'Volontariat')
         ->path('%kernel.project_dir%/src/AcMarche/Volontariat/public/assets/img', 'imagesV')

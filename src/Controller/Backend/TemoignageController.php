@@ -15,7 +15,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route(path: '/backend/temoignage')]
 #[IsGranted('ROLE_VOLONTARIAT')]
 class TemoignageController extends AbstractController
 {
@@ -25,7 +24,7 @@ class TemoignageController extends AbstractController
     ) {
     }
 
-    #[Route(path: '/', name: 'volontariat_backend_temoignage', methods: ['GET'])]
+    #[Route(path: '/backend/temoignage/', name: 'volontariat_backend_temoignage', methods: ['GET'])]
     public function index(): Response
     {
         $user = $this->getUser();
@@ -41,13 +40,14 @@ class TemoignageController extends AbstractController
         );
     }
 
-    #[Route(path: '/new', name: 'volontariat_backend_temoignage_new', methods: ['GET', 'POST'])]
+    #[Route(path: '/backend/temoignage/new', name: 'volontariat_backend_temoignage_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $user = $this->getUser();
         $temoignage = new Temoignage();
         $temoignage->setUser($user->getUserIdentifier());
         $temoignage->setNom($user->getPrenom());
+
         $form = $this->createForm(TemoignageType::class, $temoignage)
             ->add('submit', SubmitType::class, array('label' => 'Create'));
         $form->handleRequest($request);
@@ -70,7 +70,7 @@ class TemoignageController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}/edit', requirements: ['id' => '\d+'], name: 'volontariat_backend_temoignage_edit', methods: [
+    #[Route(path: '/backend/temoignage/{id}/edit', requirements: ['id' => '\d+'], name: 'volontariat_backend_temoignage_edit', methods: [
         'GET',
         'POST',
     ])]
@@ -97,7 +97,7 @@ class TemoignageController extends AbstractController
         );
     }
 
-    #[Route(path: '/delete', name: 'volontariat_backend_temoignage_delete', methods: ['DELETE'])]
+    #[Route(path: '/backend/temoignage/delete', name: 'volontariat_backend_temoignage_delete', methods: ['DELETE'])]
     public function delete(Request $request): RedirectResponse
     {
         $em = $this->managerRegistry->getManager();
@@ -108,6 +108,7 @@ class TemoignageController extends AbstractController
 
             return $this->redirectToRoute('volontariat_dashboard');
         }
+
         $form = $this->createDeleteForm();
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

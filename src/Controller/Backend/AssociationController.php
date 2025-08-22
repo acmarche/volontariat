@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route(path: '/backend/association')]
 #[IsGranted('ROLE_VOLONTARIAT')]
 class AssociationController extends AbstractController
 {
@@ -21,10 +20,10 @@ class AssociationController extends AbstractController
     ) {
     }
 
-    #[Route(path: '/edit', name: 'volontariat_backend_association_edit')]
+    #[Route(path: '/backend/association/edit', name: 'volontariat_backend_association_edit')]
     public function edit(Request $request): Response
     {
-        if (($hasAssociation = $this->hasAssociation()) !== null) {
+        if (($hasAssociation = $this->hasAssociation()) instanceof Response) {
             return $hasAssociation;
         }
 
@@ -39,6 +38,7 @@ class AssociationController extends AbstractController
 
             return $this->redirectToRoute('volontariat_dashboard');
         }
+
         $response = new Response(null, $form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
 
 

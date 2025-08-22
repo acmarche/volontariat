@@ -2,6 +2,10 @@
 
 namespace AcMarche\Volontariat\Entity;
 
+use Stringable;
+use Doctrine\DBAL\Types\Types;
+use DateTimeInterface;
+use DateTimeImmutable;
 use AcMarche\Volontariat\Repository\BesoinRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
@@ -9,43 +13,46 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table(name: 'besoin')]
 #[ORM\Entity(repositoryClass: BesoinRepository::class)]
-class Besoin implements \Stringable
+class Besoin implements Stringable
 {
     use UuidTrait;
 
     #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected int $id;
 
-    #[ORM\Column(type: 'string', nullable: false)]
+    #[ORM\Column(type: Types::STRING, nullable: false)]
     #[ORM\OrderBy(['intitule' => 'ASC'])]
     #[Assert\NotBlank]
     protected ?string $name;
 
-    #[ORM\Column(type: 'datetime')]
-    #[Assert\Type(\DateTime::class)]
-    protected ?\DateTimeInterface $date_begin;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Assert\Type(DateTime::class)]
+    protected ?DateTimeInterface $date_begin;
 
-    #[ORM\Column(type: 'datetime', nullable: true)]
-    #[Assert\Type(\DateTime::class)]
-    protected ?\DateTimeInterface $date_end;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Assert\Type(DateTime::class)]
+    protected ?DateTimeInterface $date_end;
+
     /**
      * Description.
      */
-    #[ORM\Column(type: 'text')]
+    #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank]
     protected ?string $requirement;
+
     /**
      * quand.
      */
-    #[ORM\Column(type: 'text')]
+    #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank]
     protected ?string $period;
+
     /**
      * lieu.
      */
-    #[ORM\Column(type: 'text')]
+    #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank]
     protected ?string $place;
 
@@ -68,7 +75,7 @@ class Besoin implements \Stringable
      *
      * @param string $name
      */
-    public function setName($name): static
+    public function setName(?string $name): static
     {
         $this->name = $name;
 
@@ -86,9 +93,9 @@ class Besoin implements \Stringable
     /**
      * Set dateBegin.
      *
-     * @param \DateTime $dateBegin
+     * @param DateTime $dateBegin
      */
-    public function setDateBegin(\DateTimeInterface $dateBegin): static
+    public function setDateBegin(DateTimeInterface $dateBegin): static
     {
         $this->date_begin = $dateBegin;
 
@@ -98,9 +105,9 @@ class Besoin implements \Stringable
     /**
      * Get dateBegin.
      *
-     * @return \DateTime|\DateTimeImmutable|null
+     * @return DateTime|DateTimeImmutable|null
      */
-    public function getDateBegin(): ?\DateTimeInterface
+    public function getDateBegin(): ?DateTimeInterface
     {
         return $this->date_begin;
     }
@@ -108,7 +115,7 @@ class Besoin implements \Stringable
     /**
      * Set dateEnd.
      */
-    public function setDateEnd(\DateTime|\DateTimeImmutable|null $dateEnd = null): static
+    public function setDateEnd(DateTime|DateTimeImmutable|null $dateEnd = null): static
     {
         $this->date_end = $dateEnd;
 
@@ -118,9 +125,9 @@ class Besoin implements \Stringable
     /**
      * Get dateEnd.
      *
-     * @return \DateTime|\DateTimeImmutable|null
+     * @return DateTime|DateTimeImmutable|null
      */
-    public function getDateEnd(): ?\DateTimeInterface
+    public function getDateEnd(): ?DateTimeInterface
     {
         return $this->date_end;
     }
@@ -130,7 +137,7 @@ class Besoin implements \Stringable
      *
      * @param string $requirement
      */
-    public function setRequirement($requirement): static
+    public function setRequirement(?string $requirement): static
     {
         $this->requirement = $requirement;
 
@@ -150,7 +157,7 @@ class Besoin implements \Stringable
      *
      * @param string $period
      */
-    public function setPeriod($period): static
+    public function setPeriod(?string $period): static
     {
         $this->period = $period;
 
@@ -170,7 +177,7 @@ class Besoin implements \Stringable
      *
      * @param string $place
      */
-    public function setPlace($place): static
+    public function setPlace(?string $place): static
     {
         $this->place = $place;
 

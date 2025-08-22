@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route(path: '/admin/secteur')]
 #[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class SecteurController extends AbstractController
 {
@@ -20,7 +19,7 @@ class SecteurController extends AbstractController
     {
     }
 
-    #[Route(path: '/', name: 'volontariat_admin_secteur', methods: ['GET'])]
+    #[Route(path: '/admin/secteur/', name: 'volontariat_admin_secteur', methods: ['GET'])]
     public function index(): Response
     {
         $secteurs = $this->secteurRepository->findAllOrdered();
@@ -33,7 +32,7 @@ class SecteurController extends AbstractController
         );
     }
 
-    #[Route(path: '/new', name: 'volontariat_admin_secteur_new', methods: ['GET', 'POST'])]
+    #[Route(path: '/admin/secteur/new', name: 'volontariat_admin_secteur_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $secteur = new Secteur();
@@ -57,7 +56,7 @@ class SecteurController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}', name: 'volontariat_admin_secteur_show', methods: ['GET'])]
+    #[Route(path: '/admin/secteur/{id}', name: 'volontariat_admin_secteur_show', methods: ['GET'])]
     public function show(Secteur $secteur): Response
     {
         return $this->render(
@@ -68,7 +67,7 @@ class SecteurController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}/edit', name: 'volontariat_admin_secteur_edit', methods: ['GET', 'POST'])]
+    #[Route(path: '/admin/secteur/{id}/edit', name: 'volontariat_admin_secteur_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Secteur $secteur): Response
     {
         $editForm = $this->createForm(SecteurType::class, $secteur);
@@ -90,7 +89,7 @@ class SecteurController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}/delete', name: 'volontariat_admin_secteur_delete', methods: ['POST'])]
+    #[Route(path: '/admin/secteur/{id}/delete', name: 'volontariat_admin_secteur_delete', methods: ['POST'])]
     public function delete(Request $request, Secteur $secteur): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$secteur->getId(), $request->request->get('_token'))) {

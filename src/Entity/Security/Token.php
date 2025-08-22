@@ -2,6 +2,7 @@
 
 namespace AcMarche\Volontariat\Entity\Security;
 
+use Doctrine\DBAL\Types\Types;
 use AcMarche\Volontariat\Repository\TokenRepository;
 use Stringable;
 use DateTime;
@@ -18,15 +19,15 @@ class Token implements TimestampableInterface, Stringable
     use TimestampableTrait;
 
     #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected int $id;
 
-    #[ORM\Column(type: 'string', length: 50, unique: true)]
+    #[ORM\Column(type: Types::STRING, length: 50, unique: true)]
     #[Assert\NotBlank]
     protected string $value;
 
-    #[ORM\Column(type: 'date', nullable: false)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: false)]
     protected DateTimeInterface $expire_at;
 
     #[ORM\OneToOne(targetEntity: User::class, inversedBy: 'token')]

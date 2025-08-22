@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route(path: '/admin/page')]
 #[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class PageController extends AbstractController
 {
@@ -21,7 +20,7 @@ class PageController extends AbstractController
     {
     }
 
-    #[Route(path: '/', name: 'volontariat_admin_page', methods: ['GET'])]
+    #[Route(path: '/admin/page/', name: 'volontariat_admin_page', methods: ['GET'])]
     public function index(): Response
     {
         $pages = $this->pageRepository->findAll();
@@ -34,7 +33,7 @@ class PageController extends AbstractController
         );
     }
 
-    #[Route(path: '/new', name: 'volontariat_admin_page_new', methods: ['GET', 'POST'])]
+    #[Route(path: '/admin/page/new', name: 'volontariat_admin_page_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
     {
         $page = new Page();
@@ -59,7 +58,7 @@ class PageController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}', name: 'volontariat_admin_page_show', methods: ['GET'])]
+    #[Route(path: '/admin/page/{id}', name: 'volontariat_admin_page_show', methods: ['GET'])]
     public function show(Page $page): Response
     {
         $images = $this->fileHelper->getImages($page);
@@ -75,7 +74,7 @@ class PageController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}/edit', name: 'volontariat_admin_page_edit', methods: ['GET', 'POST'])]
+    #[Route(path: '/admin/page/{id}/edit', name: 'volontariat_admin_page_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Page $page): Response
     {
         $form = $this->createForm(PageType::class, $page);
@@ -97,7 +96,7 @@ class PageController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}/delete', name: 'volontariat_admin_page_delete', methods: ['POST'])]
+    #[Route(path: '/admin/page/{id}/delete', name: 'volontariat_admin_page_delete', methods: ['POST'])]
     public function delete(Request $request, Page $page): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$page->getId(), $request->request->get('_token'))) {

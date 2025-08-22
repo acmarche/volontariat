@@ -2,6 +2,7 @@
 
 namespace AcMarche\Volontariat\Form\Admin;
 
+use Doctrine\ORM\QueryBuilder;
 use AcMarche\Volontariat\Entity\Secteur;
 use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Repository\SecteurRepository;
@@ -19,9 +20,9 @@ use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class VolontaireType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
     {
-        $builder
+        $formBuilder
             ->add('name')
             ->add('surname')
             ->add(
@@ -66,7 +67,7 @@ class VolontaireType extends AbstractType
                     'required' => false,
                     'multiple' => true,
                     'expanded' => true,
-                    'query_builder' => fn(SecteurRepository $er) => $er->secteursActifs(),
+                    'query_builder' => fn(SecteurRepository $secteurRepository): QueryBuilder => $secteurRepository->secteursActifs(),
                 ]
             )
             ->add(
@@ -105,9 +106,9 @@ class VolontaireType extends AbstractType
             );
     }
 
-    public function configureOptions(OptionsResolver $resolver): void
+    public function configureOptions(OptionsResolver $optionsResolver): void
     {
-        $resolver->setDefaults(
+        $optionsResolver->setDefaults(
             [
                 'data_class' => Volontaire::class,
             ]

@@ -2,6 +2,7 @@
 
 namespace AcMarche\Volontariat\Controller\Admin;
 
+use Exception;
 use AcMarche\Volontariat\Entity\Page;
 use AcMarche\Volontariat\Form\Admin\ImageDropZoneType;
 use AcMarche\Volontariat\Service\FileHelper;
@@ -15,13 +16,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route(path: '/admin/page/images')]
 #[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class ImagePageController extends AbstractController
 {
     public function __construct(private FileHelper $fileHelper) {}
 
-    #[Route(path: '/new/{id}', name: 'volontariat_admin_page_image_edit', methods: ['GET', 'POST'])]
+    #[Route(path: '/admin/page/images/new/{id}', name: 'volontariat_admin_page_image_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Page $page): Response
     {
         $form = $this->createForm(ImageDropZoneType::class);
@@ -45,14 +45,14 @@ class ImagePageController extends AbstractController
         );
     }
 
-    #[Route(path: '/upload/new/{id}', name: 'volontariat_admin_page_upload_file', methods: ['POST'])]
+    #[Route(path: '/admin/page/images/upload/new/{id}', name: 'volontariat_admin_page_upload_file', methods: ['POST'])]
     public function upload(Request $request, Page $page): JsonResponse
     {
         $file = $request->files->get('file');
         if ($file instanceof UploadedFile) {
             try {
                 $this->fileHelper->treatmentFile($page, $file);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 return new JsonResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
             }
         }
@@ -60,18 +60,18 @@ class ImagePageController extends AbstractController
         return new JsonResponse(['empty']);
     }
 
-    #[Route(path: '/delete/{id}', name: 'volontariat_admin_page_image_delete', methods: ['POST'])]
+    #[Route(path: '/admin/page/images/delete/{id}', name: 'volontariat_admin_page_image_delete', methods: ['POST'])]
     public function delete(Request $request, Page $page): RedirectResponse
     {
         if ($this->isCsrfTokenValid('delete'.$page->getId(), $request->request->get('_token'))) {
             $all = $request->request->all();
             $files = $all['img'];
-            foreach ($files as $filename) {
+            foreach ($files as $file) {
                 try {
-                    $this->fileHelper->deleteOneDoc($page, $filename);
-                    $this->addFlash('success', "L'image $filename a bien été supprimée");
+                    $this->fileHelper->deleteOneDoc($page, $file);
+                    $this->addFlash('success', sprintf("L'image %s a bien été supprimée", $file));
                 } catch (FileException) {
-                    $this->addFlash('error', "L'image  $filename n'a pas pu être supprimée. ");
+                    $this->addFlash('error', sprintf("L'image  %s n'a pas pu être supprimée. ", $file));
                 }
             }
         }

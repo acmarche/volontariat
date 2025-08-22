@@ -13,14 +13,14 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 class SpamHandler
 {
     public function __construct(
-        private readonly RateLimiterFactory $anonymousApiLimiter,
+        private readonly RateLimiterFactory $rateLimiterFactory,
         private readonly CaptchaApi $captchaApi
     ) {
     }
 
     public function isAccepted(Request $request): bool
     {
-        $limiter = $this->anonymousApiLimiter->create($request->getClientIp());
+        $limiter = $this->rateLimiterFactory->create($request->getClientIp());
 
         return $limiter->consume()->isAccepted();
     }

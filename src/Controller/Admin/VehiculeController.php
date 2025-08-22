@@ -16,7 +16,6 @@ use Symfony\Component\Routing\Attribute\Route;
 
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route(path: '/admin/vehicule')]
 #[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
 class VehiculeController extends AbstractController
 {
@@ -24,11 +23,11 @@ class VehiculeController extends AbstractController
     {
     }
 
-    #[Route(path: '/', name: 'volontariat_admin_vehicule', methods: ['GET'])]
+    #[Route(path: '/admin/vehicule/', name: 'volontariat_admin_vehicule', methods: ['GET'])]
     public function index() : Response
     {
-        $em = $this->managerRegistry->getManager();
-        $entities = $em->getRepository(Vehicule::class)->findAll();
+        $objectManager = $this->managerRegistry->getManager();
+        $entities = $objectManager->getRepository(Vehicule::class)->findAll();
         return $this->render(
             '@Volontariat/admin/vehicule/index.html.twig',
             array(
@@ -37,7 +36,7 @@ class VehiculeController extends AbstractController
         );
     }
 
-    #[Route(path: '/new', name: 'volontariat_admin_vehicule_new', methods: ['GET', 'POST'])]
+    #[Route(path: '/admin/vehicule/new', name: 'volontariat_admin_vehicule_new', methods: ['GET', 'POST'])]
     public function new(Request $request) : Response
     {
         $vehicule = new Vehicule();
@@ -52,6 +51,7 @@ class VehiculeController extends AbstractController
 
             return $this->redirectToRoute('volontariat_admin_vehicule');
         }
+
         return $this->render(
             '@Volontariat/admin/vehicule/new.html.twig',
             array(
@@ -61,7 +61,7 @@ class VehiculeController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}', name: 'volontariat_admin_vehicule_show', methods: ['GET'])]
+    #[Route(path: '/admin/vehicule/{id}', name: 'volontariat_admin_vehicule_show', methods: ['GET'])]
     public function show(Vehicule $vehicule) : Response
     {
         $deleteForm = $this->createDeleteForm($vehicule);
@@ -74,19 +74,20 @@ class VehiculeController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}/edit', name: 'volontariat_admin_vehicule_edit', methods: ['GET', 'POST'])]
+    #[Route(path: '/admin/vehicule/{id}/edit', name: 'volontariat_admin_vehicule_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Vehicule $vehicule) : Response
     {
-        $em = $this->managerRegistry->getManager();
+        $objectManager = $this->managerRegistry->getManager();
         $editForm = $this->createForm(VehiculeType::class, $vehicule)
             ->add('submit', SubmitType::class, array('label' => 'Update'));
         $editForm->handleRequest($request);
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $em->flush();
+            $objectManager->flush();
             $this->addFlash("success", "Le véhicule a bien été modifié");
 
             return $this->redirectToRoute('volontariat_admin_vehicule');
         }
+
         return $this->render(
             '@Volontariat/admin/vehicule/edit.html.twig',
             array(
@@ -96,7 +97,7 @@ class VehiculeController extends AbstractController
         );
     }
 
-    #[Route(path: '/{id}', name: 'volontariat_admin_vehicule_delete', methods: ['DELETE'])]
+    #[Route(path: '/admin/vehicule/{id}', name: 'volontariat_admin_vehicule_delete', methods: ['DELETE'])]
     public function delete(Request $request, Vehicule $vehicule) : RedirectResponse
     {
         $form = $this->createDeleteForm($vehicule);
@@ -108,6 +109,7 @@ class VehiculeController extends AbstractController
             $em->flush();
             $this->addFlash("success", "Le véhicule a bien été supprimé");
         }
+
         return $this->redirectToRoute('volontariat_admin_vehicule');
     }
 

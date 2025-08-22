@@ -17,14 +17,15 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @method Association|null find($id, $lockMode = null, $lockVersion = null)
  * @method Association|null findOneBy(array $criteria, array $orderBy = null)
  * @method Association[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<Association>
  */
 class AssociationRepository extends ServiceEntityRepository
 {
     use OrmCrudTrait;
 
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        parent::__construct($registry, Association::class);
+        parent::__construct($managerRegistry, Association::class);
     }
 
     /**
@@ -46,10 +47,10 @@ class AssociationRepository extends ServiceEntityRepository
         $user = $args['user'] ?? null;
         $valider = $args['valider'] ?? true;
 
-        $qb = $this->createQBl();
+        $queryBuilder = $this->createQBl();
 
         if ($nom) {
-            $qb
+            $queryBuilder
                 ->andWhere(
                     'association.email LIKE :mot OR association.name LIKE :mot OR association.description LIKE :mot ',
                 )
@@ -57,34 +58,34 @@ class AssociationRepository extends ServiceEntityRepository
         }
 
         if ($secteur) {
-            $qb
+            $queryBuilder
                 ->andWhere('secteurs = :secteur ')
                 ->setParameter('secteur', $secteur);
         }
 
         if (is_array($secteurs)) {
-            $qb
+            $queryBuilder
                 ->andWhere('secteurs IN ARRAY :secteurs ')
                 ->setParameter('secteurs', $secteurs);
         }
 
         if ($user) {
-            $qb
+            $queryBuilder
                 ->andWhere('user = :user')
                 ->setParameter('user', $user);
         }
 
         if (false === $valider) {
-            $qb
+            $queryBuilder
                 ->andWhere('association.valider = :valider')
                 ->setParameter('valider', false);
         } elseif (2 != $valider) {
-            $qb
+            $queryBuilder
                 ->andWhere('association.valider = :valider')
                 ->setParameter('valider', true);
         }
 
-        return $qb->getQuery()->getResult();
+        return $queryBuilder->getQuery()->getResult();
     }
 
     /**
@@ -137,9 +138,9 @@ class AssociationRepository extends ServiceEntityRepository
             ->getResult();
 
         $npo_emails = [];
-        foreach ($results as $association) {
-            if ($association->getEmail()) {
-                $npo_emails[] = $association->email;
+        foreach ($results as $result) {
+            if ($result->getEmail()) {
+                $npo_emails[] = $result->email;
             }
         }
 
@@ -178,7 +179,7 @@ class AssociationRepository extends ServiceEntityRepository
         $associations = [[]];
         $secteurs = $volontaire->secteurs;
         foreach ($secteurs as $secteur) {
-            if (count($this->findAssociationsBySecteur($secteur)) > 0) {
+            if ($this->findAssociationsBySecteur($secteur) !== []) {
                 $associations[] = $this->findAssociationsBySecteur($secteur);
             }
         }
@@ -205,8 +206,6 @@ class AssociationRepository extends ServiceEntityRepository
 
     /**
      * Use MapEntity url
-     * @param string $uuid
-     * @return Association|null
      */
     public function findOneByUuid(string $uuid): ?Association
     {

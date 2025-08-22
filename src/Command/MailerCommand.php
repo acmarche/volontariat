@@ -38,7 +38,7 @@ class MailerCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = new SymfonyStyle($input, $output);
+        $symfonyStyle = new SymfonyStyle($input, $output);
         $query = $input->getArgument('query');
 
         if ($query) {
@@ -54,19 +54,21 @@ class MailerCommand extends Command
                 UrlGeneratorInterface::ABSOLUTE_URL
             );
 
-            foreach ($destinataires as $association) {
-                $email = $this->messageService->getEmailEntity($association);
+            foreach ($destinataires as $destinataire) {
+                $email = $this->messageService->getEmailEntity($destinataire);
                 if ($email) {
-                    $urlAccount = $this->tokenManager->getLinkToConnect($association);
+                    $urlAccount = $this->tokenManager->getLinkToConnect($destinataire);
                     try {
-                        $this->mailer->sendAutoAssociation($association,$email, $urlAccount, $urlAssociations, $urlVolontaires);
+                        $this->mailer->sendAutoAssociation($destinataire,$email, $urlAccount, $urlAssociations, $urlVolontaires);
                     } catch (TransportExceptionInterface $e) {
-                        $io->error($e->getMessage());
+                        $symfonyStyle->error($e->getMessage());
                     }
                 }
+
                 break;
             }
-            $io->success('Sent to '.count($destinataires));
+
+            $symfonyStyle->success('Sent to '.count($destinataires));
 
             return Command::SUCCESS;
         }

@@ -2,6 +2,7 @@
 
 namespace AcMarche\Volontariat\MessageHandler;
 
+use Exception;
 use AcMarche\Volontariat\Mailer\Mailer;
 use AcMarche\Volontariat\Message\BesoinCreated;
 use AcMarche\Volontariat\Repository\BesoinRepository;
@@ -26,12 +27,13 @@ final class BesoinCreatedHandler
         if (!$besoin) {
             return;
         }
+
         $association = $besoin->getAssociation();
         foreach ($this->volontaireRepository->findVolontairesWantBeNotified() as $volontaire) {
             $urlLink = $this->tokenManager->getLinkToConnect($volontaire);
             try {
                 $this->mailer->sendNewBesoin($besoin, $association, $volontaire, $urlLink);
-            } catch (\Exception|TransportExceptionInterface $e) {
+            } catch (Exception|TransportExceptionInterface $e) {
                 //dd($e->getMessage());
             }
         }

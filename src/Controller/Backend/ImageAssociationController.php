@@ -2,6 +2,7 @@
 
 namespace AcMarche\Volontariat\Controller\Backend;
 
+use Exception;
 use AcMarche\Volontariat\Form\Admin\ImageDropZoneType;
 use AcMarche\Volontariat\Service\FileHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,7 +15,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route(path: '/backend/association/images')]
 #[IsGranted('ROLE_VOLONTARIAT')]
 class ImageAssociationController extends AbstractController
 {
@@ -22,10 +22,10 @@ class ImageAssociationController extends AbstractController
 
     public function __construct(private FileHelper $fileHelper) {}
 
-    #[Route(path: '/', name: 'volontariat_backend_images_association', methods: ['GET'])]
+    #[Route(path: '/backend/association/images/', name: 'volontariat_backend_images_association', methods: ['GET'])]
     public function edit(Request $request): Response
     {
-        if (($hasAssociation = $this->hasAssociation()) !== null) {
+        if (($hasAssociation = $this->hasAssociation()) instanceof Response) {
             return $hasAssociation;
         }
 
@@ -54,17 +54,18 @@ class ImageAssociationController extends AbstractController
         );
     }
 
-    #[Route(path: '/upload/new/', name: 'volontariat_backend_association_upload_file', methods: ['POST'])]
+    #[Route(path: '/backend/association/images/upload/new/', name: 'volontariat_backend_association_upload_file', methods: ['POST'])]
     public function upload(Request $request): JsonResponse
     {
-        if ($this->hasAssociation() !== null) {
+        if ($this->hasAssociation() instanceof Response) {
             return new JsonResponse(['empty']);
         }
+
         $file = $request->files->get('file');
         if ($file instanceof UploadedFile) {
             try {
                 $this->fileHelper->treatmentFile($this->association, $file);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 return new JsonResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
             }
         }
@@ -72,22 +73,23 @@ class ImageAssociationController extends AbstractController
         return new JsonResponse(['empty']);
     }
 
-    #[Route(path: '/delete', name: 'volontariat_backend_image_association_delete', methods: ['POST'])]
+    #[Route(path: '/backend/association/images/delete', name: 'volontariat_backend_image_association_delete', methods: ['POST'])]
     public function delete(Request $request): RedirectResponse
     {
-        if ($this->hasAssociation() !== null) {
+        if ($this->hasAssociation() instanceof Response) {
             return $this->redirectToRoute('volontariat_backend_images_association');
         }
+
         $this->denyAccessUnlessGranted('edit', $this->association);
         if ($this->isCsrfTokenValid('delete'.$this->association->getId(), $request->request->get('_token'))) {
             $all = $request->request->all();
             $files = $all['img'];
-            foreach ($files as $filename) {
+            foreach ($files as $file) {
                 try {
-                    $this->fileHelper->deleteOneDoc($this->association, $filename);
-                    $this->addFlash('success', "L'image $filename a bien été supprimée");
+                    $this->fileHelper->deleteOneDoc($this->association, $file);
+                    $this->addFlash('success', sprintf("L'image %s a bien été supprimée", $file));
                 } catch (FileException) {
-                    $this->addFlash('error', "L'image  $filename n'a pas pu être supprimée. ");
+                    $this->addFlash('error', sprintf("L'image  %s n'a pas pu être supprimée. ", $file));
                 }
             }
         }

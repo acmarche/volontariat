@@ -5,29 +5,29 @@ use AcMarche\Volontariat\Security\MessageDigestPasswordHasher;
 use AcMarche\Volontariat\Security\VolontariatAuthenticator;
 use Symfony\Config\SecurityConfig;
 
-return static function (SecurityConfig $security): void {
-    $security
+return static function (SecurityConfig $securityConfig): void {
+    $securityConfig
         ->provider('volontariat_user_provider')
         ->entity()
         ->class(User::class)
         ->managerName('default')
         ->property('email');
 
-    $security
+    $securityConfig
         ->passwordHasher('cap_hasher')
         ->id(MessageDigestPasswordHasher::class);
 
-    $security
+    $securityConfig
         ->passwordHasher(User::class)
         ->algorithm('sodium')
         ->migrateFrom(['cap_hasher']);
 
-    $security
+    $securityConfig
         ->firewall('dev')
         ->pattern('^/(_(profiler|wdt)|css|images|js)/')
         ->security(false);
 
-    $mainFirewall = $security
+    $mainFirewall = $securityConfig
         ->firewall('main')
         ->lazy(true);
 
@@ -59,5 +59,5 @@ return static function (SecurityConfig $security): void {
             'always_remember_me' => true,
         ]);
 
-    $security->roleHierarchy('ROLE_VOLONTARIAT_ADMIN', ['ROLE_VOLONTARIAT_ASSOCIATION']);
+    $securityConfig->roleHierarchy('ROLE_VOLONTARIAT_ADMIN', ['ROLE_VOLONTARIAT_ASSOCIATION']);
 };

@@ -31,8 +31,8 @@ trait getAssociationTrait
 
                 return $this->redirectToRoute('volontariat_dashboard');
             }
-        } catch (NonUniqueResultException $e) {
-            $this->addFlash('danger', $e->getMessage());
+        } catch (NonUniqueResultException $nonUniqueResultException) {
+            $this->addFlash('danger', $nonUniqueResultException->getMessage());
 
             return $this->redirectToRoute('volontariat_dashboard');
         }

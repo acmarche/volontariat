@@ -8,6 +8,7 @@
 
 namespace AcMarche\Volontariat\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use AcMarche\Volontariat\Repository\VehiculeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -20,13 +21,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Vehicule implements Stringable
 {
     #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected int $id;
 
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column(type: Types::STRING)]
     #[Assert\NotBlank]
     protected string $nom;
+
     /**
      * @var Volontaire[]|iterable
      */
@@ -56,10 +58,8 @@ class Vehicule implements Stringable
 
     /**
      * Set nom
-     *
-     * @param string $nom
      */
-    public function setNom($nom): static
+    public function setNom(string $nom): static
     {
         $this->nom = $nom;
 
@@ -96,6 +96,7 @@ class Vehicule implements Stringable
 
     /**
      * Get volontaires
+     * @return Collection<int, Volontaire>
      */
     public function getVolontaires(): iterable
     {

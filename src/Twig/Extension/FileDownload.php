@@ -21,7 +21,7 @@ class FileDownload extends AbstractExtension
         return [
             new TwigFilter(
                 'acmarche_volontariat_download_image',
-                fn ($fileName, Uploadable $uploadable) => $this->download($fileName, $uploadable)
+                fn ($fileName, Uploadable $uploadable): string => $this->download($fileName, $uploadable)
             ),
         ];
     }

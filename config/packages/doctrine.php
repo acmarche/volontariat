@@ -6,14 +6,14 @@ use AcMarche\Volontariat\Doctrine\RandFunction;
 use Symfony\Config\DoctrineConfig;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\Env;
 
-return static function (DoctrineConfig $doctrine) {
+return static function (DoctrineConfig $doctrineConfig): void {
 
-    $doctrine->dbal()
+    $doctrineConfig->dbal()
         ->connection('default')
         ->url(env('DATABASE_URL')->resolve())
         ->charset('utf8mb4');
 
-    $emMda = $doctrine->orm()->entityManager('default');
+    $emMda = $doctrineConfig->orm()->entityManager('default');
     $emMda->connection('default');
     $emMda->mapping('AcMarcheVolontariat')
         ->isBundle(false)

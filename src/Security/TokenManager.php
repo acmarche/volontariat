@@ -37,7 +37,7 @@ class TokenManager
         return $token;
     }
 
-    public function generate(User $user, \DateTime $expireAt = null): Token
+    public function generate(User $user, ?\DateTime $expireAt = null): Token
     {
         $token = $this->getInstance($user);
         try {

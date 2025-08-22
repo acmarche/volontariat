@@ -108,7 +108,7 @@ class Besoin implements \Stringable
     /**
      * Set dateEnd.
      */
-    public function setDateEnd(\DateTime|\DateTimeImmutable $dateEnd = null): static
+    public function setDateEnd(\DateTime|\DateTimeImmutable|null $dateEnd = null): static
     {
         $this->date_end = $dateEnd;
 

@@ -1,42 +1,68 @@
 {% extends '@Volontariat/base.html.twig' %}
 
 {% block body %}
-    <div class="mx-auto max-w-7xl px-6 lg:px-8">
-        <div class="mx-auto max-w-2xl lg:text-center">
-            <p class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                Je m'inscris</p>
-            <p class="mt-6 text-lg leading-8 text-gray-600">
-                Si tu as envie de mettre ton temps libre au service d’une cause qui vous touche,
-                deviens bénévole, inscris-toi !
-            </p>
-            <div class="relative pl-16">
-                <dt class="text-xl font-semibold leading-7 text-gray-900">
-                    <a href="{{ path('volontariat_register_voluntary') }}">En tant que volontaire</a>
-                </dt>
-                <dd class="mt-2 text-base leading-7 text-gray-600">
-                    <a href="{{ path('volontariat_register_voluntary') }}">
-                        Fais toi connaitre auprès des associations, celles-ci pourront te contacter en
-                        cas de besoin
-                    </a>
-                </dd>
-            </div>
-            <p class="mt-6 text-lg leading-8 text-gray-600">
-                Trouvez encore plus de bénévoles grâce à notre plate-forme<br/>
-                Trouvez le bénévolat idéal !
-            </p>
-            <div class="relative pl-16">
-                <dt class="text-xl font-semibold leading-7 text-gray-900">
-                    <a href="{{ path('volontariat_register_association') }}">En tant qu'association</a>
-                </dt>
-                <dd class="mt-2 text-base leading-7 text-gray-600">
-                    <a href="{{ path('volontariat_register_association') }}">
-                        Après votre inscription, vous aurez la possibilité de décrire votre association
-                        et de contacter nos volontaires inscrits.
-                    </a>
-                </dd>
-            </div>
+    <div class="max-w-6xl mx-auto bg-gray-100 p-8">
+
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">Je m'inscris</h1>
         </div>
 
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <a href="{{ path('volontariat_register_voluntary') }}">
+                <div class="bg-white p-8 rounded-lg shadow-md">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">En tant que volontaire</h2>
+                    <p class="text-lg text-gray-600">
+                        Si tu as envie de mettre ton temps libre au service d’une cause qui vous
+                        touche, deviens bénévole, inscris-toi !
+                    </p>
+                    <ul class="space-y-4 text-gray-600 mt-3">
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor"
+                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>Fais toi connaitre auprès des associations, celles-ci pourront te contacter en cas de besoin</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor"
+                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>Fais toi connaitre auprès des associations, celles-ci pourront te contacter en cas de besoin</span>
+                        </li>
+                    </ul>
+                </div>
+            </a>
+
+            <div class="bg-white p-8 rounded-lg shadow-md">
+                <a href="{{ path('volontariat_register_association') }}">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">En tant qu'association</h2>
+                    <p class="text-gray-600">
+                        Après votre inscription, vous aurez la possibilité de décrire votre
+                        association et de contacter nos volontaires inscrits.</p>
+                    <ul class="space-y-4 text-gray-600 mt-3">
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor"
+                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>Trouvez le bénévolat idéal !</span>
+                        </li>
+                        <li class="flex items-start">
+                            <svg class="w-6 h-6 text-green-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor"
+                                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>Trouvez encore plus de bénévoles grâce à notre plate-forme</span>
+                        </li>
+                    </ul>
+                </a>
+            </div>
+        </div>
     </div>
 
 {% endblock %}

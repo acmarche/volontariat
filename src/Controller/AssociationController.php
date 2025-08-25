@@ -5,6 +5,7 @@ namespace AcMarche\Volontariat\Controller;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Form\Search\SearchAssociationType;
 use AcMarche\Volontariat\Repository\AssociationRepository;
+use AcMarche\Volontariat\Repository\BesoinRepository;
 use AcMarche\Volontariat\Service\FileHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,8 +14,11 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class AssociationController extends AbstractController
 {
-    public function __construct(private AssociationRepository $associationRepository, private FileHelper $fileHelper)
-    {
+    public function __construct(
+        private AssociationRepository $associationRepository,
+        private BesoinRepository $besoinRepository,
+        private FileHelper $fileHelper
+    ) {
     }
 
     #[Route(path: '/association/', name: 'volontariat_association')]
@@ -52,9 +56,11 @@ class AssociationController extends AbstractController
     public function show(Association $association): Response
     {
         $images = $this->fileHelper->getImages($association);
+        $besoins = $this->besoinRepository->findByAssociation($association);
 
         return $this->render('@Volontariat/association/show.html.twig', [
             'association' => $association,
+            'besoins' => $besoins,
             'images' => $images,
         ]);
     }

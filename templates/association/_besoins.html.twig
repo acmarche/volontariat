@@ -1,0 +1,31 @@
+<h3 class="block mt-1 text-2xl text-gray-500 font-bold">
+    Ils ont besoin de vous actuellement pour :
+</h3>
+<div class="px-4 sm:px-6 lg:px-8">
+    <div class="mt-8 flow-root">
+        <div class="">
+            <div class="space-y-4">
+                {% for besoin in besoins %}
+                    <div class="bg-white shadow px-4 py-5 sm:px-6 rounded-lg">
+                        <h4 class="text-xl leading-6 font-medium">
+                            <a href="{{ path('volontariat_besoin_show', {'id': besoin.id}) }}"
+                               class="hover:underline">
+                                {{ besoin.name }}
+                            </a>
+                        </h4>
+                        <div class="mt-2 max-w-xl text-sm text-gray-500">
+                            <p>
+                                {% if besoin.dateBegin %}
+                                    Du {{ besoin.dateBegin | date('d-m-Y') }}
+                                {% endif %}
+                                {% if besoin.dateEnd %}
+                                    au {{ besoin.dateEnd | date('d-m-Y') }}
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>

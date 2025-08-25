@@ -1,50 +1,107 @@
 {% extends '@Volontariat/base.html.twig' %}
 {% block title %}Tableau de bord{% endblock %}
 {% block body %}
-    <div class="hidden lg:fixed lg:flex lg:w-4/5 lg:flex-row">
-        <div class="flex flex-grow-0 flex-col overflow-y-auto border-r border-gray-200 bg-white pt-5 pb-4">
-            <div class="mt-5 mr-5 pr-4 flex flex-col">
-                {% include '@Volontariat/dashboard/_sidebar.html.twig' %}
-            </div>
-        </div>
-        <div class="pt-14 pb-4 pl-5 flex-grow ">
-            <p>
-                Utilise le menu de gauche pour vos différentes actions
-            </p>
-            <ul role="list" class="divide-y divide-gray-200">
-                {% if volontaire %}
-                    <li class="py-4">
-                        <a href="{{ path('volontariat_volontaire_show', {'uuid': volontaire.uuid}) }}">
-                            Complète ta fiche de volontaire en cliquant sur le lien
-                        </a>
-                    </li>
-                {% endif %}
-
-                {% if association %}
-                    <li class="py-4">
-                        <a href="{{ path('volontariat_association_show', {'slug': association.slug}) }}">
-                            Complète ta fiche associative {{ association }} en cliquant sur le lien
-                        </a>
-                    </li>
-                    <li class="py-4">
-                        <a href="{{ path('volontariat_volontaire') }}">
-                            Consulter la liste des volontaires
-                        </a>
-                    </li>
-                    <li class="py-4">
-                        <a href="{{ path('volontariat_backend_besoin') }}">
-                            Publier une annonce de volontariat
-                        </a>
-                    </li>
-                    <li class="py-4">
-                        <a href="{{ path('volontariat_backend_images_association') }}">
-                            Gérer mes images
-                        </a>
-                    </li>
-                {% endif %}
-            </ul>
-
+    <div class="mx-auto max-w-2xl lg:mx-0 border-b border-gray-200 pb-5">
+        <h2 class="text-3xl font-bold leading-6 tracking-tight text-gray-900 sm:text-4xl">Mon espace</h2>
+    </div>
+    <div class="p-10">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {% if is_granted('ROLE_VOLONTARIAT_ADMIN') %}
+                <a href="{{ path('volontariat_admin_home') }}"
+                   class=" block bg-white rounded-lg shadow-md p-6 transform hover:scale-105 hover:shadow-xl transition
+                    duration-300 ease-in-out">
+                    <h3 class="text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
+                        Administration
+                    </h3>
+                    <p class="text-gray-400">
+                        Accès administrateur.
+                    </p>
+                </a>
+            {% endif %}
+            {% if volontaire %}
+                <a href="{{ path('volontariat_volontaire_show', {'uuid': volontaire.uuid}) }}"
+                   class=" block bg-white rounded-lg shadow-md p-6 transform hover:scale-105 hover:shadow-xl transition
+                    duration-300 ease-in-out">
+                    <h3 class="text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
+                        Ma fiche volontaire
+                    </h3>
+                    <p class="text-gray-400">
+                        Remplis vos informations en cliquant sur le lien.
+                    </p>
+                </a>
+            {% endif %}
+            {% if association %}
+                <a href="{{ path('volontariat_association_show', {'slug': association.slug}) }}"
+                   class=" block bg-white rounded-lg shadow-md p-6 transform hover:scale-105 hover:shadow-xl transition
+                    duration-300 ease-in-out">
+                    <h3 class="text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
+                        Mon association
+                    </h3>
+                    <p class="text-gray-400">
+                        Remplissez vos informations en cliquant sur le lien.
+                    </p>
+                </a>
+                <a href="{{ path('volontariat_volontaire') }}"
+                   class=" block bg-white rounded-lg shadow-md p-6 transform hover:scale-105 hover:shadow-xl transition
+                    duration-300 ease-in-out">
+                    <h3 class="text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
+                        Consulter la liste des volontaires
+                    </h3>
+                    <p class="text-gray-400">
+                        Besoin d'aide ? Consulte notre liste des volontaires.
+                    </p>
+                </a>
+                <a href="{{ path('volontariat_backend_besoin') }}"
+                   class=" block bg-white rounded-lg shadow-md p-6 transform hover:scale-105 hover:shadow-xl transition
+                    duration-300 ease-in-out">
+                    <h3 class="text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
+                        Publier une annonce de volontariat
+                    </h3>
+                    <p class="text-gray-400">
+                        Besoin d'aide ? Publie une annonce de volontariat, tous les volontaires seront tenu au courant.
+                    </p>
+                </a>
+                <a href="{{ path('volontariat_backend_images_association') }}"
+                   class=" block bg-white rounded-lg shadow-md p-6 transform hover:scale-105 hover:shadow-xl transition
+                    duration-300 ease-in-out">
+                    <h3 class="text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
+                        Gérer mes images
+                    </h3>
+                    <p class="text-gray-400">
+                        Agrémente ta fiche avec des images.
+                    </p>
+                </a>
+            {% endif %}
+            <a
+                href="{{ path('volontariat_backend_besoin') }}"
+                class="bg-white rounded-lg shadow-md p-6 transform hover:scale-105 hover:shadow-xl transition duration-300 ease-in-out">
+                <h3 class="text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
+                    Changer mon mot de passe
+                </h3>
+                <p class="text-gray-400">
+                    Effectue l'action en cliquant sur le lien.
+                </p>
+            </a>
+            <a
+                href="{{ path('volontariat_backend_account_edit') }}"
+                class="bg-white rounded-lg shadow-md p-6 transform hover:scale-105 hover:shadow-xl transition duration-300 ease-in-out">
+                <h3 class="text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
+                    Mon compte
+                </h3>
+                <p class="text-gray-400">
+                    Change d'adresse email pour te connecter.
+                </p>
+            </a>
+            <a
+                href="{{ path('volontariat_backend_user_delete') }}"
+                class="bg-white rounded-lg shadow-md p-6 transform hover:scale-105 hover:shadow-xl transition duration-300 ease-in-out">
+                <h3 class="text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
+                    Suppression de mon compte
+                </h3>
+                <p class="text-gray-400">
+                    Envie de nous quitter :-( c'est par ici que cela se passe
+                </p>
+            </a>
         </div>
     </div>
-
 {% endblock %}

@@ -9,23 +9,14 @@ use Symfony\UX\Dropzone\Form\DropzoneType;
 
 class ImageDropZoneType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-      /*  $builder->add('file', DropzoneType::class, [
+        $builder->add('file', DropzoneType::class, [
             'attr' => [
                 'placeholder' => 'Cliquez ici pour sélectioner les images',
             ],
             'label' => false,
             'multiple' => true,
-            'constraints' => [
-                 new File([
-                    'maxSize' => '8000k',
-                    'mimeTypes' => [
-                        'image/*',
-                    ],
-                    'mimeTypesMessage' => 'Veuillez télécharger une image valide',
-                ]),
-            ],
-        ]);*/
+        ]);
     }
 }

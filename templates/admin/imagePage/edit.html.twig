@@ -6,7 +6,7 @@
         <h3 class="card-header"> Gestion des <strong>images/docs</strong> pour {{ page }}</h3>
 
         <div class="card-body">
-            {{ form_start(form) }}
+            {{ form_start(form, { 'attr': {'id': 'formdrop','class': 'mt-3 dropzone', 'data-controller': 'dropzone'}}) }}
             {{ form_widget(form, { label: false }) }}
 
             <button type="submit" class="btn btn-primary"><i class="ti ti-image-up"></i> Envoyer les images</button>
@@ -14,8 +14,6 @@
 
             {% if images | length > 0 %}
                 {% include "@Volontariat/admin/imagePage/_images.html.twig" %}
-            {% else %}
-                <p class="text-warning">Aucune image actuellement</p>
             {% endif %}
         </div>
         <div class="card-footer">

@@ -26,7 +26,7 @@ class Page implements Uploadable, SluggableInterface, Stringable
     #[Assert\NotBlank]
     public string $title;
 
-    #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     public ?string $excerpt;
 
     #[ORM\Column(type: Types::TEXT, nullable: false)]

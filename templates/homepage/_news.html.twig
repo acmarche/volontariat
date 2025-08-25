@@ -3,34 +3,31 @@
         <div class="mx-auto max-w-2xl text-center">
             <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Actualités</h2>
         </div>
-        <div class="mx-auto mt-16 grid max-w-2xl auto-rows-fr grid-cols-1 gap-8 sm:mt-20 lg:mx-0 lg:max-w-none lg:grid-cols-3">
-            {% for page in pages %}
-                {% set image = 'https://images.unsplash.com/photo-1496128858413-b36217c2ce36?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3603&q=80' %}
-                {% if page.firstImage %}
-                    {% set image =  page.firstImage | imagine_filter('acmarche_volontariat_400_270') %}
-                {% endif %}
-                <article
-                        class="relative isolate flex flex-col justify-end overflow-hidden rounded-2xl bg-gray-900 px-8 pb-8 pt-80 sm:pt-48 lg:pt-80">
-                    <img src="{{ image }}"
-                         alt="" class="absolute inset-0 -z-10 h-full w-full object-cover">
-                    <div class="absolute inset-0 -z-10 bg-gradient-to-t from-gray-900 via-gray-900/40"></div>
-                    <div class="absolute inset-0 -z-10 rounded-2xl ring-1 ring-inset ring-gray-900/10"></div>
-
-                    <div class="flex flex-wrap items-center gap-y-1 overflow-hidden  leading-6 text-gray-300">
-                        <div class="-ml-4 flex items-center gap-x-4">
-                            <div class="flex gap-x-2.5">
-                                {{ page.excerpt }}
+        <section class="bg-gray-50 py-8">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Related Article Card 1 -->
+                    {% for page in pages %}
+                        {% set image = 'https://images.unsplash.com/photo-1496128858413-b36217c2ce36?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3603&q=80' %}
+                        {% if page.firstImage %}
+                            {% set image =  page.firstImage | imagine_filter('acmarche_volontariat_400_270') %}
+                        {% endif %}
+                        <a
+                            class="group block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300"
+                            href="{{ path('volontariat_page_show', {'slug': page.slug}) }}">
+                            <img class="h-48 w-full object-cover"
+                                 src="{{ image }}"
+                                 alt="Article thumbnail">
+                            <div class="p-6">
+                                <h4 class="font-bold text-lg text-gray-900 group-hover:text-cta-dark transition-colors">
+                                    {{ page.title }}
+                                </h4>
+                                <p class="text-sm mb-1"> {{ page.excerpt }}</p>
                             </div>
-                        </div>
-                    </div>
-                    <h3 class="mt-3 text-lg font-semibold leading-6 text-white">
-                        <a href="{{ path('volontariat_page_show', {'slug': page.slug}) }}" class="text-white">
-                            <span class="absolute inset-0"></span>
-                            {{ page.title }}
                         </a>
-                    </h3>
-                </article>
-            {% endfor %}
-        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
     </div>
 </div>

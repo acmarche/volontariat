@@ -13,8 +13,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use AcMarche\Volontariat\Security\RolesEnum;
 
-#[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
+#[IsGranted(RolesEnum::association->value)]
 class AssociationController extends AbstractController
 {
     public function __construct(

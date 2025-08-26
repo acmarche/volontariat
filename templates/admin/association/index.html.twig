@@ -12,13 +12,12 @@
                class="btn btn-primary"><i
                     class="ti ti-send"></i> Envoyer un message aux associations</a>
 
-            <table class="table table-bordered table-hover">
+            <table class="table table-bordered table-hover mt-2">
                 <thead>
                 <tr>
                     <th>Nom</th>
                     <th>Localité</th>
                     <th>Email</th>
-                    <th>Téléphone</th>
                     <th>Géré par</th>
                     <th>Validée</th>
                     <th>Inscrit le</th>
@@ -37,10 +36,11 @@
                             {{ association.email }}
                         </td>
                         <td>
-                            {{ association.phone }} {{ association.mobile }}
-                        </td>
-                        <td>
-                            {{ association.user }}
+                            {% if association.user %}
+                                <a href="{{ path('volontariat_admin_user_show', { 'id': association.user.id }) }}">
+                                    {{ association.user }}
+                                </a>
+                            {% endif %}
                         </td>
                         <td>
                             {% if association.valider %}

@@ -14,7 +14,8 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
+use AcMarche\Volontariat\Security\RolesEnum;
+#[IsGranted(RolesEnum::association->value)]
 class MessageController extends AbstractController
 {
     public function __construct(

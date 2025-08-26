@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use AcMarche\Volontariat\Security\RolesEnum;
 
 class TokenController extends AbstractController
 {
@@ -19,7 +20,7 @@ class TokenController extends AbstractController
     }
 
     #[Route(path: '/token/', name: 'volontariat_token_index')]
-    #[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
+    #[IsGranted(RolesEnum::association->value)]
     public function index(Request $request): Response
     {
         $form = $this->createForm(EmptyType::class);

@@ -19,16 +19,16 @@ class SecurityData
 
     public static function getRoleAdmin(): string
     {
-        return 'ROLE_VOLONTARIAT_ADMIN';
+        return RolesEnum::admin->value;
     }
 
     public static function getRoleVolontariat(): string
     {
-        return 'ROLE_VOLONTARIAT';
+        return RolesEnum::volontaire->value;
     }
 
     public static function getRoleAssociation(): string
     {
-        return 'ROLE_VOLONTARIAT_ASSOCIATION';
+        return RolesEnum::association->value;
     }
 }

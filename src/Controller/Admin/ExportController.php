@@ -13,7 +13,8 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[IsGranted('ROLE_VOLONTARIAT_ADMIN')]
+use AcMarche\Volontariat\Security\RolesEnum;
+#[IsGranted(RolesEnum::association->value)]
 class ExportController extends AbstractController
 {
     public function __construct(private VolontaireRepository $volontaireRepository)

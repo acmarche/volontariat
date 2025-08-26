@@ -91,9 +91,27 @@ class User implements UserInterface, PasswordHasherAwareInterface, LegacyPasswor
         return $this->password;
     }
 
-    public function hasRole($role): bool
+    public function hasRole(string $role): bool
     {
         return in_array(strtoupper($role), $this->getRoles(), true);
+    }
+
+    public function addRole(string $role): void
+    {
+        if (!in_array(strtoupper($role), $this->getRoles(), true)) {
+            $this->roles[] = strtoupper($role);
+        }
+    }
+
+    public function removeRole(string $role): void
+    {
+        if (in_array(strtoupper($role), $this->getRoles(), true)) {
+            $this->roles = array_filter($this->roles, function ($existingRole) use ($role) {
+                return strtoupper($existingRole) !== strtoupper($role);
+            });
+            // Re-index the array to avoid gaps
+            $this->roles = array_values($this->roles);
+        }
     }
 
     public function getRoles(): array

@@ -2,10 +2,9 @@
 
 namespace AcMarche\Volontariat\Command;
 
-use Exception;
 use AcMarche\Volontariat\Repository\AssociationRepository;
-use AcMarche\Volontariat\Repository\BesoinRepository;
-use AcMarche\Volontariat\Repository\VolontaireRepository;
+use AcMarche\Volontariat\Security\RolesEnum;
+use Exception;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -20,31 +19,35 @@ class FixCommand extends Command
 {
     public function __construct(
         private readonly AssociationRepository $associationRepository,
-        private readonly VolontaireRepository $volontaireRepository,
-        private readonly BesoinRepository $besoinRepository,
     ) {
         parent::__construct();
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $symfonyStyle = new SymfonyStyle($input, $output);
-        foreach ($this->associationRepository->findAll() as $volontaire) {
-           $volontaire->uuid = $volontaire->generateUuid();
-        }
-
-        foreach ($this->besoinRepository->findAll() as $volontaire) {
-           $volontaire->uuid = $volontaire->generateUuid();
-        }
-
-        foreach ($this->volontaireRepository->findAll() as $volontaire) {
-           $volontaire->uuid = $volontaire->generateUuid();
+        $io = new SymfonyStyle($input, $output);
+        foreach ($this->associationRepository->findAll() as $association) {
+            if ($association->valider) {
+                if ($user = $association->user) {
+                    if (!$user->hasRole(RolesEnum::association->value)) {
+                        $user->addRole(RolesEnum::association->value);
+                        $io->writeln("Role added to user {$user->email}");
+                    }
+                }
+            } else {
+                if ($user = $association->user) {
+                    if ($user->hasRole(RolesEnum::association->value)) {
+                        $user->removeRole(RolesEnum::association->value);
+                        $io->writeln("Role removed to user {$user->email}");
+                    }
+                }
+            }
         }
 
         try {
             $this->associationRepository->flush();
         } catch (Exception $exception) {
-            $symfonyStyle->error($exception->getMessage());
+            $io->error($exception->getMessage());
         }
 
         return Command::SUCCESS;

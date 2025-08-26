@@ -17,6 +17,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+use AcMarche\Volontariat\Security\RolesEnum;
 class ReferencerController extends AbstractController
 {
     use getAssociationTrait;
@@ -27,7 +28,7 @@ class ReferencerController extends AbstractController
     }
 
     #[Route(path: '/referencer/volontaire/{uuid}', name: 'volontariat_referencer_volontaire')]
-    #[IsGranted('ROLE_VOLONTARIAT')]
+    #[IsGranted(RolesEnum::volontaire->value)]
     public function volontaire(Request $request,#[MapEntity(expr: 'repository.findOneByUuid(uuid)')]  Volontaire $volontaire): Response
     {
         if (($hasAssociation = $this->hasAssociation()) instanceof Response) {

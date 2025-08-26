@@ -2,12 +2,15 @@
 
 namespace AcMarche\Volontariat\Controller;
 
-use Exception;
 use AcMarche\Volontariat\Entity\Association;
+use AcMarche\Volontariat\Entity\Secteur;
 use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Form\Contact\ContactType;
 use AcMarche\Volontariat\Mailer\MailerContact;
+use AcMarche\Volontariat\Repository\VolontaireRepository;
+use AcMarche\Volontariat\Security\RolesEnum;
 use AcMarche\Volontariat\Spam\Handler\SpamHandler;
+use Exception;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,9 +22,11 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class ContactController extends AbstractController
 {
     public function __construct(
+        private readonly VolontaireRepository $volontaireRepository,
         private readonly MailerContact $mailerContact,
         private readonly SpamHandler $spamHandler,
-    ) {}
+    ) {
+    }
 
     #[Route(path: '/contact/', name: 'volontariat_contact')]
     public function contact(Request $request): Response
@@ -81,6 +86,42 @@ class ContactController extends AbstractController
         );
     }
 
+
+    #[Route(path: '/contact/volontaire/by/secteur/{id}', name: 'volontariat_contact_volontaire_by_secteur')]
+    #[IsGranted(RolesEnum::volontaire->value)]
+    public function volontairesBySecteur(
+        Request $request,
+        Secteur $secteur,
+    ): Response {
+        $form = $this->createForm(ContactType::class, null);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+
+            if ($this->validateForm($request, $data)) {
+                try {
+                    $this->addFlash('success', 'Les volontaires ont bien été contacté');
+                    $this->mailerContact->sendToVolontairesBySecteur($secteur, $data);
+                } catch (TransportExceptionInterface|Exception $e) {
+                    $this->addFlash('danger', "Erreur lors de l'envoie du mail");
+                }
+            }
+
+            return $this->redirectToRoute('volontariat_volontaire');
+        }
+
+        $volontaires = $this->volontaireRepository->findVolontaireBySecteur($secteur);
+        return $this->render(
+            '@Volontariat/contact/volontaires.html.twig',
+            [
+                'volontaires' => $volontaires,
+                'form' => $form,
+            ],
+        );
+    }
+
     #[Route(path: '/contact/association/{slug}', name: 'volontariat_contact_association')]
     public function association(Request $request, Association $association): Response
     {
@@ -118,6 +159,7 @@ class ContactController extends AbstractController
             return false;
         }
 
+        dd($data);
         if (!$this->spamHandler->checkCaptcha($data['captcha'])) {
             $this->addFlash('danger', 'Vous n\'avez pas sélectionné le chat :-(');
 

@@ -3,6 +3,7 @@
 namespace AcMarche\Volontariat\Repository;
 
 use AcMarche\Volontariat\Doctrine\OrmCrudTrait;
+use AcMarche\Volontariat\Entity\Secteur;
 use AcMarche\Volontariat\Entity\Volontaire;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\ParameterType;
@@ -186,5 +187,25 @@ class VolontaireRepository extends ServiceEntityRepository
             ->setParameter('uuid', $uuid, ParameterType::STRING)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    /**
+     * @param Secteur $secteur
+     * @return array<int,Volontaire>
+     */
+    public function findVolontaireBySecteur(Secteur $secteur): array
+    {
+        return $this
+            ->createQueryBuilder('volontaire')
+            ->andWhere(':id MEMBER OF volontaire.secteurs')
+            ->setParameter('id', $secteur->getId(), ParameterType::INTEGER)
+            ->andWhere('volontaire.notification_message_association = :notification')
+        //    ->andWhere('volontaire.valider = :valider')
+       //     ->andWhere('volontaire.inactif = :inactif')
+            ->setParameter('notification', true)
+          //  ->setParameter('valider', true)
+          //  ->setParameter('inactif', false)
+            ->getQuery()
+            ->getResult();
     }
 }

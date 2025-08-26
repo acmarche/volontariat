@@ -14,7 +14,10 @@
                 <tr>
                     <th>Nom</th>
                     <th>Localité</th>
-                    <th>Email</th>
+                    <th>Validé</th>
+                    <th>Inactif</th>
+                    <th>Message assoc</th>
+                    <th>New assoc</th>
                     <th>Inscrit le</th>
                     <th>Géré par</th>
                 </tr>
@@ -29,9 +32,16 @@
                         </td>
                         <td>{{ volontaire.city }}</td>
                         <td>
-                            {% if volontaire.user %}
-                                {{ volontaire.user.email }}
-                            {% endif %}
+                                {{ volontaire.valider }}
+                        </td>
+                        <td>
+                            {{ volontaire.inactif }}
+                        </td>
+                        <td>
+                            {{ volontaire.notification_message_association }}
+                        </td>
+                        <td>
+                            {{ volontaire.notification_new_association }}
                         </td>
                         <td>
                             {{ volontaire.createdAt|date("d-m-Y") }}

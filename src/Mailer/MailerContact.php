@@ -4,7 +4,9 @@ namespace AcMarche\Volontariat\Mailer;
 
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Message;
+use AcMarche\Volontariat\Entity\Secteur;
 use AcMarche\Volontariat\Entity\Volontaire;
+use AcMarche\Volontariat\Repository\VolontaireRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
@@ -17,6 +19,7 @@ class MailerContact
 
     public function __construct(
         private readonly MailerInterface $mailer,
+        private readonly VolontaireRepository $volontaireRepository,
         #[Autowire('%env(VOLONTARIAT_MAILER_FROM)%')]
         private readonly string $from
     ) {
@@ -112,6 +115,27 @@ class MailerContact
      */
     public function sendReferencerAssociation(Association $association, Message $message): void
     {
+        $templatedEmail = (new TemplatedEmail())
+            ->from(new Address($this->from))
+            ->to(new Address($message->to))
+            ->bcc(new Address($this->from))
+            ->subject($message->sujet.' vous recommande une association')
+            ->htmlTemplate('@Volontariat/emails/_recommande_association.html.twig')
+            ->context(
+                array_merge($this->defaultParams(), [
+                    'data' => $message,
+                    'association' => $association,
+                ])
+            );
+
+        $this->mailer->send($templatedEmail);
+    }
+
+    public function sendToVolontairesBySecteur(Secteur $secteur, mixed $data)
+    {
+        $volontaires = $this->volontaireRepository->findVolontaireBySecteur($secteur);
+        dd($volontaires);
+
         $templatedEmail = (new TemplatedEmail())
             ->from(new Address($this->from))
             ->to(new Address($message->to))

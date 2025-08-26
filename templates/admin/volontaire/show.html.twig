@@ -32,6 +32,32 @@
                             </td>
                         </tr>
                         <tr>
+                            <th>Actif<br/>
+                            <span class="text-muted">Peut-être temporairement indisponible</span>
+                            </th>
+                            <td>
+                                {{ volontaire.inactif }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Valider</th>
+                            <td>
+                                {{ volontaire.valider }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Notifier par les associations</th>
+                            <td>
+                                {{ volontaire.notification_message_association }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Notifier lors d'une nouvelle association</th>
+                            <td>
+                                {{ volontaire.notification_new_association }}
+                            </td>
+                        </tr>
+                        <tr>
                             <th>Gérer par le compte</th>
                             <td>
                                 {% if volontaire.user %}

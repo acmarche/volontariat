@@ -213,35 +213,6 @@
                     Contactez-nous
                 </a>
             </div>
-            {% if app.user %}
-                <div class="border-t border-gray-200 pb-3 pt-4">
-                    <div class="flex items-center px-4">
-                        <div class="flex-shrink-0">
-                            <img class="h-10 w-10 rounded-full"
-                                 src=""
-                                 alt="">
-                        </div>
-                        <div class="ml-3">
-                            <div class="text-base font-medium text-gray-800">{{ app.user.name }} {{ app.user.surname }}</div>
-                            <div class=" font-medium text-gray-500"></div>
-                        </div>
-                    </div>
-                    <div class="mt-3 space-y-1">
-                        <a href="{{ path('volontariat_backend_account_edit') }}"
-                           class="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800">
-                            {{ app.user.name }} {{ app.user.surname }}
-                        </a>
-                        <a href="{{ path('volontariat_dashboard') }}"
-                           class="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800">
-                            Tableau de bord
-                        </a>
-                        <a href="{{ path('app_logout') }}"
-                           class="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-800">
-                            Me déconnecter
-                        </a>
-                    </div>
-                </div>
-            {% endif %}
         </div>
     </nav>
 </header>

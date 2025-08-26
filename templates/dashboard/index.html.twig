@@ -9,9 +9,9 @@
             {% if is_granted('ROLE_VOLONTARIAT_ADMIN') %}
                 <a href="{{ path('volontariat_admin_home') }}"
                    class=" block bg-white rounded-lg shadow-md p-6 transform hover:scale-105 hover:shadow-xl transition
-                    duration-300 ease-in-out">
-                    <h3 class="text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
-                        Administration
+                duration-300 ease-in-out">
+                    <h3 class="flex items-center text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
+                        <i class="ti ti-settings-cog mr-2"></i> Administration
                     </h3>
                     <p class="text-gray-400">
                         Accès administrateur.
@@ -21,9 +21,9 @@
             {% if volontaire %}
                 <a href="{{ path('volontariat_volontaire_show', {'uuid': volontaire.uuid}) }}"
                    class=" block bg-white rounded-lg shadow-md p-6 transform hover:scale-105 hover:shadow-xl transition
-                    duration-300 ease-in-out">
-                    <h3 class="text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
-                        Ma fiche volontaire
+                duration-300 ease-in-out">
+                    <h3 class="flex items-center text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
+                        <i class="ti ti-user-circle mr-2"></i> Ma fiche volontaire
                     </h3>
                     <p class="text-gray-400">
                         Remplis vos informations en cliquant sur le lien.
@@ -33,9 +33,9 @@
             {% if association %}
                 <a href="{{ path('volontariat_association_show', {'slug': association.slug}) }}"
                    class=" block bg-white rounded-lg shadow-md p-6 transform hover:scale-105 hover:shadow-xl transition
-                    duration-300 ease-in-out">
-                    <h3 class="text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
-                        Mon association
+                duration-300 ease-in-out">
+                    <h3 class="flex items-center text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
+                        <i class="ti ti-building-community mr-2"></i> Mon association
                     </h3>
                     <p class="text-gray-400">
                         Remplissez vos informations en cliquant sur le lien.
@@ -43,9 +43,9 @@
                 </a>
                 <a href="{{ path('volontariat_volontaire') }}"
                    class=" block bg-white rounded-lg shadow-md p-6 transform hover:scale-105 hover:shadow-xl transition
-                    duration-300 ease-in-out">
-                    <h3 class="text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
-                        Consulter la liste des volontaires
+                duration-300 ease-in-out">
+                    <h3 class="flex items-center text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
+                        <i class="ti ti-users mr-2"></i> Consulter la liste des volontaires
                     </h3>
                     <p class="text-gray-400">
                         Besoin d'aide ? Consulte notre liste des volontaires.
@@ -53,9 +53,9 @@
                 </a>
                 <a href="{{ path('volontariat_backend_besoin') }}"
                    class=" block bg-white rounded-lg shadow-md p-6 transform hover:scale-105 hover:shadow-xl transition
-                    duration-300 ease-in-out">
-                    <h3 class="text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
-                        Publier une annonce de volontariat
+                duration-300 ease-in-out">
+                    <h3 class="flex items-center text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
+                        <i class="ti ti-file-plus mr-2"></i> Publier une annonce de volontariat
                     </h3>
                     <p class="text-gray-400">
                         Besoin d'aide ? Publie une annonce de volontariat, tous les volontaires seront tenu au courant.
@@ -63,9 +63,9 @@
                 </a>
                 <a href="{{ path('volontariat_backend_images_association') }}"
                    class=" block bg-white rounded-lg shadow-md p-6 transform hover:scale-105 hover:shadow-xl transition
-                    duration-300 ease-in-out">
-                    <h3 class="text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
-                        Gérer mes images
+                duration-300 ease-in-out">
+                    <h3 class="flex items-center text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
+                        <i class="ti ti-photo mr-2"></i> Gérer mes images
                     </h3>
                     <p class="text-gray-400">
                         Agrémente ta fiche avec des images.
@@ -75,8 +75,8 @@
             <a
                 href="{{ path('volontariat_backend_besoin') }}"
                 class="bg-white rounded-lg shadow-md p-6 transform hover:scale-105 hover:shadow-xl transition duration-300 ease-in-out">
-                <h3 class="text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
-                    Changer mon mot de passe
+                <h3 class="flex items-center text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
+                    <i class="ti ti-key mr-2"></i> Changer mon mot de passe
                 </h3>
                 <p class="text-gray-400">
                     Effectue l'action en cliquant sur le lien.
@@ -85,8 +85,8 @@
             <a
                 href="{{ path('volontariat_backend_account_edit') }}"
                 class="bg-white rounded-lg shadow-md p-6 transform hover:scale-105 hover:shadow-xl transition duration-300 ease-in-out">
-                <h3 class="text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
-                    Mon compte
+                <h3 class="flex items-center text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
+                    <i class="ti ti-user-edit mr-2"></i> Mon compte
                 </h3>
                 <p class="text-gray-400">
                     Change d'adresse email pour te connecter.
@@ -95,8 +95,8 @@
             <a
                 href="{{ path('volontariat_backend_user_delete') }}"
                 class="bg-white rounded-lg shadow-md p-6 transform hover:scale-105 hover:shadow-xl transition duration-300 ease-in-out">
-                <h3 class="text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
-                    Suppression de mon compte
+                <h3 class="flex items-center text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
+                    <i class="ti ti-user-x mr-2"></i> Suppression de mon compte
                 </h3>
                 <p class="text-gray-400">
                     Envie de nous quitter :-( c'est par ici que cela se passe

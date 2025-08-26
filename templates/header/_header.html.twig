@@ -200,11 +200,11 @@
                    class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800">
                     Associations
                 </a>
-                <a href="{{ path('volontariat_register_index') }}"
-                   class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800">
-                    Je m'inscris
-                </a>
                 {% if app.user == null %}
+                    <a href="{{ path('volontariat_register_index') }}"
+                       class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800">
+                        Je m'inscris
+                    </a>
                     <a href="{{ path('app_login') }}"
                        class="block border-l-4 border-transparent py-2 pl-3 pr-4 text-base font-medium text-gray-600 hover:border-gray-300 hover:bg-gray-50 hover:text-gray-800">
                         Je me connecte

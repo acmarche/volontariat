@@ -8,13 +8,15 @@
         <div class="px-4 py-5 sm:p-6">
 
             <p class="my-5">
-                <a href="{{ absolute_url(path('volontariat_token_show',{'value':token})) }}" class="text-rose-400 hover:text-red-200">
+                <a href="{{ absolute_url(path('volontariat_token_show',{'value':token})) }}"
+                   class="text-rose-400 hover:text-red-200">
                     Complète ta fiche volontaire (secteurs souhaités) en suivant ce lien
                 </a>
             </p>
 
-            <p class="mb-3">Vous pouvez vous connecter à notre plate-forme avec les identifiants suivants
-                ou avec le lien ci-dessus</p>
+            <p class="mb-3">
+                Tu peux te connecter à notre plate-forme
+                avec le lien ci-dessus ou les identifiants suivants</p>
 
             <table class="min-w-full divide-y divide-gray-300">
                 <tr>
@@ -30,12 +32,6 @@
                     <td class="py-3.5 pl-4 pr-3">{{ password }}</td>
                 </tr>
             </table>
-
-            <p class="my-5">
-                <a href="{{ absolute_url(path('volontariat_token_show',{'value':token})) }}" class="text-rose-400 hover:text-red-200">
-                    Vous pouvez changer votre mot de passe sur notre plate-forme
-                </a>
-            </p>
 
             {% include '@AcMarcheVolontariat/emails/_footer.html.twig' %}
 

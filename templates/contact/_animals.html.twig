@@ -13,13 +13,14 @@
 {% block scripts %}
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const btns = document.querySelectorAll('.animal');
-            Array.prototype.forEach.call(btns, function (el, i) {
-                el.addEventListener('click', () => {
+            // Use event delegation on document or a parent container
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('animal')) {
+                    const el = e.target;
                     el.classList.toggle('border-0');
                     el.classList.toggle('border-2');
                     document.querySelector('#contact_captcha').value = el.dataset.url;
-                });
+                }
             });
         });
     </script>

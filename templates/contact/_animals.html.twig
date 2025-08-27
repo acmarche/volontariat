@@ -12,16 +12,25 @@
 </div>
 {% block scripts %}
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // Use event delegation on document or a parent container
-            document.addEventListener('click', function(e) {
-                if (e.target.classList.contains('animal')) {
-                    const el = e.target;
-                    el.classList.toggle('border-0');
-                    el.classList.toggle('border-2');
-                    document.querySelector('#contact_captcha').value = el.dataset.url;
-                }
-            });
-        });
+        function attachAnimalListeners() {
+            const btns = document.querySelectorAll('.animal');
+            if (btns.length > 0) {
+                btns.forEach(function (el) {
+                    if (!el.hasAttribute('data-listener-attached')) {
+                        el.addEventListener('click', () => {
+                            el.classList.toggle('border-0');
+                            el.classList.toggle('border-2');
+                            document.querySelector('#contact_captcha').value = el.dataset.url;
+                        });
+                        el.setAttribute('data-listener-attached', 'true');
+                    }
+                });
+            } else {
+                // Try again in 100ms if elements not found
+                setTimeout(attachAnimalListeners, 300);
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", attachAnimalListeners);
     </script>
 {% endblock %}

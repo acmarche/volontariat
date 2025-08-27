@@ -3,7 +3,7 @@
 
     <div class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow prose prose-slate">
         <div class="px-4 py-5 sm:px-6">
-            <h2 class="text-lg text-green-default font-bold">Nouvelle demande d'une association</h2>
+            <h2 class="text-lg text-green-default font-bold">Nouvelle annonce d'une association</h2>
         </div>
         <div class="px-4 py-5 sm:p-6">
 
@@ -18,7 +18,7 @@
 
             <p class="m-3">
                 Pour l'association <a
-                        href="{{ path('volontariat_association_show',{'slug': association.slug}) }}">{{ association }}</a>
+                    href="{{ path('volontariat_association_show',{'slug': association.slug}) }}">{{ association }}</a>
             </p>
 
             <h4 class="text-lg text-green-default font-bold mt-3">Quand ?</h4>
@@ -38,12 +38,6 @@
             {% if besoin.place %}
                 <h4 class="text-lg text-green-default font-bold mt-3">Lieu de prestation</h4>
                 {{ besoin.place | nl2br }}
-            {% endif %}
-
-            {% if url %}
-                <a href="{{ url }}" class="block mt-4 m-5">
-                    Me connecter à la plate-forme et gérer mes préférences
-                </a>
             {% endif %}
 
             {% include '@AcMarcheVolontariat/emails/_footer.html.twig' %}

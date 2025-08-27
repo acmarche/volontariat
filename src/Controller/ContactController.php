@@ -2,6 +2,7 @@
 
 namespace AcMarche\Volontariat\Controller;
 
+use AcMarche\Volontariat\Controller\Backend\getAssociationTrait;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Secteur;
 use AcMarche\Volontariat\Entity\Volontaire;
@@ -21,6 +22,8 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class ContactController extends AbstractController
 {
+    use getAssociationTrait;
+
     public function __construct(
         private readonly VolontaireRepository $volontaireRepository,
         private readonly MailerContact $mailerContact,
@@ -86,13 +89,17 @@ class ContactController extends AbstractController
         );
     }
 
-
     #[Route(path: '/contact/volontaire/by/secteur/{id}', name: 'volontariat_contact_volontaire_by_secteur')]
     #[IsGranted(RolesEnum::volontaire->value)]
     public function volontairesBySecteur(
         Request $request,
         Secteur $secteur,
     ): Response {
+
+        if (($hasAssociation = $this->hasAssociation()) instanceof Response) {
+            return $hasAssociation;
+        }
+
         $form = $this->createForm(ContactType::class, null);
 
         $form->handleRequest($request);
@@ -103,7 +110,7 @@ class ContactController extends AbstractController
             if ($this->validateForm($request, $data)) {
                 try {
                     $this->addFlash('success', 'Les volontaires ont bien été contacté');
-                    $this->mailerContact->sendToVolontairesBySecteur($secteur, $data);
+                    $this->mailerContact->sendToVolontairesBySecteur($this->association, $secteur, $data);
                 } catch (TransportExceptionInterface|Exception $e) {
                     $this->addFlash('danger', "Erreur lors de l'envoie du mail");
                 }
@@ -113,6 +120,7 @@ class ContactController extends AbstractController
         }
 
         $volontaires = $this->volontaireRepository->findVolontaireBySecteur($secteur);
+
         return $this->render(
             '@Volontariat/contact/volontaires.html.twig',
             [
@@ -159,7 +167,6 @@ class ContactController extends AbstractController
             return false;
         }
 
-        dd($data);
         if (!$this->spamHandler->checkCaptcha($data['captcha'])) {
             $this->addFlash('danger', 'Vous n\'avez pas sélectionné le chat :-(');
 

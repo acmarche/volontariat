@@ -6,6 +6,7 @@ use AcMarche\Volontariat\Entity\Message;
 use AcMarche\Volontariat\Form\Admin\MessageType;
 use AcMarche\Volontariat\Mailer\Mailer;
 use AcMarche\Volontariat\Mailer\MessageService;
+use AcMarche\Volontariat\Security\RolesEnum;
 use AcMarche\Volontariat\Security\TokenManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,7 +15,6 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-use AcMarche\Volontariat\Security\RolesEnum;
 #[IsGranted(RolesEnum::association->value)]
 class MessageController extends AbstractController
 {

@@ -2,13 +2,13 @@
 
 namespace AcMarche\Volontariat\Mailer;
 
-use Symfony\Component\HttpFoundation\File\File;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Besoin;
 use AcMarche\Volontariat\Entity\Message;
 use AcMarche\Volontariat\Entity\Volontaire;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
@@ -23,11 +23,14 @@ class Mailer
         private MailerInterface $mailer,
         #[Autowire('%env(VOLONTARIAT_MAILER_FROM)%')]
         private string $from,
-    ) {}
+    ) {
+    }
 
     /**
-     * @param array $message
-     *
+     * Envoie depuis l'admin vers associations ou volontaires
+     * @param string $to
+     * @param Message $message
+     * @param string|null $url
      * @throws TransportExceptionInterface
      */
     public function sendRegularMessage(
@@ -62,6 +65,7 @@ class Mailer
     }
 
     /**
+     * Depuis une commande, non utilisé
      * @throws TransportExceptionInterface
      */
     public function sendAutoAssociation(
@@ -101,13 +105,14 @@ class Mailer
         $templatedEmail = (new TemplatedEmail())
             ->from($association->email)
             ->to(new Address($volontaire->email))
+            ->replyTo(new Address($association->email))
             ->bcc(new Address('jf@marche.be'))
-            ->subject('Un nouveau besoin sur la plate-forme du volontariat')
+            ->subject('Une nouvelle annonce sur la plate-forme du volontariat')
             ->htmlTemplate('@Volontariat/emails/_new_besoin.html.twig')
             ->context(
                 array_merge($this->defaultParams(), [
                     'besoin' => $besoin,
-                    'association' => $besoin->getAssociation(),
+                    'association' => $association,
                     'url' => $urlLink,
                 ]),
             );

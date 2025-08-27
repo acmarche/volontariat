@@ -136,9 +136,6 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
     #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'])]
     public ?User $user = null;
 
-    #[ORM\Column(type: Types::BOOLEAN, nullable: false, options: ['default' => 1])]
-    public bool $valider = true;
-
     #[ORM\Column(type: Types::BOOLEAN, nullable: false)]
     public bool $inactif = false;
 

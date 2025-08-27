@@ -39,7 +39,6 @@ class VolontaireRepository extends ServiceEntityRepository
         $vehicule = $args['vehicule'] ?? null;
         $user = $args['user'] ?? null;
         $localite = $args['city'] ?? null;
-        $valider = $args['valider'] ?? null;
         $createdAt = $args['createdAt'] ?? null;
 
         $queryBuilder = $this->createQbl();
@@ -78,16 +77,6 @@ class VolontaireRepository extends ServiceEntityRepository
             $queryBuilder
                 ->andWhere('vehicules = :vehicule')
                 ->setParameter('vehicule', $vehicule);
-        }
-
-        if (false === $valider) {
-            $queryBuilder
-                ->andWhere('volontaire.valider = :valider')
-                ->setParameter('valider', false);
-        } elseif (2 != $valider) {
-            $queryBuilder
-                ->andWhere('volontaire.valider = :valider')
-                ->setParameter('valider', true);
         }
 
         if ($user) {
@@ -157,10 +146,8 @@ class VolontaireRepository extends ServiceEntityRepository
         return $this
             ->createQbl()
             ->andWhere('volontaire.notification_message_association = :notification')
-            ->andWhere('volontaire.valider = :valider')
             ->andWhere('volontaire.inactif = :inactif')
             ->setParameter('notification', true)
-            ->setParameter('valider', true)
             ->setParameter('inactif', false)
             ->getQuery()->getResult();
     }
@@ -177,19 +164,6 @@ class VolontaireRepository extends ServiceEntityRepository
     }
 
     /**
-     * Use MapEntity url
-     */
-    public function findOneByUuid(string $uuid): ?Volontaire
-    {
-        return $this
-            ->createQueryBuilder('volontaire')
-            ->andWhere('volontaire.uuid = :uuid')
-            ->setParameter('uuid', $uuid, ParameterType::STRING)
-            ->getQuery()
-            ->getOneOrNullResult();
-    }
-
-    /**
      * @param Secteur $secteur
      * @return array<int,Volontaire>
      */
@@ -200,11 +174,22 @@ class VolontaireRepository extends ServiceEntityRepository
             ->andWhere(':id MEMBER OF volontaire.secteurs')
             ->setParameter('id', $secteur->getId(), ParameterType::INTEGER)
             ->andWhere('volontaire.notification_message_association = :notification')
-        //    ->andWhere('volontaire.valider = :valider')
-       //     ->andWhere('volontaire.inactif = :inactif')
+            ->andWhere('volontaire.inactif = :inactif')
             ->setParameter('notification', true)
-          //  ->setParameter('valider', true)
-          //  ->setParameter('inactif', false)
+            ->setParameter('inactif', false)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @return array<int,Volontaire>
+     */
+    public function findActif(): array
+    {
+        return $this
+            ->createQueryBuilder('volontaire')
+            ->andWhere('volontaire.inactif = :inactif')
+            ->setParameter('inactif', false)
             ->getQuery()
             ->getResult();
     }

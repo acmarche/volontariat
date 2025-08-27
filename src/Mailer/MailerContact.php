@@ -33,7 +33,7 @@ class MailerContact
     public function sendContact(array $data): void
     {
         $templatedEmail = (new TemplatedEmail())
-            ->from(new Address($this->from,$data['email']))
+            ->from(new Address($this->from, $data['email']))
             ->to(new Address($this->from))
             ->subject('Contact sur la plate-forme du volontariat')
             ->htmlTemplate('@Volontariat/emails/_page_contact.html.twig')
@@ -52,7 +52,7 @@ class MailerContact
     public function sendToVolontaire(Volontaire $volontaire, array $data): void
     {
         $templatedEmail = (new TemplatedEmail())
-            ->from(new Address($this->from,$data['email']))
+            ->from(new Address($this->from, $data['email']))
             ->to(new Address($volontaire->email))
             ->bcc(new Address($this->from))
             ->subject('On vous contact via la plate-forme du volontariat')
@@ -73,7 +73,7 @@ class MailerContact
     public function sendToAssociation(Association $association, array $data): void
     {
         $templatedEmail = (new TemplatedEmail())
-            ->from(new Address($this->from,$data['email']))
+            ->from(new Address($this->from, $data['email']))
             ->to(new Address($this->from))
             ->bcc(new Address($this->from))
             ->subject('On vous contact via la plate-forme du volontariat')
@@ -94,8 +94,9 @@ class MailerContact
     public function sendReferencerVolontaire(Association $association, Volontaire $volontaire, Message $message): void
     {
         $templatedEmail = (new TemplatedEmail())
-            ->from(new Address($this->from,$message['email']))
+            ->from(new Address($this->from, $message['email']))
             ->to(new Address($volontaire->email))
+            ->replyTo(new Address($association->email))
             ->bcc(new Address($this->from))
             ->subject($association->name.' vous recommande un volontaire')
             ->htmlTemplate('@Volontariat/emails/_recommande_volontaire.html.twig')
@@ -131,24 +132,31 @@ class MailerContact
         $this->mailer->send($templatedEmail);
     }
 
-    public function sendToVolontairesBySecteur(Secteur $secteur, mixed $data)
+    public function sendToVolontairesBySecteur(Association $association, Secteur $secteur, array $data)
     {
         $volontaires = $this->volontaireRepository->findVolontaireBySecteur($secteur);
-        dd($volontaires);
 
-        $templatedEmail = (new TemplatedEmail())
-            ->from(new Address($this->from))
-            ->to(new Address($message->to))
-            ->bcc(new Address($this->from))
-            ->subject($message->sujet.' vous recommande une association')
-            ->htmlTemplate('@Volontariat/emails/_recommande_association.html.twig')
-            ->context(
-                array_merge($this->defaultParams(), [
-                    'data' => $message,
-                    'association' => $association,
-                ])
-            );
+        foreach ($volontaires as $volontaire) {
+            $templatedEmail = (new TemplatedEmail())
+                ->from(new Address($this->from))
+                ->bcc(new Address($this->from))
+                ->replyTo(new Address($association->email))
+                ->subject('On vous contact via la plate-forme du volontariat')
+                ->htmlTemplate('@Volontariat/emails/_to_volontaire.html.twig')
+                ->context(
+                    array_merge($this->defaultParams(), [
+                        'data' => $data,
+                        'association' => $association,
+                        'volontaire' => $volontaire,
+                    ])
+                );
 
-        $this->mailer->send($templatedEmail);
+            $templatedEmail->to(new Address($volontaire->email));
+            try {
+                $this->mailer->send($templatedEmail);
+            } catch (TransportExceptionInterface $e) {
+
+            }
+        }
     }
 }

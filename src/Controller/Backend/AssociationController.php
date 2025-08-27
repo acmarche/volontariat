@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 use AcMarche\Volontariat\Security\RolesEnum;
-#[IsGranted(RolesEnum::volontaire->value)]
+#[IsGranted(RolesEnum::association->value)]
 class AssociationController extends AbstractController
 {
     use getAssociationTrait;

@@ -25,7 +25,6 @@ class VolontaireController extends AbstractController
     public function index(Request $request): Response
     {
         $data = [];
-        $data['valider'] = 2;
 
         $form = $this->createForm(SearchVolontaireType::class, $data);
         $form->handleRequest($request);

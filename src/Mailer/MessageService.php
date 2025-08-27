@@ -19,7 +19,7 @@ class MessageService
     {
         return match ($query) {
             'association' => $this->associationRepository->search(['valider' => true]),
-            'volontaire' => $this->volontaireRepository->search(['valider' => true]),
+            'volontaire' => $this->volontaireRepository->findActif(),
             default => [],
         };
     }

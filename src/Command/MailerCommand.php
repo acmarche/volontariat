@@ -33,7 +33,7 @@ class MailerCommand extends Command
     protected function configure(): void
     {
         $this
-            ->addArgument('query', InputArgument::REQUIRED, 'Argument description');
+            ->addArgument('query', InputArgument::REQUIRED, 'association ou volontaire');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

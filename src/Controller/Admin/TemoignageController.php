@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 use AcMarche\Volontariat\Security\RolesEnum;
-#[IsGranted(RolesEnum::association->value)]
+#[IsGranted(RolesEnum::admin->value)]
 class TemoignageController extends AbstractController
 {
     public function __construct(private ManagerRegistry $managerRegistry)

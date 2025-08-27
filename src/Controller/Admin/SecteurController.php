@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 use AcMarche\Volontariat\Security\RolesEnum;
-#[IsGranted(RolesEnum::association->value)]
+#[IsGranted(RolesEnum::admin->value)]
 class SecteurController extends AbstractController
 {
     public function __construct(private SecteurRepository $secteurRepository)

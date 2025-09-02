@@ -4,7 +4,7 @@
 
     <!-- Card 1: Volunteer -->
     <!-- We add the 'group' class to the link to control child element styles on hover -->
-    <a href="#" class="group block" x-data="{}"
+    <a href="{{ path('volontariat_register_voluntary') }}" class="group block" x-data="{}"
        x-init="$el.style.opacity = 1; $el.style.transform = 'translateY(0)'"
        style="opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease-out, transform 0.5s ease-out;">
 
@@ -30,7 +30,7 @@
     </a>
 
     <!-- Card 2: Association -->
-    <a href="#" class="group block" x-data="{}"
+    <a href="{{ path('volontariat_register_association') }}" class="group block" x-data="{}"
        x-init="$el.style.opacity = 1; $el.style.transform = 'translateY(0)'"
        style="opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease-out 0.2s, transform 0.5s ease-out 0.2s;">
 

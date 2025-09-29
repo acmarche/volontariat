@@ -170,7 +170,7 @@ class ContactController extends AbstractController
         if (!$this->spamHandler->checkCaptcha($data['captcha'])) {
             $this->addFlash('danger', 'Vous n\'avez pas sélectionné le chat :-(');
 
-            return false;
+           // return false;
         }
 
         return true;

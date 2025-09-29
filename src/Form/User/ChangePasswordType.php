@@ -4,7 +4,7 @@ namespace AcMarche\Volontariat\Form\User;
 
 use AcMarche\Volontariat\Entity\Security\User;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
@@ -16,7 +16,7 @@ class ChangePasswordType extends AbstractType
         $formBuilder
             ->add(
                 'plainPassword',
-                PasswordType::class,
+                TextType::class,
                 [
                     'label' => 'Nouveau mot de passe',
                     'constraints' => [new Length(min: 6, max: 30)],

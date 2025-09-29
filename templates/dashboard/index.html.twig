@@ -23,7 +23,17 @@
                    class=" block bg-white rounded-lg shadow-md p-6 transform hover:scale-105 hover:shadow-xl transition
                 duration-300 ease-in-out">
                     <h3 class="flex items-center text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
-                        <i class="ti ti-user-circle mr-2"></i> Ma fiche volontaire
+                        <i class="ti ti-user-circle mr-2"></i> Editer ma fiche volontaire
+                    </h3>
+                    <p class="text-gray-400">
+                        Remplis vos informations en cliquant sur le lien.
+                    </p>
+                </a>
+                <a href="{{ path('volontariat_volontaire_show', {'uuid': volontaire.uuid}) }}"
+                   class=" block bg-white rounded-lg shadow-md p-6 transform hover:scale-105 hover:shadow-xl transition
+                duration-300 ease-in-out">
+                    <h3 class="flex items-center text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
+                        <i class="ti ti-user-circle mr-2"></i> Consulter ma fiche volontaire
                     </h3>
                     <p class="text-gray-400">
                         Remplis vos informations en cliquant sur le lien.

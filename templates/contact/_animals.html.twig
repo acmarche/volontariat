@@ -15,9 +15,11 @@
         function attachAnimalListeners() {
             const btns = document.querySelectorAll('.animal');
             if (btns.length > 0) {
+                console.log('Found ' + btns.length + ' animals');
                 btns.forEach(function (el) {
                     if (!el.hasAttribute('data-listener-attached')) {
                         el.addEventListener('click', () => {
+                            console.log('clicked ');
                             el.classList.toggle('border-0');
                             el.classList.toggle('border-2');
                             document.querySelector('#contact_captcha').value = el.dataset.url;

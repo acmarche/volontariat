@@ -60,6 +60,8 @@ class Besoin implements Stringable
     #[ORM\JoinColumn(nullable: false)]
     protected ?Association $association;
 
+    public bool $forceSend = false;
+
     public function __toString(): string
     {
         return $this->getName();

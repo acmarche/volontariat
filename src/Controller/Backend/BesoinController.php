@@ -3,9 +3,11 @@
 namespace AcMarche\Volontariat\Controller\Backend;
 
 use AcMarche\Volontariat\Entity\Besoin;
+use AcMarche\Volontariat\Form\Admin\BesoinEditType;
 use AcMarche\Volontariat\Form\Admin\BesoinType;
 use AcMarche\Volontariat\Message\BesoinCreated;
 use AcMarche\Volontariat\Repository\BesoinRepository;
+use AcMarche\Volontariat\Security\RolesEnum;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -15,7 +17,6 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-use AcMarche\Volontariat\Security\RolesEnum;
 #[IsGranted(RolesEnum::volontaire->value)]
 class BesoinController extends AbstractController
 {
@@ -24,7 +25,8 @@ class BesoinController extends AbstractController
     public function __construct(
         private readonly BesoinRepository $besoinRepository,
         private readonly MessageBusInterface $messageBus,
-    ) {}
+    ) {
+    }
 
     #[Route(path: '/backend/besoin/index', name: 'volontariat_backend_besoin', methods: ['GET'])]
     public function index(): Response
@@ -84,9 +86,11 @@ class BesoinController extends AbstractController
 
     #[Route(path: '/backend/besoin/{uuid}/edit', name: 'volontariat_backend_besoin_edit')]
     #[IsGranted('edit', subject: 'besoin')]
-    public function edit(Request $request,#[MapEntity(expr: 'repository.findOneByUuid(uuid)')]  Besoin $besoin): Response
-    {
-        $form = $this->createForm(BesoinType::class, $besoin);
+    public function edit(
+        Request $request,
+        #[MapEntity(expr: 'repository.findOneByUuid(uuid)')] Besoin $besoin
+    ): Response {
+        $form = $this->createForm(BesoinEditType::class, $besoin);
 
         $form->handleRequest($request);
 
@@ -94,6 +98,10 @@ class BesoinController extends AbstractController
             $this->besoinRepository->flush();
 
             $this->addFlash('success', 'Le besoin a bien été modifié');
+
+            if ($besoin->forceSend) {
+                $this->messageBus->dispatch(new BesoinCreated($besoin->getId()));
+            }
 
             return $this->redirectToRoute('volontariat_backend_besoin');
         }

@@ -28,13 +28,9 @@
                     }
                 });
             } else {
-                console.log('not Found ' + ' animals');
-                // Try again in 100ms if elements not found
-                setTimeout(attachAnimalListeners, 1000);
+
             }
         }
-
-        document.addEventListener("DOMContentLoaded", attachAnimalListeners);
-        setTimeout(attachAnimalListeners, 1000);
+        document.addEventListener("turbo:load", attachAnimalListeners);
     </script>
 {% endblock %}

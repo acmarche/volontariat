@@ -6,6 +6,8 @@ use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Form\Admin\VolontaireType;
 use AcMarche\Volontariat\Form\Search\SearchVolontaireType;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
+use AcMarche\Volontariat\Search\Searcher;
+use AcMarche\Volontariat\Security\RolesEnum;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,24 +15,25 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-use AcMarche\Volontariat\Security\RolesEnum;
 #[IsGranted(RolesEnum::admin->value)]
 class VolontaireController extends AbstractController
 {
     public function __construct(
         private VolontaireRepository $volontaireRepository,
-    ) {}
+    ) {
+    }
 
     #[Route(path: '/admin/volontaire/', name: 'volontariat_admin_volontaire')]
     public function index(Request $request): Response
     {
-        $data = [];
+        $data  = $request->getSession()->get(Searcher::searchVolontaires,[]);
 
         $form = $this->createForm(SearchVolontaireType::class, $data);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
+            $request->getSession()->set(Searcher::searchVolontaires, $data);
         }
 
         $volontaires = $this->volontaireRepository->search($data);

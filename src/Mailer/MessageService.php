@@ -15,11 +15,11 @@ class MessageService
     ) {
     }
 
-    public function getDestinataires(string $query)
+    public function getDestinataires(string $forWho, array $query = []): array
     {
-        return match ($query) {
-            'association' => $this->associationRepository->search(['valider' => true]),
-            'volontaire' => $this->volontaireRepository->findActif(),
+        return match ($forWho) {
+            'association' => $this->associationRepository->search($query),
+            'volontaire' => $this->volontaireRepository->search($query),
             default => [],
         };
     }

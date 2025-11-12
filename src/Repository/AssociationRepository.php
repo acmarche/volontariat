@@ -46,6 +46,8 @@ class AssociationRepository extends ServiceEntityRepository
         $secteurs = $args['secteurs'] ?? null;
         $user = $args['user'] ?? null;
         $valider = $args['valider'] ?? true;
+        $localite = $args['city'] ?? null;
+        $inscritLe = $args['createdAt'] ?? null;
 
         $queryBuilder = $this->createQBl();
 
@@ -55,6 +57,21 @@ class AssociationRepository extends ServiceEntityRepository
                     'association.email LIKE :mot OR association.name LIKE :mot OR association.description LIKE :mot ',
                 )
                 ->setParameter('mot', '%'.$nom.'%');
+        }
+
+        if ($localite) {
+            $queryBuilder
+                ->andWhere(
+                    'association.city LIKE :localite OR association.postalCode LIKE :localite ',
+                )
+                ->setParameter('localite', '%'.$localite.'%');
+        }
+        if ($inscritLe instanceof \DateTimeInterface) {
+            $queryBuilder
+                ->andWhere(
+                    'association.createdAt >= :date',
+                )
+                ->setParameter('date', $inscritLe->format('Y-m').'-01');
         }
 
         if ($secteur) {

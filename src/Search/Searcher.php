@@ -9,6 +9,9 @@ use Symfony\Component\Routing\RouterInterface;
 
 class Searcher
 {
+    public const searchAssocations = 'searchAssociation';
+    public const searchVolontaires = 'searchVolontaire';
+
     public function __construct(
         private AssociationRepository $associationRepository,
         private BesoinRepository $besoinRepository,

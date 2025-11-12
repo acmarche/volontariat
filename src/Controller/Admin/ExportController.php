@@ -126,20 +126,23 @@ class ExportController extends AbstractController
          */
         $c = 1;
         $worksheet->setCellValue('A'.$c, 'Nom')
-            ->setCellValue('C'.$c, 'Rue')
-            ->setCellValue('D'.$c, 'Code postal')
-            ->setCellValue('E'.$c, 'Localité')
-            ->setCellValue('G'.$c, 'Téléphone')
-            ->setCellValue('H'.$c, 'Gsm')
-            ->setCellValue('I'.$c, 'Email')
-            ->setCellValue('J'.$c, 'Site')
-            ->setCellValue('K'.$c, 'Valide')
-            ->setCellValue('L'.$c, 'Inscrit le');
+            ->setCellValue('B'.$c, 'Rue')
+            ->setCellValue('C'.$c, 'Code postal')
+            ->setCellValue('D'.$c, 'Localité')
+            ->setCellValue('E'.$c, 'Téléphone')
+            ->setCellValue('F'.$c, 'Gsm')
+            ->setCellValue('G'.$c, 'Email')
+            ->setCellValue('H'.$c, 'Site')
+            ->setCellValue('I'.$c, 'Valide')
+            ->setCellValue('J'.$c, 'Inscrit le');
 
         $l = 2;
 
         foreach ($associations as $association) {
-            $neLe = null != $association->getCreatedAt()->format('Y-m-d');
+            $neLe = '';
+            if ($association->getCreatedAt() instanceof \DateTimeInterface) {
+                $neLe = $association->getCreatedAt()->format('Y-m-d');
+            }
 
             $worksheet->setCellValue('A'.$l, $association->name)
                 ->setCellValue('B'.$l, $association->address)

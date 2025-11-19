@@ -30,10 +30,8 @@ class AssociationController extends AbstractController
     {
         $data = $request->getSession()->get(Searcher::searchAssocations, []);
 
-        $form = $this->createForm(
-            SearchAssociationType::class,
-            $data,
-        );
+        $form = $this->createForm(SearchAssociationType::class, $data);
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();

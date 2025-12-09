@@ -6,6 +6,8 @@ use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Form\Admin\AssocationType;
 use AcMarche\Volontariat\Form\Search\SearchAssociationType;
 use AcMarche\Volontariat\Repository\AssociationRepository;
+use AcMarche\Volontariat\Search\Searcher;
+use AcMarche\Volontariat\Security\RolesEnum;
 use AcMarche\Volontariat\Service\FileHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -13,7 +15,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use AcMarche\Volontariat\Security\RolesEnum;
 
 #[IsGranted(RolesEnum::admin->value)]
 class AssociationController extends AbstractController
@@ -21,21 +22,20 @@ class AssociationController extends AbstractController
     public function __construct(
         private AssociationRepository $associationRepository,
         private FileHelper $fileHelper,
-    ) {}
+    ) {
+    }
 
     #[Route(path: '/admin/association/', name: 'volontariat_admin_association', methods: ['GET', 'POST'])]
     public function index(Request $request): Response
     {
-        $data = [];
-        $data['valider'] = 2;
+        $data = $request->getSession()->get(Searcher::searchAssocations, []);
 
-        $form = $this->createForm(
-            SearchAssociationType::class,
-            $data,
-        );
+        $form = $this->createForm(SearchAssociationType::class, $data);
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
+            $request->getSession()->set(Searcher::searchAssocations, $data);
         }
 
         $associations = $this->associationRepository->search($data);

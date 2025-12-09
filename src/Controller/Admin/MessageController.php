@@ -6,6 +6,7 @@ use AcMarche\Volontariat\Entity\Message;
 use AcMarche\Volontariat\Form\Admin\MessageType;
 use AcMarche\Volontariat\Mailer\Mailer;
 use AcMarche\Volontariat\Mailer\MessageService;
+use AcMarche\Volontariat\Search\Searcher;
 use AcMarche\Volontariat\Security\RolesEnum;
 use AcMarche\Volontariat\Security\TokenManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,15 +26,22 @@ class MessageController extends AbstractController
     ) {
     }
 
-    #[Route(path: '/admin/message/new/{query}', name: 'volontariat_admin_message_new')]
-    public function new(Request $request, string $query): Response
+    #[Route(path: '/admin/message/new/{forWho}', name: 'volontariat_admin_message_new')]
+    public function new(Request $request, string $forWho): Response
     {
         $message = new Message();
         $form = $this->createForm(MessageType::class, $message);
 
         $form->handleRequest($request);
+        $query = [];
+        if ($forWho === 'association') {
+            $query = $request->getSession()->get(Searcher::searchAssocations,[]);
+        }
+        if ($forWho === 'volontaire') {
+            $query = $request->getSession()->get(Searcher::searchVolontaires,[]);
+        }
 
-        $destinataires = $this->messageService->getDestinataires($query);
+        $destinataires = $this->messageService->getDestinataires($forWho, $query);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
@@ -63,9 +71,9 @@ class MessageController extends AbstractController
             '@Volontariat/admin/message/new.html.twig',
             [
                 'message' => $message,
-                'query' => $query,
                 'destinataires' => $destinataires,
                 'form' => $form,
+                'forYou' => $forWho,
             ]
         );
     }

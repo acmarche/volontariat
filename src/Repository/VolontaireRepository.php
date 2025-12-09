@@ -51,14 +51,14 @@ class VolontaireRepository extends ServiceEntityRepository
 
         if ($localite) {
             $queryBuilder
-                ->andWhere('volontaire.city LIKE :loca ')
+                ->andWhere('volontaire.city LIKE :loca OR volontaire.postalCode LIKE :loca ')
                 ->setParameter('loca', '%'.$localite.'%');
         }
 
-        if ($createdAt) {
+        if ($createdAt instanceof \DateTimeInterface) {
             $queryBuilder
                 ->andWhere('volontaire.createdAt >= :date ')
-                ->setParameter('date', $createdAt);
+                ->setParameter('date', $createdAt->format('Y-m').'-01');
         }
 
         if ($secteur) {
@@ -85,9 +85,7 @@ class VolontaireRepository extends ServiceEntityRepository
                 ->setParameter('user', $user);
         }
 
-        $queryBuilder->addOrderBy('volontaire.name', 'ASC');
-
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder->addOrderBy('volontaire.name', 'ASC')->getQuery()->getResult();
     }
 
     /**

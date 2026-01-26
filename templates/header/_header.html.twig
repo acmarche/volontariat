@@ -3,7 +3,7 @@
         <div class="mx-auto max-w-8xl px-2 sm:px-4 lg:px-8">
             <div class="flex h-16 justify-between">
                 <div class="flex px-2 lg:px-0">
-                    <div class="flex flex-shrink-0 items-center">
+                    <div class="flex shrink-0 items-center">
                         <img class="block h-8 w-auto lg:hidden"
                              src="{{ asset('/bundles/acmarchevolontariat/images/Marche.png') }}" alt="Volontariat">
                         <img class="hidden h-8 w-auto lg:block"
@@ -102,7 +102,7 @@
                 {% if app.user %}
                     <div class="hidden lg:ml-4 lg:flex lg:items-center" x-data="{ menuOpen: false }">
                         <!-- Profile dropdown -->
-                        <div class="relative ml-4 flex-shrink-0">
+                        <div class="relative ml-4 shrink-0">
                             <div>
                                 <button type="button"
                                         @click="menuOpen = !menuOpen"
@@ -135,7 +135,7 @@
                                 To: "transform opacity-0 scale-95"
                             -->
                             <div
-                                class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 focus:outline-hidden"
                                 x-show="menuOpen"
                                 x-cloak
                                 x-transition:enter="transition ease-out duration-100"

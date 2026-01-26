@@ -62,11 +62,15 @@ class UtilisateurController extends AbstractController
             }
         }
 
+        $response = new Response(null, $form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
+
         return $this->render(
             '@Volontariat/admin/user/index.html.twig',
             [
                 'users' => $users,
+                'form' => $form,
             ]
+            , $response
         );
     }
 

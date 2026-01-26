@@ -33,7 +33,7 @@ class UtilisateurController extends AbstractController
     ) {
     }
 
-    #[Route(path: '/admin/user/', name: 'volontariat_admin_user', methods: ['GET'])]
+    #[Route(path: '/admin/user/', name: 'volontariat_admin_user', methods: ['GET','POST'])]
     public function index(Request $request): Response
     {
         $form = $this->createForm(SearchUserType::class);

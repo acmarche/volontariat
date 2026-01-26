@@ -29,10 +29,14 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
      */
-    public function upgradePassword(PasswordAuthenticatedUserInterface $passwordAuthenticatedUser, string $newHashedPassword): void
-    {
+    public function upgradePassword(
+        PasswordAuthenticatedUserInterface $passwordAuthenticatedUser,
+        string $newHashedPassword
+    ): void {
         if (!$passwordAuthenticatedUser instanceof User) {
-            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $passwordAuthenticatedUser::class));
+            throw new UnsupportedUserException(
+                sprintf('Instances of "%s" are not supported.', $passwordAuthenticatedUser::class)
+            );
         }
 
         $passwordAuthenticatedUser->password = $newHashedPassword;
@@ -59,5 +63,18 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function qbqForList(): QueryBuilder
     {
         return $this->createQueryBuilder('user')->addOrderBy('user.name');
+    }
+
+    /**
+     * @param string $name
+     * @return array<int, User>
+     */
+    public function findByName(string $name): array
+    {
+        return $this
+            ->createQueryBuilder('user')
+            ->andWhere('user.email LIKE :email OR user.name LIKE :name')
+            ->setParameter('email', $name)
+            ->getQuery()->getResult();
     }
 }

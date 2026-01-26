@@ -5,7 +5,8 @@
     <div class="card">
         <h3 class="card-header">Liste des {{ users|length }} comptes utilisateurs</h3>
         <div class="card-body">
-            <table class="table table-bordered table-hover">
+            {{ include('@Volontariat/admin/search/user.html.twig') }}
+            <table class="table table-bordered table-hover mt-3">
                 <thead>
                 <tr>
                     <th>Nom</th>

@@ -3,14 +3,16 @@
 namespace AcMarche\Volontariat\Controller\Admin;
 
 use AcMarche\Volontariat\Entity\Association;
-use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Entity\Security\User;
+use AcMarche\Volontariat\Entity\Volontaire;
+use AcMarche\Volontariat\Form\Search\SearchUserType;
 use AcMarche\Volontariat\Form\User\ChangePasswordType;
 use AcMarche\Volontariat\Form\User\UserEditType;
 use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Repository\UserRepository;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
 use AcMarche\Volontariat\Security\PasswordGenerator;
+use AcMarche\Volontariat\Security\RolesEnum;
 use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -20,7 +22,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-use AcMarche\Volontariat\Security\RolesEnum;
 #[IsGranted(RolesEnum::admin->value)]
 class UtilisateurController extends AbstractController
 {
@@ -33,20 +34,31 @@ class UtilisateurController extends AbstractController
     }
 
     #[Route(path: '/admin/user/', name: 'volontariat_admin_user', methods: ['GET'])]
-    public function index(): Response
+    public function index(Request $request): Response
     {
-        $users = $this->userRepository->findBy([], ['name' => 'ASC']);
+        $form = $this->createForm(SearchUserType::class);
+
+        $form->handleRequest($request);
+        $users = [];
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            if ($data['name']) {
+                $users = $this->userRepository->findByName($data['name']);
+            }
+        } else {
+            $users = $this->userRepository->findBy([], ['name' => 'ASC']);
+        }
         foreach ($users as $user) {
             try {
                 $user->volontaire = $this->volontaireRepository->findVolontaireByUser($user);
             } catch (NonUniqueResultException $e) {
-                dd($user);
             }
 
             try {
                 $user->association = $this->associationRepository->findAssociationByUser($user);
             } catch (NonUniqueResultException $e) {
-                dd($user);
+
             }
         }
 
@@ -92,7 +104,7 @@ class UtilisateurController extends AbstractController
             '@Volontariat/admin/user/edit.html.twig',
             [
                 'user' => $user,
-                'edit_form' =>  $editForm,
+                'edit_form' => $editForm,
             ]
         );
     }

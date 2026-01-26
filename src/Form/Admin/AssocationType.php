@@ -38,6 +38,7 @@ class AssocationType extends AbstractType
             ])
             ->add('email', EmailType::class, [
                 'label' => 'Courriel',
+                'help' => 'zeez',
             ])
             ->add(
                 'web_site',

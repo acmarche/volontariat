@@ -42,6 +42,7 @@ class RegisterAssociationType extends AbstractType
             )
             ->add('email', EmailType::class, [
                 'label' => 'Courriel',
+                'help' => ' Afin de garantir la continuité d’accès, l’accès à une fiche association doit idéalement être lié à une adresse e-mail de l’association (et non à une adresse personnelle).',
             ])
             ->add(
                 'description',

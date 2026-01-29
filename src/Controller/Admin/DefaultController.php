@@ -16,4 +16,12 @@ class DefaultController extends AbstractController
     {
         return $this->render('@Volontariat/admin/default/index.html.twig');
     }
+
+    #[Route(path: '/documentation', name: 'volontariat_documentation')]
+    public function documentation(): Response
+    {
+        return $this->render('@Volontariat/admin/default/documentation.html.twig', [
+
+        ]);
+    }
 }

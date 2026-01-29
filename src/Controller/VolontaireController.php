@@ -6,20 +6,18 @@ use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Form\Search\SearchVolontaireType;
 use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
-use AcMarche\Volontariat\Security\SecurityData;
+use AcMarche\Volontariat\Security\Voter\VolontaireVoter;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class VolontaireController extends AbstractController
 {
     public function __construct(
-        private VolontaireRepository $volontaireRepository,
-        private AssociationRepository $associationRepository,
-        private AuthorizationCheckerInterface $authorizationChecker,
+        private readonly VolontaireRepository $volontaireRepository,
+        private readonly AssociationRepository $associationRepository,
     ) {}
 
     #[Route(path: '/volontaire/', name: 'volontariat_volontaire')]
@@ -33,7 +31,7 @@ class VolontaireController extends AbstractController
         }
 
         $volontaires = $this->volontaireRepository->search($data);
-        if (!$this->authorizationChecker->isGranted(SecurityData::getRoleAssociation())) {
+        if (!$this->isGranted(VolontaireVoter::INDEX)) {
             return $this->render(
                 '@Volontariat/volontaire/index_not_connected.html.twig',
                 [
@@ -55,7 +53,7 @@ class VolontaireController extends AbstractController
     #[Route(path: '/volontaire/{uuid}', name: 'volontariat_volontaire_show')]
     public function show(#[MapEntity(expr: 'repository.findOneByUuid(uuid)')] Volontaire $volontaire): Response
     {
-        if (!$this->authorizationChecker->isGranted('show', $volontaire)) {
+        if (!$this->isGranted(VolontaireVoter::SHOW, $volontaire)) {
             return $this->render(
                 '@Volontariat/volontaire/show_not_connected.html.twig',
                 [

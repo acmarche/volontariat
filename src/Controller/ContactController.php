@@ -90,7 +90,7 @@ class ContactController extends AbstractController
     }
 
     #[Route(path: '/contact/volontaire/by/secteur/{id}', name: 'volontariat_contact_volontaire_by_secteur')]
-    #[IsGranted(RolesEnum::volontaire->value)]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function volontairesBySecteur(
         Request $request,
         Secteur $secteur,

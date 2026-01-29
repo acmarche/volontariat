@@ -19,7 +19,7 @@ class TokenController extends AbstractController
     }
 
     #[Route(path: '/token/', name: 'volontariat_token_index')]
-    #[IsGranted(RolesEnum::association->value)]
+    #[IsGranted(RolesEnum::admin->value)]
     public function index(Request $request): Response
     {
         $form = $this->createForm(EmptyType::class);

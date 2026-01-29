@@ -8,6 +8,7 @@ use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Form\Contact\ReferencerType;
 use AcMarche\Volontariat\Mailer\MailerContact;
 use AcMarche\Volontariat\Mailer\MessageService;
+use AcMarche\Volontariat\Security\RolesEnum;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,10 +17,11 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-use AcMarche\Volontariat\Security\RolesEnum;
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 class ReferencerController extends AbstractController
 {
     use getAssociationTrait;
+
     public function __construct(
         private MailerContact $mailerContact,
         private MessageService $messageService
@@ -27,9 +29,10 @@ class ReferencerController extends AbstractController
     }
 
     #[Route(path: '/referencer/volontaire/{uuid}', name: 'volontariat_referencer_volontaire')]
-    #[IsGranted(RolesEnum::volontaire->value)]
-    public function volontaire(Request $request,#[MapEntity(expr: 'repository.findOneByUuid(uuid)')]  Volontaire $volontaire): Response
-    {
+    public function volontaire(
+        Request $request,
+        #[MapEntity(expr: 'repository.findOneByUuid(uuid)')] Volontaire $volontaire
+    ): Response {
         if (($hasAssociation = $this->hasAssociation()) instanceof Response) {
             return $hasAssociation;
         }

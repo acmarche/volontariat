@@ -3,6 +3,7 @@
 namespace AcMarche\Volontariat\Entity;
 
 use AcMarche\Volontariat\Entity\Security\User;
+use AcMarche\Volontariat\Security\RolesEnum;
 use Stringable;
 use Doctrine\DBAL\Types\Types;
 use DateTimeInterface;
@@ -185,7 +186,7 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
 
     public function getRoles(): array
     {
-        return ['ROLE_VOLONTARIAT'];
+        return [RolesEnum::volontaire->value];
     }
 
     public function getId(): int

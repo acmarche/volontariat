@@ -17,7 +17,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[IsGranted(RolesEnum::volontaire->value)]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 class BesoinController extends AbstractController
 {
     use getAssociationTrait;

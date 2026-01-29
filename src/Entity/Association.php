@@ -3,6 +3,7 @@
 namespace AcMarche\Volontariat\Entity;
 
 use AcMarche\Volontariat\Entity\Security\User;
+use AcMarche\Volontariat\Security\RolesEnum;
 use DateTimeInterface;
 use Stringable;
 use Doctrine\DBAL\Types\Types;
@@ -176,7 +177,11 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
 
     public function getRoles(): array
     {
-        return ['ROLE_ASSOCIATION'];
+        if (!$this->valider) {
+            return [];
+        }
+
+        return [RolesEnum::association->value];
     }
 
     public function getId(): int

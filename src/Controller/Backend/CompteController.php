@@ -18,7 +18,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Constraints\Length;
 use AcMarche\Volontariat\Security\RolesEnum;
 
-#[IsGranted(RolesEnum::volontaire->value)]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 class CompteController extends AbstractController
 {
     public function __construct(

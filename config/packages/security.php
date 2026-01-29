@@ -89,7 +89,4 @@ return static function (SecurityConfig $securityConfig): void {
             'path' => '/',
             'always_remember_me' => true,
         ]);
-
-    $securityConfig->roleHierarchy('ROLE_ASSOCIATION', ['ROLE_VOLONTARIAT']);
-    $securityConfig->roleHierarchy('ROLE_VOLONTARIAT_ADMIN', ['ROLE_VOLONTARIAT', 'ROLE_ASSOCIATION']);
 };

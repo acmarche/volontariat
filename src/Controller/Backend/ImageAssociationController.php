@@ -2,9 +2,9 @@
 
 namespace AcMarche\Volontariat\Controller\Backend;
 
-use Exception;
 use AcMarche\Volontariat\Form\Admin\ImageDropZoneType;
 use AcMarche\Volontariat\Service\FileHelper;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -15,13 +15,14 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-use AcMarche\Volontariat\Security\RolesEnum;
-#[IsGranted(RolesEnum::volontaire->value)]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 class ImageAssociationController extends AbstractController
 {
     use getAssociationTrait;
 
-    public function __construct(private FileHelper $fileHelper) {}
+    public function __construct(private FileHelper $fileHelper)
+    {
+    }
 
     #[Route(path: '/backend/association/images/', name: 'volontariat_backend_images_association', methods: ['GET'])]
     public function edit(Request $request): Response

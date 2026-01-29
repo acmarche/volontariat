@@ -10,8 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-use AcMarche\Volontariat\Security\RolesEnum;
-#[IsGranted(RolesEnum::association->value)]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 class AssociationController extends AbstractController
 {
     use getAssociationTrait;

@@ -22,6 +22,11 @@ trait getAssociationTrait
             return $this->redirectToRoute('volontariat_dashboard');
         }
 
+        if (!$user->valider) {
+            $this->addFlash('danger', 'Votre association n\'est pas encore validée');
+
+            return null;
+        }
         $this->association = $user;
 
         return null;

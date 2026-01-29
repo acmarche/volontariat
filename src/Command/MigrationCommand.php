@@ -5,6 +5,7 @@ namespace AcMarche\Volontariat\Command;
 use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Repository\UserRepository;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
+use AcMarche\Volontariat\Security\RolesEnum;
 use AcMarche\Volontariat\Security\TokenManager;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -57,7 +58,7 @@ class MigrationCommand extends Command
 
         foreach ($this->userRepository->findAll() as $user) {
 
-            if ($user->hasRole('ROLE_VOLONTARIAT_ADMIN')) {
+            if ($user->hasRole(RolesEnum::admin->value)) {
                 $io->warning("User {$user->email} is admin");
                 continue;
             }

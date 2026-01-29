@@ -7,7 +7,6 @@ use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Form\Admin\TemoignageType;
 use AcMarche\Volontariat\Repository\TemoignageRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormInterface;
@@ -15,9 +14,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-use AcMarche\Volontariat\Security\RolesEnum;
-#[IsGranted(RolesEnum::volontaire->value)]
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 class TemoignageController extends AbstractController
 {
     public function __construct(

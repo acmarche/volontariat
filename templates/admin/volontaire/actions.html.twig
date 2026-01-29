@@ -2,6 +2,10 @@
    class="btn btn-primary"><i
             class="ti ti-pencil"></i> Editer</a>
 
+<a href="{{ path('volontariat_admin_volontaire_password', { 'id': volontaire.id }) }}" role="button"
+   class="btn btn-primary"><i
+        class="ti ti-lock"></i> Mot de passe</a>
+
 <a href="{{ path('volontariat_volontaire_show', { 'uuid': volontaire.uuid }) }}" role="button"
    class="btn btn-primary" target="apercu"><i class="ti ti-eye"></i> Voir sur le site</a>
 

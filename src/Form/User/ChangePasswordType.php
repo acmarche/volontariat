@@ -2,11 +2,11 @@
 
 namespace AcMarche\Volontariat\Form\User;
 
-use AcMarche\Volontariat\Entity\Security\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints\Length;
 
 class ChangePasswordType extends AbstractType
@@ -28,7 +28,7 @@ class ChangePasswordType extends AbstractType
     {
         $optionsResolver->setDefaults(
             [
-                'data_class' => User::class,
+                'data_class' => UserInterface::class,
             ]
         );
     }

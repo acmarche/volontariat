@@ -88,31 +88,6 @@ class UtilisateurController extends AbstractController
         );
     }
 
-    #[Route(path: '/admin/user/password/{id}', name: 'volontariat_admin_user_password', methods: ['GET', 'POST'])]
-    public function password(Request $request, User $user): Response
-    {
-        $form = $this->createForm(ChangePasswordType::class, $user);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $user->password = $this->passwordGenerator->cryptPassword($user, $form->getData()->plainPassword);
-            $this->userRepository->flush();
-
-            $this->addFlash('success', 'Mot de passe changé');
-
-            return $this->redirectToRoute('volontariat_admin_user_show', ['id' => $user->getId()]);
-        }
-
-        return $this->render(
-            '@Volontariat/admin/user/password.html.twig',
-            [
-                'user' => $user,
-                'form' => $form,
-            ]
-        );
-    }
-
     #[Route(path: '/admin/user/{id}/delete', name: 'volontariat_admin_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user): RedirectResponse
     {

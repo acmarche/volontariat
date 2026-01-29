@@ -26,8 +26,8 @@
                 <tr>
                     <th>Url pour connection automatique</th>
                     <td>
-                        {% if user.token %}
-                            <a href="{{ path('volontariat_token_show', {'value':  user.token.value}) }}">
+                        {% if user.tokenValue %}
+                            <a href="{{ path('volontariat_token_show', {'value':  user.tokenValue}) }}">
                                 Lien de connection
                             </a>
                         {% endif %}

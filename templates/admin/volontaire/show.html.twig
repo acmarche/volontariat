@@ -33,14 +33,10 @@
                         </tr>
                         <tr>
                             <th>
-                                Inactif
-                                <br/>
-                                <span class="text-muted">
                                 Je suis indisponible pour le moment
-                            </span>
                             </th>
                             <td>
-                                {{ volontaire.inactif }}
+                                {{ volontaire.inactif ? '<span class="text-danger">Oui</span>' : 'Non' }}
                             </td>
                         </tr>
                         <tr>
@@ -56,11 +52,11 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>Gérer par le compte</th>
+                            <th>Url pour connection automatique</th>
                             <td>
-                                {% if volontaire.user %}
-                                    <a href="{{ path('volontariat_admin_user_show', { 'id': volontaire.user.id }) }}">
-                                        {{ volontaire.user }}
+                                {% if volontaire.tokenValue %}
+                                    <a href="{{ path('volontariat_token_show', {'value':  volontaire.tokenValue}) }}">
+                                        Lien de connection
                                     </a>
                                 {% endif %}
                             </td>

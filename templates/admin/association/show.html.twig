@@ -39,11 +39,11 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>Gérer par le compte</th>
+                            <th>Url pour connection automatique</th>
                             <td>
-                                {% if association.user %}
-                                    <a href="{{ path('volontariat_admin_user_show', { 'id': association.user.id }) }}">
-                                        {{ association.user }}
+                                {% if association.tokenValue %}
+                                    <a href="{{ path('volontariat_token_show', {'value':  association.tokenValue}) }}">
+                                        Lien de connection
                                     </a>
                                 {% endif %}
                             </td>

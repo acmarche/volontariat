@@ -39,7 +39,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                {% include '@AcMarcheVolontariat/admin/_menu_user.html.twig' %}
+                {% include '@Volontariat/admin/_menu_user.html.twig' %}
             </ul>
             <ul class="navbar-nav mb-2 mb-lg-0">
                 {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
@@ -62,7 +62,7 @@
 <main role="main" class="flex-shrink-0">
     <div class="{% block container_class %}container{% endblock %} pt-3">
 
-        {% include '@AcMarcheVolontariat/admin/_flash_messages.html.twig' %}
+        {% include '@Volontariat/admin/_flash_messages.html.twig' %}
 
         {% block notifications %}
 

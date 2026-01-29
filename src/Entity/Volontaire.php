@@ -62,7 +62,6 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
      * @AcMarcheAssert\CodePostalIsBelgium
      */
     #[ORM\Column(type: Types::INTEGER, nullable: true)]
-    #[Assert\NotBlank]
     public ?int $postalCode;
 
     #[ORM\Column(type: Types::STRING, nullable: false)]

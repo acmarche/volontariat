@@ -46,7 +46,7 @@ class VolontaireType extends AbstractType
                 'required' => false,
                 'label' => 'Année de naissance',
                 'constraints' => [
-                    new Range(min: 1955, max: 2020),
+                    new Range(min: 1930, max: 2020),
                 ],
             ])
             ->add(

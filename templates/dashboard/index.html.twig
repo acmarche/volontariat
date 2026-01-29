@@ -19,7 +19,7 @@
                 </a>
             {% endif %}
             {% if volontaire %}
-                <a href="{{ path('volontariat_backend_volontaire_edit', {'uuid': volontaire.uuid}) }}"
+                <a href="{{ path('volontariat_backend_volontaire_edit') }}"
                    class=" block bg-white rounded-lg shadow-md p-6 transform hover:scale-105 hover:shadow-xl transition
                 duration-300 ease-in-out">
                     <h3 class="flex items-center text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
@@ -41,7 +41,7 @@
                 </a>
             {% endif %}
             {% if association %}
-                <a href="{{ path('volontariat_backend_association_edit', {'slug': association.slug}) }}"
+                <a href="{{ path('volontariat_backend_association_edit') }}"
                    class=" block bg-white rounded-lg shadow-md p-6 transform hover:scale-105 hover:shadow-xl transition
                 duration-300 ease-in-out">
                     <h3 class="flex items-center text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">

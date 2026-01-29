@@ -66,16 +66,22 @@ class VolontaireVoter extends Voter
             return false;
         }
 
-        return (bool) $user->valider;
+        return (bool)$user->valider;
     }
 
     private function canView(Volontaire $volontaire, TokenInterface $token): bool
     {
-        if ($this->accessDecisionManager->decide($token, [SecurityData::getRoleAssociation()])) {
+        $user = $token->getUser();
+
+        if ($this->canEdit($volontaire, $token)) {
             return true;
         }
 
-        return $this->canEdit($volontaire, $token);
+        if (!$user instanceof Association) {
+            return false;
+        }
+
+        return (bool)$user->valider;
     }
 
     private function canEdit(Volontaire $volontaire, TokenInterface $token): bool

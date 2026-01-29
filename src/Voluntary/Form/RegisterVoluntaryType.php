@@ -50,8 +50,6 @@ class RegisterVoluntaryType extends AbstractType
             ->add('accord', CheckboxType::class, [
                 'required' => true,
                 'label' => false,
-                'help_html' => true,
-                'help' => '<a href="https://www.marche.be/administration/rgpd/" target="_blank">J\'ai pris connaissance du règlement de la vie privée</a>',
             ]);
     }
 

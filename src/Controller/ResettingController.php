@@ -39,6 +39,11 @@ class ResettingController extends AbstractController
             }
 
             $token = $this->tokenManager->generate($user);
+            if (!$token) {
+                $this->addFlash('danger', 'Le lien pour vous connecter n\'a pas pu être généré');
+
+                return $this->redirectToRoute('volontariat_password_lost');
+            }
 
             try {
                 $this->mailerSecurity->sendRequestNewPassword($user, $token);

@@ -2,15 +2,13 @@
 
 namespace AcMarche\Volontariat\Security;
 
-use DateTime;
 use AcMarche\Volontariat\Entity\Association;
-use AcMarche\Volontariat\Entity\Security\Token;
 use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Repository\AssociationRepository;
-use AcMarche\Volontariat\Repository\TokenRepository;
 use AcMarche\Volontariat\Repository\UserRepository;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
+use DateTime;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -24,7 +22,6 @@ class TokenManager
     public function __construct(
         private UserAuthenticatorInterface $userAuthenticator,
         private AuthenticatorInterface $formLoginAuthenticator,
-        private TokenRepository $tokenRepository,
         private UserRepository $userRepository,
         private AssociationRepository $associationRepository,
         private VolontaireRepository $volontaireRepository,
@@ -32,13 +29,13 @@ class TokenManager
     ) {
     }
 
-    public function generate(UserInterface $user, ?DateTime $expireAt = null): Token|string
+    public function generate(UserInterface $user, ?DateTime $expireAt = null): ?string
     {
         if (!$expireAt instanceof DateTime) {
             $expireAt = new DateTime('+90 day');
         }
 
-        if ($user instanceof Association || $user instanceof Volontaire) {
+        if ($user instanceof Association || $user instanceof Volontaire || $user instanceof User) {
             try {
                 $user->tokenValue = bin2hex(random_bytes(20));
             } catch (Exception) {
@@ -49,28 +46,15 @@ class TokenManager
             return $user->tokenValue;
         }
 
-        // User (admin) - use Token entity
-        $token = $this->getInstanceForUser($user);
-        try {
-            $token->setValue(bin2hex(random_bytes(20)));
-        } catch (Exception) {
-        }
-        $token->setExpireAt($expireAt);
-        $this->tokenRepository->flush();
-
-        return $token;
+        return null;
     }
 
-    public function isExpired(Token|UserInterface $tokenOrEntity): bool
+    public function isExpired(?UserInterface $entity): bool
     {
         $today = new DateTime('today');
 
-        if ($tokenOrEntity instanceof Token) {
-            return $today > $tokenOrEntity->getExpireAt();
-        }
-
-        if (($tokenOrEntity instanceof Association || $tokenOrEntity instanceof Volontaire) && $tokenOrEntity->tokenExpireAt) {
-            return $today > $tokenOrEntity->tokenExpireAt;
+        if (($entity instanceof Association || $entity instanceof Volontaire || $entity instanceof User)) {
+            return $today > $entity->tokenExpireAt;
         }
 
         return true;
@@ -126,23 +110,11 @@ class TokenManager
             return $volontaire;
         }
 
-        $token = $this->tokenRepository->findOneBy(['value' => $value]);
-        if ($token instanceof Token) {
-            return $token->getUser();
+        if ($user = $this->userRepository->findOneByTokenValue($value)) {
+            return $user;
         }
 
         return null;
-    }
-
-    private function getInstanceForUser(User $user): Token
-    {
-        if (($token = $this->tokenRepository->findOneBy(['user' => $user])) === null) {
-            $token = new Token();
-            $token->setUser($user);
-            $this->tokenRepository->persist($token);
-        }
-
-        return $token;
     }
 
     private function flush(UserInterface $user): void

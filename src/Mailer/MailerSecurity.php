@@ -3,7 +3,6 @@
 namespace AcMarche\Volontariat\Mailer;
 
 use AcMarche\Volontariat\Entity\Association;
-use AcMarche\Volontariat\Entity\Security\Token;
 use AcMarche\Volontariat\Entity\Volontaire;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -74,10 +73,8 @@ class MailerSecurity
     /**
      * @throws TransportExceptionInterface
      */
-    public function sendRequestNewPassword(UserInterface $user, Token|string $token): void
+    public function sendRequestNewPassword(UserInterface $user, string $tokenValue): void
     {
-        $tokenValue = $token instanceof Token ? $token->getValue() : $token;
-
         $templatedEmail = (new TemplatedEmail())
             ->from($this->from)
             ->to(new Address($user->getUserIdentifier()))

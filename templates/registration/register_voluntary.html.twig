@@ -53,11 +53,17 @@
                             </div>
                         </div>
 
-                        <div class="col-span-6 sm:col-span-3">
+                        <div class="col-span-6 mt-4">
                             {{ form_errors(form.accord) }}
-                            {{ form_widget(form.accord, {'attr': {'class': 'mb-3 h-6 w-12 mt-2 block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm: sm:leading-6'}}) }}
-                            {{ form_help(form.accord) }}
-                            {{ form_label(form.accord, 'Accord', {'label_attr': {'class': 'block  font-medium leading-6 text-gray-900'}}) }}
+                            <div class="flex items-start gap-3">
+                                {{ form_widget(form.accord, {'attr': {'class': 'h-5 w-5 mt-0.5 rounded border-gray-300 text-green-default focus:ring-green-default cursor-pointer'}}) }}
+                                <label for="{{ form.accord.vars.id }}" class="text-sm text-gray-700 cursor-pointer">
+                                    <span class="text-red-500">*</span>
+                                    <a href="https://www.marche.be/administration/rgpd/" target="_blank" class="text-green-default hover:text-green-light hover:underline">
+                                        J'ai pris connaissance du règlement de la vie privée
+                                    </a>
+                                </label>
+                            </div>
                         </div>
                     </div>
 

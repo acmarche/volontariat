@@ -2,12 +2,13 @@
 
 namespace AcMarche\Volontariat\Security\Voter;
 
+use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Besoin;
-use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Security\SecurityData;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * It grants or denies permissions for actions related to blog posts (such as
@@ -47,7 +48,7 @@ class BesoinVoter extends Voter
     {
         $user = $token->getUser();
 
-        if (!$user instanceof User) {
+        if (!$user instanceof UserInterface) {
             return false;
         }
 
@@ -74,9 +75,8 @@ class BesoinVoter extends Voter
     private function canEdit(Besoin $besoin, TokenInterface $token): bool
     {
         $user = $token->getUser();
-        $associationUser = $besoin->getAssociation()->user;
 
-        return $user === $associationUser;
+        return $user instanceof Association && $user->getId() === $besoin->getAssociation()?->getId();
     }
 
     private function canDelete(Besoin $besoin, TokenInterface $token): bool

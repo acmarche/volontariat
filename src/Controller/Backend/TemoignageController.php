@@ -3,6 +3,7 @@
 namespace AcMarche\Volontariat\Controller\Backend;
 
 use AcMarche\Volontariat\Entity\Temoignage;
+use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Form\Admin\TemoignageType;
 use AcMarche\Volontariat\Repository\TemoignageRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -47,7 +48,7 @@ class TemoignageController extends AbstractController
         $user = $this->getUser();
         $temoignage = new Temoignage();
         $temoignage->setUser($user->getUserIdentifier());
-        $temoignage->setNom($user->getPrenom());
+        $temoignage->setNom($user instanceof Volontaire ? $user->surname : $user->getUserIdentifier());
 
         $form = $this->createForm(TemoignageType::class, $temoignage)
             ->add('submit', SubmitType::class, array('label' => 'Create'));

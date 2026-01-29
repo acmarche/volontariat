@@ -131,8 +131,10 @@ class ContactController extends AbstractController
     }
 
     #[Route(path: '/contact/association/{slug}', name: 'volontariat_contact_association')]
-    public function association(Request $request, Association $association): Response
-    {
+    public function association(
+        Request $request,
+        #[MapEntity(expr: 'repository.findOneBySlug(slug)')] Association $association
+    ): Response {
         $form = $this->createForm(ContactType::class, null);
 
         $form->handleRequest($request);

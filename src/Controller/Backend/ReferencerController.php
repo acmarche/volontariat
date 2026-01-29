@@ -4,7 +4,6 @@ namespace AcMarche\Volontariat\Controller\Backend;
 
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Message;
-use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Form\Contact\ReferencerType;
 use AcMarche\Volontariat\Mailer\MailerContact;
@@ -69,9 +68,6 @@ class ReferencerController extends AbstractController
     #[Route(path: '/referencer/association/{slug}', name: 'volontariat_referencer_association')]
     public function association(Request $request, Association $association): Response
     {
-        /**
-         * @var User $user
-         */
         $user = $this->getUser();
 
         $message = new Message();

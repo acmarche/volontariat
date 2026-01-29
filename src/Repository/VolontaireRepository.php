@@ -10,6 +10,9 @@ use Doctrine\DBAL\ParameterType;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -19,7 +22,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @method Volontaire[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @extends ServiceEntityRepository<Volontaire>
  */
-class VolontaireRepository extends ServiceEntityRepository
+class VolontaireRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
     use OrmCrudTrait;
 
@@ -28,6 +31,31 @@ class VolontaireRepository extends ServiceEntityRepository
         parent::__construct($managerRegistry, Volontaire::class);
     }
 
+    public function upgradePassword(
+        PasswordAuthenticatedUserInterface $passwordAuthenticatedUser,
+        string $newHashedPassword
+    ): void {
+        if (!$passwordAuthenticatedUser instanceof Volontaire) {
+            throw new UnsupportedUserException(
+                sprintf('Instances of "%s" are not supported.', $passwordAuthenticatedUser::class)
+            );
+        }
+
+        $passwordAuthenticatedUser->password = $newHashedPassword;
+        $this->flush();
+    }
+
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function findAssociationByUser(UserInterface $user): ?Volontaire
+    {
+        return $this
+            ->createQBl()
+            ->andWhere('volontaire.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()->getOneOrNullResult();
+    }
     /**
      * @return Volontaire[]
      */
@@ -37,7 +65,6 @@ class VolontaireRepository extends ServiceEntityRepository
         $secteur = $args['secteur'] ?? null;
         $secteurs = $args['secteurs'] ?? null;
         $vehicule = $args['vehicule'] ?? null;
-        $user = $args['user'] ?? null;
         $localite = $args['city'] ?? null;
         $createdAt = $args['createdAt'] ?? null;
 
@@ -79,12 +106,6 @@ class VolontaireRepository extends ServiceEntityRepository
                 ->setParameter('vehicule', $vehicule);
         }
 
-        if ($user) {
-            $queryBuilder
-                ->andWhere('user = :user')
-                ->setParameter('user', $user);
-        }
-
         return $queryBuilder->addOrderBy('volontaire.name', 'ASC')->getQuery()->getResult();
     }
 
@@ -123,17 +144,14 @@ class VolontaireRepository extends ServiceEntityRepository
         return $cities;
     }
 
-    /**
-     * @throws NonUniqueResultException
-     */
-    public function findVolontaireByUser(UserInterface $user): ?Volontaire
+    public function findOneByEmail(string $email): ?Volontaire
     {
-        return $this
-            ->createQbl()
-            ->andWhere('volontaire.user = :user')
-            ->setParameter('user', $user)
-            ->orderBy('volontaire.city')
-            ->getQuery()->getOneOrNullResult();
+        return $this->findOneBy(['email' => $email]);
+    }
+
+    public function findOneByTokenValue(string $value): ?Volontaire
+    {
+        return $this->findOneBy(['tokenValue' => $value]);
     }
 
     /**
@@ -156,9 +174,8 @@ class VolontaireRepository extends ServiceEntityRepository
             ->createQueryBuilder('volontaire')
             ->leftJoin('volontaire.association', 'association', 'WITH')
             ->leftJoin('volontaire.secteurs', 'secteurs', 'WITH')
-            ->leftJoin('volontaire.user', 'user', 'WITH')
             ->leftJoin('volontaire.vehicules', 'vehicules', 'WITH')
-            ->addSelect('secteurs', 'vehicules', 'user', 'association');
+            ->addSelect('secteurs', 'vehicules', 'association');
     }
 
     /**

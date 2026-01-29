@@ -2,8 +2,8 @@
 
 namespace AcMarche\Volontariat\Security;
 
-use AcMarche\Volontariat\Entity\Security\User;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\String\ByteString;
 
 class PasswordGenerator
@@ -18,12 +18,12 @@ class PasswordGenerator
         return ByteString::fromRandom(8);
     }
 
-    public function cryptPassword(User $user, string $plainPassword): string
+    public function cryptPassword(UserInterface $user, string $plainPassword): string
     {
         return $this->userPasswordHasher->hashPassword($user, $plainPassword);
     }
 
-    public function generateAndCrypt(User $user): string
+    public function generateAndCrypt(UserInterface $user): string
     {
         return $this->cryptPassword($user, $this->generate());
     }

@@ -134,6 +134,6 @@ class User implements UserInterface, PasswordHasherAwareInterface, LegacyPasswor
 
     public function getPasswordHasherName(): ?string
     {
-        return 'cap_hasher';
+        return null;
     }
 }

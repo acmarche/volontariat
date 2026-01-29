@@ -2,7 +2,6 @@
 
 namespace AcMarche\Volontariat\Controller;
 
-use AcMarche\Volontariat\Entity\Security\Token;
 use AcMarche\Volontariat\Form\EmptyType;
 use AcMarche\Volontariat\Security\TokenManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -40,15 +39,22 @@ class TokenController extends AbstractController
     }
 
     #[Route(path: '/token/{value}', name: 'volontariat_token_show')]
-    public function show(Request $request, Token $token): RedirectResponse
+    public function show(Request $request, string $value): RedirectResponse
     {
-        if ($this->tokenManager->isExpired($token)) {
-            $this->addFlash('error', 'Cette url a expirée');
+        $user = $this->tokenManager->findByTokenValue($value);
+
+        if (!$user) {
+            $this->addFlash('danger', 'Token invalide');
 
             return $this->redirectToRoute('volontariat_home');
         }
 
-        $user = $token->getUser();
+        if ($this->tokenManager->isExpired($user)) {
+            $this->addFlash('danger', 'Cette url a expirée');
+
+            return $this->redirectToRoute('volontariat_home');
+        }
+
         $this->tokenManager->loginUser($request, $user, 'main');
 
         return $this->redirectToRoute('volontariat_dashboard');

@@ -2,12 +2,12 @@
 
 namespace AcMarche\Volontariat\Security\Voter;
 
-use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Entity\Temoignage;
 use AcMarche\Volontariat\Security\SecurityData;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AccessDecisionManagerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * It grants or denies permissions for actions related to blog posts (such as
@@ -47,7 +47,7 @@ class TemoignageVoter extends Voter
     {
         $user = $token->getUser();
 
-        if (!$user instanceof User) {
+        if (!$user instanceof UserInterface) {
             return false;
         }
 
@@ -74,9 +74,8 @@ class TemoignageVoter extends Voter
     private function canEdit(Temoignage $temoignage, TokenInterface $token): bool
     {
         $user = $token->getUser();
-        $associationUser = $temoignage->getUser();
 
-        return $user === $associationUser;
+        return $user->getUserIdentifier() === $temoignage->getUser();
     }
 
     private function canDelete(Temoignage $temoignage, TokenInterface $token): bool

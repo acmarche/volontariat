@@ -67,7 +67,7 @@ class ImageAssociationController extends AbstractController
                     $this->fileHelper->deleteOneDoc($association, $file);
                     $this->addFlash('success', sprintf("L'image %s a bien été supprimée", $file));
                 } catch (FileException) {
-                    $this->addFlash('error', sprintf("L'image  %s n'a pas pu être supprimée. ", $file));
+                    $this->addFlash('danger', sprintf("L'image  %s n'a pas pu être supprimée. ", $file));
                 }
             }
         }

@@ -2,8 +2,8 @@
 
 namespace AcMarche\Volontariat\Controller;
 
-use AcMarche\Volontariat\Repository\AssociationRepository;
-use AcMarche\Volontariat\Repository\VolontaireRepository;
+use AcMarche\Volontariat\Entity\Association;
+use AcMarche\Volontariat\Entity\Volontaire;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -13,19 +13,19 @@ use AcMarche\Volontariat\Security\RolesEnum;
 #[IsGranted(RolesEnum::volontaire->value)]
 class DashboardController extends AbstractController
 {
-    public function __construct(
-        private AssociationRepository $associationRepository,
-        private VolontaireRepository $volontaireRepository
-    ) {
-    }
-
     #[Route(path: '/dashboard/', name: 'volontariat_dashboard')]
     public function index(): Response
     {
         $user = $this->getUser();
 
-        $association = $this->associationRepository->findAssociationByUser($user);
-        $volontaire = $this->volontaireRepository->findVolontaireByUser($user);
+        $association = null;
+        $volontaire = null;
+
+        if ($user instanceof Association) {
+            $association = $user;
+        } elseif ($user instanceof Volontaire) {
+            $volontaire = $user;
+        }
 
         return $this->render('@Volontariat/dashboard/index.html.twig', [
             'volontaire' => $volontaire,

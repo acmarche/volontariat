@@ -11,8 +11,6 @@
                 <tr>
                     <th>Nom</th>
                     <th>Email</th>
-                    <th>Fiche association</th>
-                    <th>Fiche volontaire</th>
                     <th>Rôles</th>
                 </tr>
                 </thead>
@@ -25,20 +23,6 @@
                             </a>
                         </td>
                         <td>{{ user.email }}</td>
-                        <td>
-                            {% if user.association %}
-                                <a href="{{ path('volontariat_admin_association_show',{'id':user.association.id}) }}">
-                                    {{ user.association }}
-                                </a>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if user.volontaire %}
-                                <a href="{{ path('volontariat_admin_volontaire_show',{'id':user.volontaire.id}) }}">
-                                    {{ user.volontaire }}
-                                </a>
-                            {% endif %}
-                        </td>
                         <td>
                             {% for role in user.roles %}
                                 {{ role }}

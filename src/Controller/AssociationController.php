@@ -7,6 +7,7 @@ use AcMarche\Volontariat\Form\Search\SearchAssociationType;
 use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Repository\BesoinRepository;
 use AcMarche\Volontariat\Service\FileHelper;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -53,7 +54,9 @@ class AssociationController extends AbstractController
     }
 
     #[Route(path: '/association/{slug}', name: 'volontariat_association_show')]
-    public function show(Association $association): Response
+    public function show(
+        #[MapEntity(expr: 'repository.findOneBySlug(slug)')]
+        Association $association): Response
     {
         $images = $this->fileHelper->getImages($association);
         $besoins = $this->besoinRepository->findByAssociation($association);

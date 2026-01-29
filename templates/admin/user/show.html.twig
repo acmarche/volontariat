@@ -24,26 +24,6 @@
                     </td>
                 </tr>
                 <tr>
-                    <th>Gère le volontaire</th>
-                    <td>
-                        {% if volontaire %}
-                            <a href="{{ path('volontariat_admin_volontaire_show',{'id':volontaire.id}) }}">
-                                {{ volontaire }}
-                            </a>
-                        {% endif %}
-                    </td>
-                </tr>
-                <tr>
-                    <th>Gère l'association</th>
-                    <td>
-                        {% if association %}
-                            <a href="{{ path('volontariat_admin_association_show',{'id':association.id}) }}">
-                                {{ association }}
-                            </a>
-                        {% endif %}
-                    </td>
-                </tr>
-                <tr>
                     <th>Url pour connection automatique</th>
                     <td>
                         {% if user.token %}

@@ -2,10 +2,10 @@
 
 namespace AcMarche\Volontariat\Entity;
 
+use AcMarche\Volontariat\Entity\Security\User;
 use Stringable;
 use Doctrine\DBAL\Types\Types;
 use DateTimeInterface;
-use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\InterfaceDef\Uploadable;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
 use AcMarche\Volontariat\Validator\Constraints as AcMarcheAssert;
@@ -17,19 +17,23 @@ use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
 use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
 use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\PasswordHasher\Hasher\PasswordHasherAwareInterface;
+use Symfony\Component\Security\Core\User\LegacyPasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Table(name: 'volontaire')]
 #[ORM\Entity(repositoryClass: VolontaireRepository::class)]
 #[Vich\Uploadable]
-class Volontaire implements Uploadable, TimestampableInterface, SluggableInterface, Stringable
+class Volontaire implements Uploadable, TimestampableInterface, SluggableInterface, Stringable, UserInterface, PasswordHasherAwareInterface, LegacyPasswordAuthenticatedUserInterface
 {
     use TimestampableTrait;
     use SluggableTrait;
     use ImageTrait;
     use NotificationTrait;
     use UuidTrait;
+    use PasswordAuthenticableTrait;
 
     #[ORM\Id]
     #[ORM\Column(type: Types::INTEGER)]
@@ -133,8 +137,11 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
     #[ORM\ManyToMany(targetEntity: Association::class)]
     public Collection|null $association = null;
 
-    #[ORM\ManyToOne(targetEntity: User::class, cascade: ['persist'])]
-    public ?User $user = null;
+    #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
+    public ?bool $accord = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    public ?DateTimeInterface $accord_date = null;
 
     #[ORM\Column(type: Types::BOOLEAN, nullable: false)]
     public bool $inactif = false;
@@ -145,6 +152,9 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
     #[Vich\UploadableField(mapping: 'volontaire_image', fileNameProperty: 'imageName')]
     #[Assert\Image(maxSize: '7M')]
     private ?File $image = null;
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    public ?User $user = null;
 
     public function getPath(): string
     {
@@ -173,16 +183,9 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
         $this->association = new ArrayCollection();
     }
 
-    public static function newFromUser(User $user): self
+    public function getRoles(): array
     {
-        $voluntary = new self();
-        $voluntary->name = $user->name;
-        $voluntary->surname = $user->surname;
-        $voluntary->email = $user->email;
-        $voluntary->city = $user->city;
-        $voluntary->user = $user;
-
-        return $voluntary;
+        return ['ROLE_VOLONTARIAT'];
     }
 
     public function getId(): int

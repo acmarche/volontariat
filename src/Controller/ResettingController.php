@@ -2,10 +2,9 @@
 
 namespace AcMarche\Volontariat\Controller;
 
-use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Form\User\LostPasswordType;
 use AcMarche\Volontariat\Mailer\MailerSecurity;
-use AcMarche\Volontariat\Repository\UserRepository;
+use AcMarche\Volontariat\Security\EmailUniquenessChecker;
 use AcMarche\Volontariat\Security\TokenManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +15,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class ResettingController extends AbstractController
 {
     public function __construct(
-        private UserRepository $userRepository,
+        private EmailUniquenessChecker $emailUniquenessChecker,
         private TokenManager $tokenManager,
         private MailerSecurity $mailerSecurity
     ) {
@@ -30,8 +29,9 @@ class ResettingController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $user = $this->userRepository->findOneByEmail($form->getData()->email);
-            if (!$user instanceof User) {
+            $email = $form->get('email')->getData();
+            $user = $this->emailUniquenessChecker->findByEmail($email);
+            if (!$user) {
                 $this->addFlash('danger', 'Aucun utilisateur trouvé avec cette adresse mail');
                 sleep(3);
 

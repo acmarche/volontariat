@@ -4,14 +4,12 @@ namespace AcMarche\Volontariat\Controller;
 
 use AcMarche\Volontariat\Association\Form\RegisterAssociationType;
 use AcMarche\Volontariat\Entity\Association;
-use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Mailer\MailerSecurity;
 use AcMarche\Volontariat\Repository\AssociationRepository;
-use AcMarche\Volontariat\Repository\UserRepository;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
+use AcMarche\Volontariat\Security\EmailUniquenessChecker;
 use AcMarche\Volontariat\Security\PasswordGenerator;
-use AcMarche\Volontariat\Security\SecurityData;
 use AcMarche\Volontariat\Security\TokenManager;
 use AcMarche\Volontariat\Voluntary\Form\RegisterVoluntaryType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -27,12 +25,12 @@ use Twig\Error\SyntaxError;
 class RegisterController extends AbstractController
 {
     public function __construct(
-        private UserRepository $userRepository,
         private VolontaireRepository $volontaireRepository,
         private AssociationRepository $associationRepository,
         private TokenManager $tokenManager,
         private MailerSecurity $mailerSecurity,
         private PasswordGenerator $passwordGenerator,
+        private EmailUniquenessChecker $emailUniquenessChecker,
     ) {
     }
 
@@ -45,32 +43,28 @@ class RegisterController extends AbstractController
     #[Route(path: '/register/voluntary', name: 'volontariat_register_voluntary', methods: ['GET', 'POST'])]
     public function registerVoluntary(Request $request): Response
     {
-        $user = new User();
-        $form = $this->createForm(RegisterVoluntaryType::class, $user);
+        $volontaire = new Volontaire();
+        $form = $this->createForm(RegisterVoluntaryType::class, $volontaire);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $email = $form->getData()->email;
-            if ($this->userRepository->findOneByEmail($email) instanceof User) {
-                $this->addFlash('danger', 'Un volontaire est déjà inscrit avec cette adresse email');
+            if (!$this->emailUniquenessChecker->isEmailAvailable($email)) {
+                $this->addFlash('danger', 'Un compte est déjà inscrit avec cette adresse email');
 
                 return $this->redirectToRoute('volontariat_register_voluntary');
             }
 
             $plainPassword = $this->passwordGenerator->generate();
-            $user->password = $this->passwordGenerator->cryptPassword($user, $plainPassword);
-            $user->roles = [SecurityData::getRoleVolontariat()];
-            $this->userRepository->insert($user);
+            $volontaire->password = $this->passwordGenerator->cryptPassword($volontaire, $plainPassword);
+            $volontaire->setUuid($volontaire->generateUuid());
+            $this->volontaireRepository->insert($volontaire);
 
-            $voluntary = Volontaire::newFromUser($user);
-            $voluntary->setUuid($voluntary->generateUuid());
-            $this->volontaireRepository->insert($voluntary);
-
-            $token = $this->tokenManager->generate($user);
+            $tokenValue = $this->tokenManager->generate($volontaire);
 
             try {
-                $this->mailerSecurity->sendWelcomeVoluntary($voluntary, $plainPassword, $token);
+                $this->mailerSecurity->sendWelcomeVoluntary($volontaire, $plainPassword, $tokenValue);
             } catch (TransportException|TransportExceptionInterface $e) {
-                $this->addFlash('error', $e->getMessage());
+                $this->addFlash('danger', $e->getMessage());
             }
 
             return $this->redirectToRoute('volontariat_register_complete');
@@ -95,23 +89,20 @@ class RegisterController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $email = $form->getData()->email;
-            if ($this->userRepository->findOneByEmail($email) instanceof User) {
-                $this->addFlash('danger', 'Une association est déjà inscrite avec cette adresse email');
+            if (!$this->emailUniquenessChecker->isEmailAvailable($email)) {
+                $this->addFlash('danger', 'Un compte est déjà inscrit avec cette adresse email');
 
                 return $this->redirectToRoute('volontariat_register_association');
             }
 
-            $user = User::createFromAssociation($association);
             $plainPassword = $this->passwordGenerator->generate();
-            $user->password = $this->passwordGenerator->cryptPassword($user, $plainPassword);
-            $this->userRepository->insert($user);
-
+            $association->password = $this->passwordGenerator->cryptPassword($association, $plainPassword);
             $this->associationRepository->insert($association);
 
-            $token = $this->tokenManager->generate($user);
+            $tokenValue = $this->tokenManager->generate($association);
 
             try {
-                $this->mailerSecurity->sendWelcomeAssociation($association, $plainPassword, $token);
+                $this->mailerSecurity->sendWelcomeAssociation($association, $plainPassword, $tokenValue);
                 $this->addFlash('success', 'Votre Asbl a bien été inscrite');
                 $this->addFlash('warning', 'Votre Asbl doit être validée par un administrateur');
             } catch (TransportException|LoaderError|RuntimeError|SyntaxError|TransportExceptionInterface $e) {

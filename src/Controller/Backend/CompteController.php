@@ -4,27 +4,28 @@ namespace AcMarche\Volontariat\Controller\Backend;
 
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Volontaire;
-use AcMarche\Volontariat\Form\User\ChangePasswordType;
-use AcMarche\Volontariat\Form\User\UserEditPublicType;
 use AcMarche\Volontariat\Repository\AssociationRepository;
-use AcMarche\Volontariat\Repository\UserRepository;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
+use AcMarche\Volontariat\Security\EmailUniquenessChecker;
 use AcMarche\Volontariat\Security\PasswordGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-
+use Symfony\Component\Validator\Constraints\Length;
 use AcMarche\Volontariat\Security\RolesEnum;
+
 #[IsGranted(RolesEnum::volontaire->value)]
 class CompteController extends AbstractController
 {
     public function __construct(
-        private UserRepository $userRepository,
         private AssociationRepository $associationRepository,
         private VolontaireRepository $volontaireRepository,
-        private PasswordGenerator $passwordGenerator
+        private PasswordGenerator $passwordGenerator,
+        private EmailUniquenessChecker $emailUniquenessChecker,
     ) {
     }
 
@@ -33,19 +34,27 @@ class CompteController extends AbstractController
     {
         $user = $this->getUser();
         $oldEmail = $user->email;
-        $form = $this->createForm(UserEditPublicType::class, $user);
+
+        $formBuilder = $this->createFormBuilder($user)
+            ->add('name', TextType::class, ['required' => true]);
+
+        if ($user instanceof Volontaire) {
+            $formBuilder->add('surname', TextType::class, ['required' => true, 'label' => 'Prénom']);
+        }
+
+        $form = $formBuilder
+            ->add('email', EmailType::class, ['required' => true])
+            ->getForm();
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-
-            if ($oldEmail != $data->email && $this->userRepository->findOneByEmailAndSkip($data->email, $user)) {
+            if ($oldEmail !== $user->email && !$this->emailUniquenessChecker->isEmailAvailable($user->email, $user)) {
                 $this->addFlash('danger', 'Cette adresse mail est déjà prise vous ne pouvez pas l\'utiliser');
                 return $this->redirectToRoute('volontariat_dashboard');
             }
 
-            $this->userRepository->flush();
+            $this->flushEntity($user);
             $this->addFlash('success', 'Le compte a été mis à jour');
 
             return $this->redirectToRoute('volontariat_dashboard');
@@ -64,16 +73,21 @@ class CompteController extends AbstractController
     public function password(Request $request): Response
     {
         $user = $this->getUser();
-        $formProfil = $this->createForm(ChangePasswordType::class, $user);
 
-        $formProfil->handleRequest($request);
+        $form = $this->createFormBuilder()
+            ->add('plainPassword', TextType::class, [
+                'label' => 'Nouveau mot de passe',
+                'constraints' => [new Length(min: 6, max: 30)],
+            ])
+            ->getForm();
 
-        if ($formProfil->isSubmitted() && $formProfil->isValid()) {
-            $data = $formProfil->getData();
+        $form->handleRequest($request);
 
-            $user->password = $this->passwordGenerator->cryptPassword($user, $data->plainPassword);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $plainPassword = $form->get('plainPassword')->getData();
+            $user->password = $this->passwordGenerator->cryptPassword($user, $plainPassword);
 
-            $this->userRepository->flush();
+            $this->flushEntity($user);
 
             $this->addFlash('success', 'Profil mis à jour');
 
@@ -84,7 +98,7 @@ class CompteController extends AbstractController
             '@Volontariat/backend/account/password.html.twig',
             [
                 'user' => $user,
-                'form' => $formProfil,
+                'form' => $form,
             ]
         );
     }
@@ -95,17 +109,18 @@ class CompteController extends AbstractController
         $user = $this->getUser();
 
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
-
-            if (($association = $this->associationRepository->findAssociationByUser($user)) instanceof Association) {
-                $this->associationRepository->remove($association);
+            if ($user instanceof Association) {
+                $this->associationRepository->remove($user);
+                $this->associationRepository->flush();
+            } elseif ($user instanceof Volontaire) {
+                $this->volontaireRepository->remove($user);
+                $this->volontaireRepository->flush();
             }
 
-            if (($volontaire = $this->volontaireRepository->findVolontaireByUser($user)) instanceof Volontaire) {
-                $this->volontaireRepository->remove($volontaire);
-            }
+            // Invalidate session
+            $request->getSession()->invalidate();
+            $this->container->get('security.token_storage')->setToken(null);
 
-            $this->userRepository->remove($user);
-            $this->userRepository->flush();
             $this->addFlash('success', 'Le compte a bien été supprimé');
 
             return $this->redirectToRoute('volontariat_home');
@@ -117,5 +132,14 @@ class CompteController extends AbstractController
                 'user' => $user,
             ]
         );
+    }
+
+    private function flushEntity(object $user): void
+    {
+        if ($user instanceof Association) {
+            $this->associationRepository->flush();
+        } elseif ($user instanceof Volontaire) {
+            $this->volontaireRepository->flush();
+        }
     }
 }

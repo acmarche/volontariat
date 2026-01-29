@@ -1,69 +1,130 @@
-{# templates/emails/signup.html.twig #}
-{% apply inky_to_html|inline_css %}
-    <html>
-    <head>
-        <style>
-            {% block style %}
-            {{ source("@email/zurb_2/main.css") }}
-            {{ source("@email/zurb_2/notification/local.css") }}
-            {{ source("@cssV/email.css") }}
-            {% endblock %}
-        </style>
-    </head>
-    <body>
-    <spacer size="32"></spacer>
-    <wrapper class="body">
-        <container
-                class="body_{{ ("urgent" == importance ? "alert" : ("high" == importance ? "warning" : "default")) }}">
-            <spacer size="16"></spacer>
-            <row>
-                <columns large="18" small="12">
-                    {% block lead %}
-                        <p class="lead">
-                            {{ email.subject }}
-                        </p>
-                    {% endblock %}
+{# templates/emails/basic.html.twig #}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{ email.subject }}</title>
+    <!--[if mso]>
+    <noscript>
+        <xml>
+            <o:OfficeDocumentSettings>
+                <o:PixelsPerInch>96</o:PixelsPerInch>
+            </o:OfficeDocumentSettings>
+        </xml>
+    </noscript>
+    <![endif]-->
+    <style>
+        {% block style %}
+        body, table, td, p, a, li { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+        table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+        img { -ms-interpolation-mode: bicubic; border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
+        body { margin: 0; padding: 0; width: 100% !important; }
+        a[x-apple-data-detectors] { color: inherit !important; text-decoration: none !important; font-size: inherit !important; font-family: inherit !important; font-weight: inherit !important; line-height: inherit !important; }
+        @media only screen and (max-width: 600px) {
+            .container { width: 100% !important; padding: 16px !important; }
+            .content-cell { padding: 24px 16px !important; }
+        }
+        {% endblock %}
+    </style>
+</head>
+<body style="margin: 0; padding: 0; background-color: #f4f4f5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+    {# Importance-based border color #}
+    {% set border_color = importance == 'urgent' ? '#dc2626' : (importance == 'high' ? '#f59e0b' : '#72c02c') %}
 
-                    {% block content %}
-                        {% if markdown %}
-                            {{ include('@email/zurb_2/notification/content_markdown.html.twig') }}
-                        {% else %}
-                            {{ (raw ? content|raw : content)|nl2br }}
-                        {% endif %}
-                    {% endblock %}
+    {# Outer wrapper table #}
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color: #f4f4f5;">
+        <tr>
+            <td align="center" style="padding: 32px 16px;">
 
+                {# Main container #}
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" class="container" style="max-width: 600px; width: 100%; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); border-top: 4px solid {{ border_color }};">
+
+                    {# Header / Subject #}
+                    <tr>
+                        <td class="content-cell" style="padding: 32px 40px 24px 40px;">
+                            {% block lead %}
+                            <h1 style="margin: 0; font-size: 24px; font-weight: 600; color: #1f2937; line-height: 1.4;">
+                                {{ email.subject }}
+                            </h1>
+                            {% endblock %}
+                        </td>
+                    </tr>
+
+                    {# Content #}
+                    <tr>
+                        <td class="content-cell" style="padding: 0 40px 24px 40px;">
+                            {% block content %}
+                            <div style="font-size: 16px; line-height: 1.6; color: #374151;">
+                                    {{ (raw ? content|raw : content)|nl2br }}
+                            </div>
+                            {% endblock %}
+                        </td>
+                    </tr>
+
+                    {# Action Button #}
                     {% block action %}
-                        {% if action_url %}
-                            <spacer size="16"></spacer>
-                            <button href="{{ action_url }}">{{ action_text }}</button>
-                        {% endif %}
-                    {% endblock %}
-
-                    {% block exception %}
-                        {% if exception %}
-                            <spacer size="16"></spacer>
-                            <p><em>Exception stack trace attached.</em></p>
-                        {% endif %}
-                    {% endblock %}
-                </columns>
-            </row>
-
-            <wrapper class="secondary">
-                <spacer size="16"></spacer>
-                {% block footer %}
-                    {% if footer_text is defined and footer_text is not null %}
-                        <row>
-                            <columns small="12" large="6">
-                                {% block footer_content %}
-                                    <p><small>{{ footer_text }}</small></p>
-                                {% endblock %}
-                            </columns>
-                        </row>
+                    {% if action_url is defined and action_url %}
+                    <tr>
+                        <td class="content-cell" style="padding: 8px 40px 32px 40px;">
+                            <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                                <tr>
+                                    <td style="border-radius: 6px; background-color: #72c02c;">
+                                        <a href="{{ action_url }}" target="_blank" style="display: inline-block; padding: 14px 28px; font-size: 16px; font-weight: 600; color: #ffffff; text-decoration: none; border-radius: 6px;">
+                                            {{ action_text|default('Voir plus') }}
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
                     {% endif %}
-                {% endblock %}
-            </wrapper>
-        </container>
-    </wrapper>
-    </body>
-    </html>
-{% endapply %}
+                    {% endblock %}
+
+                    {# Exception notice #}
+                    {% block exception %}
+                    {% if exception is defined and exception %}
+                    <tr>
+                        <td class="content-cell" style="padding: 0 40px 24px 40px;">
+                            <p style="margin: 0; font-size: 14px; font-style: italic; color: #6b7280;">
+                                Exception stack trace attached.
+                            </p>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% endblock %}
+
+                    {# Footer #}
+                    {% block footer %}
+                    {% if footer_text is defined and footer_text %}
+                    <tr>
+                        <td style="padding: 24px 40px; background-color: #f9fafb; border-top: 1px solid #e5e7eb; border-radius: 0 0 8px 8px;">
+                            {% block footer_content %}
+                            <p style="margin: 0; font-size: 13px; color: #6b7280; line-height: 1.5;">
+                                {{ footer_text }}
+                            </p>
+                            {% endblock %}
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% endblock %}
+
+                </table>
+
+                {# Platform signature #}
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" style="max-width: 600px; width: 100%;">
+                    <tr>
+                        <td style="padding: 24px 40px; text-align: center;">
+                            <p style="margin: 0; font-size: 12px; color: #9ca3af;">
+                                Plate-forme du volontariat
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

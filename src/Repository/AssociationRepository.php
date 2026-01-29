@@ -11,6 +11,9 @@ use Doctrine\DBAL\ParameterType;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -19,13 +22,27 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @method Association[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  * @extends ServiceEntityRepository<Association>
  */
-class AssociationRepository extends ServiceEntityRepository
+class AssociationRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
 {
     use OrmCrudTrait;
 
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, Association::class);
+    }
+
+    public function upgradePassword(
+        PasswordAuthenticatedUserInterface $passwordAuthenticatedUser,
+        string $newHashedPassword
+    ): void {
+        if (!$passwordAuthenticatedUser instanceof Association) {
+            throw new UnsupportedUserException(
+                sprintf('Instances of "%s" are not supported.', $passwordAuthenticatedUser::class)
+            );
+        }
+
+        $passwordAuthenticatedUser->password = $newHashedPassword;
+        $this->flush();
     }
 
     /**
@@ -37,6 +54,17 @@ class AssociationRepository extends ServiceEntityRepository
     }
 
     /**
+     * @throws NonUniqueResultException
+     */
+    public function findAssociationByUser(UserInterface $user): ?Association
+    {
+        return $this
+            ->createQBl()
+            ->andWhere('association.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()->getOneOrNullResult();
+    }
+    /**
      * @return Association[]
      */
     public function search(array $args): array
@@ -44,7 +72,6 @@ class AssociationRepository extends ServiceEntityRepository
         $nom = $args['nom'] ?? null;
         $secteur = $args['secteur'] ?? null;
         $secteurs = $args['secteurs'] ?? null;
-        $user = $args['user'] ?? null;
         $valider = $args['valider'] ?? true;
         $localite = $args['city'] ?? null;
         $inscritLe = $args['createdAt'] ?? null;
@@ -84,12 +111,6 @@ class AssociationRepository extends ServiceEntityRepository
             $queryBuilder
                 ->andWhere('secteurs IN ARRAY :secteurs ')
                 ->setParameter('secteurs', $secteurs);
-        }
-
-        if ($user) {
-            $queryBuilder
-                ->andWhere('user = :user')
-                ->setParameter('user', $user);
         }
 
         if (false === $valider) {
@@ -164,16 +185,14 @@ class AssociationRepository extends ServiceEntityRepository
         return $npo_emails;
     }
 
-    /**
-     * @throws NonUniqueResultException
-     */
-    public function findAssociationByUser(UserInterface $user): ?Association
+    public function findOneByEmail(string $email): ?Association
     {
-        return $this
-            ->createQBl()
-            ->andWhere('association.user = :user')
-            ->setParameter('user', $user)
-            ->getQuery()->getOneOrNullResult();
+        return $this->findOneBy(['email' => $email]);
+    }
+
+    public function findOneByTokenValue(string $value): ?Association
+    {
+        return $this->findOneBy(['tokenValue' => $value]);
     }
 
     /**
@@ -216,8 +235,7 @@ class AssociationRepository extends ServiceEntityRepository
             ->createQueryBuilder('association')
             ->leftJoin('association.secteurs', 'secteurs', 'WITH')
             ->leftJoin('association.besoins', 'besoins', 'WITH')
-            ->leftJoin('association.user', 'user', 'WITH')
-            ->addSelect('secteurs', 'besoins', 'user')
+            ->addSelect('secteurs', 'besoins')
             ->addOrderBy('association.name', 'ASC');
     }
 

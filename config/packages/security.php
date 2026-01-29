@@ -1,17 +1,38 @@
 <?php
 
+use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Security\User;
+use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Security\MessageDigestPasswordHasher;
 use AcMarche\Volontariat\Security\VolontariatAuthenticator;
 use Symfony\Config\SecurityConfig;
 
 return static function (SecurityConfig $securityConfig): void {
     $securityConfig
-        ->provider('volontariat_user_provider')
+        ->provider('admin_provider')
         ->entity()
         ->class(User::class)
         ->managerName('default')
         ->property('email');
+
+    $securityConfig
+        ->provider('association_provider')
+        ->entity()
+        ->class(Association::class)
+        ->managerName('default')
+        ->property('email');
+
+    $securityConfig
+        ->provider('volontaire_provider')
+        ->entity()
+        ->class(Volontaire::class)
+        ->managerName('default')
+        ->property('email');
+
+    $securityConfig
+        ->provider('all_users')
+        ->chain()
+        ->providers(['association_provider', 'volontaire_provider', 'admin_provider']);
 
     $securityConfig
         ->passwordHasher('cap_hasher')
@@ -19,6 +40,16 @@ return static function (SecurityConfig $securityConfig): void {
 
     $securityConfig
         ->passwordHasher(User::class)
+        ->algorithm('sodium')
+        ->migrateFrom(['cap_hasher']);
+
+    $securityConfig
+        ->passwordHasher(Association::class)
+        ->algorithm('sodium')
+        ->migrateFrom(['cap_hasher']);
+
+    $securityConfig
+        ->passwordHasher(Volontaire::class)
         ->algorithm('sodium')
         ->migrateFrom(['cap_hasher']);
 
@@ -45,7 +76,7 @@ return static function (SecurityConfig $securityConfig): void {
 
     $mainFirewall
         ->customAuthenticators($authenticators)
-        ->provider('volontariat_user_provider')
+        ->provider('all_users')
         ->entryPoint(VolontariatAuthenticator::class)
         ->loginThrottling()
         ->maxAttempts(6)
@@ -59,5 +90,6 @@ return static function (SecurityConfig $securityConfig): void {
             'always_remember_me' => true,
         ]);
 
-    $securityConfig->roleHierarchy('ROLE_VOLONTARIAT_ADMIN', ['ROLE_VOLONTARIAT_ASSOCIATION']);
+    $securityConfig->roleHierarchy('ROLE_ASSOCIATION', ['ROLE_VOLONTARIAT']);
+    $securityConfig->roleHierarchy('ROLE_VOLONTARIAT_ADMIN', ['ROLE_VOLONTARIAT', 'ROLE_ASSOCIATION']);
 };

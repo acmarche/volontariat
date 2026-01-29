@@ -4,13 +4,13 @@ namespace AcMarche\Volontariat\Mailer;
 
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Security\Token;
-use AcMarche\Volontariat\Entity\Security\User;
 use AcMarche\Volontariat\Entity\Volontaire;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class MailerSecurity
 {
@@ -28,7 +28,7 @@ class MailerSecurity
      *
      * @throws TransportExceptionInterface
      */
-    public function sendWelcomeVoluntary(Volontaire $volontaire, string $password, Token $token): void
+    public function sendWelcomeVoluntary(Volontaire $volontaire, string $password, string $tokenValue): void
     {
         $templatedEmail = (new TemplatedEmail())
             ->from($this->from)
@@ -40,7 +40,7 @@ class MailerSecurity
                 array_merge($this->defaultParams(), [
                     'voluntary' => $volontaire,
                     'password' => $password,
-                    'token' => $token->getValue(),
+                    'token' => $tokenValue,
                 ])
             );
 
@@ -52,7 +52,7 @@ class MailerSecurity
      *
      * @throws TransportExceptionInterface
      */
-    public function sendWelcomeAssociation(Association $association, string $password, Token $token): void
+    public function sendWelcomeAssociation(Association $association, string $password, string $tokenValue): void
     {
         $templatedEmail = (new TemplatedEmail())
             ->from($this->from)
@@ -64,7 +64,7 @@ class MailerSecurity
                 array_merge($this->defaultParams(), [
                     'association' => $association,
                     'password' => $password,
-                    'token' => $token->getValue(),
+                    'token' => $tokenValue,
                 ])
             );
 
@@ -74,17 +74,19 @@ class MailerSecurity
     /**
      * @throws TransportExceptionInterface
      */
-    public function sendRequestNewPassword(User $user, Token $token): void
+    public function sendRequestNewPassword(UserInterface $user, Token|string $token): void
     {
+        $tokenValue = $token instanceof Token ? $token->getValue() : $token;
+
         $templatedEmail = (new TemplatedEmail())
             ->from($this->from)
-            ->to(new Address($user->email))
+            ->to(new Address($user->getUserIdentifier()))
             ->subject('Lien de connection sur la plate-forme du volontariat')
             ->htmlTemplate('@Volontariat/emails/_lost_password.html.twig')
             ->context(
                 array_merge($this->defaultParams(), [
                     'user' => $user,
-                    'token' => $token->getValue(),
+                    'token' => $tokenValue,
                 ])
             );
 

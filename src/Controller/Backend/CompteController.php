@@ -55,7 +55,7 @@ class CompteController extends AbstractController
                 return $this->redirectToRoute('volontariat_dashboard');
             }
 
-            $this->flushEntity($user);
+            $this->flushEntity();
             $this->addFlash('success', 'Le compte a été mis à jour');
 
             return $this->redirectToRoute('volontariat_dashboard');
@@ -89,7 +89,7 @@ class CompteController extends AbstractController
             $plainPassword = $form->get('plainPassword')->getData();
             $user->password = $this->passwordGenerator->cryptPassword($user, $plainPassword);
 
-            $this->flushEntity($user);
+            $this->flushEntity();
 
             $this->addFlash('success', 'Profil mis à jour');
 
@@ -136,12 +136,8 @@ class CompteController extends AbstractController
         );
     }
 
-    private function flushEntity(object $user): void
+    private function flushEntity(): void
     {
-        if ($user instanceof Association) {
-            $this->associationRepository->flush();
-        } elseif ($user instanceof Volontaire) {
-            $this->volontaireRepository->flush();
-        }
+       $this->associationRepository->flush();
     }
 }

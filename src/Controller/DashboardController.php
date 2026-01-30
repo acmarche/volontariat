@@ -12,7 +12,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 class DashboardController extends AbstractController
 {
-    #[Route(path: '/dashboard/', name: 'volontariat_dashboard')]
+    #[Route(path: '/monespace/', name: 'volontariat_dashboard')]
     public function index(): Response
     {
         $user = $this->getUser();

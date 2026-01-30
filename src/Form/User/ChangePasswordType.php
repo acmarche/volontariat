@@ -19,7 +19,9 @@ class ChangePasswordType extends AbstractType
                 TextType::class,
                 [
                     'label' => 'Nouveau mot de passe',
-                    'constraints' => [new Length(min: 6, max: 30)],
+                    'help' => 'Minimum 8 caractères',
+                    'attr' => ['autocomplete' => false],
+                    'constraints' => [new Length(min: 8, max: 30)],
                 ]
             );
     }

@@ -4,19 +4,18 @@ namespace AcMarche\Volontariat\Controller\Backend;
 
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Entity\Volontaire;
+use AcMarche\Volontariat\Form\User\ChangePasswordType;
 use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
 use AcMarche\Volontariat\Security\EmailUniquenessChecker;
 use AcMarche\Volontariat\Security\PasswordGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\Validator\Constraints\Length;
 
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 class CompteController extends AbstractController
@@ -75,13 +74,7 @@ class CompteController extends AbstractController
     {
         $user = $this->getUser();
 
-        $form = $this->createFormBuilder()
-            ->add('plainPassword', PasswordType::class, [
-                'label' => 'Nouveau mot de passe',
-                'help' => 'Minimum 8 caractères',
-                'constraints' => [new Length(min: 8, max: 30)],
-            ])
-            ->getForm();
+        $form = $this->createForm(ChangePasswordType::class);
 
         $form->handleRequest($request);
 
@@ -138,6 +131,6 @@ class CompteController extends AbstractController
 
     private function flushEntity(): void
     {
-       $this->associationRepository->flush();
+        $this->associationRepository->flush();
     }
 }

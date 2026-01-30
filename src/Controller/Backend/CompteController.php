@@ -74,7 +74,7 @@ class CompteController extends AbstractController
     {
         $user = $this->getUser();
 
-        $form = $this->createForm(ChangePasswordType::class);
+        $form = $this->createForm(ChangePasswordType::class,$user);
 
         $form->handleRequest($request);
 

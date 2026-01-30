@@ -52,6 +52,8 @@ class MigrationCommand extends Command
             return Command::SUCCESS;
         }
 
+        $io->note('Dry-run mode: no changes will be made');
+        return Command::SUCCESS;
         if ($dryRun) {
             $io->note('Dry-run mode: no changes will be made');
         }

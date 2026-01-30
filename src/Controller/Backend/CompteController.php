@@ -10,13 +10,13 @@ use AcMarche\Volontariat\Security\EmailUniquenessChecker;
 use AcMarche\Volontariat\Security\PasswordGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Validator\Constraints\Length;
-use AcMarche\Volontariat\Security\RolesEnum;
 
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 class CompteController extends AbstractController
@@ -51,6 +51,7 @@ class CompteController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             if ($oldEmail !== $user->email && !$this->emailUniquenessChecker->isEmailAvailable($user->email, $user)) {
                 $this->addFlash('danger', 'Cette adresse mail est déjà prise vous ne pouvez pas l\'utiliser');
+
                 return $this->redirectToRoute('volontariat_dashboard');
             }
 
@@ -75,9 +76,10 @@ class CompteController extends AbstractController
         $user = $this->getUser();
 
         $form = $this->createFormBuilder()
-            ->add('plainPassword', TextType::class, [
+            ->add('plainPassword', PasswordType::class, [
                 'label' => 'Nouveau mot de passe',
-                'constraints' => [new Length(min: 6, max: 30)],
+                'help' => 'Minimum 8 caractères',
+                'constraints' => [new Length(min: 8, max: 30)],
             ])
             ->getForm();
 

@@ -79,7 +79,7 @@ return static function (SecurityConfig $securityConfig): void {
         ->provider('all_users')
         ->entryPoint(VolontariatAuthenticator::class)
         ->loginThrottling()
-        ->maxAttempts(6)
+        ->maxAttempts(8)
         ->interval('15 minutes');
 
     $mainFirewall

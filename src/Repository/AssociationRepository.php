@@ -251,4 +251,9 @@ class AssociationRepository extends ServiceEntityRepository implements PasswordU
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function findActif()
+    {
+
+    }
 }

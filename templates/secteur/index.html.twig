@@ -1,47 +1,66 @@
 {% extends '@Volontariat/base.html.twig' %}
 {% block title %}Les secteurs d'activités{% endblock %}
 {% block body %}
-    <div class="overflow-hidden bg-white shadow sm:rounded-md">
-        <div class="md:flex md:items-center md:justify-between">
-            <div class="min-w-0 flex-1">
-                <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
-                    Liste des secteurs d'activités
-                </h2>
-            </div>
-        </div>
-        <div class="border-b border-gray-200 bg-white px-4 py-5 sm:px-6">
-            <p class="mt-1  text-gray-500">
-                Clique sur un secteur pour voir les volontaires et associations qui l’ont sélectionné.
+    <section class="py-12">
+        <!-- Header Section -->
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-gray-900 mb-4">
+                Secteurs d'activités
+            </h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                Explorez nos différents secteurs et découvrez les volontaires
+                et associations qui y participent.
             </p>
         </div>
-        <div class="space-y-4">
+
+        <!-- Grid of Secteurs -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {% for secteur in secteurs %}
                 <a href="{{ path('volontariat_secteur_show', {'id': secteur.id}) }}"
-                   class="block p-4 bg-white shadow-sm rounded-lg border border-gray-200 hover:bg-gray-50 hover:shadow-md transition-all duration-200 ease-in-out">
-                    <div class="flex items-center justify-between">
+                   class="group relative bg-white rounded-2xl p-6 shadow-sm border border-gray-100
+                          hover:shadow-xl hover:border-emerald-200 hover:-translate-y-1
+                          transition-all duration-300">
 
-                        <!-- Content Section -->
-                        <div class="flex-1 min-w-0 pr-4">
-                            <h3 class="text-lg font-semibold text-green-default">
-                                {{ secteur.name }}
-                            </h3>
-                            <p class="mt-2 text-sm text-gray-600">
-                                {{ secteur.description }}
-                            </p>
-                        </div>
+                    <!-- Icon Circle -->
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-100 to-teal-100
+                                flex items-center justify-center mb-4
+                                group-hover:from-emerald-200 group-hover:to-teal-200 transition-colors">
+                        <i class="ti ti-heart-handshake text-2xl text-emerald-600"></i>
+                    </div>
 
-                        <!-- Chevron Icon -->
-                        <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"
-                                 aria-hidden="true">
-                                <path fill-rule="evenodd"
-                                      d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
-                                      clip-rule="evenodd"/>
-                            </svg>
-                        </div>
+                    <!-- Content -->
+                    <h3 class="font-semibold text-gray-900 group-hover:text-emerald-700
+                               transition-colors line-clamp-2 mb-2">
+                        {{ secteur.name }}
+                    </h3>
+
+                    {% if secteur.description %}
+                        <p class="text-sm text-gray-500 line-clamp-2 mb-4">
+                            {{ secteur.description }}
+                        </p>
+                    {% endif %}
+
+                    <!-- Stats -->
+                    <div class="flex items-center gap-4 text-xs text-gray-500 pt-4 border-t border-gray-100">
+                        <span class="flex items-center gap-1">
+                            <i class="ti ti-building"></i>
+                            {{ secteur.associations|length }} association{{ secteur.associations|length > 1 ? 's' : '' }}
+                        </span>
+                        <span class="flex items-center gap-1">
+                            <i class="ti ti-users"></i>
+                            {{ secteur.volontaires|length }} volontaire{{ secteur.volontaires|length > 1 ? 's' : '' }}
+                        </span>
+                    </div>
+
+                    <!-- Arrow -->
+                    <div class="absolute top-6 right-6 opacity-0 group-hover:opacity-100
+                                transition-opacity">
+                        <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                        </svg>
                     </div>
                 </a>
             {% endfor %}
         </div>
-    </div>
+    </section>
 {% endblock %}

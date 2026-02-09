@@ -35,6 +35,9 @@ class DefaultController extends AbstractController
 
         $volontaires = $this->volontaireRepository->findActif();
         $associations = $this->associationRepository->findAll();
+        foreach ($associations as $association) {
+            $association->images = $this->fileHelper->getImages($association);
+        }
 
         return $this->render('@Volontariat/default/index.html.twig', [
             'pages' => $pages,

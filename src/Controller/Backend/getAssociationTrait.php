@@ -13,6 +13,7 @@ trait getAssociationTrait
     {
         $user = $this->getUser();
         if (!$user) {
+            $this->addFlash('danger','Connectez-vous');
             return $this->redirectToRoute('volontariat_home');
         }
 
@@ -25,7 +26,7 @@ trait getAssociationTrait
         if (!$user->valider) {
             $this->addFlash('danger', 'Votre association n\'est pas encore validée');
 
-            return null;
+            return $this->redirectToRoute('volontariat_home');
         }
 
         $this->association = $user;

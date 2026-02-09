@@ -22,6 +22,12 @@ class DashboardController extends AbstractController
 
         if ($user instanceof Association) {
             $association = $user;
+
+            if ($association->valider === false) {
+                $this->addFlash('danger', 'Votre association n\'est pas encore validée');
+
+                return $this->redirectToRoute('volontariat_home');
+            }
         } elseif ($user instanceof Volontaire) {
             $volontaire = $user;
         }

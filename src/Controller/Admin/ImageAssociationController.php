@@ -2,25 +2,26 @@
 
 namespace AcMarche\Volontariat\Controller\Admin;
 
-use Exception;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Form\Admin\ImageDropZoneType;
+use AcMarche\Volontariat\Security\RolesEnum;
 use AcMarche\Volontariat\Service\FileHelper;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-use AcMarche\Volontariat\Security\RolesEnum;
 #[IsGranted(RolesEnum::admin->value)]
 class ImageAssociationController extends AbstractController
 {
-    public function __construct(private FileHelper $fileHelper) {}
+    public function __construct(private FileHelper $fileHelper)
+    {
+    }
 
     #[Route(path: '/admin/images/association/new/{id}', name: 'volontariat_admin_image_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Association $association): Response
@@ -29,6 +30,20 @@ class ImageAssociationController extends AbstractController
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile[] $data */
+            $data = $form->getData();
+            foreach ($data['file'] as $file) {
+                if ($file instanceof UploadedFile) {
+                    try {
+                        $this->fileHelper->treatmentFile($association, $file);
+                    } catch (Exception $exception) {
+                        $this->addFlash('danger', 'Erreur upload image: '.$exception->getMessage());
+                    }
+                }
+            }
+
+            $this->addFlash('success', 'Les images ont été traitées');
+
             return $this->redirectToRoute('volontariat_admin_association_show', ['id' => $association->getId()]);
         }
 
@@ -39,21 +54,6 @@ class ImageAssociationController extends AbstractController
             'association' => $association,
             'form' => $form,
         ]);
-    }
-
-    #[Route(path: '/admin/images/association/upload/new/{id}', name: 'volontariat_admin_association_upload_file', methods: ['POST'])]
-    public function upload(Request $request, Association $association): JsonResponse
-    {
-        $file = $request->files->get('file');
-        if ($file instanceof UploadedFile) {
-            try {
-                $this->fileHelper->treatmentFile($association, $file);
-            } catch (Exception $e) {
-                return new JsonResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
-            }
-        }
-
-        return new JsonResponse(['empty']);
     }
 
     #[Route(path: '/admin/images/association/delete/{id}', name: 'volontariat_admin_image_association_delete', methods: ['POST'])]
@@ -74,5 +74,4 @@ class ImageAssociationController extends AbstractController
 
         return $this->redirectToRoute('volontariat_admin_association_show', ['id' => $association->getId()]);
     }
-
 }

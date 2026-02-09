@@ -8,7 +8,6 @@ use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +23,7 @@ class ImageAssociationController extends AbstractController
     {
     }
 
-    #[Route(path: '/backend/association/images/', name: 'volontariat_backend_images_association', methods: ['GET'])]
+    #[Route(path: '/backend/association/images/', name: 'volontariat_backend_images_association', methods: ['GET', 'POST'])]
     public function edit(Request $request): Response
     {
         if (($hasAssociation = $this->hasAssociation()) instanceof Response) {
@@ -35,15 +34,26 @@ class ImageAssociationController extends AbstractController
 
         $form = $this->createForm(ImageDropZoneType::class);
 
-        $images = $this->fileHelper->getImages($this->association);
-
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            return $this->redirectToRoute('volontariat_dashboard');
+            /** @var UploadedFile[] $data */
+            $data = $form->getData();
+            foreach ($data['file'] as $file) {
+                if ($file instanceof UploadedFile) {
+                    try {
+                        $this->fileHelper->treatmentFile($this->association, $file);
+                    } catch (Exception $exception) {
+                        $this->addFlash('danger', 'Erreur upload image: '.$exception->getMessage());
+                    }
+                }
+            }
+
+            $this->addFlash('success', 'Les images ont été traitées');
+
+            return $this->redirectToRoute('volontariat_backend_images_association');
         }
 
-        $response = new Response(null, $form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
+        $images = $this->fileHelper->getImages($this->association);
 
         return $this->render(
             '@Volontariat/backend/association/images_edit.html.twig',
@@ -52,27 +62,7 @@ class ImageAssociationController extends AbstractController
                 'association' => $this->association,
                 'form' => $form,
             ],
-            $response,
         );
-    }
-
-    #[Route(path: '/backend/association/images/upload/new/', name: 'volontariat_backend_association_upload_file', methods: ['POST'])]
-    public function upload(Request $request): JsonResponse
-    {
-        if ($this->hasAssociation() instanceof Response) {
-            return new JsonResponse(['empty']);
-        }
-
-        $file = $request->files->get('file');
-        if ($file instanceof UploadedFile) {
-            try {
-                $this->fileHelper->treatmentFile($this->association, $file);
-            } catch (Exception $e) {
-                return new JsonResponse($e->getMessage(), Response::HTTP_BAD_REQUEST);
-            }
-        }
-
-        return new JsonResponse(['empty']);
     }
 
     #[Route(path: '/backend/association/images/delete', name: 'volontariat_backend_image_association_delete', methods: ['POST'])]

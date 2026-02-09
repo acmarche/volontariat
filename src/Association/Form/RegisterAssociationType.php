@@ -3,6 +3,8 @@
 namespace AcMarche\Volontariat\Association\Form;
 
 use AcMarche\Volontariat\Entity\Association;
+use AcMarche\Volontariat\Entity\Secteur;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -52,6 +54,16 @@ class RegisterAssociationType extends AbstractType
                     'attr' => [
                         'rows' => 8,
                     ],
+                ]
+            )
+            ->add(
+                'secteurs',
+                EntityType::class,
+                [
+                    'class' => Secteur::class,
+                    'required' => false,
+                    'multiple' => true,
+                    'expanded' => true,
                 ]
             );
     }

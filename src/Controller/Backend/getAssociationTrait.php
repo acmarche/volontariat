@@ -27,6 +27,7 @@ trait getAssociationTrait
 
             return null;
         }
+
         $this->association = $user;
 
         return null;

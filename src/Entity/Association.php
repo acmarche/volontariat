@@ -188,4 +188,20 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
     {
         return $this->id;
     }
+
+    public function __serialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'email' => $this->email,
+            'password' => $this->password ?? null,
+        ];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        $this->id = $data['id'];
+        $this->email = $data['email'];
+        $this->password = $data['password'] ?? null;
+    }
 }

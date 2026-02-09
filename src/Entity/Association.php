@@ -132,7 +132,7 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
 
     public function getPath(): string
     {
-        return 'association';
+        return 'associations';
     }
 
     public function __construct()

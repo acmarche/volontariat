@@ -159,7 +159,7 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
 
     public function getPath(): string
     {
-        return 'volontaire';
+        return 'volontaires';
     }
 
     public function __toString(): string

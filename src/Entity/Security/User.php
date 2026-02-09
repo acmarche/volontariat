@@ -48,7 +48,7 @@ class User implements UserInterface, PasswordHasherAwareInterface, LegacyPasswor
 
     public function __toString(): string
     {
-        return $this->email;
+        return $this->surname.' '.$this->name;
     }
 
     public function getId(): ?int

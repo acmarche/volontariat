@@ -18,13 +18,13 @@ class FileHelper
 
     private string $rootUploadPath;
 
-    private string $rootDownloadPath = '/uploads/volontariat';
+    private string $rootDownloadPath = '/files/volontariat';
 
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
         private readonly string $projectDir,
     ) {
-        $this->rootUploadPath = $this->projectDir.'/public/uploads/volontariat';
+        $this->rootUploadPath = $this->projectDir.'/public/files/volontariat';
     }
 
     public function treatmentFile(Uploadable|Association|Page $uploadable, UploadedFile $uploadedFile): File

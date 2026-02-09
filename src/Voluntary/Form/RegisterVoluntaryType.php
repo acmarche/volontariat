@@ -2,7 +2,9 @@
 
 namespace AcMarche\Volontariat\Voluntary\Form;
 
+use AcMarche\Volontariat\Entity\Secteur;
 use AcMarche\Volontariat\Entity\Volontaire;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -50,7 +52,17 @@ class RegisterVoluntaryType extends AbstractType
             ->add('accord', CheckboxType::class, [
                 'required' => true,
                 'label' => false,
-            ]);
+            ])
+            ->add(
+                'secteurs',
+                EntityType::class,
+                [
+                    'class' => Secteur::class,
+                    'required' => false,
+                    'multiple' => true,
+                    'expanded' => true,
+                ]
+            );
     }
 
     public function configureOptions(OptionsResolver $optionsResolver): void

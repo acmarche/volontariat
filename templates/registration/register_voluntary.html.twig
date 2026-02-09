@@ -65,6 +65,25 @@
                                 </label>
                             </div>
                         </div>
+                        <div class="col-span-12">
+                            <div role="group" aria-labelledby="label-notifications">
+                                <div>
+                                    <div class=" font-semibold leading-6 text-gray-900" id="label-notifications">
+                                        Secteurs d'activités
+                                    </div>
+                                    <div class="mt-4 space-y-4">
+                                        {% for secteur in form.secteurs %}
+                                            <div class="flex items-center">
+                                                {{ form_errors(secteur) }}
+                                                {{ form_widget(secteur, {'attr': {'class': 'h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600'}}) }}
+                                                {{ form_label(secteur, null, {'label_attr': {'class': 'ml-3 block  font-medium leading-6 text-gray-900'}}) }}
+                                                {{ form_help(secteur) }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="bg-gray-50 px-4 py-3 text-right sm:px-6">

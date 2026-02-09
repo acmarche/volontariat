@@ -12,7 +12,7 @@
                 {% for association in associations %}
                     {% set url = asset('bundles/acmarchevolontariat/images/logo1-default.png') %}
                     {% if association.imageName %}
-                        {% set url = association.imageName|acmarche_volontariat_download_image(association) %}
+                        {% set url = vich_uploader_asset(association, 'image') %}
                     {% elseif association.firstImage %}
                         {% set url = association.firstImage.url %}
                     {% endif %}

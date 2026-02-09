@@ -2,111 +2,115 @@
 {% block title %}Inscription en tant qu'association{% endblock %}
 {% block body %}
 
-<div class="hidden sm:block" aria-hidden="true">
-    <div class="py-5 text-lg">J'inscris mon association
-        <div class="border-t border-gray-200"></div>
-    </div>
-</div>
+    <div class="max-w-3xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
 
-<div class="mt-10 sm:mt-0">
-    <div class="md:grid md:grid-cols-3 md:gap-6">
-        <div class="md:col-span-1">
-            <div class="px-4 sm:px-0">
-                <h3 class="text-base font-semibold leading-6 text-gray-900">Informations</h3>
-                <p class="mt-1  text-gray-600">
-                    Tous les champs sont obligatoires
-                </p>
-            </div>
-        </div>
+        <h1 class="text-2xl font-bold text-gray-900 mb-2 sm:text-3xl">
+            J'inscris mon association
+        </h1>
+        <p class="text-gray-600 mb-6">Tous les champs marqués d'un <span class="text-red-600" aria-hidden="true">*</span><span class="sr-only">astérisque</span> sont obligatoires.</p>
 
-        <div class="mt-5 md:col-span-2 md:mt-0">
-            {{ form_start(form) }}
-            {{ form_errors(form) }}
-            <div class="overflow-hidden shadow sm:rounded-md">
-                <div class="bg-white px-4 py-5 sm:p-6">
-                    <div class="grid grid-cols-6 gap-6">
-                        <div class="col-span-6 sm:col-span-4">
-                            {{ form_label(form.name, null, {'label_attr': {'class': 'block  font-medium leading-6 text-gray-900'}}) }}
-                            {{ form_errors(form.name) }}
-                            {{ form_widget(form.name, {'attr': {'class': 'mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm: sm:leading-6'}}) }}
-                            {{ form_help(form.name) }}
-                        </div>
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'aria-label': 'Formulaire d\'inscription association'}}) }}
+        {{ form_errors(form) }}
 
-                        <div class="col-span-3 sm:col-span-3">
-                            {{ form_label(form.address, null, {'label_attr': {'class': 'block  font-medium leading-6 text-gray-900'}}) }}
-                            {{ form_errors(form.address) }}
-                            {{ form_widget(form.address, {'attr': {'class': 'mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm: sm:leading-6'}}) }}
-                            {{ form_help(form.address) }}
-                        </div>
+        <div class="bg-white shadow rounded-lg overflow-hidden">
+            <fieldset class="px-4 py-6 sm:px-6 sm:py-8">
+                <legend class="text-lg font-semibold text-gray-900 mb-6">Informations</legend>
 
-                        <div class="col-span-2 sm:col-span-1">
-                            {{ form_label(form.postalCode, null, {'label_attr': {'class': 'block  font-medium leading-6 text-gray-900'}}) }}
-                            {{ form_errors(form.postalCode) }}
-                            {{ form_widget(form.postalCode, {'attr': {'class': 'mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm: sm:leading-6'}}) }}
-                            {{ form_help(form.postalCode) }}
-                        </div>
-
-                        <div class="col-span-2 sm:col-span-2">
-                            {{ form_label(form.city, null, {'label_attr': {'class': 'block  font-medium leading-6 text-gray-900'}}) }}
-                            {{ form_errors(form.city) }}
-                            {{ form_widget(form.city, {'attr': {'class': 'mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm: sm:leading-6'}}) }}
-                            {{ form_help(form.city) }}
-                        </div>
-
-                        <div class="col-span-6 sm:col-span-3">
-                            {{ form_label(form.email, null, {'label_attr': {'class': 'block  font-medium leading-6 text-gray-900'}}) }}
-                            {{ form_errors(form.email) }}
-                            {{ form_widget(form.email, {'attr': {'class': 'mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm: sm:leading-6'}}) }}
-                            {{ form_help(form.email) }}
-                        </div>
-
-                        <div class="col-span-6 sm:col-span-3">
-                            {{ form_label(form.phone, null, {'label_attr': {'class': 'block  font-medium leading-6 text-gray-900'}}) }}
-                            {{ form_errors(form.phone) }}
-                            {{ form_widget(form.phone, {'attr': {'class': 'mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm: sm:leading-6'}}) }}
-                            {{ form_help(form.phone) }}
-                        </div>
-
-                        <div class="col-span-6">
-                            {{ form_label(form.description, null, {'label_attr': {'class': 'block  font-medium leading-6 text-gray-900'}}) }}
-                            {{ form_errors(form.description) }}
-                            {{ form_widget(form.description, {'attr': {'class': 'mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm: sm:leading-6'}}) }}
-                            {{ form_help(form.description) }}
-                        </div>
-
-                        <div class="col-span-12">
-                            <div role="group" aria-labelledby="label-notifications">
-                                <div>
-                                    <div class=" font-semibold leading-6 text-gray-900" id="label-notifications">
-                                        Secteurs d'activités
-                                    </div>
-                                    <div class="mt-4 space-y-4">
-                                        {% for secteur in form.secteurs %}
-                                            <div class="flex items-center">
-                                                {{ form_errors(secteur) }}
-                                                {{ form_widget(secteur, {'attr': {'class': 'h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600'}}) }}
-                                                {{ form_label(secteur, null, {'label_attr': {'class': 'ml-3 block  font-medium leading-6 text-gray-900'}}) }}
-                                                {{ form_help(secteur) }}
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div class="sm:col-span-2">
+                        {{ form_label(form.name, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-900 mb-1'}}) }}
+                        {{ form_errors(form.name) }}
+                        {{ form_widget(form.name, {'attr': {
+                            'class': 'block w-full rounded-md border-0 px-3 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 text-base sm:text-sm sm:leading-6',
+                            'autocomplete': 'organization',
+                            'aria-required': 'true'
+                        }}) }}
                     </div>
 
-                    <div class="bg-gray-50 px-4 py-3 text-right sm:px-6">
-                        <button type="submit"
-                                class="inline-flex justify-center rounded-md bg-green-default py-2 px-3  font-semibold text-white shadow-sm hover:bg-green-light focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
-                            J'inscris mon association
-                        </button>
+                    <div class="sm:col-span-2">
+                        {{ form_label(form.address, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-900 mb-1'}}) }}
+                        {{ form_errors(form.address) }}
+                        {{ form_widget(form.address, {'attr': {
+                            'class': 'block w-full rounded-md border-0 px-3 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 text-base sm:text-sm sm:leading-6',
+                            'autocomplete': 'street-address',
+                            'aria-required': 'true'
+                        }}) }}
+                    </div>
+
+                    <div>
+                        {{ form_label(form.postalCode, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-900 mb-1'}}) }}
+                        {{ form_errors(form.postalCode) }}
+                        {{ form_widget(form.postalCode, {'attr': {
+                            'class': 'block w-full rounded-md border-0 px-3 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 text-base sm:text-sm sm:leading-6',
+                            'autocomplete': 'postal-code',
+                            'aria-required': 'true'
+                        }}) }}
+                    </div>
+
+                    <div>
+                        {{ form_label(form.city, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-900 mb-1'}}) }}
+                        {{ form_errors(form.city) }}
+                        {{ form_widget(form.city, {'attr': {
+                            'class': 'block w-full rounded-md border-0 px-3 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 text-base sm:text-sm sm:leading-6',
+                            'autocomplete': 'address-level2',
+                            'aria-required': 'true'
+                        }}) }}
+                    </div>
+
+                    <div>
+                        {{ form_label(form.email, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-900 mb-1'}}) }}
+                        {{ form_errors(form.email) }}
+                        {{ form_widget(form.email, {'attr': {
+                            'class': 'block w-full rounded-md border-0 px-3 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 text-base sm:text-sm sm:leading-6',
+                            'autocomplete': 'email',
+                            'aria-required': 'true'
+                        }}) }}
+                        {{ form_help(form.email, {'help_attr': {'class': 'mt-1 text-sm text-gray-500'}}) }}
+                    </div>
+
+                    <div>
+                        {{ form_label(form.phone, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-900 mb-1'}}) }}
+                        {{ form_errors(form.phone) }}
+                        {{ form_widget(form.phone, {'attr': {
+                            'class': 'block w-full rounded-md border-0 px-3 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 text-base sm:text-sm sm:leading-6',
+                            'autocomplete': 'tel',
+                            'aria-required': 'true'
+                        }}) }}
+                    </div>
+
+                    <div class="sm:col-span-2">
+                        {{ form_label(form.description, null, {'label_attr': {'class': 'block text-sm font-medium text-gray-900 mb-1'}}) }}
+                        {{ form_errors(form.description) }}
+                        {{ form_widget(form.description, {'attr': {
+                            'class': 'block w-full rounded-md border-0 px-3 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 text-base sm:text-sm sm:leading-6',
+                            'rows': 8,
+                            'aria-required': 'true'
+                        }}) }}
                     </div>
                 </div>
+            </fieldset>
 
-                {{ form_end(form) }}
+            <fieldset class="border-t border-gray-200 px-4 py-6 sm:px-6">
+                <legend class="text-lg font-semibold text-gray-900 mb-4">Secteurs d'activités</legend>
+                <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    {% for secteur in form.secteurs %}
+                        <div class="flex items-center gap-2">
+                            {{ form_widget(secteur, {'attr': {'class': 'h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-2 focus:ring-green-600'}}) }}
+                            {{ form_label(secteur, null, {'label_attr': {'class': 'text-sm font-medium text-gray-900'}}) }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </fieldset>
+
+            <div class="border-t border-gray-200 bg-gray-50 px-4 py-4 sm:px-6 flex flex-col sm:flex-row sm:justify-end">
+                <button type="submit"
+                        class="w-full sm:w-auto inline-flex justify-center rounded-md bg-green-default px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-green-light focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 sm:py-2 sm:text-sm">
+                    J'inscris mon association
+                </button>
             </div>
         </div>
+
+        {{ form_end(form) }}
     </div>
 
-
-    {% endblock %}
+{% endblock %}

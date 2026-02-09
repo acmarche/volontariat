@@ -1,19 +1,23 @@
 {% extends '@Volontariat/base.html.twig' %}
-
+{% block title %}Inscription terminée{% endblock %}
 {% block body %}
-    <div class="bg-white py-24 sm:py-32">
-        <div class="mx-auto max-w-7xl px-6 lg:px-8">
-            <div class="mx-auto max-w-2xl lg:text-center">
-                <h2 class="text-lg font-semibold leading-7 text-indigo-600">Inscription terminée</h2>
-                <p class="mt-6 text-base leading-8 text-gray-600">
-                    Un email vous a été envoyé. Consultez-le pour finaliser votre inscription.
 
-                </p>
+    <div class="max-w-3xl mx-auto px-4 py-12 sm:px-6 sm:py-20 lg:px-8">
+        <div class="bg-white shadow rounded-lg px-6 py-10 sm:px-10 sm:py-14 text-center">
+            <svg class="mx-auto h-14 w-14 text-green-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+            </svg>
+            <h1 class="mt-4 text-2xl font-bold text-gray-900 sm:text-3xl">Inscription terminée</h1>
+            <p class="mt-4 text-base text-gray-600 leading-7 sm:text-lg">
+                Un email vous a été envoyé. Consultez-le pour finaliser votre inscription.
+            </p>
+            <div class="mt-8">
+                <a href="{{ path('volontariat_home') }}"
+                   class="inline-flex justify-center rounded-md bg-green-default px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-green-light focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 sm:py-2 sm:text-sm">
+                    Retour à l'accueil
+                </a>
             </div>
-
         </div>
     </div>
 
-
 {% endblock %}
-

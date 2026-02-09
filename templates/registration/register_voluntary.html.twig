@@ -2,101 +2,104 @@
 {% block title %}Inscription en tant que volontaire{% endblock %}
 {% block body %}
 
-    <div class="hidden sm:block" aria-hidden="true">
-        <div class="py-5 text-lg">Je m'inscris en tant que volontaire
-            <div class="border-t border-gray-200"></div>
-        </div>
-    </div>
+    <div class="max-w-3xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
 
-    <div class="mt-10 sm:mt-0">
-        <div class="md:grid md:grid-cols-3 md:gap-6">
-            <div class="md:col-span-1">
-                <div class="px-4 sm:px-0">
-                    <h3 class="text-base font-semibold leading-6 text-gray-900">Vos coordonnées</h3>
-                    <p class="mt-1  text-gray-600">
-                        Tous les champs sont obligatoires
-                    </p>
-                </div>
-            </div>
-            <div class="mt-5 md:col-span-2 md:mt-0">
-                {{ form_start(form) }}
-                {{ form_errors(form) }}
-                <div class="overflow-hidden shadow sm:rounded-md">
-                    <div class="bg-white px-4 py-5 sm:p-6">
-                        <div class="grid grid-cols-6 gap-6">
-                            <div class="col-span-6 sm:col-span-3">
-                                {{ form_label(form.surname, 'Prénom', {'label_attr': {'class': 'block  font-medium leading-6 text-gray-900'}}) }}
-                                {{ form_errors(form.surname) }}
-                                {{ form_widget(form.surname, {'attr': {'class': 'mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm: sm:leading-6'}}) }}
-                                {{ form_help(form.surname) }}
-                            </div>
+        <h1 class="text-2xl font-bold text-gray-900 mb-2 sm:text-3xl">
+            Je m'inscris en tant que volontaire
+        </h1>
+        <p class="text-gray-600 mb-6">Tous les champs marqués d'un <span class="text-red-600" aria-hidden="true">*</span><span class="sr-only">astérisque</span> sont obligatoires.</p>
 
-                            <div class="col-span-6 sm:col-span-3">
-                                {{ form_label(form.name, 'Nom', {'label_attr': {'class': 'block  font-medium leading-6 text-gray-900'}}) }}
-                                {{ form_errors(form.name) }}
-                                {{ form_widget(form.name, {'attr': {'class': 'mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm: sm:leading-6'}}) }}
-                                {{ form_help(form.name) }}
-                            </div>
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'aria-label': 'Formulaire d\'inscription volontaire'}}) }}
+        {{ form_errors(form) }}
 
-                            <div class="col-span-6 sm:col-span-3">
-                                {{ form_label(form.email, 'Courriel', {'label_attr': {'class': 'block  font-medium leading-6 text-gray-900'}}) }}
-                                {{ form_errors(form.email) }}
-                                {{ form_widget(form.email, {'attr': {'class': 'mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm: sm:leading-6'}}) }}
-                                {{ form_help(form.email) }}
-                            </div>
+        <div class="bg-white shadow rounded-lg overflow-hidden">
+            <fieldset class="px-4 py-6 sm:px-6 sm:py-8">
+                <legend class="text-lg font-semibold text-gray-900 mb-6">Vos coordonnées</legend>
 
-                            <div class="col-span-6 sm:col-span-3">
-                                {{ form_label(form.city, 'Localité', {'label_attr': {'class': 'block  font-medium leading-6 text-gray-900'}}) }}
-                                {{ form_errors(form.city) }}
-                                {{ form_widget(form.city, {'attr': {'class': 'mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm: sm:leading-6'}}) }}
-                                {{ form_help(form.city) }}
-                            </div>
-                        </div>
-
-                        <div class="col-span-6 mt-4">
-                            {{ form_errors(form.accord) }}
-                            <div class="flex items-start gap-3">
-                                {{ form_widget(form.accord, {'attr': {'class': 'h-5 w-5 mt-0.5 rounded border-gray-300 text-green-default focus:ring-green-default cursor-pointer'}}) }}
-                                <label for="{{ form.accord.vars.id }}" class="text-sm text-gray-700 cursor-pointer">
-                                    <span class="text-red-500">*</span>
-                                    <a href="https://www.marche.be/administration/rgpd/" target="_blank" class="text-green-default hover:text-green-light hover:underline">
-                                        J'ai pris connaissance du règlement de la vie privée
-                                    </a>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-span-12">
-                            <div role="group" aria-labelledby="label-notifications">
-                                <div>
-                                    <div class=" font-semibold leading-6 text-gray-900" id="label-notifications">
-                                        Secteurs d'activités
-                                    </div>
-                                    <div class="mt-4 space-y-4">
-                                        {% for secteur in form.secteurs %}
-                                            <div class="flex items-center">
-                                                {{ form_errors(secteur) }}
-                                                {{ form_widget(secteur, {'attr': {'class': 'h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600'}}) }}
-                                                {{ form_label(secteur, null, {'label_attr': {'class': 'ml-3 block  font-medium leading-6 text-gray-900'}}) }}
-                                                {{ form_help(secteur) }}
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div>
+                        {{ form_label(form.surname, 'Prénom', {'label_attr': {'class': 'block text-sm font-medium text-gray-900 mb-1'}}) }}
+                        {{ form_errors(form.surname) }}
+                        {{ form_widget(form.surname, {'attr': {
+                            'class': 'block w-full rounded-md border-0 px-3 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 text-base sm:text-sm sm:leading-6',
+                            'autocomplete': 'given-name',
+                            'aria-required': 'true'
+                        }}) }}
                     </div>
 
-                    <div class="bg-gray-50 px-4 py-3 text-right sm:px-6">
-                        <button type="submit"
-                                class="inline-flex justify-center rounded-md bg-green-default py-2 px-3  font-semibold text-white shadow-sm hover:bg-green-light focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
-                            Je m'inscris
-                        </button>
+                    <div>
+                        {{ form_label(form.name, 'Nom', {'label_attr': {'class': 'block text-sm font-medium text-gray-900 mb-1'}}) }}
+                        {{ form_errors(form.name) }}
+                        {{ form_widget(form.name, {'attr': {
+                            'class': 'block w-full rounded-md border-0 px-3 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 text-base sm:text-sm sm:leading-6',
+                            'autocomplete': 'family-name',
+                            'aria-required': 'true'
+                        }}) }}
+                    </div>
+
+                    <div>
+                        {{ form_label(form.email, 'Courriel', {'label_attr': {'class': 'block text-sm font-medium text-gray-900 mb-1'}}) }}
+                        {{ form_errors(form.email) }}
+                        {{ form_widget(form.email, {'attr': {
+                            'class': 'block w-full rounded-md border-0 px-3 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 text-base sm:text-sm sm:leading-6',
+                            'autocomplete': 'email',
+                            'aria-required': 'true'
+                        }}) }}
+                    </div>
+
+                    <div>
+                        {{ form_label(form.city, 'Localité', {'label_attr': {'class': 'block text-sm font-medium text-gray-900 mb-1'}}) }}
+                        {{ form_errors(form.city) }}
+                        {{ form_widget(form.city, {'attr': {
+                            'class': 'block w-full rounded-md border-0 px-3 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 text-base sm:text-sm sm:leading-6',
+                            'autocomplete': 'address-level2',
+                            'aria-required': 'true'
+                        }}) }}
                     </div>
                 </div>
+            </fieldset>
 
-                {{ form_end(form) }}
+            <fieldset class="border-t border-gray-200 px-4 py-6 sm:px-6">
+                <legend class="text-lg font-semibold text-gray-900 mb-4">Secteurs d'activités</legend>
+                <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    {% for secteur in form.secteurs %}
+                        <div class="flex items-center gap-2">
+                            {{ form_widget(secteur, {'attr': {'class': 'h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-2 focus:ring-green-600'}}) }}
+                            {{ form_label(secteur, null, {'label_attr': {'class': 'text-sm font-medium text-gray-900'}}) }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </fieldset>
+
+            <div class="border-t border-gray-200 px-4 py-6 sm:px-6">
+                {{ form_errors(form.accord) }}
+                <div class="flex items-start gap-3">
+                    {{ form_widget(form.accord, {'attr': {
+                        'class': 'mt-0.5 h-5 w-5 rounded border-gray-300 text-green-600 focus:ring-2 focus:ring-green-600 cursor-pointer',
+                        'aria-required': 'true'
+                    }}) }}
+                    <label for="{{ form.accord.vars.id }}" class="text-sm text-gray-700 cursor-pointer">
+                        <span class="text-red-600" aria-hidden="true">*</span>
+                        <a href="https://www.marche.be/administration/rgpd/"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           class="text-green-700 underline hover:text-green-500 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 rounded">
+                            J'ai pris connaissance du règlement de la vie privée
+                            <span class="sr-only">(ouvre dans un nouvel onglet)</span>
+                        </a>
+                    </label>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-200 bg-gray-50 px-4 py-4 sm:px-6 flex flex-col sm:flex-row sm:justify-end">
+                <button type="submit"
+                        class="w-full sm:w-auto inline-flex justify-center rounded-md bg-green-default px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-green-light focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 sm:py-2 sm:text-sm">
+                    Je m'inscris
+                </button>
             </div>
         </div>
+
+        {{ form_end(form) }}
     </div>
 
 {% endblock %}

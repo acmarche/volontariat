@@ -49,7 +49,7 @@ class Page implements Uploadable, SluggableInterface, Stringable
 
     public function getPath(): string
     {
-        return 'page';
+        return 'pages';
     }
 
     public function getFirstImage()

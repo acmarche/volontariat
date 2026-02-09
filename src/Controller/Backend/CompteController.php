@@ -7,11 +7,8 @@ use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Form\User\ChangePasswordType;
 use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
-use AcMarche\Volontariat\Security\EmailUniquenessChecker;
 use AcMarche\Volontariat\Security\PasswordGenerator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -24,49 +21,7 @@ class CompteController extends AbstractController
         private AssociationRepository $associationRepository,
         private VolontaireRepository $volontaireRepository,
         private PasswordGenerator $passwordGenerator,
-        private EmailUniquenessChecker $emailUniquenessChecker,
     ) {
-    }
-
-    #[Route(path: '/compte/edit', name: 'volontariat_backend_account_edit')]
-    public function edit(Request $request): Response
-    {
-        $user = $this->getUser();
-        $oldEmail = $user->email;
-
-        $formBuilder = $this->createFormBuilder($user)
-            ->add('name', TextType::class, ['required' => true]);
-
-        if ($user instanceof Volontaire) {
-            $formBuilder->add('surname', TextType::class, ['required' => true, 'label' => 'Prénom']);
-        }
-
-        $form = $formBuilder
-            ->add('email', EmailType::class, ['required' => true])
-            ->getForm();
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            if ($oldEmail !== $user->email && !$this->emailUniquenessChecker->isEmailAvailable($user->email, $user)) {
-                $this->addFlash('danger', 'Cette adresse mail est déjà prise vous ne pouvez pas l\'utiliser');
-
-                return $this->redirectToRoute('volontariat_dashboard');
-            }
-
-            $this->flushEntity();
-            $this->addFlash('success', 'Le compte a été mis à jour');
-
-            return $this->redirectToRoute('volontariat_dashboard');
-        }
-
-        return $this->render(
-            '@Volontariat/backend/account/edit.html.twig',
-            [
-                'user' => $user,
-                'form' => $form,
-            ]
-        );
     }
 
     #[Route(path: '/compte/password', name: 'volontariat_backend_password_edit')]
@@ -74,7 +29,7 @@ class CompteController extends AbstractController
     {
         $user = $this->getUser();
 
-        $form = $this->createForm(ChangePasswordType::class,$user);
+        $form = $this->createForm(ChangePasswordType::class, $user);
 
         $form->handleRequest($request);
 

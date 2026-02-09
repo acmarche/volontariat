@@ -64,6 +64,7 @@ class AssociationRepository extends ServiceEntityRepository implements PasswordU
             ->setParameter('user', $user)
             ->getQuery()->getOneOrNullResult();
     }
+
     /**
      * @return Association[]
      */
@@ -252,8 +253,16 @@ class AssociationRepository extends ServiceEntityRepository implements PasswordU
             ->getOneOrNullResult();
     }
 
-    public function findActif()
+    /**
+     * @return array<int,Association>
+     */
+    public function findActif(): array
     {
-
+        return $this
+            ->createQBl()
+            ->andWhere('association.valider = :valider')
+            ->setParameter('valider', true)
+            ->getQuery()
+            ->getResult();
     }
 }

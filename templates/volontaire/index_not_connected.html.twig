@@ -2,36 +2,132 @@
 {% block title %}Les volontaires{% endblock %}
 {% block body %}
 
-    <div class="overflow-hidden bg-white py-12 sm:py-8">
-        <div class="mx-auto max-w-7xl px-6 lg:px-8">
-            <div
-                class="mx-auto grid max-w-2xl grid-cols-1 gap-y-16 gap-x-8 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
-                <div class="lg:pr-8 lg:pt-4">
-                    <div class="lg:max-w-lg">
-                        <h2 class="text-base font-semibold leading-7 text-indigo-600">Nos volontaires</h2>
-                        <p class="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                            Le point de rencontre entre volontaires et associations.
-                        </p>
-                        <p class="mt-6 text-lg leading-8 text-gray-600">
-                            Vous êtes déjà {{ volontaires|length }} inscrits!
-                        </p>
-                        <dl class="mt-10 max-w-xl space-y-8 text-lg leading-7 text-gray-600 lg:max-w-none">
-                            <div class="relative pl-9">
-                                <dd class="flex">
-                                    <a href="{{ path('volontariat_register_association') }}">
-                                        Vous êtes une association qui a besoin de volontaires ?
-                                        Inscrivez-vous sur notre plateforme pour les contacter !
-                                    </a>
-                                </dd>
-                            </div>
-                        </dl>
+    <section class="relative overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-teal-50">
+        <div class="absolute inset-0 opacity-40">
+            <svg class="absolute w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <pattern id="volontaires-pattern" x="0" y="0" width="40" height="40"
+                             patternUnits="userSpaceOnUse">
+                        <circle cx="20" cy="20" r="1" fill="currentColor" class="text-emerald-200"/>
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#volontaires-pattern)"/>
+            </svg>
+        </div>
+
+        <div class="relative mx-auto max-w-7xl px-6 py-16 lg:py-24 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <span class="inline-flex items-center rounded-full bg-emerald-100 px-4 py-1.5 text-sm font-medium text-emerald-700 mb-6">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        Nos volontaires
+                    </span>
+
+                    <h1 class="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
+                        Le point de rencontre entre
+                        <span class="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">volontaires et associations</span>
+                    </h1>
+
+                    <div class="mt-8 flex items-center gap-4">
+                        <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-600">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="text-3xl font-bold text-gray-900">{{ volontaires|length }}<span class="text-emerald-600">+</span></div>
+                            <div class="text-sm text-gray-500">Volontaires inscrits</div>
+                        </div>
+                    </div>
+
+                    <p class="mt-6 text-lg leading-8 text-gray-600">
+                        Vous êtes une association qui a besoin de volontaires ?
+                        Inscrivez-vous sur notre plateforme pour les contacter !
+                    </p>
+
+                    <div class="mt-8 flex flex-col sm:flex-row gap-4">
+                        <a href="{{ path('volontariat_register_voluntary') }}"
+                           class="inline-flex items-center justify-center px-6 py-3 rounded-full bg-emerald-600 text-white font-semibold hover:bg-emerald-700 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+                            </svg>
+                            Devenir volontaire
+                        </a>
+                        <a href="{{ path('volontariat_register_association') }}"
+                           class="inline-flex items-center justify-center px-6 py-3 rounded-full bg-white text-gray-700 font-semibold hover:bg-gray-50 transition-all shadow-md hover:shadow-lg border border-gray-200 hover:-translate-y-0.5">
+                            <svg class="w-5 h-5 mr-2 text-amber-500" fill="none" stroke="currentColor"
+                                 viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                            </svg>
+                            Inscrire mon association
+                        </a>
                     </div>
                 </div>
-                <img src="{{ asset('bundles/acmarchevolontariat/images/Volunteering-pana.svg') }}"
-                     alt="Product screenshot"
-                     class="w-[34rem] max-w-none rounded-xl shadow-xl ring-1 ring-gray-400/10 sm:w-[34rem] md:-ml-4 lg:-ml-0"
-                     width="2432" height="1442">
+
+                <div class="flex justify-center lg:justify-end">
+                    <img src="{{ asset('bundles/acmarchevolontariat/images/Volunteering-pana.svg') }}"
+                         alt="Illustration volontariat"
+                         class="w-full max-w-lg">
+                </div>
             </div>
         </div>
-    </div>
+    </section>
+
+    <section class="py-16 bg-white">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900">Ils s'engagent comme volontaires</h2>
+                <p class="mt-4 text-gray-600 max-w-2xl mx-auto">
+                    Connectez-vous pour découvrir tous les profils et entrer en contact avec nos volontaires
+                </p>
+            </div>
+
+            {% if volontaires|length > 0 %}
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+                    {% for volontaire in volontaires|slice(0, 12) %}
+                        <div class="group text-center">
+                            <div class="mx-auto w-20 h-20 rounded-full overflow-hidden bg-gray-100 ring-2 ring-white shadow-md group-hover:ring-emerald-200 group-hover:shadow-lg transition-all duration-300">
+                                {% if volontaire.imageName %}
+                                    <img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                         src="{{ vich_uploader_asset(volontaire, 'image') | imagine_filter('acmarche_volontariat_index') }}"
+                                         alt="{{ volontaire.surname }}">
+                                {% else %}
+                                    <svg class="w-full h-full text-gray-300 p-4" fill="currentColor"
+                                         viewBox="0 0 24 24">
+                                        <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z"/>
+                                    </svg>
+                                {% endif %}
+                            </div>
+                            <h3 class="mt-3 text-sm font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors">
+                                {{ volontaire.surname }}
+                            </h3>
+                            <p class="text-xs text-gray-500">{{ volontaire.city }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="mt-12 text-center">
+                    <a href="{{ path('app_login') }}"
+                       class="inline-flex items-center px-8 py-4 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-semibold hover:from-emerald-700 hover:to-teal-700 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                        </svg>
+                        Se connecter pour voir tous les volontaires
+                        <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                        </svg>
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
 {% endblock %}

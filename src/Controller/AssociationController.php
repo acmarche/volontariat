@@ -3,7 +3,6 @@
 namespace AcMarche\Volontariat\Controller;
 
 use AcMarche\Volontariat\Entity\Association;
-use AcMarche\Volontariat\Form\Search\SearchAssociationType;
 use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Repository\BesoinRepository;
 use AcMarche\Volontariat\Service\FileHelper;
@@ -25,21 +24,8 @@ class AssociationController extends AbstractController
     #[Route(path: '/association/', name: 'volontariat_association')]
     public function index(Request $request): Response
     {
-        $data = [];
+        $associations = $this->associationRepository->findActif();
 
-        $form = $this->createForm(SearchAssociationType::class, $data);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            if ($form->get('raz')->isClicked()) {
-                $this->addFlash('info', 'La recherche a bien été réinitialisée.');
-
-                return $this->redirectToRoute('volontariat_association');
-            }
-
-            $data = $form->getData();
-        }
-
-        $associations = $this->associationRepository->search($data);
         foreach ($associations as $association) {
             $association->setImages($this->fileHelper->getImages($association));
         }
@@ -47,7 +33,6 @@ class AssociationController extends AbstractController
         return $this->render(
             '@Volontariat/association/index.html.twig',
             [
-                'search_form' => $form,
                 'associations' => $associations,
             ]
         );
@@ -56,8 +41,8 @@ class AssociationController extends AbstractController
     #[Route(path: '/association/{slug}', name: 'volontariat_association_show')]
     public function show(
         #[MapEntity(expr: 'repository.findOneBySlug(slug)')]
-        Association $association): Response
-    {
+        Association $association
+    ): Response {
         $images = $this->fileHelper->getImages($association);
         $besoins = $this->besoinRepository->findByAssociation($association);
 

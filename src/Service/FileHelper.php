@@ -124,8 +124,7 @@ class FileHelper
 
     protected function makePath(Uploadable $uploadable): string
     {
-        return DIRECTORY_SEPARATOR.$uploadable->getPath().$this->directorySeparator.$uploadable->getId(
-            ).$this->directorySeparator;
+        return DIRECTORY_SEPARATOR.$uploadable->getPath().$this->directorySeparator;
     }
 
     public function getUploadPath(Uploadable $uploadable): string

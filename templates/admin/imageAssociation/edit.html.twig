@@ -11,7 +11,7 @@
             {% for message in app.flashes('dropzone_success') %}
                 <div class="alert alert-success" data-turbo-cache="false">{{ message }}</div>
             {% endfor %}
-           {{ form_start(form, { 'action': path('volontariat_admin_association_upload_file',{'id':album.id}), 'attr': {'id': 'formdrop','class': 'mt-3 dropzone-container dropzone', 'data-controller': 'dropzone'}}) }}
+           {{ form_start(form, { 'action': path('volontariat_admin_association_upload_file',{'id':association.id}), 'attr': {'id': 'formdrop','class': 'mt-3 dropzone-container dropzone', 'data-controller': 'dropzone'}}) }}
             {{ form_widget(form) }}
 
             <button type="submit" class="btn btn-primary"><i class="ti ti-image-up"></i> Envoyer les images</button>

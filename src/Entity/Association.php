@@ -20,12 +20,14 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\PasswordHasher\Hasher\PasswordHasherAwareInterface;
 use Symfony\Component\Security\Core\User\LegacyPasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use AcMarche\Volontariat\Validator\Constraints as AcMarcheAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: AssociationRepository::class)]
 #[ORM\Table(name: 'association')]
+#[AcMarcheAssert\UniqueEmail]
 class Association implements Uploadable, TimestampableInterface, SluggableInterface, Stringable, UserInterface, PasswordHasherAwareInterface, LegacyPasswordAuthenticatedUserInterface
 {
     use TimestampableTrait;

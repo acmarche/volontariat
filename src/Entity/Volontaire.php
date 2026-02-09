@@ -27,6 +27,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[ORM\Table(name: 'volontaire')]
 #[ORM\Entity(repositoryClass: VolontaireRepository::class)]
 #[Vich\Uploadable]
+#[AcMarcheAssert\UniqueEmail]
 class Volontaire implements Uploadable, TimestampableInterface, SluggableInterface, Stringable, UserInterface, PasswordHasherAwareInterface, LegacyPasswordAuthenticatedUserInterface
 {
     use TimestampableTrait;

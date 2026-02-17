@@ -66,7 +66,12 @@ class ImagePageController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$page->getId(), $request->request->get('_token'))) {
             $all = $request->request->all();
-            $files = $all['img'];
+            $files = $all['img'] ?? [];
+            if ($files === []) {
+                $this->addFlash('warning', 'Aucune image sélectionnée');
+
+                return $this->redirectToRoute('volontariat_admin_page_show', ['id' => $page->getId()]);
+            }
             foreach ($files as $file) {
                 try {
                     $this->fileHelper->deleteOneDoc($page, $file);

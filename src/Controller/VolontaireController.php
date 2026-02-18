@@ -23,14 +23,7 @@ class VolontaireController extends AbstractController
     #[Route(path: '/volontaire/', name: 'volontariat_volontaire')]
     public function index(Request $request): Response
     {
-        $data = [];
-        $form = $this->createForm(SearchVolontaireType::class, $data);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-        }
-
-        $volontaires = $this->volontaireRepository->search($data);
+        $volontaires = $this->volontaireRepository->findActif();
         if (!$this->isGranted(VolontaireVoter::INDEX)) {
             return $this->render(
                 '@Volontariat/volontaire/index_not_connected.html.twig',
@@ -43,9 +36,7 @@ class VolontaireController extends AbstractController
         return $this->render(
             '@Volontariat/volontaire/index.html.twig',
             [
-                'search_form' => $form,
                 'volontaires' => $volontaires,
-                'search' => $form->isSubmitted(),
             ],
         );
     }

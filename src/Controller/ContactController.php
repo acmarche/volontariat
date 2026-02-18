@@ -4,12 +4,14 @@ namespace AcMarche\Volontariat\Controller;
 
 use AcMarche\Volontariat\Controller\Backend\getAssociationTrait;
 use AcMarche\Volontariat\Entity\Association;
+use AcMarche\Volontariat\Entity\Enum\StatisticTypeEnum;
 use AcMarche\Volontariat\Entity\Secteur;
 use AcMarche\Volontariat\Entity\Volontaire;
 use AcMarche\Volontariat\Form\Contact\ContactType;
 use AcMarche\Volontariat\Mailer\MailerContact;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
 use AcMarche\Volontariat\Security\RolesEnum;
+use AcMarche\Volontariat\Service\StatisticService;
 use AcMarche\Volontariat\Spam\Handler\SpamHandler;
 use Exception;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
@@ -28,6 +30,7 @@ class ContactController extends AbstractController
         private readonly VolontaireRepository $volontaireRepository,
         private readonly MailerContact $mailerContact,
         private readonly SpamHandler $spamHandler,
+        private readonly StatisticService $statisticService,
     ) {
     }
 
@@ -44,6 +47,7 @@ class ContactController extends AbstractController
                 try {
                     $this->addFlash('success', 'Votre demande a bien été envoyée');
                     $this->mailerContact->sendContact($data);
+                    $this->statisticService->log(StatisticTypeEnum::CONTACT_GENERAL);
 
                     return $this->redirectToRoute('volontariat_home');
                 } catch (TransportExceptionInterface|Exception $e) {
@@ -72,6 +76,7 @@ class ContactController extends AbstractController
                 try {
                     $this->addFlash('success', 'Le volontaire a bien été contacté');
                     $this->mailerContact->sendToVolontaire($volontaire, $data);
+                    $this->statisticService->log(StatisticTypeEnum::CONTACT_VOLONTAIRE, volontaire: $volontaire);
                 } catch (TransportExceptionInterface|Exception $e) {
                     $this->addFlash('danger', "Erreur lors de l'envoie du mail");
                 }
@@ -111,6 +116,7 @@ class ContactController extends AbstractController
                 try {
                     $this->addFlash('success', 'Les volontaires ont bien été contacté');
                     $this->mailerContact->sendToVolontairesBySecteur($this->association, $secteur, $data);
+                    $this->statisticService->log(StatisticTypeEnum::CONTACT_VOLONTAIRE_BY_SECTEUR);
                 } catch (TransportExceptionInterface|Exception $e) {
                     $this->addFlash('danger', "Erreur lors de l'envoie du mail");
                 }
@@ -144,6 +150,7 @@ class ContactController extends AbstractController
                 try {
                     $this->addFlash('success', 'L\'association a bien été contactée');
                     $this->mailerContact->sendToAssociation($association, $data);
+                    $this->statisticService->log(StatisticTypeEnum::CONTACT_ASSOCIATION, association: $association);
                 } catch (TransportExceptionInterface|Exception $e) {
                     $this->addFlash('danger', "Erreur lors de l'envoie du mail");
                 }

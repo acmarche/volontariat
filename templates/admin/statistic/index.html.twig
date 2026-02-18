@@ -1,11 +1,93 @@
 {% extends '@Volontariat/admin/base.html.twig' %}
 {% block body -%}
 
-    <div class="card">
-        <h3 class="card-header">Statistiques</h3>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Statistiques</h2>
+        {{ form_start(form, {'attr': {'class': 'd-flex align-items-center gap-2'}}) }}
+            {{ form_widget(form.year, {'attr': {'class': 'form-select', 'onchange': 'this.form.submit()'}}) }}
+        {{ form_end(form) }}
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-muted">Associations</h5>
+                    <p class="display-6">{{ totalAssociations }}</p>
+                    <p class="text-muted mb-0">{{ totalAssociationsValidated }} validées</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-muted">Volontaires</h5>
+                    <p class="display-6">{{ totalVolontaires }}</p>
+                    <p class="text-muted mb-0">{{ totalVolontairesActif }} actifs</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-muted">Besoins</h5>
+                    <p class="display-6">{{ totalBesoins }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <h5 class="card-header">Contacts</h5>
         <div class="card-body">
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th class="text-end">Total</th>
+                        {% for month in months %}
+                            <th class="text-end">{{ month[:3] }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stat in contactStats %}
+                        <tr>
+                            <td>{{ stat.label }}</td>
+                            <td class="text-end fw-bold">{{ stat.count }}</td>
+                            {% for m in 1..12 %}
+                                <td class="text-end">{{ stat.monthly[m] > 0 ? stat.monthly[m] : '-' }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 
-
+    <div class="card mb-4">
+        <h5 class="card-header">Secteurs les plus populaires</h5>
+        <div class="card-body">
+            <table class="table table-sm">
+                <thead>
+                    <tr>
+                        <th>Secteur</th>
+                        <th class="text-end">Volontaires</th>
+                        <th class="text-end">Associations</th>
+                        <th class="text-end">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for secteur in secteursPopular %}
+                        <tr>
+                            <td>{{ secteur.name }}</td>
+                            <td class="text-end">{{ secteur.volontaires }}</td>
+                            <td class="text-end">{{ secteur.associations }}</td>
+                            <td class="text-end fw-bold">{{ secteur.total }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 

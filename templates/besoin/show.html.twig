@@ -15,13 +15,38 @@
             </p>
         </div>
 
-        <h4 class="text-lg text-green-default font-bold mt-3">Intéressé par cette mission, clique sur le lien
-            ci-dessous</h4>
-        <p class="m-3">
-            <a href="{{ path('volontariat_association_show',{'slug': association.slug}) }}">
-                Pour l'association {{ association }}
-            </a>
-        </p>
+        <div class="border-b border-gray-200 bg-gray-50 px-4 py-5 sm:px-6 mt-4 rounded-md">
+            <h4 class="text-lg text-green-default font-bold">Association : {{ association }}</h4>
+            <ul class="mt-2 space-y-1 text-gray-700">
+                {% if association.address or association.city %}
+                    <li>
+                        {{ association.address }} {{ association.number ?? '' }}, {{ association.postalCode ?? '' }} {{ association.city }}
+                    </li>
+                {% endif %}
+                {% if association.phone %}
+                    <li>Tél : {{ association.phone }}</li>
+                {% endif %}
+                {% if association.mobile %}
+                    <li>GSM : {{ association.mobile }}</li>
+                {% endif %}
+                {% if association.email %}
+                    <li>Email : <a href="mailto:{{ association.email }}" class="text-blue-600 underline">{{ association.email }}</a></li>
+                {% endif %}
+                {% if association.web_site %}
+                    <li>Site web : <a href="{{ association.web_site }}" target="_blank" class="text-blue-600 underline">{{ association.web_site }}</a></li>
+                {% endif %}
+            </ul>
+            <div class="mt-4 flex gap-3">
+                <a href="{{ path('volontariat_contact_association', {'slug': association.slug}) }}"
+                   class="inline-flex items-center rounded-md bg-green-default px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-700">
+                    Contacter l'association
+                </a>
+                <a href="{{ path('volontariat_association_show', {'slug': association.slug}) }}"
+                   class="inline-flex items-center rounded-md bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                    Voir le profil
+                </a>
+            </div>
+        </div>
 
         <h4 class="text-lg text-green-default font-bold mt-3">Quand ?</h4>
         {% if besoin.dateBegin %}

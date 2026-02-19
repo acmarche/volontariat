@@ -1,36 +1,30 @@
 <h4 class="text-2xl text-green-default mb-2 mb-cta-dark">Filtre anti-spam</h4>
 <hr>
 <p><strong>Sélectionnez l'image représentant un chat</strong></p>
-<div class="flex flex-row gap-3 mt-2">
+<div id="captcha-animals" class="flex flex-row gap-3 mt-2">
     {% for animal in animals %}
-        <button type="button" class="animal border-transparent focus:border-2 focus:border-green-700"
+        <button type="button" class="animal border-2 border-transparent"
                 data-url="{{ animal }}">
             <img src="{{ animal }}" rel="nofollow" alt="animal" class="w-32 h-32 object-cover">
         </button>
     {% endfor %}
-
 </div>
-{% block scripts %}
-    <script>
-        function attachAnimalListeners() {
-            const btns = document.querySelectorAll('.animal');
-            if (btns.length > 0) {
-                console.log('Found ' + btns.length + ' animals');
-                btns.forEach(function (el) {
-                    if (!el.hasAttribute('data-listener-attached')) {
-                        el.addEventListener('click', () => {
-                            console.log('clicked ');
-                            el.classList.toggle('border-0');
-                            el.classList.toggle('border-2');
-                            document.querySelector('#contact_captcha').value = el.dataset.url;
-                        });
-                        el.setAttribute('data-listener-attached', 'true');
-                    }
-                });
-            } else {
-
+<script data-turbo-temporary>
+    if (!window._captchaListenerAttached) {
+        window._captchaListenerAttached = true;
+        document.addEventListener('click', function (e) {
+            const btn = e.target.closest('#captcha-animals .animal');
+            if (!btn) return;
+            document.querySelectorAll('#captcha-animals .animal').forEach(function (el) {
+                el.classList.remove('border-green-700');
+                el.classList.add('border-transparent');
+            });
+            btn.classList.remove('border-transparent');
+            btn.classList.add('border-green-700');
+            const input = document.querySelector('#contact_captcha');
+            if (input) {
+                input.value = btn.dataset.url;
             }
-        }
-        document.addEventListener("turbo:load", attachAnimalListeners);
-    </script>
-{% endblock %}
+        });
+    }
+</script>

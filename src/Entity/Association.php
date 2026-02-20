@@ -78,18 +78,6 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
     public ?string $description;
 
     /**
-     * Description des besoins permanent.
-     */
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    public ?string $requirement;
-
-    /**
-     * lieu besoins permanents.
-     */
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    public ?string $place;
-
-    /**
      * contact besoins permanents.
      */
     #[ORM\Column(type: Types::TEXT, nullable: true)]

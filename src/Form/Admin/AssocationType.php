@@ -51,10 +51,6 @@ class AssocationType extends AbstractType
                 'label' => 'Téléphone',
                 'required' => false,
             ])
-            ->add('place', TextType::class, [
-                'label' => 'Lieu du besoin permanent',
-                'required' => false,
-            ])
             ->add('mobile', TextType::class, [
                 'label' => 'Mobile',
                 'required' => false,
@@ -68,15 +64,6 @@ class AssocationType extends AbstractType
                     'attr' => [
                         'rows' => 8,
                     ],
-                ]
-            )
-            ->add(
-                'requirement',
-                TextareaType::class,
-                [
-                    'label' => 'Besoins en volontariat',
-                    'help' => 'Besoins permanents',
-                    'required' => false,
                 ]
             )
             ->add(

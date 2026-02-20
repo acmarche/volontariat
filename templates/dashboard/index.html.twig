@@ -4,6 +4,19 @@
     <div class="mx-auto max-w-2xl lg:mx-0 border-b border-gray-200 pb-5">
         <h2 class="text-3xl font-bold leading-6 tracking-tight text-gray-900 sm:text-4xl">{{ user }}</h2>
     </div>
+    {% if association %}
+        <a href="{{ path('volontariat_association_show', {'slug': association.slug}) }}"
+           class=" block ">
+            Visualiser mon association sur le site
+        </a>
+    {% endif %}
+    {% if volontaire %}
+        <a href="{{ path('volontariat_volontaire_show', {'uuid': volontaire.uuid}) }}"
+           class=" block ">
+            Visualiser ma fiche volontaire sur le site
+        </a>
+    {% endif %}
+
     <div class="p-10">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             {% if is_granted('ROLE_VOLONTARIAT_ADMIN') %}
@@ -33,10 +46,10 @@
                    class=" block bg-white rounded-lg shadow-md p-6 transform hover:scale-105 hover:shadow-xl transition
                 duration-300 ease-in-out">
                     <h3 class="flex items-center text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
-                        <i class="ti ti-user-circle mr-2"></i> Consulter ma fiche volontaire
+                        <i class="ti ti-user-circle mr-2"></i> Parcourez la liste des associations
                     </h3>
                     <p class="text-gray-400">
-                        Mise en commun de tes secteurs avec celle des associations.
+                        Prenez contact avec eux n'hésitez pas !
                     </p>
                 </a>
             {% endif %}
@@ -49,16 +62,6 @@
                     </h3>
                     <p class="text-gray-400">
                         Remplissez vos informations en cliquant sur le lien.
-                    </p>
-                </a>
-                <a href="{{ path('volontariat_association_show', {'slug': association.slug}) }}"
-                   class=" block bg-white rounded-lg shadow-md p-6 transform hover:scale-105 hover:shadow-xl transition
-                duration-300 ease-in-out">
-                    <h3 class="flex items-center text-xl font-semibold text-green-default hover:text-blue-600 transition-colors duration-300">
-                        <i class="ti ti-building-community mr-2"></i> Consulter ma fiche associative
-                    </h3>
-                    <p class="text-gray-400">
-                        Consultez vos informations en cliquant sur le lien.
                     </p>
                 </a>
                 <a href="{{ path('volontariat_volontaire') }}"

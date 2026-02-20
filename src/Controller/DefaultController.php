@@ -34,7 +34,7 @@ class DefaultController extends AbstractController
         }
 
         $volontaires = $this->volontaireRepository->findActif();
-        $associations = $this->associationRepository->findAll();
+        $associations = $this->associationRepository->findActif(14);
         foreach ($associations as $association) {
             $association->images = $this->fileHelper->getImages($association);
         }

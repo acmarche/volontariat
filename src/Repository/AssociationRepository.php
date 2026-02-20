@@ -256,7 +256,7 @@ class AssociationRepository extends ServiceEntityRepository implements PasswordU
     /**
      * @return array<int,Association>
      */
-    public function findActif(): array
+    public function findActif(int $max = 500): array
     {
         return $this
             ->createQBl()

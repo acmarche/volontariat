@@ -29,7 +29,10 @@ class PageRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('page')
             ->andWhere('page.actualite = 1')
-            ->orderBy('page.id', 'DESC')->getQuery()->getResult();
+            ->setMaxResults(6)
+            ->orderBy('page.id', 'DESC')
+            ->getQuery()
+            ->getResult();
     }
 
     /**

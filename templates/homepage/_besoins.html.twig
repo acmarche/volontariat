@@ -1,0 +1,81 @@
+<section class="py-16 bg-white" aria-labelledby="besoins-heading">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-10 gap-4">
+            <div>
+                <h2 id="besoins-heading" class="text-3xl font-bold text-gray-900">Annonces de volontariat</h2>
+                <p class="mt-2 text-gray-600">Des associations ont besoin de vous, rejoignez-les !</p>
+            </div>
+            <a href="{{ path('volontariat_besoin') }}"
+               class="inline-flex items-center text-emerald-600 font-semibold hover:text-emerald-700 transition-colors group">
+                Toutes les annonces
+                <svg class="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                </svg>
+            </a>
+        </div>
+
+        {% if besoins|length > 0 %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for besoin in besoins %}
+                    <article class="group relative flex flex-col rounded-2xl border border-gray-200 bg-white p-6 shadow-sm hover:shadow-md hover:border-emerald-300 transition-all duration-200">
+                        <a href="{{ path('volontariat_besoin_show', {'id': besoin.id}) }}" class="absolute inset-0 z-10" aria-label="Voir l'annonce : {{ besoin.name }}">
+                            <span class="sr-only">Voir l'annonce</span>
+                        </a>
+
+                        <div class="flex items-start justify-between gap-4 mb-3">
+                            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600 group-hover:bg-emerald-100 transition-colors duration-200">
+                                <i class="ti ti-speakerphone text-xl" aria-hidden="true"></i>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                {% if besoin.dateBegin %}
+                                    <span class="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-medium text-blue-700">
+                                        <i class="ti ti-calendar text-sm" aria-hidden="true"></i>
+                                        {{ besoin.dateBegin|date('d/m/Y') }}
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <h3 class="text-lg font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors duration-200 line-clamp-2">
+                            {{ besoin.name }}
+                        </h3>
+
+                        {% if besoin.association %}
+                            <p class="mt-1 text-sm text-emerald-600 font-medium">
+                                <i class="ti ti-building text-sm" aria-hidden="true"></i>
+                                {{ besoin.association }}
+                            </p>
+                        {% endif %}
+
+                        <p class="mt-2 text-sm text-gray-500 line-clamp-2">
+                            {{ besoin.requirement|striptags|u.truncate(120, '...') }}
+                        </p>
+
+                        <div class="mt-auto pt-4 flex items-center gap-4 text-xs text-gray-400">
+                            {% if besoin.place %}
+                                <span class="inline-flex items-center gap-1">
+                                    <i class="ti ti-map-pin text-sm" aria-hidden="true"></i>
+                                    {{ besoin.place|striptags|u.truncate(30, '...') }}
+                                </span>
+                            {% endif %}
+                            {% if besoin.period %}
+                                <span class="inline-flex items-center gap-1">
+                                    <i class="ti ti-clock text-sm" aria-hidden="true"></i>
+                                    {{ besoin.period|striptags|u.truncate(30, '...') }}
+                                </span>
+                            {% endif %}
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="text-center py-12">
+                <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-gray-100">
+                    <i class="ti ti-speakerphone text-2xl text-gray-400" aria-hidden="true"></i>
+                </div>
+                <h3 class="mt-3 text-sm font-medium text-gray-900">Aucune annonce en cours</h3>
+                <p class="mt-1 text-sm text-gray-500">Les prochaines annonces de volontariat apparaîtront ici.</p>
+            </div>
+        {% endif %}
+    </div>
+</section>

@@ -3,6 +3,7 @@
 namespace AcMarche\Volontariat\Controller;
 
 use AcMarche\Volontariat\Repository\AssociationRepository;
+use AcMarche\Volontariat\Repository\BesoinRepository;
 use AcMarche\Volontariat\Repository\PageRepository;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
 use AcMarche\Volontariat\Search\Searcher;
@@ -18,6 +19,7 @@ class DefaultController extends AbstractController
     public function __construct(
         private readonly FileHelper $fileHelper,
         private readonly PageRepository $pageRepository,
+        private readonly BesoinRepository $besoinRepository,
         private readonly AssociationRepository $associationRepository,
         private readonly VolontaireRepository $volontaireRepository,
         private readonly Searcher $searcher,
@@ -33,14 +35,16 @@ class DefaultController extends AbstractController
             $page->images = $this->fileHelper->getImages($page);
         }
 
+        $besoins = $this->besoinRepository->getRecent(6);
         $volontaires = $this->volontaireRepository->findActif();
-        $associations = $this->associationRepository->findAll();
+        $associations = $this->associationRepository->findActif(14);
         foreach ($associations as $association) {
             $association->images = $this->fileHelper->getImages($association);
         }
 
         return $this->render('@Volontariat/default/index.html.twig', [
             'pages' => $pages,
+            'besoins' => $besoins,
             'volontaires' => $volontaires,
             'associations' => $associations,
         ]);

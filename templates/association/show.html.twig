@@ -62,18 +62,6 @@
                                 </dd>
                             </div>
                         {% endif %}
-                        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
-                            <dt class=" font-medium text-gray-500">Besoins</dt>
-                            <dd class="mt-1  text-gray-900 sm:col-span-2 sm:mt-0">
-                                {{ association.requirement | nl2br }}
-                            </dd>
-                        </div>
-                        <div class="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
-                            <dt class=" font-medium text-gray-500">Lieu besoins permanents</dt>
-                            <dd class="mt-1  text-gray-900 sm:col-span-2 sm:mt-0">
-                                {{ association.place | nl2br }}
-                            </dd>
-                        </div>
                         {% include '@Volontariat/association/_secteurs_activites.html.twig' %}
                         {% include '@Volontariat/association/_images.html.twig' %}
                     </dl>

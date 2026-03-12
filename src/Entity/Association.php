@@ -197,6 +197,7 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
             'id' => $this->id,
             'email' => $this->email,
             'password' => $this->password ?? null,
+            'salt' => $this->salt ?? null,
         ];
     }
 
@@ -205,5 +206,6 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
         $this->id = $data['id'];
         $this->email = $data['email'];
         $this->password = $data['password'] ?? null;
+        $this->salt = $data['salt'] ?? null;
     }
 }

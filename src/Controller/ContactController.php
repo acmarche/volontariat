@@ -11,6 +11,8 @@ use AcMarche\Volontariat\Form\Contact\ContactType;
 use AcMarche\Volontariat\Mailer\MailerContact;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
 use AcMarche\Volontariat\Security\RolesEnum;
+use AcMarche\Volontariat\Seo\SeoData;
+use AcMarche\Volontariat\Seo\SeoService;
 use AcMarche\Volontariat\Service\StatisticService;
 use AcMarche\Volontariat\Spam\Handler\SpamHandler;
 use Exception;
@@ -31,12 +33,14 @@ class ContactController extends AbstractController
         private readonly MailerContact $mailerContact,
         private readonly SpamHandler $spamHandler,
         private readonly StatisticService $statisticService,
+        private readonly SeoService $seoService,
     ) {
     }
 
     #[Route(path: '/contact/', name: 'volontariat_contact')]
     public function contact(Request $request): Response
     {
+        $this->seoService->setData(new SeoData(title: 'Contact'));
         $form = $this->createForm(ContactType::class);
         $form->handleRequest($request);
 
@@ -65,6 +69,7 @@ class ContactController extends AbstractController
         Request $request,
         #[MapEntity(expr: 'repository.findOneByUuid(uuid)')] Volontaire $volontaire,
     ): Response {
+        $this->seoService->setData(new SeoData(title: 'Contacter '.$volontaire->name.' '.$volontaire->surname));
         $form = $this->createForm(ContactType::class, null);
 
         $form->handleRequest($request);
@@ -141,6 +146,7 @@ class ContactController extends AbstractController
         Request $request,
         #[MapEntity(expr: 'repository.findOneBySlug(slug)')] Association $association
     ): Response {
+        $this->seoService->setData(new SeoData(title: 'Contacter '.$association->name));
         $form = $this->createForm(ContactType::class, null);
 
         $form->handleRequest($request);

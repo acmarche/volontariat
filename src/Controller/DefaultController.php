@@ -7,6 +7,8 @@ use AcMarche\Volontariat\Repository\BesoinRepository;
 use AcMarche\Volontariat\Repository\PageRepository;
 use AcMarche\Volontariat\Repository\VolontaireRepository;
 use AcMarche\Volontariat\Search\Searcher;
+use AcMarche\Volontariat\Seo\SeoData;
+use AcMarche\Volontariat\Seo\SeoService;
 use AcMarche\Volontariat\Service\FileHelper;
 use AcMarche\Volontariat\Spam\Handler\SpamHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,13 +25,18 @@ class DefaultController extends AbstractController
         private readonly AssociationRepository $associationRepository,
         private readonly VolontaireRepository $volontaireRepository,
         private readonly Searcher $searcher,
-        private readonly SpamHandler $spamHandler
+        private readonly SpamHandler $spamHandler,
+        private readonly SeoService $seoService,
     ) {
     }
 
     #[Route(path: '/', name: 'volontariat_home')]
     public function index(): Response
     {
+        $this->seoService->setData(new SeoData(
+            title: 'Accueil',
+            description: 'Un lieu virtuel de rencontre entre volontaires et associations pour des implications concrètes à Marche-en-Famenne.',
+        ));
         $pages = $this->pageRepository->findRecentNews();
         foreach ($pages as $page) {
             $page->images = $this->fileHelper->getImages($page);
@@ -54,6 +61,9 @@ class DefaultController extends AbstractController
     public function search(Request $request): Response
     {
         $keyword = $request->query->get('keyword');
+        $this->seoService->setData(new SeoData(
+            title: 'Recherche'.($keyword ? ' : '.$keyword : ''),
+        ));
         $results = [];
         if (!$keyword) {
             $this->addFlash('danger', 'Veuillez encoder un mot clef');

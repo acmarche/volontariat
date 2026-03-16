@@ -5,6 +5,8 @@ namespace AcMarche\Volontariat\Controller;
 use AcMarche\Volontariat\Entity\Association;
 use AcMarche\Volontariat\Repository\AssociationRepository;
 use AcMarche\Volontariat\Repository\BesoinRepository;
+use AcMarche\Volontariat\Seo\SeoData;
+use AcMarche\Volontariat\Seo\SeoService;
 use AcMarche\Volontariat\Service\FileHelper;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,13 +19,18 @@ class AssociationController extends AbstractController
     public function __construct(
         private AssociationRepository $associationRepository,
         private BesoinRepository $besoinRepository,
-        private FileHelper $fileHelper
+        private FileHelper $fileHelper,
+        private SeoService $seoService,
     ) {
     }
 
     #[Route(path: '/association/', name: 'volontariat_association')]
     public function index(Request $request): Response
     {
+        $this->seoService->setData(new SeoData(
+            title: 'Associations',
+            description: 'Découvrez les associations actives sur la plate-forme du volontariat de Marche-en-Famenne.',
+        ));
         $associations = $this->associationRepository->findActif();
 
         foreach ($associations as $association) {
@@ -43,6 +50,10 @@ class AssociationController extends AbstractController
         #[MapEntity(expr: 'repository.findOneBySlug(slug)')]
         Association $association
     ): Response {
+        $this->seoService->setData(new SeoData(
+            title: $association->name,
+            description: $association->description ?? 'Association '.$association->name.' sur la plate-forme du volontariat.',
+        ));
         $images = $this->fileHelper->getImages($association);
         $besoins = $this->besoinRepository->findByAssociation($association);
 

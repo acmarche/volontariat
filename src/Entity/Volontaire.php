@@ -193,4 +193,22 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
     {
         return $this->id;
     }
+
+    public function __serialize(): array
+    {
+        return [
+            'id' => $this->id,
+            'email' => $this->email,
+            'password' => $this->password ?? null,
+            'salt' => $this->salt ?? null,
+        ];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        $this->id = $data['id'];
+        $this->email = $data['email'];
+        $this->password = $data['password'] ?? null;
+        $this->salt = $data['salt'] ?? null;
+    }
 }

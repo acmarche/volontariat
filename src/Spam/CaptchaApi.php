@@ -3,10 +3,6 @@
 namespace AcMarche\Volontariat\Spam;
 
 use Symfony\Component\HttpClient\HttpClient;
-use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class CaptchaApi
@@ -21,20 +17,23 @@ class CaptchaApi
     }
 
 
-    /**
-     * @throws ClientExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws TransportExceptionInterface
-     */
-    public function getDog(): string
+    public function getFox(): string
     {
-        $url = 'https://dog.ceo/api/breeds/image/random';
-        $response = $this->httpClient->request('GET', $url);
+        $number = random_int(1, 122);
 
-        $content = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        try {
+            $url = 'https://randomfox.ca/floof/';
+            $response = $this->httpClient->request('GET', $url);
 
-        return $content['message'];
+            $content = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+            if (is_array($content) && isset($content['image'])) {
+                return $content['image'];
+            }
+        } catch (\Exception) {
+            // fallback on rate limit or any API error
+        }
+
+        return 'https://randomfox.ca/images/'.$number.'.jpg';
     }
 
     public function getCat(): string
@@ -53,20 +52,15 @@ class CaptchaApi
             // fallback on rate limit or any API error
         }
 
-        return 'https://placekitten.com/150/150?image='.$number;
+        return 'https://cataas.com/cat?width=150&height=150&_='.$number;
     }
 
     /**
      * @return string[]
-     *
-     * @throws ClientExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws TransportExceptionInterface
      */
     public function getAnimals(): array
     {
-        $animals = [$this->getDog(), $this->getCat()];
+        $animals = [$this->getFox(), $this->getCat()];
         shuffle($animals);
 
         return $animals;

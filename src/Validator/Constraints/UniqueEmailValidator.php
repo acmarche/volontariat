@@ -25,7 +25,9 @@ class UniqueEmailValidator extends ConstraintValidator
             return;
         }
 
-        $email = $value->email;
+        // Typed properties without a default are uninitialized on a not yet
+        // hydrated entity: isset() returns false instead of throwing.
+        $email = $value->email ?? null;
 
         if (!$email) {
             return;

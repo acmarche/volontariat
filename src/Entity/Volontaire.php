@@ -69,6 +69,7 @@ class Volontaire implements Uploadable, TimestampableInterface, SluggableInterfa
     public ?string $city;
 
     #[ORM\Column(name: 'email')]
+    #[Assert\NotBlank]
     #[Assert\Email(message: "The email '{{ value }}' is not a valid email.")]
     public string $email;
 

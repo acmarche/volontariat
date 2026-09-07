@@ -61,6 +61,7 @@ class Association implements Uploadable, TimestampableInterface, SluggableInterf
     public ?string $city;
 
     #[ORM\Column(name: 'email')]
+    #[Assert\NotBlank]
     #[Assert\Email(message: "The email '{{ value }}' is not a valid email.")]
     public ?string $email;
 

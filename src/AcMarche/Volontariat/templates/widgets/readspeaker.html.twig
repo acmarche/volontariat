@@ -1,0 +1,81 @@
+{% extends '@Volontariat/base.html.twig' %}
+
+{% block title %}ReadSpeaker webReader{% endblock %}
+{% block body %}
+
+    <div class="md:flex md:items-center md:justify-between">
+        <div class="min-w-0 flex-1">
+            <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+                À propos de la fonction Écouter : ReadSpeaker webReader
+            </h2>
+        </div>
+    </div>
+
+    <div class="overflow-hidden rounded-lg bg-white shadow my-5 ">
+        <div class="px-4 py-2 sm:p-6">
+            Avec ReadSpeaker webReader, les contenus en ligne sont lus à haute voix.
+            Un seul clic suffit pour que le texte soit simultanément lu à haute voix et mis en surbrillance de façon à
+            suivre plus facilement la lecture, quel que soit le terminal que vous utilisez et où que vous vous trouviez.
+            Le contenu est plus accessible, et le parcourir devient une expérience plus enrichissante. En tant
+            qu’utilisateur, vous n’avez rien à télécharger.
+            <br/><br/>
+            <h4>Comment ça marche?</h4>
+            Activez ReadSpeaker webReader en cliquant sur le bouton Écouter.
+            <br/><br/>
+            Le bouton Écouter.<br/>
+            Avec ReadSpeaker webReader vous pouvez également :
+            <br/><br/>
+            Sélectionner un texte et cliquer sur le bouton Écouter qui s’affiche dans le menu contextuel pour déclencher
+            la lecture
+            Cliquer sur un paragraphe pour le faire lire automatiquement à haute voix<br/>
+            Accéder à une version épurée de la page et sélectionner la police, la taille et la couleur du texte lu<br/>
+            Télécharger une version audio du contenu consulté pour l’écouter plus tard en mode hors-ligne<br/>
+            Traduire un texte sélectionné dans différentes langues, et le faire lire dans la langue choisie<br/>
+            Personnaliser la vitesse de lecture, les couleurs de surbrillance et d’autres paramètres<br/>
+            Activer la visibilité du texte renforcée afin de pouvoir agrandir le texte lu dans une cartouche en bas de
+            page<br/>
+            Sélectionner un mot et rechercher sa définition dans le dictionnaire<br/>
+            Vous trouverez des instructions claires sur la façon d'utiliser chaque fonctionnalité de webReader dans
+            l'outil d'aide, qui se trouve dans le menu. Essayez de lire l'outil d'aide pour trouver des idées sur la
+            façon d'utiliser de manière optimale les fonctionnalités de webReader !
+            <br/><br/>
+            Le menu webReader.
+            Navigation par le clavier
+            webReader peut être activé, c’est-à-dire que le bouton Écoutez peut être mis en évidence, avec la touche
+            d’accès "K". La touche d’accès "L" met le lecteur audio en évidence et démarre la lecture. De nombreux
+            outils et fonctionnalités webReader disposent également d’une touche d’accès dédiée. Les touches d’accès
+            sont activées grâce à des touches modificateurs, qui varient selon le navigateur et le système
+            d’exploitation utilisés: voir https://en.wikipedia.org/wiki/Access_key. (lien vers une page en anglais).
+            <br/><br/>
+            À l’intérieur du lecteur audio, c’est-à- dire lorsque l’utilisateur a mis le lecteur audio en évidence, la
+            combinaison de touches Tab/Maj+Tab peut être utilisée pour naviguer, et la touche Entrée pour activer un
+            bouton ou une option en particulier. La touche Échap peut être utilisée pour arrêter l'action en cours,
+            fermer le menu ou fermer une fenêtre de dialogue, selon le contexte.
+            <br/><br/>
+            Mettre le bouton Écouter en évidence : Modificateurs + K<br/>
+            Activer le lecteur WebReader : Modificateurs + L<br/>
+            Ouvrir/fermer le menu : Modificateurs + 1<br/>
+            Ouvrir l'outil d'aide : Modificateurs + I<br/>
+            Autres raccourcis clavier : Voir l'outil d'aide<br/>
+            Cookies<br/>
+            L’utilisation de webReader est optimisée lorsque les cookies sont activés car ils permettent de sauvegarder
+            les paramètres personnels de l’utilisateur entre deux sessions.
+            <br/><br/>
+            Compatibilité
+            webReader est une solution qui fonctionne sur :
+            <br/><br/>
+            Tous les terminaux couramment utilisés : PC, ordinateur portable, Chromebook, tablette, smartphone etc.<br/>
+            Tous les principaux systèmes d’exploitation : Windows, Chrome, Android, iOS/iPadOS, macOS, Linux, etc..<br/>
+            Tous les principaux navigateurs Web :<br/>
+            Pour les PC et les ordinateurs portables : IE10+, Edge, Chrome (et autres navigateurs Chromium), Firefox et
+            Safari<br/>
+            pour les appareils mobiles : Safari et Chrome sur les appareils IOSi/PadOS, Chrome sur les appareils Android<br/>
+            Pour en savoir plus sur ReadSpeaker, rendez-vous sur www.readspeaker.com<br/>
+        </div>
+    </div>
+
+    <div class="mt-32 sm:mt-40 xl:mx-auto xl:max-w-7xl xl:px-8">
+        <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=2832&amp;q=80"
+             alt="" class="aspect-[5/2] w-full object-cover xl:rounded-3xl">
+    </div>
+{% endblock %}

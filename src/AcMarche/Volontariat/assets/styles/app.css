@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+
+    html {
+        @apply scroll-pt-3 scroll-smooth text-base;
+        /* see https://www.getrevue.co/profile/shrutibalasa/issues/did-you-know-about-scroll-padding-easy-solution-to-fixed-header-problem-1325973 */
+    }
+
+    * {
+        /* outline: 1px #0ae4ff solid;*/
+    }
+
+    a {
+        @apply text-atlantis-600 hover:text-rose-300
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+
+    body {
+        @apply antialiased text-cta-dark;
+    }
+
+    img, video, iframe {
+        @apply object-cover max-w-full object-top-center;
+        block-size: auto;
+        /*max-inline-size: 100%;*/
+        /* see https://web.dev/learn/design/responsive-images/ */
+    }
+}
+
+@layer components {
+    #app {
+        @apply grid min-h-screen;
+        grid-template-rows: auto 1fr auto;
+    }
+
+    .alert {
+        @apply border px-4 py-3 rounded relative w-full
+    }
+
+    .alert-info {
+        @apply bg-green-400 text-gray-500
+    }
+
+    .alert-success {
+        @apply bg-green-400 text-white
+    }
+
+    .alert-danger {
+        @apply bg-red-400 text-white
+    }
+}

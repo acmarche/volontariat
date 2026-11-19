@@ -1,0 +1,59 @@
+<?php
+
+namespace AcMarche\Volontariat\Form\Contact;
+
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class ContactType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $formBuilder, array $options): void
+    {
+        $formBuilder
+            ->add(
+                'name',
+                TextType::class,
+                [
+                    'required' => true,
+                    'label' => 'Votre nom',
+                ]
+            )
+            ->add(
+                'surname',
+                TextType::class,
+                [
+                    'required' => true,
+                    'label' => 'Votre prénom',
+                ]
+            )
+            ->add(
+                'email',
+                EmailType::class,
+                [
+                    'required' => true,
+                    'label' => 'Votre courriel',
+                ]
+            )
+            ->add(
+                'content',
+                TextareaType::class,
+                [
+                    'label' => 'Message',
+                    'required' => true,
+                    'attr' => ['rows' => 8],
+                ]
+            )
+            ->add('captcha', CaptchaFieldType::class);
+    }
+
+    public function configureOptions(OptionsResolver $optionsResolver): void
+    {
+        $optionsResolver->setDefaults(
+            []
+        );
+    }
+}

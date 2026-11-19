@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <title>{{ seo_title() }}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="{{ seo_description() }}">
+    <meta property="og:title" content="{{ seo_title() }}">
+    <meta property="og:description" content="{{ seo_description() }}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ seo_url() }}">
+    <meta property="og:site_name" content="{{ seo_site_name() }}">
+    {% if seo_image() %}
+        <meta property="og:image" content="{{ seo_image() }}">
+    {% endif %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('bundles/acmarchevolontariat/favicon.ico') }}"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+    <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="https://cdn-eu.readspeaker.com/script/11982/webReader/webReader.js?pids=wr" type="text/javascript" id="rs_req_Init"></script>
+    {% block stylesheets %}
+
+    {% endblock %}
+
+    {% block javascripts %}
+        {% block importmap %}{{ importmap('app') }}{% endblock %}
+    {% endblock %}
+</head>
+<body id="app">
+{% include '@Volontariat/header/_header.html.twig' %}
+<main class="container mt-12 mx-auto sm:px-6 lg:px-8 max-w-7xl" id="maincontent" >
+    {% include '@Volontariat/_flash_messages.html.twig' %}
+    {% block body %}
+
+    {% endblock %}
+</main>
+{% include '@Volontariat/footer/_footer.html.twig' %}
+{% include '@Volontariat/_analytics.html.twig' %}
+</body>
+</html>

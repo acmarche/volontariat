@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+@plugin "@tailwindcss/typography";
+@plugin "@tailwindcss/forms";
+@plugin "@tailwindcss/aspect-ratio";
+
+@source "../../src/AcMarche/Volontariat/templates/**/*.html.twig";
+@source "../**/*.js";
+
+@theme {
+    --color-cta-dark: #82786FFF;
+
+    --color-green-default: #72c02c;
+    --color-green-light: #72C02CC9;
+
+    --color-atlantis-50: #f4fbea;
+    --color-atlantis-100: #e5f7d0;
+    --color-atlantis-200: #cdefa7;
+    --color-atlantis-300: #ace274;
+    --color-atlantis-400: #8cd249;
+    --color-atlantis-500: #72c02c;
+    --color-atlantis-600: #53921e;
+    --color-atlantis-700: #40701b;
+    --color-atlantis-800: #36591b;
+    --color-atlantis-900: #2f4c1b;
+}
+
+@utility object-top-center {
+    object-position: top center;
+}
+
+@utility object-center-center {
+    object-position: center center;
+}
+
+@utility object-bottom-center {
+    object-position: bottom center;
+}
+
+@layer base {
+    html {
+        @apply scroll-pt-3 scroll-smooth text-base;
+    }
+
+    a {
+        @apply text-atlantis-600 hover:text-rose-300;
+    }
+
+    [x-cloak] {
+        display: none !important;
+    }
+
+    body {
+        @apply antialiased text-cta-dark;
+    }
+
+    img, video, iframe {
+        @apply object-cover max-w-full object-top-center;
+        block-size: auto;
+    }
+
+    label.required::after {
+        content: " *";
+        color: red;
+    }
+
+    input:required {
+        border-left: 3px solid red;
+    }
+}
+
+@layer components {
+    #app {
+        @apply grid min-h-screen;
+        grid-template-rows: auto 1fr auto;
+    }
+
+    .alert {
+        @apply border px-4 py-3 rounded relative w-full;
+    }
+
+    .alert-info {
+        @apply bg-green-400 text-gray-500;
+    }
+
+    .alert-success {
+        @apply bg-green-400 text-white;
+    }
+
+    .alert-danger {
+        @apply bg-red-400 text-white;
+    }
+}

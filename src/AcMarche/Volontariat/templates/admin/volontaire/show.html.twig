@@ -1,0 +1,93 @@
+{% extends '@Volontariat/admin/base.html.twig' %}
+
+{% block body %}
+
+    <div class="card">
+        <h3 class="card-header">{{ volontaire }}</h3>
+        <div class="card-body">
+
+            {{ include('@Volontariat/admin/volontaire/actions.html.twig') }}
+
+            <div class="row">
+                <div class="col-6">
+                    <table class="table table-bordered table-hover">
+                        <tbody>
+                        <tr>
+                            <th>Email</th>
+                            <td>
+                                {{ volontaire.email }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Téléphone ou mobile</th>
+                            <td>
+                                {{ volontaire.phone }}
+                                {{ volontaire.mobile }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Né en</th>
+                            <td>
+                                {{ volontaire.birthyear }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Je suis indisponible pour le moment
+                            </th>
+                            <td>
+                                {{ volontaire.inactif ? '<span class="text-danger">Oui</span>' : 'Non' }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Notifier par les associations</th>
+                            <td>
+                                {{ volontaire.notification_message_association }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Notifier lors d'une nouvelle association</th>
+                            <td>
+                                {{ volontaire.notification_new_association }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Url pour connection automatique</th>
+                            <td>
+                                {% if volontaire.tokenValue %}
+                                    <a href="{{ path('volontariat_token_show', {'value':  volontaire.tokenValue}) }}">
+                                        Lien de connection
+                                    </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="col-6">
+                    {% include '@Volontariat/admin/volontaire/secteurs.html.twig' %}
+                </div>
+
+            </div>
+
+            {% if volontaire.imageName %}
+                <img class="thumbnail"
+                     src="{{ vich_uploader_asset(volontaire, 'image') | imagine_filter('acmarche_volontariat_thumb') }}"
+                     alt="{{ volontaire.imageName }}">
+            {% endif %}
+
+            {% if volontaire.description %}
+                <p>{{ volontaire.description | nl2br }}</p>
+            {% endif %}
+        </div>
+        <div class="card-footer">
+            <p class="text-muted">
+                {{ 'Created' | trans }} {{ volontaire.createdAt|date('d-m-Y H:i:s') }}
+                . {{ 'Updated' | trans }} {{ volontaire.updatedAt|date('d-m-Y H:i:s') }}
+            </p>
+        </div>
+    </div>
+    {{ include('@Volontariat/admin/volontaire/delete.html.twig') }}
+
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends '@Volontariat/base.html.twig' %}
+{% block title %}{{ secteur }}{% endblock %}
+{% block body %}
+    <div class="overflow-hidden bg-white shadow sm:rounded-md">
+        <div class="md:flex md:items-center md:justify-between">
+            <div class="min-w-0 flex-1">
+                <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+                    {{ secteur }}
+                </h2>
+            </div>
+        </div>
+        {% if is_granted('ROLE_ASSOCIATION') %}
+            <div class="border-b border-gray-200 bg-white px-4 py-5 sm:px-6">
+                <h3 class="mt-1 text-xl text-gray-500">
+                    Les volontaires ont choisi ce secteur.
+                </h3>
+            </div>
+            <p class="m-3 text-lg leading-8 text-gray-600">
+                <a href="{{ path('volontariat_contact_volontaire_by_secteur',{'id':secteur.id}) }}">
+                <i class="ti ti-send"></i> Clique ici pour joindre les volontaires de ce secteur.
+                </a>
+            </p>
+            <div class="space-y-4 grid grid-cols-2 gap-4 md:grid-cols-4">
+                {% for volontaire in volontaires %}
+                    <a href="{{ path('volontariat_volontaire_show', {'uuid': volontaire.uuid}) }}"
+                       class="block p-4 bg-white shadow-sm rounded-lg border border-gray-200 hover:bg-gray-50 hover:shadow-md transition-all duration-200 ease-in-out">
+                        <div class="flex items-center justify-between">
+
+                            <!-- Content Section -->
+                            <div class="flex-1 min-w-0 pr-4">
+                                <h3 class="text-lg font-semibold text-green-default">
+                                    {{ volontaire.surname }} <span class="text-base leading-7 text-gray-600 "> </span>
+                                </h3>
+                                <p class="mt-2 text-sm text-gray-600">
+                                    De {{ volontaire.city }}
+                                </p>
+                            </div>
+
+                            <!-- Chevron Icon -->
+                            <div class="flex-shrink-0">
+                                <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"
+                                     aria-hidden="true">
+                                    <path fill-rule="evenodd"
+                                          d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                                          clip-rule="evenodd"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="border-b border-gray-200 bg-white px-4 py-5 sm:px-6">
+            <h3 class="mt-1 text-xl text-gray-500">
+                Les associations ont choisi ce secteur.
+            </h3>
+        </div>
+
+        <div class="space-y-4">
+            {% for association in associations %}
+                <a href="{{ path('volontariat_association_show', {'slug': association.slug}) }}"
+                   class="block p-4 bg-white shadow-sm rounded-lg border border-gray-200 hover:bg-gray-50 hover:shadow-md transition-all duration-200 ease-in-out">
+                    <div class="flex items-center justify-between">
+
+                        <!-- Content Section -->
+                        <div class="flex-1 min-w-0 pr-4">
+                            <h3 class="text-lg font-semibold text-green-default">
+                                {{ association.name }} <span
+                                    class="text-base leading-7 text-gray-600 "> ({{ association.city }})</span>
+                            </h3>
+                            <p class="mt-2 text-sm text-gray-600">
+                                {{ association.description|u.truncate(450,'...')|nl2br }}
+                            </p>
+                        </div>
+
+                        <!-- Chevron Icon -->
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"
+                                 aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                      d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z"
+                                      clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+
+    </div>
+{% endblock %}

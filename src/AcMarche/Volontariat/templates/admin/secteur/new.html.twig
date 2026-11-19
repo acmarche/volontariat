@@ -1,0 +1,20 @@
+{% extends '@Volontariat/admin/base.html.twig' %}
+
+{% block body %}
+    <div class="card">
+        <h3 class="card-header">Nouveau secteur</h3>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-8">
+                    {% include '@Volontariat/admin/secteur/_form.html.twig' %}
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a href="{{ path('volontariat_admin_secteur') }}">
+                <span class="ti ti-list"></span> Annuler et retour à la liste
+            </a>
+        </div>
+    </div>
+{% endblock %}
+

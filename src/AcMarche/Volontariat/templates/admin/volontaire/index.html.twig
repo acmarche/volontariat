@@ -1,0 +1,55 @@
+{% extends "@Volontariat/admin/base.html.twig" %}
+{% block title %}Volontaires{% endblock %}
+
+{% block body -%}
+
+    <div class="card">
+        <h3 class="card-header">Liste des {{ volontaires | length }} volontaires</h3>
+        <div class="card-body">
+
+            {{ include('@Volontariat/admin/search/volontaire.html.twig') }}
+
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Localité</th>
+                    <th>Inactif</th>
+                    <th>Message assoc</th>
+                    <th>New assoc</th>
+                    <th>Inscrit le</th>
+                    <th>Géré par</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for volontaire in volontaires %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('volontariat_admin_volontaire_show', { 'id': volontaire.id }) }}"
+                               title="Voir"> {{ volontaire.name }} {{ volontaire.surname }}
+                            </a>
+                        </td>
+                        <td>{{ volontaire.city }}</td>
+                        <td>
+                            {{ volontaire.inactif }}
+                        </td>
+                        <td>
+                            {{ volontaire.notification_message_association }}
+                        </td>
+                        <td>
+                            {{ volontaire.notification_new_association }}
+                        </td>
+                        <td>
+                            {{ volontaire.createdAt|date("d-m-Y") }}
+                        </td>
+                        <td>
+                            {{ volontaire.user }}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

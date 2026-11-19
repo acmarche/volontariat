@@ -1,0 +1,40 @@
+{% extends '@Volontariat/emails/basic.html.twig' %}
+{% block content %}
+
+    <div class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow prose prose-slate">
+        <div class="px-4 py-5 sm:px-6">
+            <h2 class="text-lg text-green-default font-bold">Nous vous remercions pour votre inscription</h2>
+        </div>
+        <div class="px-4 py-5 sm:p-6">
+
+            <p class="my-5">
+                <a href="{{ absolute_url(path('volontariat_token_show',{'value':token})) }}"
+                   class="text-rose-400 hover:text-red-200">
+                    Complète ta fiche volontaire (secteurs souhaités) en suivant ce lien
+                </a>
+            </p>
+
+            <p class="mb-3">
+                Tu peux te connecter à notre plate-forme
+                avec le lien ci-dessus ou les identifiants suivants</p>
+
+            <table class="min-w-full divide-y divide-gray-300">
+                <tr>
+                    <th scope="col" class="py-3.5 pl-4 pr-3 text-left  font-semibold text-gray-900 sm:pl-0">Nom
+                        d'utilisateur
+                    </th>
+                    <td class="py-3.5 pl-4 pr-3">{{ voluntary.email }}</td>
+                </tr>
+                <tr>
+                    <th scope="col" class="py-3.5 pl-4 pr-3 text-left  font-semibold text-gray-900 sm:pl-0">
+                        Mot de passe
+                    </th>
+                    <td class="py-3.5 pl-4 pr-3">{{ password }}</td>
+                </tr>
+            </table>
+
+            {% include '@Volontariat/emails/_footer.html.twig' %}
+
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends '@Volontariat/base.html.twig' %}
+
+{% block body %}
+
+    <div class="card">
+        <h3 class="card-header">Gestion des images pour {{ association }}</h3>
+        <div class="card-body">
+            {{ form_start(form, { 'attr': {'class': 'mt-3', 'enctype': 'multipart/form-data'}}) }}
+            {{ form_errors(form) }}
+            {{ form_widget(form) }}
+
+            <button type="submit" class="btn btn-primary mt-3"><i class="fas fa-upload"></i> Envoyer les images</button>
+            {{ form_end(form) }}
+
+            {% if images | length > 0 %}
+                {% include "@Volontariat/backend/association/_images.html.twig" %}
+            {% else %}
+                <p class="text-warning d-block mt-4">Aucune image actuellement</p>
+            {% endif %}
+
+        </div>
+        <div class="card-footer mt-4">
+            <a href="{{ path('volontariat_dashboard') }}" class="btn btn-primary"
+               role="button"><i class="fas fa-list"></i> Retour à l' association</a>
+        </div>
+    </div>
+
+{% endblock %}

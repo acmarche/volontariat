@@ -1,0 +1,105 @@
+{% extends '@Volontariat/base.html.twig' %}
+{% block title %}Inscription en tant que volontaire{% endblock %}
+{% block body %}
+
+    <div class="max-w-3xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+
+        <h1 class="text-2xl font-bold text-gray-900 mb-2 sm:text-3xl">
+            Je m'inscris en tant que volontaire
+        </h1>
+        <p class="text-gray-600 mb-6">Tous les champs marqués d'un <span class="text-red-600" aria-hidden="true">*</span><span class="sr-only">astérisque</span> sont obligatoires.</p>
+
+        {{ form_start(form, {'attr': {'novalidate': 'novalidate', 'aria-label': 'Formulaire d\'inscription volontaire'}}) }}
+        {{ form_errors(form) }}
+
+        <div class="bg-white shadow rounded-lg overflow-hidden">
+            <fieldset class="px-4 py-6 sm:px-6 sm:py-8">
+                <legend class="text-lg font-semibold text-gray-900 mb-6">Vos coordonnées</legend>
+
+                <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <div>
+                        {{ form_label(form.surname, 'Prénom', {'label_attr': {'class': 'block text-sm font-medium text-gray-900 mb-1'}}) }}
+                        {{ form_errors(form.surname) }}
+                        {{ form_widget(form.surname, {'attr': {
+                            'class': 'block w-full rounded-md border-0 px-3 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 text-base sm:text-sm sm:leading-6',
+                            'autocomplete': 'given-name',
+                            'aria-required': 'true'
+                        }}) }}
+                    </div>
+
+                    <div>
+                        {{ form_label(form.name, 'Nom', {'label_attr': {'class': 'block text-sm font-medium text-gray-900 mb-1'}}) }}
+                        {{ form_errors(form.name) }}
+                        {{ form_widget(form.name, {'attr': {
+                            'class': 'block w-full rounded-md border-0 px-3 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 text-base sm:text-sm sm:leading-6',
+                            'autocomplete': 'family-name',
+                            'aria-required': 'true'
+                        }}) }}
+                    </div>
+
+                    <div>
+                        {{ form_label(form.email, 'Courriel', {'label_attr': {'class': 'block text-sm font-medium text-gray-900 mb-1'}}) }}
+                        {{ form_errors(form.email) }}
+                        {{ form_widget(form.email, {'attr': {
+                            'class': 'block w-full rounded-md border-0 px-3 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 text-base sm:text-sm sm:leading-6',
+                            'autocomplete': 'email',
+                            'aria-required': 'true'
+                        }}) }}
+                    </div>
+
+                    <div>
+                        {{ form_label(form.city, 'Localité', {'label_attr': {'class': 'block text-sm font-medium text-gray-900 mb-1'}}) }}
+                        {{ form_errors(form.city) }}
+                        {{ form_widget(form.city, {'attr': {
+                            'class': 'block w-full rounded-md border-0 px-3 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-600 text-base sm:text-sm sm:leading-6',
+                            'autocomplete': 'address-level2',
+                            'aria-required': 'true'
+                        }}) }}
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="border-t border-gray-200 px-4 py-6 sm:px-6">
+                <legend class="text-lg font-semibold text-gray-900 mb-4">Secteurs d'activités</legend>
+                <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    {% for secteur in form.secteurs %}
+                        <div class="flex items-center gap-2">
+                            {{ form_widget(secteur, {'attr': {'class': 'h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-2 focus:ring-green-600'}}) }}
+                            {{ form_label(secteur, null, {'label_attr': {'class': 'text-sm font-medium text-gray-900'}}) }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </fieldset>
+
+            <div class="border-t border-gray-200 px-4 py-6 sm:px-6">
+                {{ form_errors(form.accord) }}
+                <div class="flex items-start gap-3">
+                    {{ form_widget(form.accord, {'attr': {
+                        'class': 'mt-0.5 h-5 w-5 rounded border-gray-300 text-green-600 focus:ring-2 focus:ring-green-600 cursor-pointer',
+                        'aria-required': 'true'
+                    }}) }}
+                    <label for="{{ form.accord.vars.id }}" class="text-sm text-gray-700 cursor-pointer">
+                        <span class="text-red-600" aria-hidden="true">*</span>
+                        <a href="https://www.marche.be/administration/rgpd/"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           class="text-green-700 underline hover:text-green-500 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 rounded">
+                            J'ai pris connaissance du règlement de la vie privée
+                            <span class="sr-only">(ouvre dans un nouvel onglet)</span>
+                        </a>
+                    </label>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-200 bg-gray-50 px-4 py-4 sm:px-6 flex flex-col sm:flex-row sm:justify-end">
+                <button type="submit"
+                        class="w-full sm:w-auto inline-flex justify-center rounded-md bg-green-default px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-green-light focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 sm:py-2 sm:text-sm">
+                    Je m'inscris
+                </button>
+            </div>
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+
+{% endblock %}

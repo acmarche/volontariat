@@ -1,0 +1,63 @@
+{% extends "@Volontariat/admin/base.html.twig" %}
+
+{% block body -%}
+
+    <div class="card">
+        <h3 class="card-header">Liste des {{ associations | length }} associations</h3>
+        <div class="card-body">
+
+            {{ include('@Volontariat/admin/search/association.html.twig') }}
+
+            <a href="{{ path('volontariat_admin_message_new', { 'forWho': 'association' }) }}" role="button"
+               class="btn btn-primary"><i
+                    class="ti ti-send"></i> Envoyer un message aux associations</a>
+            <a title="Exporter en Excel" href="{{ path('volontariat_admin_association_xls') }}"
+               class="btn btn-outline-warning btn-xs" role="button">
+                <i class="ti ti-file-spreadsheet"></i>
+            </a>
+
+            <table class="table table-bordered table-hover mt-2">
+                <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Localité</th>
+                    <th>Email</th>
+                    <th>Validée</th>
+                    <th>Inscrit le</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for association in associations %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('volontariat_admin_association_show', { 'id': association.id }) }}"
+                               title="Voir"> {{ association }}
+                            </a>
+                        </td>
+                        <td>{{ association.city }}</td>
+                        <td>
+                            {% if association.user %}
+                                <a href="{{ path('volontariat_admin_user_show', { 'id': association.user.id }) }}">
+                                    {{ association.user }}
+                                </a>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if association.valider %}
+                                <span class="ti ti-check"></span>
+                            {% else %}
+                                <span class="text-danger">Non</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if association.createdAt %}
+                                {{ association.createdAt|date("d-m-Y") }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

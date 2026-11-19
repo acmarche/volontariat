@@ -1,0 +1,14 @@
+{% set url = null %}
+{% if association.imageName %}
+    {% set url = vich_uploader_asset(association, 'image')  %}
+{% elseif association.firstImage %}
+    {% set url = association.firstImage | acmarche_volontariat_download_image(association) %}
+{% endif %}
+{#| imagine_filter('grh_thumb')  #}
+{% if url %}
+    <div class="relative w-full">
+        <img src="{{ url }}"
+             alt="" class="aspect-[16/9] w-full rounded-2xl bg-gray-100 object-cover h-[30rem]">
+        <div class="absolute inset-0 rounded-2xl ring-1 ring-inset ring-gray-900/10"></div>
+    </div>
+{% endif %}

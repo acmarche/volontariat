@@ -1,0 +1,14 @@
+{% extends '@Volontariat/base.html.twig' %}
+
+{% block body %}
+    <div class="max-w-6xl mx-auto p-8 bg-gray-100">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-green-default mb-4">Je m'inscris</h1>
+        </div>
+
+        <!-- The x-data attribute initializes an Alpine.js component -->
+        {% include '@Volontariat/registration/_columns.html.twig' %}
+    </div>
+
+{% endblock %}
+

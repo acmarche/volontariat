@@ -1,0 +1,99 @@
+{% extends '@Volontariat/admin/base.html.twig' %}
+
+{% block body %}
+
+    <div class="card">
+        <h3 class="card-header">{{ association }}</h3>
+        <div class="card-body">
+
+            {% include '@Volontariat/admin/association/actions.html.twig' %}
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <table class="table table-bordered table-hover">
+                        <tbody>
+                        <tr>
+                            <th>Adresse</th>
+                            <td>
+                                {{ association.address }}<br/>
+                                {{ association.postalCode }} {{ association.city }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>
+                            <td>
+                                {{ association.email }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Site web</th>
+                            <td>
+                                {{ association.web_site }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Téléphone ou mobile</th>
+                            <td>
+                                {{ association.phone }}
+                                {{ association.mobile }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Url pour une connection automatique</th>
+                            <td>
+                                {% if association.tokenValue %}
+                                    <a href="{{ path('volontariat_token_show', {'value':  association.tokenValue}) }}">
+                                        Lien de connection
+                                    </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="text-muted">
+                             Pour donner le lien: Click droit sur le lien et "copier l'adresse du lien" pour envoyer par mail.<br/>
+                             Pour voir "en tant que", clique sur le lien
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Validée</th>
+                            <td>
+                                {% if association.valider %}
+                                    <span class="ti ti-check"></span>
+                                {% else %}
+                                    <span class="text-danger">Non</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-4">
+                    {% if association.imageName %}
+                        <img class="thumbnail"
+                             src="{{ vich_uploader_asset(association, 'image') | imagine_filter('acmarche_volontariat_thumb') }}"
+                             alt="{{ association.imageName }}">
+                    {% endif %}
+                </div>
+            </div>
+
+            {{ association.description | nl2br }}
+
+            <h4 class="text-success">Contact</h4>
+            {{ association.contact | nl2br }}
+
+            {% include '@Volontariat/admin/association/secteurs.html.twig' %}
+
+            {% include '@Volontariat/admin/association/besoins.html.twig' %}
+
+            {% include'@Volontariat/admin/association/images.html.twig' %}
+        </div>
+        <div class="card-footer">
+            <p class="text-muted">
+                {{ 'Created' | trans }} {{ association.createdAt|date('d-m-Y H:i:s') }}
+                . {{ 'Updated' | trans }} {{ association.updatedAt|date('d-m-Y H:i:s') }}
+            </p>
+        </div>
+    </div>
+    {{ include('@Volontariat/admin/association/delete.html.twig') }}
+
+{% endblock %}

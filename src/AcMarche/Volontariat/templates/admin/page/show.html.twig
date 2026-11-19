@@ -1,0 +1,24 @@
+{% extends '@Volontariat/admin/base.html.twig' %}
+
+{% block body %}
+
+    <div class="card">
+        <h3 class="card-header">{{ page }}</h3>
+        <div class="card-body">
+
+            {{ include ('@Volontariat/admin/page/actions.html.twig' ) }}
+
+            <br/><br/>
+
+            {{ page.content | raw }}
+            <br/><br/>
+
+            {% include'@Volontariat/admin/page/images.html.twig' %}
+
+            {% include'@Volontariat/admin/page/documents.html.twig' %}
+        </div>
+    </div>
+
+    {{ include ('@Volontariat/admin/page/delete.html.twig') }}
+
+{% endblock %}

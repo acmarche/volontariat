@@ -1,0 +1,102 @@
+<?php
+
+namespace AcMarche\Volontariat\Controller\Admin;
+
+use AcMarche\Volontariat\Entity\Security\User;
+use AcMarche\Volontariat\Form\Search\SearchUserType;
+use AcMarche\Volontariat\Form\User\ChangePasswordType;
+use AcMarche\Volontariat\Form\User\UserEditType;
+use AcMarche\Volontariat\Repository\UserRepository;
+use AcMarche\Volontariat\Security\PasswordGenerator;
+use AcMarche\Volontariat\Security\RolesEnum;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+
+#[IsGranted(RolesEnum::admin->value)]
+class UtilisateurController extends AbstractController
+{
+    public function __construct(
+        private UserRepository $userRepository,
+        private PasswordGenerator $passwordGenerator
+    ) {
+    }
+
+    #[Route(path: '/admin/user/', name: 'volontariat_admin_user', methods: ['GET','POST'])]
+    public function index(Request $request): Response
+    {
+        $form = $this->createForm(SearchUserType::class);
+
+        $form->handleRequest($request);
+        $users = [];
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            if ($data['name']) {
+                $users = $this->userRepository->findByName($data['name']);
+            }
+        } else {
+            $users = $this->userRepository->findBy([], ['name' => 'ASC']);
+        }
+        $response = new Response(null, $form->isSubmitted() ? Response::HTTP_ACCEPTED : Response::HTTP_OK);
+
+        return $this->render(
+            '@Volontariat/admin/user/index.html.twig',
+            [
+                'users' => $users,
+                'form' => $form,
+            ]
+            , $response
+        );
+    }
+
+    #[Route(path: '/admin/user/{id}', name: 'volontariat_admin_user_show', methods: ['GET'])]
+    public function show(User $user): Response
+    {
+        return $this->render(
+            '@Volontariat/admin/user/show.html.twig',
+            [
+                'user' => $user,
+            ]
+        );
+    }
+
+    #[Route(path: '/admin/user/{id}/edit', name: 'volontariat_admin_user_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, User $user): Response
+    {
+        $editForm = $this->createForm(UserEditType::class, $user)
+            ->add('submit', SubmitType::class, ['label' => 'Update']);
+
+        $editForm->handleRequest($request);
+        if ($editForm->isSubmitted() && $editForm->isValid()) {
+            $this->userRepository->flush();
+            $this->addFlash('success', "L'user a bien été modifié");
+
+            return $this->redirectToRoute('volontariat_admin_user');
+        }
+
+        return $this->render(
+            '@Volontariat/admin/user/edit.html.twig',
+            [
+                'user' => $user,
+                'edit_form' => $editForm,
+            ]
+        );
+    }
+
+    #[Route(path: '/admin/user/{id}/delete', name: 'volontariat_admin_user_delete', methods: ['POST'])]
+    public function delete(Request $request, User $user): RedirectResponse
+    {
+        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+            $this->userRepository->remove($user);
+            $this->userRepository->flush();
+            $this->addFlash('success', 'L\'utilisateur a bien été supprimé');
+        }
+
+        return $this->redirectToRoute('volontariat_admin_user');
+    }
+}

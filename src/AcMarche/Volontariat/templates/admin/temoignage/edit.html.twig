@@ -1,0 +1,18 @@
+{% extends '@Volontariat/admin/base.html.twig' %}
+
+{% block body -%}
+
+        <h3>{{ temoignage }}</h3>
+
+    <div class="row">
+        <div class="col-lg-8">
+            {{ form(form) }}
+        </div>
+    </div>
+
+    <a href="{{ path('volontariat_admin_temoignage') }}">
+        <span class="ti ti-list"></span> Annuler et retour à la liste
+    </a>
+{% endblock %}
+
+

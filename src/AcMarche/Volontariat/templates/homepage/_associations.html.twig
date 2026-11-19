@@ -1,0 +1,80 @@
+<section class="py-16 bg-white">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-gray-900">Nos associations partenaires</h2>
+            <p class="mt-4 text-gray-600 max-w-2xl mx-auto">
+                Découvrez les associations qui font vivre le volontariat dans notre région
+            </p>
+        </div>
+
+        {% if associations|length > 0 %}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for association in associations %}
+                    {% set url = asset('bundles/acmarchevolontariat/images/logo1-default.png') %}
+                    {% if association.imageName %}
+                        {% set url = vich_uploader_asset(association, 'image') %}
+                    {% elseif association.firstImage %}
+                        {% set url = association.firstImage.url %}
+                    {% endif %}
+
+                    <a href="{{ path('volontariat_association_show', {'slug': association.slug}) }}"
+                       class="group block bg-gray-50 rounded-xl p-6 hover:bg-emerald-50 transition-all duration-300 border border-transparent hover:border-emerald-200 hover:shadow-lg">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden bg-white shadow-sm ring-1 ring-gray-100">
+                                <img src="{{ url }}"
+                                     alt="{{ association.name }}"
+                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h3 class="font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors">
+                                    {{ association.name }}
+                                </h3>
+                                <p class="mt-1 text-sm text-gray-500 line-clamp-2">
+                                    {{ association.description|striptags|u.truncate(100, '...') }}
+                                </p>
+                                {% if association.secteurs|length > 0 %}
+                                    <div class="mt-2 flex flex-wrap gap-1">
+                                        {% for secteur in association.secteurs|slice(0, 2) %}
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-emerald-100 text-emerald-700">
+                                                {{ secteur.name }}
+                                            </span>
+                                        {% endfor %}
+                                        {% if association.secteurs|length > 2 %}
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-600">
+                                                +{{ association.secteurs|length - 2 }}
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <svg class="flex-shrink-0 w-5 h-5 text-gray-400 group-hover:text-emerald-600 transition-all group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+
+            <div class="mt-12 text-center">
+                <a href="{{ path('volontariat_association') }}"
+                   class="inline-flex items-center px-8 py-4 rounded-full bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-semibold hover:from-emerald-700 hover:to-teal-700 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                    </svg>
+                    Voir toutes les associations
+                    <svg class="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                </a>
+            </div>
+        {% else %}
+            <div class="text-center py-12">
+                <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                </svg>
+                <h3 class="mt-2 text-sm font-medium text-gray-900">Pas encore d'associations</h3>
+                <p class="mt-1 text-sm text-gray-500">Les associations inscrites apparaîtront ici.</p>
+            </div>
+        {% endif %}
+    </div>
+</section>

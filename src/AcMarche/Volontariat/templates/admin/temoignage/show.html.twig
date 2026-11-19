@@ -1,0 +1,17 @@
+{% extends '@Volontariat/admin/base.html.twig' %}
+
+{% block body %}
+
+    <h3>{{ temoignage }}</h3>
+
+    {% include '@Volontariat/admin/temoignage/actions.html.twig' with {'temoignage': temoignage } %}
+
+    <br/><br/>
+    De {{ temoignage.nom }} à {{ temoignage.village }}
+    <br/><br/>
+    {{ temoignage.message | nl2br }}
+    <br/><br/>
+
+    {% include '@Volontariat/admin/temoignage/delete.html.twig' with {'delete_form': delete_form } %}
+
+{% endblock %}

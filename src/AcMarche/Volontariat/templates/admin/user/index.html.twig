@@ -1,0 +1,37 @@
+{% extends '@Volontariat/admin/base.html.twig' %}
+
+{% block body -%}
+
+    <div class="card">
+        <h3 class="card-header">Liste des {{ users|length }} comptes utilisateurs</h3>
+        <div class="card-body">
+            {{ include('@Volontariat/admin/search/user.html.twig') }}
+            <table class="table table-bordered table-hover mt-3">
+                <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Rôles</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>
+                            <a href="{{ path('volontariat_admin_user_show', { 'id': user.id }) }}">
+                                {{ user.name }} {{ user.surname }}
+                            </a>
+                        </td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            {% for role in user.roles %}
+                                {{ role }}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

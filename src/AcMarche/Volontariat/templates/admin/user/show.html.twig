@@ -1,0 +1,50 @@
+{% extends '@Volontariat/admin/base.html.twig' %}
+
+{% block body %}
+
+    <div class="card">
+        <h3 class="card-header">{{ user }}</h3>
+        <div class="card-body">
+
+            {% include '@Volontariat/admin/user/actions.html.twig' %}
+
+            <br/>
+            <table class="table table-bordered table-hover">
+                <tbody>
+                <tr>
+                    <th>Nom prénom</th>
+                    <td>
+                        {{ user.name }} {{ user.surname }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Email</th>
+                    <td>
+                        {{ user.email }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Url pour connection automatique</th>
+                    <td>
+                        {% if user.tokenValue %}
+                            <a href="{{ path('volontariat_token_show', {'value':  user.tokenValue}) }}">
+                                Lien de connection
+                            </a>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Rôles</th>
+                    <td>
+                        {% for role in user.roles %}
+                            {{ role }}
+                        {% endfor %}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% include '@Volontariat/admin/user/delete.html.twig' %}
+
+{% endblock %}

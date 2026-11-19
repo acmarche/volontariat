@@ -1,0 +1,111 @@
+<?php
+
+namespace AcMarche\Volontariat\Controller\Admin;
+
+use AcMarche\Volontariat\Entity\Page;
+use AcMarche\Volontariat\Form\Admin\PageType;
+use AcMarche\Volontariat\Repository\PageRepository;
+use AcMarche\Volontariat\Service\FileHelper;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+
+use AcMarche\Volontariat\Security\RolesEnum;
+#[IsGranted(RolesEnum::admin->value)]
+class PageController extends AbstractController
+{
+    public function __construct(private FileHelper $fileHelper, private PageRepository $pageRepository)
+    {
+    }
+
+    #[Route(path: '/admin/page/', name: 'volontariat_admin_page', methods: ['GET'])]
+    public function index(): Response
+    {
+        $pages = $this->pageRepository->findAll();
+
+        return $this->render(
+            '@Volontariat/admin/page/index.html.twig',
+            [
+                'pages' => $pages,
+            ]
+        );
+    }
+
+    #[Route(path: '/admin/page/new', name: 'volontariat_admin_page_new', methods: ['GET', 'POST'])]
+    public function new(Request $request): Response
+    {
+        $page = new Page();
+        $form = $this->createForm(PageType::class, $page);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->pageRepository->persist($page);
+            $this->pageRepository->flush();
+            $this->addFlash('success', 'La page a bien été ajoutée');
+
+            return $this->redirectToRoute('volontariat_admin_page_show', ['id' => $page->getId()]);
+        }
+
+        return $this->render(
+            '@Volontariat/admin/page/new.html.twig',
+            [
+                'page' => $page,
+                'form' => $form,
+            ]
+        );
+    }
+
+    #[Route(path: '/admin/page/{id}', name: 'volontariat_admin_page_show', methods: ['GET'])]
+    public function show(Page $page): Response
+    {
+        $images = $this->fileHelper->getImages($page);
+        $docs = $this->fileHelper->getDocuments($page);
+
+        return $this->render(
+            '@Volontariat/admin/page/show.html.twig',
+            [
+                'page' => $page,
+                'images' => $images,
+                'documents' => $docs,
+            ]
+        );
+    }
+
+    #[Route(path: '/admin/page/{id}/edit', name: 'volontariat_admin_page_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Page $page): Response
+    {
+        $form = $this->createForm(PageType::class, $page);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->pageRepository->flush();
+            $this->addFlash('success', 'La page a bien été modifiée');
+
+            return $this->redirectToRoute('volontariat_admin_page_show', ['id' => $page->getId()]);
+        }
+
+        return $this->render(
+            '@Volontariat/admin/page/edit.html.twig',
+            [
+                'page' => $page,
+                'form' => $form,
+            ]
+        );
+    }
+
+    #[Route(path: '/admin/page/{id}/delete', name: 'volontariat_admin_page_delete', methods: ['POST'])]
+    public function delete(Request $request, Page $page): RedirectResponse
+    {
+        if ($this->isCsrfTokenValid('delete'.$page->getId(), $request->request->get('_token'))) {
+            $this->pageRepository->remove($page);
+            $this->pageRepository->flush();
+            $this->addFlash('success', 'La page a bien été supprimée');
+        }
+
+        return $this->redirectToRoute('volontariat_admin_page');
+    }
+}

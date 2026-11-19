@@ -1,0 +1,21 @@
+{% extends '@Volontariat/admin/base.html.twig' %}
+
+{% block body -%}
+
+    <div class="card">
+        <h3 class="card-header">{{ besoin }}</h3>
+        <div class="card-body">
+
+            <div class="row">
+                <div class="col-lg-8">
+                    {% include '@Volontariat/admin/besoin/_form.html.twig' %}
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a href="{{ path('volontariat_admin_besoin_show', {'id':besoin.id}) }}">
+                <span class="ti ti-list"></span> Annuler
+            </a>
+        </div>
+    </div>
+{% endblock %}

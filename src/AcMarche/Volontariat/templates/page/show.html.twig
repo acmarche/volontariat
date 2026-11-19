@@ -1,0 +1,32 @@
+{% extends '@Volontariat/base.html.twig' %}
+{% block title %}{{ page.title }}{% endblock %}
+{% block body %}
+
+    <div class="md:flex md:items-center md:justify-between">
+        <div class="min-w-0 flex-1">
+            <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+                {{ page.title }}
+            </h2>
+        </div>
+
+        {% if is_granted('edit', page) %}
+            <div class="mt-4 flex md:mt-0 md:ml-4">
+                <a type="button" href="{{ path('volontariat_admin_page_edit', {'id':page.id}) }}"
+                   class="inline-flex items-center rounded-md bg-white px-3 py-2  font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                    Modifier
+                </a>
+            </div>
+        {% endif %}
+
+    </div>
+
+    {% include '@Volontariat/widgets/_btn_readspeaker.html.twig' %}
+    <div class="overflow-hidden rounded-lg bg-white shadow my-5 ">
+        <div class="px-4 py-2 sm:p-6">
+            {{ page.content|raw }}
+        </div>
+    </div>
+
+    {% include '@Volontariat/page/_images.html.twig' %}
+
+{% endblock %}

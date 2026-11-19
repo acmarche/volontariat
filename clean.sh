@@ -3,7 +3,6 @@ cd "$(dirname "$0")" || exit 1
 rm -fr var/cache/prod
 rm -fr var/cache/dev
 rm -fr var/log/*
-chown root:root ./ -R
 
 # --- Permissions (https://symfony.com/doc/current/setup/file_permissions.html)
 # Web server user: frankenphp on dev server, www-data on prod server.
@@ -16,6 +15,11 @@ if [ -z "$HTTPDUSER" ]; then
     fi
 fi
 CLIUSER=$(whoami)
+
+# Code owned by root on prod only; keep the developer as owner on dev
+if [ "$HTTPDUSER" = "www-data" ]; then
+    sudo chown -R root:root .
+fi
 
 # Folders the app writes to: cache/logs, Vich uploads, Liip Imagine cache
 WRITABLE_DIRS="var public/files public/media"

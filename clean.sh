@@ -6,9 +6,15 @@ rm -fr var/cache/dev
 rm -fr var/log/*
 
 # --- Permissions (https://symfony.com/doc/current/setup/file_permissions.html)
-# Web server user (frankenphp here); falls back to auto-detection.
-HTTPDUSER=${HTTPDUSER:-frankenphp}
-id "$HTTPDUSER" >/dev/null 2>&1 || HTTPDUSER=$(ps axo user,comm | grep -E '[a]pache|[h]ttpd|[_]www|[w]ww-data|[n]ginx|[f]rankenphp' | grep -v root | head -1 | cut -d' ' -f1)
+# Web server user: frankenphp on dev server, www-data on prod server.
+# Can be forced with: HTTPDUSER=xxx ./clean.sh
+if [ -z "$HTTPDUSER" ]; then
+    if id frankenphp >/dev/null 2>&1; then
+        HTTPDUSER=frankenphp
+    else
+        HTTPDUSER=www-data
+    fi
+fi
 CLIUSER=$(whoami)
 
 # Folders the app writes to: cache/logs, Vich uploads, Liip Imagine cache

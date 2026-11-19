@@ -1,9 +1,9 @@
 #!/bin/bash
 cd "$(dirname "$0")" || exit 1
-
 rm -fr var/cache/prod
 rm -fr var/cache/dev
 rm -fr var/log/*
+chown root:root ./
 
 # --- Permissions (https://symfony.com/doc/current/setup/file_permissions.html)
 # Web server user: frankenphp on dev server, www-data on prod server.

@@ -10,6 +10,7 @@ use AcMarche\Volontariat\Mailer\MailerContact;
 use AcMarche\Volontariat\Mailer\MessageService;
 use AcMarche\Volontariat\Security\RolesEnum;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +25,8 @@ class ReferencerController extends AbstractController
 
     public function __construct(
         private MailerContact $mailerContact,
-        private MessageService $messageService
+        private MessageService $messageService,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
@@ -53,7 +55,8 @@ class ReferencerController extends AbstractController
                 $this->mailerContact->sendReferencerVolontaire($this->association, $volontaire, $data);
                 $this->addFlash('success', 'Le message a bien été envoyé');
             } catch (TransportExceptionInterface $e) {
-                $this->addFlash('danger', "Erreur lors de l'envoie: ".$e->getMessage());
+                $this->logger->error('Mail error: '.$e->getMessage());
+                $this->addFlash('danger', "Erreur lors de l'envoi du mail. Veuillez réessayer plus tard.");
             }
 
             return $this->redirectToRoute('volontariat_volontaire');
@@ -91,7 +94,8 @@ class ReferencerController extends AbstractController
                 $this->mailerContact->sendReferencerAssociation($association, $data);
                 $this->addFlash('success', 'Le message a bien été envoyé');
             } catch (TransportExceptionInterface $e) {
-                $this->addFlash('danger', "Erreur lors de l'envoie: ".$e->getMessage());
+                $this->logger->error('Mail error: '.$e->getMessage());
+                $this->addFlash('danger', "Erreur lors de l'envoi du mail. Veuillez réessayer plus tard.");
             }
 
             return $this->redirectToRoute('volontariat_association');

@@ -6,6 +6,7 @@ use AcMarche\Volontariat\Form\User\LostPasswordType;
 use AcMarche\Volontariat\Mailer\MailerSecurity;
 use AcMarche\Volontariat\Security\EmailUniquenessChecker;
 use AcMarche\Volontariat\Security\TokenManager;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +18,8 @@ class ResettingController extends AbstractController
     public function __construct(
         private EmailUniquenessChecker $emailUniquenessChecker,
         private TokenManager $tokenManager,
-        private MailerSecurity $mailerSecurity
+        private MailerSecurity $mailerSecurity,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
@@ -50,7 +52,8 @@ class ResettingController extends AbstractController
                 $this->addFlash('success', 'Un mail avec la procédure à suivre vous a été envoyé');
 
             } catch (TransportExceptionInterface $e) {
-                $this->addFlash('danger', $e->getMessage());
+                $this->logger->error('Mail error: '.$e->getMessage());
+                $this->addFlash('danger', "Erreur lors de l'envoi du mail. Veuillez réessayer plus tard.");
             }
 
             return $this->redirectToRoute('volontariat_home');

@@ -12,6 +12,7 @@ use AcMarche\Volontariat\Security\EmailUniquenessChecker;
 use AcMarche\Volontariat\Security\PasswordGenerator;
 use AcMarche\Volontariat\Security\TokenManager;
 use AcMarche\Volontariat\Voluntary\Form\RegisterVoluntaryType;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,6 +32,7 @@ class RegisterController extends AbstractController
         private MailerSecurity $mailerSecurity,
         private PasswordGenerator $passwordGenerator,
         private EmailUniquenessChecker $emailUniquenessChecker,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
@@ -64,7 +66,8 @@ class RegisterController extends AbstractController
             try {
                 $this->mailerSecurity->sendWelcomeVoluntary($volontaire, $plainPassword, $tokenValue);
             } catch (TransportException|TransportExceptionInterface $e) {
-                $this->addFlash('danger', $e->getMessage());
+                $this->logger->error('Mail error: '.$e->getMessage());
+                $this->addFlash('danger', "Erreur lors de l'envoi du mail. Veuillez réessayer plus tard.");
             }
 
             return $this->redirectToRoute('volontariat_register_complete');
@@ -106,7 +109,8 @@ class RegisterController extends AbstractController
                 $this->addFlash('success', 'Votre Asbl a bien été inscrite');
                 $this->addFlash('warning', 'Votre Asbl doit être validée par un administrateur');
             } catch (TransportException|LoaderError|RuntimeError|SyntaxError|TransportExceptionInterface $e) {
-                $this->addFlash('error', $e->getMessage());
+                $this->logger->error('Mail error: '.$e->getMessage());
+                $this->addFlash('danger', "Erreur lors de l'envoi du mail. Veuillez réessayer plus tard.");
             }
 
             return $this->redirectToRoute('volontariat_register_complete');

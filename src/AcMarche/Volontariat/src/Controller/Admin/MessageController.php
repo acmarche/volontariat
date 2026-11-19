@@ -9,6 +9,7 @@ use AcMarche\Volontariat\Mailer\MessageService;
 use AcMarche\Volontariat\Search\Searcher;
 use AcMarche\Volontariat\Security\RolesEnum;
 use AcMarche\Volontariat\Security\TokenManager;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,6 +24,7 @@ class MessageController extends AbstractController
         private MessageService $messageService,
         private TokenManager $tokenManager,
         private Mailer $mailer,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
@@ -57,7 +59,8 @@ class MessageController extends AbstractController
                     try {
                         $this->mailer->sendRegularMessage($email, $data, $url);
                     } catch (TransportExceptionInterface $e) {
-                        $this->addFlash('danger', 'Erreur envoie pour '.$email.' '.$e->getMessage());
+                        $this->logger->error('Mail error for '.$email.': '.$e->getMessage());
+                        $this->addFlash('danger', "Erreur lors de l'envoi du mail pour ".$email);
                     }
                 }
             }

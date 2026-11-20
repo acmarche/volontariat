@@ -72,8 +72,10 @@ class ReferencerController extends AbstractController
     }
 
     #[Route(path: '/referencer/association/{slug}', name: 'volontariat_referencer_association')]
-    public function association(Request $request, Association $association): Response
-    {
+    public function association(
+        Request $request,
+        #[MapEntity(expr: 'repository.findOneBySlug(slug)')] Association $association
+    ): Response {
         $user = $this->getUser();
 
         $message = new Message();

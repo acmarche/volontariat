@@ -1,0 +1,60 @@
+# https://github.com/Mati365/ckeditor5-symfony
+ckeditor5:
+    presets:
+        volontariat:
+            editorType: classic
+            config:
+                language: fr
+                toolbar:
+                    items:
+                        - undo
+                        - redo
+                        - '|'
+                        - heading
+                        - '|'
+                        - bold
+                        - italic
+                        - underline
+                        - strikethrough
+                        - removeFormat
+                        - '|'
+                        - numberedList
+                        - bulletedList
+                        - outdent
+                        - indent
+                        - blockQuote
+                        - '|'
+                        - link
+                        - insertImage
+                        - insertTable
+                        - horizontalLine
+                        - '|'
+                        - sourceEditing
+                plugins:
+                    - Essentials
+                    - Paragraph
+                    - Heading
+                    - Bold
+                    - Italic
+                    - Underline
+                    - Strikethrough
+                    - RemoveFormat
+                    - List
+                    - Indent
+                    - BlockQuote
+                    - Link
+                    - AutoLink
+                    - ImageBlock
+                    - ImageInline
+                    - ImageInsertViaUrl
+                    - ImageToolbar
+                    - ImageTextAlternative
+                    - ImageStyle
+                    - Table
+                    - TableToolbar
+                    - HorizontalLine
+                    - SourceEditing
+                image:
+                    toolbar: [imageTextAlternative, '|', 'imageStyle:inline', 'imageStyle:block']
+                table:
+                    contentToolbar: [tableColumn, tableRow, mergeTableCells]

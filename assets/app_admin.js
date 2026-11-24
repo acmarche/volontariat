@@ -1,3 +1,4 @@
+import '@mati365/ckeditor5-symfony';
 // start the Stimulus application
 import './bootstrap.js';
 

@@ -13,7 +13,7 @@ return [
     Symfony\Bundle\SecurityBundle\SecurityBundle::class => ['all' => true],
     Symfony\Bundle\MonologBundle\MonologBundle::class => ['all' => true],
     Symfony\Bundle\MakerBundle\MakerBundle::class => ['dev' => true],
-    FOS\CKEditorBundle\FOSCKEditorBundle::class => ['all' => true],
+    Mati365\CKEditor5Symfony\CKEditorBundle::class => ['all' => true],
     Knp\DoctrineBehaviors\DoctrineBehaviorsBundle::class => ['all' => true],
     Knp\Bundle\SnappyBundle\KnpSnappyBundle::class => ['all' => true],
     Liip\ImagineBundle\LiipImagineBundle::class => ['all' => true],

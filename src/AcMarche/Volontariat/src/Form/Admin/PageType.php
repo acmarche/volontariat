@@ -3,7 +3,7 @@
 namespace AcMarche\Volontariat\Form\Admin;
 
 use AcMarche\Volontariat\Entity\Page;
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use Mati365\CKEditor5Symfony\Form\Type\CKEditor5Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -42,13 +42,11 @@ class PageType extends AbstractType
             )
             ->add(
                 'content',
-                CKEditorType::class,
+                CKEditor5Type::class,
                 [
-                    'config_name' => 'volontariat_config',
-                    'attr' => [
-                        'rows' => 40,
-                        'cols' => 80,
-                    ],
+                    'preset' => 'volontariat',
+                    'editable_height' => 500,
+                    'language' => 'fr',
                 ]
             );
     }

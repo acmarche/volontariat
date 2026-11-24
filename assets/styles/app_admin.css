@@ -1,3 +1,4 @@
+@import "../vendor/ckeditor5/dist/browser/ckeditor5.css";
 .search-preview {
     position: absolute;
     z-index: 100;

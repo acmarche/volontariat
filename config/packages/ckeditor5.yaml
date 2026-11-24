@@ -46,15 +46,22 @@ ckeditor5:
                     - AutoLink
                     - ImageBlock
                     - ImageInline
+                    - ImageInsert
                     - ImageInsertViaUrl
+                    - ImageUpload
+                    - SimpleUploadAdapter
                     - ImageToolbar
                     - ImageTextAlternative
                     - ImageStyle
+                    - ImageResize
+                    - ImageCaption
                     - Table
                     - TableToolbar
                     - HorizontalLine
                     - SourceEditing
                 image:
-                    toolbar: [imageTextAlternative, '|', 'imageStyle:inline', 'imageStyle:block']
+                    toolbar: [imageTextAlternative, toggleImageCaption, '|', 'imageStyle:inline', 'imageStyle:block', 'imageStyle:side', '|', resizeImage]
+                    upload:
+                        types: [jpeg, png, gif, webp]
                 table:
                     contentToolbar: [tableColumn, tableRow, mergeTableCells]

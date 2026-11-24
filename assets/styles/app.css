@@ -91,3 +91,12 @@
         @apply bg-red-400 text-white;
     }
 }
+
+/* Images inserted with CKEditor 5 (page content) */
+.ck-content figure.image { display: table; clear: both; margin: 1rem auto; text-align: center; }
+.ck-content figure.image img { display: block; max-width: 100%; height: auto; margin: 0 auto; }
+.ck-content figure.image.image_resized { max-width: 100%; display: block; box-sizing: border-box; }
+.ck-content figure.image.image_resized img { width: 100%; }
+.ck-content figure.image.image-style-side { float: right; max-width: 50%; margin: 0 0 1rem 1.5rem; }
+.ck-content img.image_resized { height: auto; }
+.ck-content figure.image > figcaption { display: table-caption; caption-side: bottom; padding: .5rem; font-size: .875rem; color: var(--color-gray-600); }

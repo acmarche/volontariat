@@ -11,6 +11,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Mime\MimeTypes;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 
 class FileHelper
 {
@@ -40,6 +41,30 @@ class FileHelper
         $directory = $this->getUploadPath($uploadable);
 
         return $uploadedFile->move($directory, $fileName);
+    }
+
+    /**
+     * Stores an image uploaded from the CKEditor and returns its public URL.
+     * Without uploadable (e.g. page not saved yet), the file goes to a shared "editor" folder.
+     */
+    public function uploadEditorImage(UploadedFile $uploadedFile, ?Uploadable $uploadable = null): string
+    {
+        $extension = $uploadedFile->guessExtension() ?? 'bin';
+        $baseName = pathinfo($uploadedFile->getClientOriginalName(), PATHINFO_FILENAME);
+        $slug = strtolower((string) (new AsciiSlugger())->slug($baseName)) ?: 'image';
+        $fileName = $slug.'-'.uniqid().'.'.$extension;
+
+        if ($uploadable instanceof Uploadable) {
+            $directory = $this->getUploadPath($uploadable);
+            $downloadPath = $this->getDownloadPath($uploadable);
+        } else {
+            $directory = $this->rootUploadPath.'/pages/editor/';
+            $downloadPath = $this->rootDownloadPath.'/pages/editor/';
+        }
+
+        $uploadedFile->move($directory, $fileName);
+
+        return $downloadPath.$fileName;
     }
 
     public function deleteOneDoc(Uploadable $uploadable, string $filename): void
